@@ -80,9 +80,6 @@ input,textarea,select{font-family:'Plus Jakarta Sans',sans-serif;outline:none;}
 
 /* SIDEBAR FOOTER & PROFILE BTN */
 .sidebar-footer{padding:16px;border-top:1px solid var(--line);display:flex;flex-direction:column;gap:8px;}
-.profile-nav-btn { display:flex; align-items:center; gap:12px; padding:12px; border-radius:10px; background:var(--bg); border:1px solid var(--line2); margin-bottom: 8px; cursor:pointer; transition:all .2s; font-size:13px; font-weight:600; color:var(--text); }
-.profile-nav-btn:hover { border-color:var(--primary-light); background:var(--card2); }
-.profile-nav-btn.active { background:var(--primary-bg); border-color:var(--primary); color:var(--primary-light); }
 .sb-btn{width:100%;padding:10px 14px;border-radius:8px;font-size:13px;font-weight:600;transition:all .2s;display:flex;align-items:center;justify-content:center;gap:6px;}
 .sb-btn.primary{background:var(--primary);color:#fff;}
 .sb-btn.secondary{background:var(--card2);color:var(--text);border:1px solid var(--line2);}
@@ -369,10 +366,10 @@ input,textarea,select{font-family:'Plus Jakarta Sans',sans-serif;outline:none;}
 .pub-date-row{display:flex;align-items:center;gap:12px;}
 .pub-date-lbl{font-size:16px;}
 
-/* CSS DEL INPUT DE FECHA Y EL CALENDARIO (BLANCO FORZADO) */
+/* CSS DEL INPUT DE FECHA Y EL CALENDARIO (FORZAR BLANCO) */
 .pub-date-inp{padding:8px 12px;background:var(--bg);border:1px solid var(--line2);border-radius:8px;font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--text);cursor:pointer;transition:border-color .2s; color-scheme: dark;}
 .pub-date-inp:focus{border-color:var(--accent-light);box-shadow:0 0 0 1px var(--accent-light);}
-.pub-date-inp::-webkit-calendar-picker-indicator { cursor: pointer; filter: invert(1) sepia(100%) !important; }
+.pub-date-inp::-webkit-calendar-picker-indicator { cursor: pointer; filter: invert(1) sepia(100%) saturate(0%) hue-rotate(0deg) brightness(200%) !important; }
 
 /* Calendar */
 .cal-wrap{background:var(--card);border:1px solid var(--line);border-radius:16px;overflow:hidden;}
@@ -644,6 +641,19 @@ input,textarea,select{font-family:'Plus Jakarta Sans',sans-serif;outline:none;}
 </div>
 </div>
 
+<div class="overlay" id="m-send-msg" onclick="ovClose(event,'m-send-msg')">
+<div class="modal" style="max-width: 400px;">
+  <div class="modal-title">Send Message</div>
+  <div class="field">
+    <textarea class="field-textarea" id="inp-msg-text" placeholder="Type your message here..."></textarea>
+  </div>
+  <div class="modal-footer">
+    <button class="btn-cancel" onclick="closeModal('m-send-msg')">Cancel</button>
+    <button class="btn-ok" onclick="submitMessage()">Send</button>
+  </div>
+</div>
+</div>
+
 <div class="overlay" id="m-new-user" onclick="ovClose(event,'m-new-user')">
 <div class="modal" style="max-width: 400px;">
   <div class="modal-title" id="m-user-title">Edit Profile</div>
@@ -838,8 +848,8 @@ input,textarea,select{font-family:'Plus Jakarta Sans',sans-serif;outline:none;}
 /* ═══════════════════════════════════════
    CONFIGURACIÓN DE CUENTA MAESTRA
 ═══════════════════════════════════════ */
-// PON AQUÍ TU CORREO DE GOOGLE. 
-const MASTER_EMAILS = ["tu_correo_maestro@gmail.com", "tucorreo@gmail.com"]; 
+// PON AQUÍ TU CORREO DE GOOGLE REAL. Solo este correo podrá eliminar proyectos y perfiles.
+const MASTER_EMAILS = ["manuelrate19@gmail.com"]; 
 
 
 /* ═══════════════════════════════════════
@@ -1099,9 +1109,9 @@ function renderTopbarAuth() {
         <span class="user-menu-name">${u.name} ▾</span>
       </div>
       <div class="dropdown-content" id="user-dropdown">
-        <div class="dropdown-item" onclick="goScreen('profile'); toggleDropdown();">👤 My Profile</div>
-        <div class="dropdown-item" onclick="goScreen('notifications'); toggleDropdown();">🔔 Notifications ${notifBadge}</div>
-        <div class="dropdown-item" onclick="goScreen('messages'); toggleDropdown();">💬 Messages ${msgBadge}</div>
+        <div class="dropdown-item" onclick="goScreen('profile')">👤 My Profile</div>
+        <div class="dropdown-item" onclick="goScreen('notifications')">🔔 Notifications ${notifBadge}</div>
+        <div class="dropdown-item" onclick="goScreen('messages')">💬 Messages ${msgBadge}</div>
         <div class="dropdown-item" style="color:var(--red)" onclick="signOut()">🚪 Logout</div>
       </div>
     </div>
@@ -1751,7 +1761,7 @@ function confirmDelete() {
 }
 
 /* ═══════════════════════════════════════
-   PROFILE SCREEN
+   PROFILE SCREEN (MY PROFILE)
 ═══════════════════════════════════════ */
 function renderProfile() {
   try {
@@ -1888,6 +1898,7 @@ function renderPublish() {
   el.innerHTML=`<div class="sec-title" style="margin-bottom:14px">COMPLETED PROJECTS QUEUE</div><div class="publish-list">${listHTML}</div><div class="sec-title"><span>📅 SCHEDULING CALENDAR</span></div>${buildCalendarHTML()}`;
   document.querySelectorAll('.cal-day:not(.empty)').forEach(d=>{ d.addEventListener('click',()=>{ const ds=`${calDate.getFullYear()}-${String(calDate.getMonth()+1).padStart(2,'0')}-${String(d.dataset.day).padStart(2,'0')}`; calSelectedDay=calSelectedDay===ds?null:ds; renderPublish(); }); });
 }
+
 function buildCalendarHTML() {
   const y=calDate.getFullYear(), m=calDate.getMonth(), todayStr=today();
   const scheduled={}; DB.publish.filter(x=>x.date).forEach(x=>{ scheduled[x.date]=(scheduled[x.date]||[]); const p=getP(x.projectId); if(p) scheduled[x.date].push(p); });
