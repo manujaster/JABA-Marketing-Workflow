@@ -38,6 +38,7 @@
   --red: #ef4444;           
 }
 
+/* Fuerza el calendario a modo oscuro para que sea blanco */
 body { background:var(--bg); color:var(--text); font-family:'Plus Jakarta Sans',sans-serif; min-height:100vh; color-scheme: dark; }
 button{font-family:'Plus Jakarta Sans',sans-serif;cursor:pointer;border:none;outline:none;}
 input,textarea,select{font-family:'Plus Jakarta Sans',sans-serif;outline:none;}
@@ -78,11 +79,8 @@ input,textarea,select{font-family:'Plus Jakarta Sans',sans-serif;outline:none;}
 .cat-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0;}
 .cat-count{margin-left:auto;font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--muted);font-weight:500;}
 
-/* SIDEBAR FOOTER & PROFILE BTN */
+/* SIDEBAR FOOTER */
 .sidebar-footer{padding:16px;border-top:1px solid var(--line);display:flex;flex-direction:column;gap:8px;}
-.profile-nav-btn { display:flex; align-items:center; gap:12px; padding:12px; border-radius:10px; background:var(--bg); border:1px solid var(--line2); cursor:pointer; transition:all .2s; font-size:13px; font-weight:600; color:var(--text); }
-.profile-nav-btn:hover { border-color:var(--primary-light); background:var(--card2); }
-.profile-nav-btn.active { background:var(--primary-bg); border-color:var(--primary); color:var(--primary-light); }
 .sb-btn{width:100%;padding:10px 14px;border-radius:8px;font-size:13px;font-weight:600;transition:all .2s;display:flex;align-items:center;justify-content:center;gap:6px;}
 .sb-btn.primary{background:var(--primary);color:#fff;}
 .sb-btn.secondary{background:var(--card2);color:var(--text);border:1px solid var(--line2);}
@@ -255,7 +253,7 @@ input,textarea,select{font-family:'Plus Jakarta Sans',sans-serif;outline:none;}
 .link-value{font-size:13px;color:var(--text);text-decoration:none;flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;transition:color .2s;}
 .link-value:hover{color:var(--primary-light);text-decoration:underline;}
 .link-del-btn{background:var(--card2);border-radius:6px;width:26px;height:26px;display:flex;align-items:center;justify-content:center;color:var(--muted);cursor:pointer;transition:all .2s;}
-.link-del-btn:hover{background:var(--red);color:#fff;}
+.link-del-btn:hover{background:var(--primary);color:#fff;}
 .link-inline-add { display:flex;gap:8px;margin-top:16px;padding-top:16px;border-top:1px dashed var(--line2); }
 .link-inline-add input { flex:1;padding:8px 12px;background:var(--bg);border:1px solid var(--line2);border-radius:8px;font-size:13px;color:var(--text);transition:border-color .2s; }
 .link-inline-add input:focus { border-color:var(--primary-light); }
@@ -369,12 +367,12 @@ input,textarea,select{font-family:'Plus Jakarta Sans',sans-serif;outline:none;}
 .pub-date-row{display:flex;align-items:center;gap:12px;}
 .pub-date-lbl{font-size:16px;}
 
-/* CSS DEL INPUT DE FECHA Y EL CALENDARIO (FORZAR BLANCO) */
-.pub-date-inp{padding:8px 12px;background:var(--bg);border:1px solid var(--line2);border-radius:8px;font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--text);cursor:pointer;transition:border-color .2s; color-scheme: dark;}
+/* CALENDARIO BLANCO (MÉTODO NATIVO MÁS SEGURO) */
+.pub-date-inp{padding:8px 12px;background:var(--bg);border:1px solid var(--line2);border-radius:8px;font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--text);cursor:pointer;transition:border-color .2s;}
 .pub-date-inp:focus{border-color:var(--accent-light);box-shadow:0 0 0 1px var(--accent-light);}
-.pub-date-inp::-webkit-calendar-picker-indicator { cursor: pointer; filter: invert(1) sepia(100%) saturate(0%) hue-rotate(0deg) brightness(200%) !important; }
+.pub-date-inp::-webkit-calendar-picker-indicator { cursor: pointer; }
 
-/* Calendar */
+/* Calendar Widget */
 .cal-wrap{background:var(--card);border:1px solid var(--line);border-radius:16px;overflow:hidden;}
 .cal-hd{display:flex;align-items:center;justify-content:space-between;padding:20px;border-bottom:1px solid var(--line);}
 .cal-month{font-size:18px;font-weight:700;color:var(--text);}
@@ -416,7 +414,7 @@ input,textarea,select{font-family:'Plus Jakarta Sans',sans-serif;outline:none;}
 .idea-add-icon{font-size:32px;}
 .idea-add-text{font-size:14px;font-weight:700;}
 
-/* Content type tags generic */
+/* Content type tags */
 .ct-longform{background:rgba(99,102,241,0.15);color:var(--primary-light);}
 .ct-short{background:rgba(168,85,247,0.15);color:var(--accent-light);}
 .ct-podcast{background:var(--green-bg);color:var(--green);}
@@ -808,6 +806,24 @@ input,textarea,select{font-family:'Plus Jakarta Sans',sans-serif;outline:none;}
 </div>
 </div>
 
+<div class="overlay" id="m-link" onclick="ovClose(event,'m-link')">
+<div class="modal">
+  <div class="modal-title">Manage Link</div>
+  <div class="field">
+    <label class="field-label">Link Type</label>
+    <select class="field-select" id="inp-linktype" disabled></select>
+  </div>
+  <div class="field">
+    <label class="field-label">URL</label>
+    <input class="field-input" id="inp-linkurl" placeholder="https://...">
+  </div>
+  <div class="modal-footer">
+    <button class="btn-cancel" onclick="closeModal('m-link')">Cancel</button>
+    <button class="btn-ok" onclick="saveLink()">Save Link</button>
+  </div>
+</div>
+</div>
+
 <div class="overlay" id="m-idea" onclick="ovClose(event,'m-idea')">
 <div class="modal">
   <div class="modal-title" id="m-idea-title">New Video Idea</div>
@@ -896,15 +912,27 @@ const CloudDB = {
 
 let DB = { years:[], categories:[], projects:[], publish:[], ideas:[], todos:{}, users:[], notifications:{}, messages:{} };
 let isDbLoaded = false;
+let linkCtx = null;
 
-// 4. Inicializar y escuchar cambios en TIEMPO REAL
+// Inicializar y escuchar cambios en TIEMPO REAL
 function initApp() {
+  
+  // 1. Rescatar proyectos que hayan quedado en el LocalStorage
+  const localStr = localStorage.getItem('jm-db');
+  let localDB = null;
+  try { if(localStr) localDB = JSON.parse(localStr); } catch(e){}
+
   db.collection("workspace").doc("main_data").onSnapshot((doc) => {
     isDbLoaded = true;
     if (doc.exists) {
       DB = doc.data().db_state || {};
     } else {
-      DB = {};
+      // Si la base de datos de Firebase es nueva y vacía, MIGRAMOS los datos de LocalStorage a la Nube.
+      if (localDB && localDB.projects && localDB.projects.length > 0) {
+        DB = localDB;
+      } else {
+        DB = {};
+      }
     }
       
     // MIGRACIONES AGRESIVAS (Previene que perfiles o proyectos queden en blanco)
@@ -932,17 +960,23 @@ function initApp() {
       p.order = p.order ?? i;
     });
 
-    // Si el documento era nuevo, lo guardamos para establecer la base en la nube
+    // Guardar para asentar los datos migrados o nuevos
     if(!doc.exists) CloudDB.save(DB);
     
-    // Solo si Firebase Auth ya nos dio un usuario, lo sincronizamos y renderizamos
+    // Si ya inició sesión Google, sincronizar. Si no, al menos renderizar los proyectos
     if(currentUserObj) {
       syncUserAndRender();
+    } else {
+      render();
     }
     
   }, (error) => {
     console.error("Error conectando a Firebase.", error);
-    alert("Error de conexión a la base de datos.");
+    // Si falla la conexión por reglas de seguridad, mostramos LocalStorage para no dejar la pantalla vacía
+    if(localDB) DB = localDB;
+    isDbLoaded = true;
+    if(currentUserObj) syncUserAndRender();
+    else render();
   });
 }
 
@@ -1020,7 +1054,6 @@ firebase.auth().onAuthStateChanged((user) => {
   if (user) {
     currentUserObj = user;
     isMaster = MASTER_EMAILS.includes(user.email);
-    // Si la DB ya cargó, procesamos y renderizamos
     if(isDbLoaded) {
       syncUserAndRender();
     }
@@ -1031,6 +1064,14 @@ firebase.auth().onAuthStateChanged((user) => {
     document.getElementById('m-login').classList.add('open');
   }
 });
+
+function checkAuth() {
+  if(!currentUserObj) {
+    document.getElementById('m-login').classList.add('open');
+  } else {
+    document.getElementById('m-login').classList.remove('open');
+  }
+}
 
 // Empata la cuenta de Google con nuestra Base de Datos
 function syncUserAndRender() {
@@ -1153,6 +1194,7 @@ function renderMessages() {
 }
 
 // ── PERFIL PÚBLICO EN PANTALLA ──
+let viewingProfileId = null;
 function viewPublicProfile(uid) {
   if(uid === currentUser) { goScreen('profile'); return; }
   viewingProfileId = uid;
@@ -1187,7 +1229,7 @@ function renderPublicProfile() {
       <img src="${u.avatar}" class="profile-avatar">
       <div class="profile-info">
         <h2>${u.name}</h2>
-        <p>${u.role || 'Team Member'}</p>
+        <p style="font-size:13px; color:var(--soft);">${u.role || 'Team Member'}</p>
       </div>
     </div>
     
@@ -1335,6 +1377,25 @@ function renderTopbar() {
   bc.innerHTML = leftSub;
   title.textContent = leftTitle;
   right.innerHTML = renderTopbarAuth();
+}
+
+/* ═══════════════════════════════════════
+   AVATAR HELPER
+═══════════════════════════════════════ */
+function renderAvatars(assignees) {
+  const arr = assignees || [];
+  if(!arr.length) return '<div class="avatar-empty">+</div>';
+  const max = 3;
+  const visible = arr.slice(0, max);
+  const extra = arr.length - max;
+  let html = '<div class="avatar-group">';
+  visible.forEach(uid => { 
+    const u = DB.users.find(x => x.id === uid); 
+    if(u) html += `<img src="${u.avatar}" class="avatar-sm" title="${u.name}" onclick="event.stopPropagation(); openPublicProfile('${u.id}')">`; 
+  });
+  if(extra > 0) html += `<div class="avatar-extra">+${extra}</div>`;
+  html += '</div>';
+  return html;
 }
 
 /* ═══════════════════════════════════════
@@ -1654,6 +1715,7 @@ function applyFeedback() {
   if(file) resizeImage(file, finishFb); else finishFb(null);
 }
 
+// Ventana centralizada para Eliminar Proyectos o Usuarios
 function askDelete(id, type) { 
   deleteCtx = id; 
   deleteType = type;
@@ -1671,6 +1733,7 @@ function confirmDelete() {
     toast('Project wiped','🗑');
   } else if (deleteType === 'user') {
     DB.users = DB.users.filter(u=>u.id!==deleteCtx);
+    // Eliminarlo de las asignaciones de proyectos
     DB.projects.forEach(p => { 
       if(p.assignees) p.assignees = p.assignees.filter(uid => uid !== deleteCtx); 
     });
@@ -1689,7 +1752,12 @@ function confirmDelete() {
 function renderProfile() {
   const u = getAuthUser(); 
   if(!u) {
-    document.getElementById('profile-content').innerHTML = '<div class="empty-state"><div class="empty-text">Loading profile...</div></div>';
+    document.getElementById('profile-content').innerHTML = `
+      <div class="empty-state" style="margin-top:40px;">
+        <div class="empty-icon">👤</div>
+        <div class="empty-text">Loading profile data...</div>
+        <button class="tb-btn primary" onclick="checkSyncUser(); renderProfile();">Refresh</button>
+      </div>`;
     return;
   }
   
@@ -1725,7 +1793,7 @@ function renderProfile() {
     </div>
   `).join('');
 
-  // Panel maestro de administración de usuarios (Solo para correo Maestro)
+  // Sección exclusiva para el Master (Lista del equipo para eliminar)
   let teamHTML = '';
   if(isMaster) {
     teamHTML = `
@@ -1777,7 +1845,6 @@ function renderProfile() {
     ${teamHTML}
   `;
 }
-
 function addTodo() {
   const text = document.getElementById('new-todo').value.trim(); if(!text) return;
   DB.todos[currentUser].push({id:uid(), text, done:false});
@@ -1800,6 +1867,7 @@ function setPublishDate(pid,date) { const e=DB.publish.find(x=>x.projectId===pid
 function renderPublish() {
   const el=document.getElementById('pub-content');
   if(!DB.publish.length) { 
+    // Muestra el calendario aunque no haya nada en la lista.
     el.innerHTML=`
       <div class="sec-title" style="margin-bottom:14px">COMPLETED PROJECTS QUEUE</div>
       <div style="text-align:center; padding:60px 20px; color:var(--muted); font-size:14px; background:var(--card); border-radius:12px; margin-bottom:32px;">No content ready to publish yet.</div>
@@ -1918,7 +1986,7 @@ function loadProjCats() { const yr=document.getElementById('inp-pyear').value, c
 ═══════════════════════════════════════ */
 function openModal(id) {
   if(id==='m-project'){ document.getElementById('inp-pyear').innerHTML=DB.years.map(y=>`<option value="${y.id}">${y.label}</option>`).join(''); loadProjCats(); buildCTRadios(selContentType); document.getElementById('step-toggles').innerHTML=DEFAULT_STEPS.map(s=>`<div class="stoggle on" data-s="${s}" onclick="this.classList.toggle('on')">${s}</div>`).join(''); tempAssignees = [currentUser]; renderAssignUserList('create-proj-assignees', tempAssignees); document.getElementById('inp-pname').value=''; }
-  if(id==='m-category'){ document.getElementById('inp-cyear').innerHTML=DB.years.map(y=>`<option value="${y.id}">${y.label}</option>`).join(''); selCatColor=CAT_COLORS[0]; buildCatSwatches(); document.getElementById('inp-cname').value=''; document.getElementById('inp-cnewyear').value=''; }
+  if(id==='m-category'){ document.getElementById('inp-cyear').innerHTML=DB.years.map(y=>`<option value="${y.id}">${y.label}</option>`).join(''); selCatColor=CAT_COLORS[0]; buildCatSwatches(); document.getElementById('inp-cname').value=''; }
   if(id==='m-season'){ document.getElementById('inp-season-name').value=''; }
   if(id==='m-step') document.getElementById('inp-sname').value='';
   document.getElementById(id).classList.add('open');
