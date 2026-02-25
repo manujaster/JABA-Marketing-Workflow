@@ -8,6 +8,7 @@
 
 <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
 <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
 
 <style>
 *,*::before,*::after{margin:0;padding:0;box-sizing:border-box;}
@@ -37,8 +38,8 @@
   --red: #ef4444;           
 }
 
-/* Fuerza el calendario del input a verse claro en fondos oscuros */
-body{background:var(--bg);color:var(--text);font-family:'Plus Jakarta Sans',sans-serif;min-height:100vh; color-scheme: dark;}
+/* Soluciona el ícono negro del calendario poniéndolo en modo oscuro nativo */
+body { background:var(--bg); color:var(--text); font-family:'Plus Jakarta Sans',sans-serif; min-height:100vh; color-scheme: dark; }
 button{font-family:'Plus Jakarta Sans',sans-serif;cursor:pointer;border:none;outline:none;}
 input,textarea,select{font-family:'Plus Jakarta Sans',sans-serif;outline:none;}
 
@@ -109,7 +110,7 @@ input,textarea,select{font-family:'Plus Jakarta Sans',sans-serif;outline:none;}
 
 /* USER PROFILE NAV */
 .user-menu-btn{display:flex;align-items:center;gap:8px;padding:6px 12px;background:var(--card);border:1px solid var(--line2);border-radius:20px;cursor:pointer;transition:all .2s;}
-.user-menu-btn:hover{border-color:var(--primary-light);background:var(--card2);}
+.user-menu-btn:hover{border-color:var(--red);background:var(--card2);}
 .user-menu-avatar{width:24px;height:24px;border-radius:50%;object-fit:cover;}
 .user-menu-name{font-size:12px;font-weight:600;color:var(--text);}
 
@@ -364,7 +365,7 @@ input,textarea,select{font-family:'Plus Jakarta Sans',sans-serif;outline:none;}
 /* CSS DEL INPUT DE FECHA Y EL CALENDARIO */
 .pub-date-inp{padding:8px 12px;background:var(--bg);border:1px solid var(--line2);border-radius:8px;font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--text);cursor:pointer;transition:border-color .2s; color-scheme: dark;}
 .pub-date-inp:focus{border-color:var(--accent-light);box-shadow:0 0 0 1px var(--accent-light);}
-.pub-date-inp::-webkit-calendar-picker-indicator { filter: invert(0.8); cursor: pointer; }
+.pub-date-inp::-webkit-calendar-picker-indicator { cursor: pointer; }
 
 /* Calendar */
 .cal-wrap{background:var(--card);border:1px solid var(--line);border-radius:16px;overflow:hidden;}
@@ -469,13 +470,8 @@ input,textarea,select{font-family:'Plus Jakarta Sans',sans-serif;outline:none;}
 .toast span{color:var(--primary-light);font-size:18px;}
 @keyframes ti{from{opacity:0;transform:translateY(20px) scale(0.95)}to{opacity:1;transform:none}}
 
-/* Login UI inside Modal */
-.login-user-list{display:flex;flex-direction:column;gap:12px;}
-.login-user-card{display:flex;align-items:center;gap:16px;background:var(--bg);border:1px solid var(--line2);padding:16px;border-radius:12px;cursor:pointer;transition:all .2s;}
-.login-user-card:hover{border-color:var(--primary-light);background:var(--card2);transform:translateY(-2px);}
-.login-user-avatar{width:40px;height:40px;border-radius:50%;}
-.login-user-info h3{font-size:16px;font-weight:700;color:var(--text);margin-bottom:2px;}
-.login-user-info p{font-size:12px;color:var(--muted);}
+/* Google Button SVG wrapper */
+.google-btn-icon { background: white; border-radius: 50%; padding: 2px; display: inline-flex; margin-right: 12px; align-items: center; justify-content: center; width: 24px; height: 24px;}
 </style>
 </head>
 <body>
@@ -509,8 +505,6 @@ input,textarea,select{font-family:'Plus Jakarta Sans',sans-serif;outline:none;}
     <div class="profile-nav-btn" id="nav-profile" onclick="goScreen('profile')">
       <span class="nav-icon">👤</span><span>My Profile</span>
     </div>
-    <button class="sb-btn primary" onclick="openModal('m-project')">➕ New Project</button>
-    <button class="sb-btn secondary" onclick="openModal('m-category')">➕ Add Category</button>
   </div>
 </aside>
 
@@ -593,29 +587,17 @@ input,textarea,select{font-family:'Plus Jakarta Sans',sans-serif;outline:none;}
 </div>
 
 <div class="overlay" id="m-login">
-<div class="modal" style="max-width: 400px;">
-  <div class="modal-title" style="text-align:center;">Welcome to JABA Workflow</div>
-  <p style="text-align:center; color:var(--soft); font-size:13px; margin-bottom:24px;">Select your user profile to continue</p>
-  <div class="login-user-list" id="login-user-list"></div>
-  <button class="tb-btn primary" style="width:100%; margin-top:20px; justify-content:center; padding:12px;" onclick="closeModal('m-login'); openModal('m-new-user');">➕ Create New Profile</button>
-</div>
-</div>
-
-<div class="overlay" id="m-new-user" onclick="ovClose(event,'m-new-user')">
-<div class="modal" style="max-width: 400px;">
-  <div class="modal-title" id="m-user-title">Create Profile</div>
-  <div class="field">
-    <label class="field-label">Full Name</label>
-    <input class="field-input" id="inp-u-name" placeholder="E.g.: John Doe">
-  </div>
-  <div class="field">
-    <label class="field-label">Email / Role</label>
-    <input class="field-input" id="inp-u-email" placeholder="E.g.: Editor">
-  </div>
-  <div class="modal-footer">
-    <button class="btn-cancel" onclick="closeModal('m-new-user'); checkAuth();">Cancel</button>
-    <button class="btn-ok" onclick="saveUserProfile()">Save Profile</button>
-  </div>
+<div class="modal" style="max-width: 400px; text-align: center;">
+  <img src="Jaba Face.png" alt="Logo" style="width:72px; height:72px; object-fit:contain; margin-bottom:16px;">
+  <div class="modal-title">Welcome to JABA Workflow</div>
+  <p style="color:var(--soft); font-size:13px; margin-bottom:28px;">Please sign in with your Google account to access the workspace.</p>
+  
+  <button class="tb-btn primary" style="width:100%; justify-content:center; padding:12px; font-size: 14px;" onclick="signInWithGoogle()">
+    <span class="google-btn-icon">
+      <svg width="16" height="16" viewBox="0 0 48 48"><path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.7 17.74 9.5 24 9.5z"/><path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/><path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"/><path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.15 1.45-4.92 2.3-8.16 2.3-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/></svg>
+    </span>
+    Sign in with Google
+  </button>
 </div>
 </div>
 
@@ -783,6 +765,13 @@ input,textarea,select{font-family:'Plus Jakarta Sans',sans-serif;outline:none;}
 
 <script>
 /* ═══════════════════════════════════════
+   CONFIGURACIÓN DE CUENTA MAESTRA
+═══════════════════════════════════════ */
+// Pon tu correo aquí. Solo este correo podrá eliminar proyectos y perfiles.
+const MASTER_EMAILS = ["manuelrate19@gmail.com"]; 
+
+
+/* ═══════════════════════════════════════
    DATA & CONSTANTS
 ═══════════════════════════════════════ */
 const CONTENT_TYPES = [
@@ -832,9 +821,11 @@ const CloudDB = {
 };
 
 let DB = { years:[], categories:[], projects:[], publish:[], ideas:[], todos:{}, users:[] };
+let isDbLoaded = false;
 
 function initApp() {
   db.collection("workspace").doc("main_data").onSnapshot((doc) => {
+    isDbLoaded = true;
     if (doc.exists) {
       DB = doc.data().db_state;
       
@@ -851,8 +842,6 @@ function initApp() {
       if (!DB.ideas) DB.ideas = [];
       if (!DB.todos) DB.todos = {};
       
-      checkAuth();
-      if(currentUser) render(); 
     } else {
       DB.users = [];
       DB.years = [{ id:'y2026', label:'2026' }];
@@ -865,8 +854,11 @@ function initApp() {
       DB.ideas = [];
       DB.todos = {};
       CloudDB.save(DB); 
-      checkAuth();
     }
+    
+    checkSyncUser(); // Revisa si hay que sincronizar el usuario de Auth con la DB
+    if(currentUser) render();
+    
   }, (error) => {
     console.error("Error conectando a Firebase.", error);
     alert("Error de conexión a la base de datos.");
@@ -908,7 +900,7 @@ function ctClass(ct) { return 'ct-'+(ct||'other'); }
 function ctLabel(ct) { const match = CONTENT_TYPES.find(c=>c.id===ct); return match ? match.label : 'Other'; }
 
 /* ═══════════════════════════════════════
-   STATE & AUTH & DYNAMIC USERS
+   STATE & GOOGLE AUTHENTICATION
 ═══════════════════════════════════════ */
 let screen = 'projects';
 let filterCat = null;
@@ -925,69 +917,74 @@ let currentCommentImgB64 = null;
 let editingIdeaId = null;
 let isPausedGridOpen = false;
 
-let currentUser = localStorage.getItem('jm-user');
-let editingProfileId = null;
+let currentUser = null; // Guardará el UID de firebase auth
+let currentUserObj = null; // Guardará el objeto completo de auth
+let isMaster = false; // Define si tiene permisos de eliminar
 
-function checkAuth() {
-  if(!currentUser || !DB.users.find(u=>u.id===currentUser)) {
-    const list = document.getElementById('login-user-list');
-    if(DB.users.length === 0) {
-      list.innerHTML = `<div style="text-align:center; color:var(--muted); font-size:13px; margin-bottom:16px;">No profiles found. Create the first one!</div>`;
-    } else {
-      list.innerHTML = DB.users.map(u=>`
-        <div class="login-user-card" onclick="login('${u.id}')">
-          <img src="${u.avatar}" class="login-user-avatar">
-          <div class="login-user-info"><h3>${u.name}</h3><p>${u.email}</p></div>
-        </div>`).join('');
-    }
-    document.getElementById('m-login').classList.add('open');
-  } else {
-    renderTopbarAuth();
-  }
+function signInWithGoogle() {
+  const provider = new firebase.auth.GoogleAuthProvider();
+  firebase.auth().signInWithPopup(provider).catch(err => {
+    console.error(err);
+    alert("Error al iniciar sesión: " + err.message);
+  });
 }
 
-function login(id) {
-  currentUser = id; localStorage.setItem('jm-user', id);
-  document.getElementById('m-login').classList.remove('open');
-  renderTopbarAuth(); render();
+function signOut() {
+  firebase.auth().signOut();
+}
+
+// Escuchamos cambios en la autenticación de Firebase
+firebase.auth().onAuthStateChanged((user) => {
+  if (user) {
+    currentUserObj = user;
+    isMaster = MASTER_EMAILS.includes(user.email);
+    checkSyncUser();
+    
+    closeModal('m-login');
+    if(isDbLoaded) render();
+  } else {
+    currentUserObj = null;
+    currentUser = null;
+    isMaster = false;
+    document.getElementById('m-login').classList.add('open'); // Mostrar login
+  }
+});
+
+function checkSyncUser() {
+  if(isDbLoaded && currentUserObj && DB.users) {
+    let u = DB.users.find(x => x.email === currentUserObj.email);
+    if(!u) {
+      // Registrar usuario nuevo en la DB
+      DB.users.push({ 
+        id: currentUserObj.uid, 
+        name: currentUserObj.displayName || 'Usuario Nuevo', 
+        email: currentUserObj.email, 
+        avatar: currentUserObj.photoURL || 'https://ui-avatars.com/api/?name=U' 
+      });
+      save();
+    } else if (u.avatar !== currentUserObj.photoURL || u.name !== currentUserObj.displayName) {
+      // Actualizar datos si cambiaron en Google
+      u.avatar = currentUserObj.photoURL || u.avatar;
+      u.name = currentUserObj.displayName || u.name;
+      save();
+    }
+    currentUser = currentUserObj.uid;
+  }
 }
 
 function getAuthUser() { return DB.users.find(x=>x.id===currentUser); }
 
 function renderTopbarAuth() {
   const u = getAuthUser();
-  if(!u) return;
-  // El render principal ahora se encarga de inyectarlo para evitar superposiciones
-}
-
-function openEditProfile(id) {
-  editingProfileId = id;
-  const u = DB.users.find(x=>x.id===id);
-  document.getElementById('m-user-title').textContent = u ? 'Edit Profile' : 'Create Profile';
-  document.getElementById('inp-u-name').value = u ? u.name : '';
-  document.getElementById('inp-u-email').value = u ? u.email : '';
-  openModal('m-new-user');
-}
-
-function saveUserProfile() {
-  const name = document.getElementById('inp-u-name').value.trim();
-  const email = document.getElementById('inp-u-email').value.trim();
-  if(!name) return alert("Name is required.");
-  
-  const avatar = `https://ui-avatars.com/api/?name=${encodeURIComponent(name)}&background=6366f1&color=fff`;
-
-  if(editingProfileId) {
-    const u = DB.users.find(x=>x.id===editingProfileId);
-    if(u) { u.name = name; u.email = email; u.avatar = avatar; }
-  } else {
-    const newId = uid();
-    DB.users.push({ id: newId, name, email, avatar });
-    if(!currentUser) { currentUser = newId; localStorage.setItem('jm-user', newId); }
-  }
-  save(); closeModal('m-new-user'); 
-  if(document.getElementById('m-login').classList.contains('open')) checkAuth();
-  else { renderTopbarAuth(); render(); }
-  toast('Profile saved', '👤');
+  if(!u) return '';
+  // Devuelve solo el string de HTML para inyectar en la Topbar
+  return `
+    <button class="tb-btn primary" onclick="openModal('m-project')">➕ New Project</button>
+    <div class="user-menu-btn" onclick="signOut()" title="Click to Sign Out">
+      <img src="${u.avatar}" class="user-menu-avatar">
+      <span class="user-menu-name">${u.name} (Logout)</span>
+    </div>
+  `;
 }
 
 /* ═══════════════════════════════════════
@@ -1066,16 +1063,9 @@ function renderTopbar() {
 
   bc.innerHTML = leftSub;
   title.textContent = leftTitle;
-
-  const u = getAuthUser();
-  let rightHTML = `<button class="tb-btn primary" onclick="openModal('m-project')">➕ New Project</button>`;
-  if(u) {
-    rightHTML += `<div class="user-menu-btn" onclick="document.getElementById('m-login').classList.add('open')" title="Switch User">
-      <img src="${u.avatar}" class="user-menu-avatar">
-      <span class="user-menu-name">${u.name}</span>
-    </div>`;
-  }
-  right.innerHTML = rightHTML;
+  
+  // Inyectar Perfil y Botón de crear proyecto en todas las vistas
+  right.innerHTML = renderTopbarAuth();
 }
 
 /* ═══════════════════════════════════════
@@ -1159,7 +1149,9 @@ function renderProjects() {
     const pips = steps.map(s=>`<div class="step-pip ${ver.waitingFeedback&&s.status==='done'?'waiting':s.status}" title="${s.name}"></div>`).join('');
     
     return `<div class="project-card" draggable="true" ondragstart="dragStart(event,'${p.id}')" ondragover="dragOver(event)" ondragleave="dragLeave(event)" ondrop="drop(event,'${p.id}')" ondragend="dragEnd(event)">
-      <div class="pc-action-btn pc-del" title="Delete Project" onclick="event.stopPropagation(); askDelete('${p.id}', 'project')">🗑</div>
+      
+      ${isMaster ? `<div class="pc-action-btn pc-del" title="Delete Project" onclick="event.stopPropagation(); askDelete('${p.id}', 'project')">🗑</div>` : ''}
+      
       <div class="pc-action-btn pc-drag" title="Drag to reorder">⠿</div>
       ${p.thumbnail ? `<div class="pc-thumb-wrap"><img src="${p.thumbnail}" class="pc-thumb"></div>` : ''}
       <div class="pc-body" onclick="openProj('${p.id}')">
@@ -1258,6 +1250,12 @@ function renderDetail() {
     <div class="detail-thumb-wrap" onclick="document.getElementById('upload-thumb-input').click()">
       ${thumbHtml}
     </div>
+    
+    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:16px;">
+      <h2 style="font-size:24px; font-weight:800;">${p.name}</h2>
+      ${isMaster ? `<button class="tb-btn danger" onclick="askDelete('${p.id}', 'project')">🗑 Delete Project</button>` : ''}
+    </div>
+
     <div class="assignees-block">
       <div>
         <div class="assignees-label">ASSIGNED TO</div>
@@ -1351,7 +1349,7 @@ function renderComments() {
       ${c.text?`<div class="cc-text">${c.text}</div>`:''}
       ${c.img?`<img src="${c.img}" class="cc-img">`:''}
       <div class="cc-date">${c.date}</div>
-      ${c.authorId===currentUser || !c.authorId ? `<button class="cc-del" onclick="deleteComment('${p.id}','${c.id}')">✕</button>`:''}
+      ${c.authorId===currentUser || isMaster ? `<button class="cc-del" onclick="deleteComment('${p.id}','${c.id}')">✕</button>`:''}
     </div>`;
   }).join('');
 }
@@ -1374,6 +1372,7 @@ function applyFeedback() {
   if(file) resizeImage(file, finishFb); else finishFb(null);
 }
 
+// Ventana centralizada para Eliminar Proyectos o Usuarios
 function askDelete(id, type) { 
   deleteCtx = id; 
   deleteType = type;
@@ -1391,9 +1390,10 @@ function confirmDelete() {
     toast('Project wiped','🗑');
   } else if (deleteType === 'user') {
     DB.users = DB.users.filter(u=>u.id!==deleteCtx);
-    if(currentUser === deleteCtx) { currentUser = null; localStorage.removeItem('jm-user'); }
+    // Eliminarlo de las asignaciones de proyectos
+    DB.projects.forEach(p => { p.assignees = p.assignees.filter(uid => uid !== deleteCtx); });
     save();
-    checkAuth();
+    renderProfile(); // Recargar la lista de perfiles
     toast('Profile deleted','🗑');
   }
   closeModal('m-delete'); 
@@ -1435,16 +1435,32 @@ function renderProfile() {
     </div>
   `).join('');
 
+  // Sección exclusiva para el Master (Lista del equipo para eliminar)
+  let teamHTML = '';
+  if(isMaster) {
+    teamHTML = `
+    <div class="sec-title" style="margin-top:40px; margin-bottom:16px;">👑 MASTER ADMIN: TEAM MANAGEMENT</div>
+    <div class="profile-grid">
+      <div class="profile-col" style="grid-column: 1 / -1;">
+        <div class="todo-list">
+          ${DB.users.map(user => `
+            <div class="todo-item">
+              <img src="${user.avatar}" class="avatar-sm" style="margin:0;">
+              <span class="todo-text" style="font-weight:600; margin-left:10px;">${user.name} <span style="color:var(--muted); font-weight:400;">(${user.email})</span></span>
+              ${user.id !== currentUser ? `<button class="todo-del" title="Delete User" onclick="askDelete('${user.id}', 'user')">🗑</button>` : '<span style="font-size:11px; color:var(--primary-light)">You</span>'}
+            </div>
+          `).join('')}
+        </div>
+      </div>
+    </div>`;
+  }
+
   document.getElementById('profile-content').innerHTML = `
     <div class="profile-header">
       <img src="${u.avatar}" class="profile-avatar">
       <div class="profile-info">
         <h2>${u.name}</h2>
         <p>${u.email}</p>
-      </div>
-      <div class="profile-actions">
-        <button class="tb-btn" onclick="openEditProfile('${u.id}')">✏️ Edit</button>
-        <button class="tb-btn danger" onclick="askDelete('${u.id}', 'user')">🗑 Delete</button>
       </div>
     </div>
     <div class="profile-grid">
@@ -1465,6 +1481,7 @@ function renderProfile() {
         <div class="todo-list">${todoHTML || '<div style="color:var(--muted);font-size:13px;">All caught up!</div>'}</div>
       </div>
     </div>
+    ${teamHTML}
   `;
 }
 function addTodo() {
@@ -1603,7 +1620,7 @@ function goScreen(name) { screen=name; if(name!=='detail') curPid=null; document
 function toast(msg,icon='✓') { const el=document.createElement('div'); el.className='toast'; el.innerHTML=`<span>${icon}</span> ${msg}`; document.body.appendChild(el); setTimeout(()=>el.remove(),2800); }
 
 function render() {
-  renderTopbarAuth(); renderSidebar(); renderTopbar();
+  renderSidebar(); renderTopbar();
   if(screen==='projects') renderProjects();
   else if(screen==='detail') renderDetail();
   else if(screen==='publish') renderPublish();
