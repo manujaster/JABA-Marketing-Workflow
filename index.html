@@ -38,7 +38,6 @@
   --red: #ef4444;           
 }
 
-/* Soluciona el ícono negro del calendario poniéndolo en modo oscuro nativo */
 body { background:var(--bg); color:var(--text); font-family:'Plus Jakarta Sans',sans-serif; min-height:100vh; color-scheme: dark; }
 button{font-family:'Plus Jakarta Sans',sans-serif;cursor:pointer;border:none;outline:none;}
 input,textarea,select{font-family:'Plus Jakarta Sans',sans-serif;outline:none;}
@@ -62,7 +61,7 @@ input,textarea,select{font-family:'Plus Jakarta Sans',sans-serif;outline:none;}
 .nav-item.active{background:var(--primary-bg);color:var(--primary-light);font-weight:600;}
 .nav-icon{font-size:16px;width:20px;text-align:center;opacity:0.8;}
 .nav-item.active .nav-icon{opacity:1;}
-.nav-badge{margin-left:auto;font-family:'JetBrains Mono',monospace;font-size:10px;background:var(--orange);color:#fff;padding:2px 8px;border-radius:12px;display:none;font-weight:700;}
+.nav-badge{margin-left:auto;font-family:'JetBrains Mono',monospace;font-size:10px;background:var(--red);color:#fff;padding:2px 8px;border-radius:12px;display:none;font-weight:700;}
 .nav-badge.show{display:block;}
 
 .yr-block{margin-bottom:4px;}
@@ -81,9 +80,6 @@ input,textarea,select{font-family:'Plus Jakarta Sans',sans-serif;outline:none;}
 
 /* SIDEBAR FOOTER & PROFILE BTN */
 .sidebar-footer{padding:16px;border-top:1px solid var(--line);display:flex;flex-direction:column;gap:8px;}
-.profile-nav-btn { display:flex; align-items:center; gap:12px; padding:12px; border-radius:10px; background:var(--bg); border:1px solid var(--line2); margin-bottom: 8px; cursor:pointer; transition:all .2s; font-size:13px; font-weight:600; color:var(--text); }
-.profile-nav-btn:hover { border-color:var(--primary-light); background:var(--card2); }
-.profile-nav-btn.active { background:var(--primary-bg); border-color:var(--primary); color:var(--primary-light); }
 .sb-btn{width:100%;padding:10px 14px;border-radius:8px;font-size:13px;font-weight:600;transition:all .2s;display:flex;align-items:center;justify-content:center;gap:6px;}
 .sb-btn.primary{background:var(--primary);color:#fff;}
 .sb-btn.secondary{background:var(--card2);color:var(--text);border:1px solid var(--line2);}
@@ -108,11 +104,17 @@ input,textarea,select{font-family:'Plus Jakarta Sans',sans-serif;outline:none;}
 .tb-btn.danger{border-color:var(--line2);color:var(--red);background:var(--bg);}
 .tb-btn.danger:hover{background:var(--red);color:#fff;border-color:transparent;}
 
-/* USER PROFILE NAV */
+/* USER DROPDOWN MENU */
+.user-menu-wrap { position: relative; }
 .user-menu-btn{display:flex;align-items:center;gap:8px;padding:6px 12px;background:var(--card);border:1px solid var(--line2);border-radius:20px;cursor:pointer;transition:all .2s;}
-.user-menu-btn:hover{border-color:var(--red);background:var(--card2);}
-.user-menu-avatar{width:24px;height:24px;border-radius:50%;object-fit:cover;}
-.user-menu-name{font-size:12px;font-weight:600;color:var(--text);}
+.user-menu-btn:hover{border-color:var(--primary-light);background:var(--card2);}
+.user-menu-avatar{width:26px;height:26px;border-radius:50%;object-fit:cover;}
+.user-menu-name{font-size:13px;font-weight:600;color:var(--text);}
+.dropdown-content { display:none; position:absolute; right:0; top:48px; background:var(--card); border:1px solid var(--line); border-radius:12px; min-width:180px; box-shadow:0 12px 24px rgba(0,0,0,0.5); z-index:999; padding:8px; flex-direction:column; gap:4px; }
+.dropdown-content.show { display:flex; }
+.dropdown-item { padding:10px 12px; border-radius:8px; font-size:13px; font-weight:600; color:var(--text); cursor:pointer; transition:all .2s; display:flex; align-items:center; justify-content:space-between; }
+.dropdown-item:hover { background:var(--card2); color:var(--primary-light); }
+.dd-badge { background:var(--red); color:#fff; font-size:10px; padding:2px 6px; border-radius:12px; font-weight:700; }
 
 /* SCREENS */
 .screen{display:none;flex:1;overflow-y:auto;}
@@ -123,10 +125,11 @@ input,textarea,select{font-family:'Plus Jakarta Sans',sans-serif;outline:none;}
 
 /* AVATARS */
 .avatar-group{display:flex;align-items:center;}
-.avatar-sm{width:26px;height:26px;border-radius:50%;border:2px solid var(--card);margin-left:-8px;object-fit:cover;background:var(--card2);}
+.avatar-sm{width:28px;height:28px;border-radius:50%;border:2px solid var(--card);margin-left:-8px;object-fit:cover;background:var(--card2);cursor:pointer;transition:all .2s;}
 .avatar-sm:first-child{margin-left:0;}
-.avatar-extra{width:26px;height:26px;border-radius:50%;border:2px solid var(--card);margin-left:-8px;background:var(--card3);color:var(--text);font-size:10px;font-weight:700;display:flex;align-items:center;justify-content:center;}
-.avatar-empty{width:26px;height:26px;border-radius:50%;border:2px dashed var(--line2);display:flex;align-items:center;justify-content:center;font-size:12px;color:var(--muted);background:var(--bg);}
+.avatar-sm:hover{transform:translateY(-2px) scale(1.1); z-index:10; border-color:var(--primary-light);}
+.avatar-extra{width:28px;height:28px;border-radius:50%;border:2px solid var(--card);margin-left:-8px;background:var(--card3);color:var(--text);font-size:10px;font-weight:700;display:flex;align-items:center;justify-content:center;}
+.avatar-empty{width:28px;height:28px;border-radius:50%;border:2px dashed var(--line2);display:flex;align-items:center;justify-content:center;font-size:12px;color:var(--muted);background:var(--bg);}
 
 /* ── FILTERS & SEARCH ── */
 .filter-bar{display:flex;align-items:center;gap:12px;margin-bottom:24px;background:var(--card);padding:12px 16px;border-radius:12px;border:1px solid var(--line);}
@@ -186,7 +189,7 @@ input,textarea,select{font-family:'Plus Jakarta Sans',sans-serif;outline:none;}
 /* PAUSED SECTION */
 .paused-header{display:flex;align-items:center;gap:10px;padding:12px 16px;background:var(--card2);border-radius:12px;cursor:pointer;margin-bottom:16px;color:var(--soft);font-weight:600;font-size:14px;border:1px solid var(--line2);}
 .paused-header:hover{background:var(--card3);color:var(--text);}
-.paused-icon{font-size:16px;}
+.paused-icon{font-size:16px; transition:transform .2s;}
 .paused-grid{display:none;}
 .paused-grid.open{display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:16px;}
 .paused-grid .project-card{opacity:0.6;border-style:dashed;}
@@ -298,7 +301,8 @@ input,textarea,select{font-family:'Plus Jakarta Sans',sans-serif;outline:none;}
 .cp-list::-webkit-scrollbar-thumb{background:var(--line2);border-radius:2px;}
 .comment-card{background:var(--bg);border:1px solid var(--line2);border-radius:12px;padding:16px;position:relative;}
 .cc-top{display:flex;align-items:center;gap:8px;margin-bottom:10px;}
-.cc-author-img{width:20px;height:20px;border-radius:50%;}
+.cc-author-img{width:20px;height:20px;border-radius:50%;cursor:pointer;transition:transform .2s;}
+.cc-author-img:hover{transform:scale(1.2);}
 .cc-author-name{font-size:12px;font-weight:700;color:var(--text);}
 .cc-ver{font-size:10px;font-weight:700;color:var(--primary-light);background:var(--primary-bg);padding:2px 6px;border-radius:6px;margin-left:auto;}
 .cc-text{font-size:13px;color:var(--text);line-height:1.5;margin-bottom:10px;}
@@ -361,11 +365,9 @@ input,textarea,select{font-family:'Plus Jakarta Sans',sans-serif;outline:none;}
 .pub-remove:hover{background:var(--red);color:#fff;border-color:transparent;}
 .pub-date-row{display:flex;align-items:center;gap:12px;}
 .pub-date-lbl{font-size:16px;}
-
-/* CSS DEL INPUT DE FECHA Y EL CALENDARIO */
 .pub-date-inp{padding:8px 12px;background:var(--bg);border:1px solid var(--line2);border-radius:8px;font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--text);cursor:pointer;transition:border-color .2s; color-scheme: dark;}
 .pub-date-inp:focus{border-color:var(--accent-light);box-shadow:0 0 0 1px var(--accent-light);}
-.pub-date-inp::-webkit-calendar-picker-indicator { cursor: pointer; }
+.pub-date-inp::-webkit-calendar-picker-indicator { cursor: pointer; filter: invert(1); }
 
 /* Calendar */
 .cal-wrap{background:var(--card);border:1px solid var(--line);border-radius:16px;overflow:hidden;}
@@ -472,6 +474,11 @@ input,textarea,select{font-family:'Plus Jakarta Sans',sans-serif;outline:none;}
 
 /* Google Button SVG wrapper */
 .google-btn-icon { background: white; border-radius: 50%; padding: 2px; display: inline-flex; margin-right: 12px; align-items: center; justify-content: center; width: 24px; height: 24px;}
+
+/* Messages & Notification styles */
+.msg-bubble{background:var(--card2);padding:12px 16px;border-radius:12px;margin-bottom:8px;font-size:13px;color:var(--text);border:1px solid var(--line2);}
+.msg-bubble.unread{border-color:var(--primary-light);background:var(--primary-bg);}
+.msg-meta{font-size:10px;color:var(--muted);margin-bottom:4px;display:flex;justify-content:space-between;}
 </style>
 </head>
 <body>
@@ -491,7 +498,7 @@ input,textarea,select{font-family:'Plus Jakarta Sans',sans-serif;outline:none;}
       <span class="nav-icon">📁</span><span>Projects</span>
     </div>
     <div class="nav-item" id="nav-publish" onclick="goScreen('publish')">
-      <span class="nav-icon">🚀</span><span>Publish Queue</span>
+      <span class="nav-icon">🚀</span><span>Completed Projects</span>
       <span class="nav-badge" id="pub-badge"></span>
     </div>
     <div class="nav-item" id="nav-ideas" onclick="goScreen('ideas')">
@@ -502,9 +509,8 @@ input,textarea,select{font-family:'Plus Jakarta Sans',sans-serif;outline:none;}
   </nav>
   
   <div class="sidebar-footer">
-    <div class="profile-nav-btn" id="nav-profile" onclick="goScreen('profile')">
-      <span class="nav-icon">👤</span><span>My Profile</span>
-    </div>
+    <button class="sb-btn primary" onclick="openModal('m-project')">➕ New Project</button>
+    <button class="sb-btn secondary" onclick="openModal('m-category')">➕ Add Category</button>
   </div>
 </aside>
 
@@ -560,7 +566,12 @@ input,textarea,select{font-family:'Plus Jakarta Sans',sans-serif;outline:none;}
             <label for="cp-file" class="cp-file-lbl" title="Attach Image">📎</label>
             <input type="file" id="cp-file" accept="image/*" style="display:none" onchange="previewCommentImage(event)">
           </div>
-          <button class="cp-send" onclick="submitComment()">Add Note</button>
+          <div style="display:flex; gap:10px; align-items:center;">
+             <select id="cp-tag" class="field-select" style="padding:8px 10px; font-size:12px; flex:1;">
+               <option value="">No tag...</option>
+             </select>
+             <button class="cp-send" style="margin-top:0; flex:1;" onclick="submitComment()">Add Note</button>
+          </div>
         </div>
       </div>
     </div>
@@ -598,6 +609,34 @@ input,textarea,select{font-family:'Plus Jakarta Sans',sans-serif;outline:none;}
     </span>
     Sign in with Google
   </button>
+</div>
+</div>
+
+<div class="overlay" id="m-public-profile" onclick="ovClose(event,'m-public-profile')">
+<div class="modal" style="max-width: 450px;" id="public-profile-content">
+  </div>
+</div>
+
+<div class="overlay" id="m-send-msg" onclick="ovClose(event,'m-send-msg')">
+<div class="modal" style="max-width: 400px;">
+  <div class="modal-title">Send Message</div>
+  <div class="field">
+    <textarea class="field-textarea" id="inp-msg-text" placeholder="Type your message here..."></textarea>
+  </div>
+  <div class="modal-footer">
+    <button class="btn-cancel" onclick="closeModal('m-send-msg')">Cancel</button>
+    <button class="btn-ok" onclick="submitMessage()">Send</button>
+  </div>
+</div>
+</div>
+
+<div class="overlay" id="m-inbox" onclick="ovClose(event,'m-inbox')">
+<div class="modal" style="max-width: 500px;">
+  <div class="modal-title" id="m-inbox-title">Inbox</div>
+  <div id="m-inbox-list" style="max-height: 400px; overflow-y:auto; margin-bottom:20px;"></div>
+  <div class="modal-footer">
+    <button class="btn-cancel" onclick="closeModal('m-inbox')">Close</button>
+  </div>
 </div>
 </div>
 
@@ -672,11 +711,11 @@ input,textarea,select{font-family:'Plus Jakarta Sans',sans-serif;outline:none;}
     <input class="field-input" id="inp-cname" placeholder="E.g.: JABA, External Client">
   </div>
   <div class="field">
-    <label class="field-label">Season / Year</label>
+    <label class="field-label">Select Season / Year</label>
     <select class="field-select" id="inp-cyear"></select>
   </div>
   <div class="field">
-    <label class="field-label">Create New Season? (Optional)</label>
+    <label class="field-label">Or create New Season? (Optional)</label>
     <input class="field-input" id="inp-cnewyear" placeholder="E.g.: 2027">
   </div>
   <div class="field">
@@ -838,7 +877,7 @@ const CloudDB = {
   }
 };
 
-let DB = { years:[], categories:[], projects:[], publish:[], ideas:[], todos:{}, users:[] };
+let DB = { years:[], categories:[], projects:[], publish:[], ideas:[], todos:{}, users:[], notifications:{}, messages:{} };
 let isDbLoaded = false;
 
 function initApp() {
@@ -847,8 +886,10 @@ function initApp() {
     if (doc.exists) {
       DB = doc.data().db_state;
       
-      // Migraciones de protección
+      // Migraciones de protección para evitar errores (Evita que el Perfil quede en blanco)
       if (!DB.users) DB.users = [];
+      if (!DB.notifications) DB.notifications = {};
+      if (!DB.messages) DB.messages = {};
       DB.projects.forEach((p,i) => {
         if (!p.links || Array.isArray(p.links)) { p.links = { wip:'', final:'', ref:'' }; }
         if (p.priority === undefined) p.priority = false;
@@ -870,6 +911,8 @@ function initApp() {
       DB.publish = [];
       DB.ideas = [];
       DB.todos = {};
+      DB.notifications = {};
+      DB.messages = {};
       CloudDB.save(DB); 
     }
     
@@ -937,6 +980,7 @@ let isPausedGridOpen = false;
 let currentUser = null; 
 let currentUserObj = null; 
 let isMaster = false; 
+let msgTargetUid = null;
 
 function signInWithGoogle() {
   const provider = new firebase.auth.GoogleAuthProvider();
@@ -974,7 +1018,7 @@ function checkSyncUser() {
         id: currentUserObj.uid, 
         name: currentUserObj.displayName || 'User', 
         email: currentUserObj.email, 
-        role: 'Editor',
+        role: 'Team Member',
         avatar: currentUserObj.photoURL || 'https://ui-avatars.com/api/?name=U' 
       };
       DB.users.push(u);
@@ -986,16 +1030,136 @@ function checkSyncUser() {
 
 function getAuthUser() { return DB.users.find(x=>x.id===currentUser); }
 
+// DROPDOWN DE USUARIO Y NOTIFICACIONES
 function renderTopbarAuth() {
   const u = getAuthUser();
   if(!u) return '';
+  
+  const unreadNotifs = (DB.notifications?.[u.id] || []).filter(n => !n.read).length;
+  const unreadMsgs = (DB.messages?.[u.id] || []).filter(m => !m.read).length;
+  
+  const notifBadge = unreadNotifs ? `<span class="dd-badge">${unreadNotifs}</span>` : '';
+  const msgBadge = unreadMsgs ? `<span class="dd-badge">${unreadMsgs}</span>` : '';
+
   return `
-    <button class="tb-btn primary" onclick="openModal('m-project')">➕ New Project</button>
-    <div class="user-menu-btn" onclick="signOut()" title="Click to Sign Out">
-      <img src="${u.avatar}" class="user-menu-avatar">
-      <span class="user-menu-name">${u.name} (Logout)</span>
+    <div class="user-menu-wrap" id="user-dropdown-wrap">
+      <div class="user-menu-btn" onclick="toggleDropdown()">
+        <img src="${u.avatar}" class="user-menu-avatar">
+        <span class="user-menu-name">${u.name} ▾</span>
+      </div>
+      <div class="dropdown-content" id="user-dropdown">
+        <div class="dropdown-item" onclick="goScreen('profile')">👤 My Profile</div>
+        <div class="dropdown-item" onclick="openInbox('notifications')">🔔 Notifications ${notifBadge}</div>
+        <div class="dropdown-item" onclick="openInbox('messages')">💬 Messages ${msgBadge}</div>
+        <div class="dropdown-item" style="color:var(--red)" onclick="signOut()">🚪 Logout</div>
+      </div>
     </div>
   `;
+}
+
+function toggleDropdown() {
+  document.getElementById('user-dropdown').classList.toggle('show');
+}
+window.onclick = function(e) {
+  if (!e.target.closest('#user-dropdown-wrap')) {
+    const dd = document.getElementById('user-dropdown');
+    if(dd && dd.classList.contains('show')) dd.classList.remove('show');
+  }
+}
+
+// INBOX (Notificaciones y Mensajes)
+function openInbox(type) {
+  const u = getAuthUser();
+  if(!u) return;
+  const list = document.getElementById('m-inbox-list');
+  const title = document.getElementById('m-inbox-title');
+  
+  if(type === 'notifications') {
+    title.textContent = '🔔 Notifications';
+    const notifs = DB.notifications[u.id] || [];
+    if(!notifs.length) {
+      list.innerHTML = `<div style="color:var(--muted); font-size:13px; text-align:center; padding:20px;">No new notifications.</div>`;
+    } else {
+      list.innerHTML = notifs.slice().reverse().map(n => `
+        <div class="msg-bubble ${n.read ? '' : 'unread'}" onclick="if(this.dataset.pid){ goScreen('projects'); openProj('${n.pid}'); closeModal('m-inbox'); }" data-pid="${n.pid||''}" style="${n.pid?'cursor:pointer;':''}">
+          <div class="msg-meta"><span>System</span><span>${n.date}</span></div>
+          <div>${n.text}</div>
+        </div>
+      `).join('');
+    }
+    // Marcar leídos
+    notifs.forEach(n => n.read = true);
+    save();
+  } else {
+    title.textContent = '💬 Direct Messages';
+    const msgs = DB.messages[u.id] || [];
+    if(!msgs.length) {
+      list.innerHTML = `<div style="color:var(--muted); font-size:13px; text-align:center; padding:20px;">No messages.</div>`;
+    } else {
+      list.innerHTML = msgs.slice().reverse().map(m => {
+        const sender = DB.users.find(x=>x.id===m.from) || {name:'Unknown'};
+        return `
+        <div class="msg-bubble ${m.read ? '' : 'unread'}">
+          <div class="msg-meta"><span style="color:var(--primary-light); font-weight:700;">${sender.name}</span><span>${m.date}</span></div>
+          <div>${m.text}</div>
+        </div>
+      `}).join('');
+    }
+    msgs.forEach(m => m.read = true);
+    save();
+  }
+  
+  renderTopbar(); // Refresca las burbujas
+  openModal('m-inbox');
+}
+
+// Perfil Público (Visto por otros)
+function openPublicProfile(uid) {
+  const u = DB.users.find(x => x.id === uid);
+  if(!u) return;
+  const activeProjs = DB.projects.filter(p => {
+    if(!p.assignees?.includes(u.id)) return false;
+    const v = getCurVer(p);
+    return v && !v.steps.every(s=>s.status==='done');
+  });
+
+  document.getElementById('public-profile-content').innerHTML = `
+    <div style="display:flex; align-items:center; gap:16px; margin-bottom:20px;">
+      <img src="${u.avatar}" style="width:64px; height:64px; border-radius:50%; border:3px solid var(--card2)">
+      <div>
+        <h2 style="font-size:20px; font-weight:800; color:var(--text);">${u.name}</h2>
+        <p style="font-size:13px; color:var(--soft);">${u.role || 'Team Member'}</p>
+      </div>
+    </div>
+    ${uid !== currentUser ? `<button class="tb-btn primary" style="width:100%; margin-bottom:24px; padding:12px; justify-content:center;" onclick="openSendMsg('${u.id}')">💬 Send Private Message</button>` : ''}
+    <div class="sec-title">▶ ACTIVE WORKSPACE</div>
+    <div style="display:flex; flex-direction:column; gap:8px;">
+      ${activeProjs.length ? activeProjs.map(p => `
+        <div style="background:var(--card2); padding:12px 16px; border-radius:8px; font-size:13px; font-weight:600; color:var(--text); border:1px solid var(--line2); cursor:pointer; transition:all .2s;" onmouseover="this.style.borderColor='var(--primary-light)'" onmouseout="this.style.borderColor='var(--line2)'" onclick="closeModal('m-public-profile'); openProj('${p.id}')">
+          ${p.name}
+        </div>
+      `).join('') : '<div style="color:var(--muted); font-size:13px;">No active projects at the moment.</div>'}
+    </div>
+  `;
+  openModal('m-public-profile');
+}
+
+function openSendMsg(uid) {
+  msgTargetUid = uid;
+  document.getElementById('inp-msg-text').value = '';
+  closeModal('m-public-profile');
+  openModal('m-send-msg');
+}
+
+function submitMessage() {
+  const text = document.getElementById('inp-msg-text').value.trim();
+  if(!text || !msgTargetUid) return;
+  if(!DB.messages) DB.messages = {};
+  if(!DB.messages[msgTargetUid]) DB.messages[msgTargetUid] = [];
+  DB.messages[msgTargetUid].push({ id: uid(), from: currentUser, text, date: today(), read: false });
+  save();
+  closeModal('m-send-msg');
+  toast('Message sent', '💬');
 }
 
 function openEditProfile(id) {
@@ -1085,7 +1249,7 @@ function renderTopbar() {
     leftSub = `<span class="bc-link" onclick="setFilter(null)">Workspace</span> <span style="color:var(--muted)">/</span> <span class="bc-link" onclick="setFilter('${cat?.id}')">${cat?.name||'Uncategorized'}</span> <span style="color:var(--muted)">/</span> <span style="color:var(--text)">${p.name}</span>`;
     leftTitle = p.name;
   }
-  else if(screen==='publish') { leftTitle = 'Publish Queue'; }
+  else if(screen==='publish') { leftTitle = 'Completed Projects'; }
   else if(screen==='ideas') { leftTitle = 'Video Ideas & Concepts'; }
   else if(screen==='profile') { leftTitle = 'My Profile'; }
   else {
@@ -1101,25 +1265,6 @@ function renderTopbar() {
   bc.innerHTML = leftSub;
   title.textContent = leftTitle;
   right.innerHTML = renderTopbarAuth();
-}
-
-/* ═══════════════════════════════════════
-   AVATAR HELPER
-═══════════════════════════════════════ */
-function renderAvatars(assignees) {
-  const arr = assignees || [];
-  if(!arr.length) return '<div class="avatar-empty">+</div>';
-  const max = 3;
-  const visible = arr.slice(0, max);
-  const extra = arr.length - max;
-  let html = '<div class="avatar-group">';
-  visible.forEach(uid => { 
-    const u = DB.users.find(x => x.id === uid); 
-    if(u) html += `<img src="${u.avatar}" class="avatar-sm" title="${u.name}">`; 
-  });
-  if(extra > 0) html += `<div class="avatar-extra">+${extra}</div>`;
-  html += '</div>';
-  return html;
 }
 
 /* ═══════════════════════════════════════
@@ -1277,7 +1422,7 @@ function renderDetail() {
   const linksHTML = LINK_TYPES.map(lt=>{
     const url = p.links[lt]||'';
     const lbl = lt==='wip'?'Work in Progress':lt==='final'?'Final Render':'Reference';
-    return `<div class="link-row"><span class="link-label">${lbl}:</span>${url?`<a class="link-value" href="${url}" target="_blank" rel="noopener">${url}</a>`:`<span class="link-value" style="color:var(--muted);text-decoration:none">—</span>`}<button class="link-del-btn" onclick="openLinkModal('${p.id}','${lt}')">✏</button></div>`;
+    return `<div class="link-row"><span class="link-label">${lbl}:</span>${url?`<a class="link-value" href="${url}" target="_blank" rel="noopener">${url}</a>`:`<span class="link-value" style="color:var(--muted);text-decoration:none">—</span>`}<button class="link-del-btn" onclick="openLinkModal('${p.id}','${lt}')" title="Edit Link">✏</button></div>`;
   }).join('');
 
   const versHTML = p.versions.slice().reverse().map(v=>`<div class="version-row ${v.v===p.currentVersion?'vcurrent':''}"><div class="v-tag">${v.v}</div><div class="v-body"><div class="v-desc">${v.feedbackDesc}</div><div class="v-date">📅 ${v.date}</div>${v.v===p.currentVersion?`<div class="v-cur">ACTIVE WORKSPACE</div>`:`<button class="v-switch-btn" onclick="switchVer('${p.id}','${v.v}')">Revert to this</button>`}</div></div>`).join('');
@@ -1310,6 +1455,13 @@ function renderDetail() {
     <button class="tb-btn" style="margin-bottom:32px" onclick="openModal('m-step')">+ Add Custom Stage</button>
     <div class="sec-title"><span>🕒 ITERATION HISTORY</span></div>
     <div class="versions-list">${versHTML}</div>`;
+    
+  // Populate Mentions Select for Comments
+  const cpTag = document.getElementById('cp-tag');
+  if(cpTag) {
+    cpTag.innerHTML = `<option value="">Do not tag anyone...</option>` + DB.users.filter(u=>u.id !== currentUser).map(u => `<option value="${u.id}">@${u.name}</option>`).join('');
+  }
+
   renderComments();
 }
 
@@ -1369,10 +1521,26 @@ function saveAssignees() {
 /* ── Comments ── */
 function previewCommentImage(e) { if(!e.target.files[0]) return; resizeImage(e.target.files[0], (b) => { currentCommentImgB64 = b; const img = document.getElementById('cp-img-preview'); img.src = b; img.style.display = 'block'; }); }
 function submitComment() {
-  const text=document.getElementById('cp-ta').value.trim(); if(!text && !currentCommentImgB64) return;
+  let text=document.getElementById('cp-ta').value.trim(); 
+  if(!text && !currentCommentImgB64) return;
+  
+  const tagUid = document.getElementById('cp-tag').value;
+  if(tagUid) {
+    const taggedUser = DB.users.find(u=>u.id===tagUid);
+    if(taggedUser) text = `<strong style="color:var(--primary-light)">@${taggedUser.name}</strong> ` + text;
+  }
+
   const p=getP(curPid);
   p.comments.push({id:uid(),text,img:currentCommentImgB64,date:today(),version:p.currentVersion, authorId:currentUser});
-  document.getElementById('cp-ta').value=''; currentCommentImgB64=null; document.getElementById('cp-img-preview').style.display = 'none'; document.getElementById('cp-file').value='';
+  
+  // Create Notification if tagged
+  if(tagUid) {
+    if(!DB.notifications) DB.notifications = {};
+    if(!DB.notifications[tagUid]) DB.notifications[tagUid] = [];
+    DB.notifications[tagUid].push({ id: uid(), text: `${getAuthUser().name} tagged you in "${p.name}"`, pid: p.id, date: today(), read: false });
+  }
+
+  document.getElementById('cp-ta').value=''; currentCommentImgB64=null; document.getElementById('cp-img-preview').style.display = 'none'; document.getElementById('cp-file').value=''; document.getElementById('cp-tag').value='';
   save(); renderComments(); toast('Note logged','✔️');
 }
 function deleteComment(pid,cid) { const p=getP(pid); p.comments=p.comments.filter(c=>c.id!==cid); save(); renderComments(); }
@@ -1385,7 +1553,7 @@ function renderComments() {
     const author = DB.users.find(u=>u.id===c.authorId) || {name:'Unknown', avatar:'https://ui-avatars.com/api/?name=Unknown'};
     return `<div class="comment-card">
       <div class="cc-top">
-        <img src="${author.avatar}" class="cc-author-img">
+        <img src="${author.avatar}" class="cc-author-img" onclick="openPublicProfile('${c.authorId}')" title="View Profile">
         <span class="cc-author-name">${author.name}</span>
         <span class="cc-ver">${c.version}</span>
       </div>
@@ -1415,6 +1583,7 @@ function applyFeedback() {
   if(file) resizeImage(file, finishFb); else finishFb(null);
 }
 
+// Ventana centralizada para Eliminar Proyectos o Usuarios
 function askDelete(id, type) { 
   deleteCtx = id; 
   deleteType = type;
@@ -1432,6 +1601,7 @@ function confirmDelete() {
     toast('Project wiped','🗑');
   } else if (deleteType === 'user') {
     DB.users = DB.users.filter(u=>u.id!==deleteCtx);
+    // Eliminarlo de las asignaciones de proyectos
     DB.projects.forEach(p => { 
       if(p.assignees) p.assignees = p.assignees.filter(uid => uid !== deleteCtx); 
     });
@@ -1479,6 +1649,7 @@ function renderProfile() {
     </div>
   `).join('');
 
+  // Sección exclusiva para el Master (Lista del equipo para eliminar)
   let teamHTML = '';
   if(isMaster) {
     teamHTML = `
@@ -1551,11 +1722,20 @@ function setPublishDate(pid,date) { const e=DB.publish.find(x=>x.projectId===pid
 
 function renderPublish() {
   const el=document.getElementById('pub-content');
-  if(!DB.publish.length) { el.innerHTML=`<div class="empty-state"><div class="empty-icon">🚀</div><div class="empty-text">Queue is empty</div><div class="empty-sub">Send finished projects here to organize release dates.</div></div>`; return; }
+  if(!DB.publish.length) { 
+    // Si está vacío, de todos modos mostramos el calendario.
+    el.innerHTML=`
+      <div class="sec-title" style="margin-bottom:14px">COMPLETED PROJECTS QUEUE</div>
+      <div style="text-align:center; padding:60px 20px; color:var(--muted); font-size:14px; background:var(--card); border-radius:12px; margin-bottom:32px;">No content ready to publish yet.</div>
+      <div class="sec-title" style="margin-bottom:14px">📅 PUBLISH CALENDAR</div>
+      ${buildCalendarHTML()}
+    `; 
+    return; 
+  }
   
   const listHTML=DB.publish.map(entry=>{
     const p=getP(entry.projectId); if(!p) return '';
-    const cat=getCat(p.catId), finalLink=p.links.find(l=>l.type==='final')?.url;
+    const cat=getCat(p.catId), finalLink=p.links.find ? p.links.find(l=>l.type==='final')?.url : p.links.final;
     return `<div class="pub-card">
       ${p.thumbnail ? `<img src="${p.thumbnail}" class="pub-thumb">` : `<div class="pub-thumb" style="display:flex;align-items:center;justify-content:center;color:var(--muted);font-size:32px;border:2px dashed var(--line2)">🎬</div>`}
       <div class="pub-info-wrap">
@@ -1572,9 +1752,15 @@ function renderPublish() {
     </div>`;
   }).join('');
 
-  el.innerHTML=`<div class="publish-list">${listHTML}</div><div class="sec-title"><span>📅 SCHEDULING CALENDAR</span></div>${buildCalendarHTML()}`;
+  el.innerHTML=`
+    <div class="sec-title" style="margin-bottom:14px">COMPLETED PROJECTS QUEUE</div>
+    <div class="publish-list">${listHTML}</div>
+    <div class="sec-title" style="margin-bottom:14px">📅 PUBLISH CALENDAR</div>
+    ${buildCalendarHTML()}`;
+    
   document.querySelectorAll('.cal-day:not(.empty)').forEach(d=>{ d.addEventListener('click',()=>{ const ds=`${calDate.getFullYear()}-${String(calDate.getMonth()+1).padStart(2,'0')}-${String(d.dataset.day).padStart(2,'0')}`; calSelectedDay=calSelectedDay===ds?null:ds; renderPublish(); }); });
 }
+
 function buildCalendarHTML() {
   const y=calDate.getFullYear(), m=calDate.getMonth(), todayStr=today();
   const scheduled={}; DB.publish.filter(x=>x.date).forEach(x=>{ scheduled[x.date]=(scheduled[x.date]||[]); const p=getP(x.projectId); if(p) scheduled[x.date].push(p); });
@@ -1585,7 +1771,7 @@ function buildCalendarHTML() {
     const hasEv=scheduled[ds]?.length>0, isSel=calSelectedDay===ds;
     dayHTML+=`<div class="cal-day ${ds===todayStr?'today':''} ${hasEv?'has-events':''} ${ds<todayStr&&ds!==todayStr?'past':''} ${isSel?'selected':''}" data-day="${d}">${d}${hasEv?`<div class="cal-day-dots">${scheduled[ds].slice(0,3).map(()=>`<div class="cal-dot"></div>`).join('')}</div>`:''}</div>`;
   }
-  let det=''; if(calSelectedDay && scheduled[calSelectedDay]){ det=`<div style="background:var(--card);border:1px solid var(--primary-light);border-radius:12px;padding:20px;margin-top:20px;"><div style="font-size:14px;font-weight:800;margin-bottom:12px;color:var(--text);">📅 Releases for ${calSelectedDay}</div>${scheduled[calSelectedDay].map(p=>`<div style="background:var(--bg);border-left:4px solid var(--accent);border-radius:8px;padding:12px 16px;margin-bottom:8px;"><div style="font-size:14px;font-weight:700;color:var(--text)">${p.name}</div></div>`).join('')}</div>`; }
+  let det=''; if(calSelectedDay && scheduled[calSelectedDay]){ det=`<div style="background:var(--card);border:1px solid var(--primary-light);border-radius:12px;padding:20px;margin-top:20px;"><div style="font-size:14px;font-weight:800;margin-bottom:12px;color:var(--text);">📅 Releases for ${calSelectedDay}</div>${scheduled[calSelectedDay].map(p=>`<div style="background:var(--bg);border-left:4px solid var(--accent);border-radius:8px;padding:12px 16px;margin-bottom:8px; cursor:pointer;" onclick="openProj('${p.id}')"><div style="font-size:14px;font-weight:700;color:var(--text)">${p.name}</div></div>`).join('')}</div>`; }
   return `<div class="cal-wrap"><div class="cal-hd"><button class="cal-nav" onclick="calDate.setMonth(calDate.getMonth()-1); calSelectedDay=null; renderPublish()">◀</button><div class="cal-month">${['January','February','March','April','May','June','July','August','September','October','November','December'][m]} ${y}</div><button class="cal-nav" onclick="calDate.setMonth(calDate.getMonth()+1); calSelectedDay=null; renderPublish()">▶</button></div><div class="cal-body"><div class="cal-dnames">${['Su','Mo','Tu','We','Th','Fr','Sa'].map(d=>`<div class="cal-dname">${d}</div>`).join('')}</div><div class="cal-days">${dayHTML}</div></div></div>${det}`;
 }
 
@@ -1632,7 +1818,7 @@ function createProject() {
   const selSteps=[...document.querySelectorAll('#step-toggles .stoggle.on')].map(t=>t.dataset.s);
   if(!selSteps.length){ alert('Please select at least one pipeline step.'); return; }
   DB.projects.push({
-    id:uid(), catId, name, contentType:selContentType, priority:false, currentVersion:'v1.0', order:DB.projects.length, thumbnail: null, links:[], assignees:[...tempAssignees], isPaused:false,
+    id:uid(), catId, name, contentType:selContentType, priority:false, currentVersion:'v1.0', order:DB.projects.length, thumbnail: null, links:{wip:'',final:'',ref:''}, assignees:[...tempAssignees], isPaused:false,
     versions:[{v:'v1.0',date:today(),feedbackDesc:'Initial workspace created',waitingFeedback:false,steps:selSteps.map((s,i)=>({name:s,status:i===0?'active':'pending',note:''}))}],
     comments:[], publishDate:null
   });
