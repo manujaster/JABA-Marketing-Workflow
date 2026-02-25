@@ -80,7 +80,7 @@ input,textarea,select{font-family:'Plus Jakarta Sans',sans-serif;outline:none;}
 
 /* SIDEBAR FOOTER & PROFILE BTN */
 .sidebar-footer{padding:16px;border-top:1px solid var(--line);display:flex;flex-direction:column;gap:8px;}
-.profile-nav-btn { display:flex; align-items:center; gap:12px; padding:12px; border-radius:10px; background:var(--bg); border:1px solid var(--line2); margin-bottom: 8px; cursor:pointer; transition:all .2s; font-size:13px; font-weight:600; color:var(--text); }
+.profile-nav-btn { display:flex; align-items:center; gap:12px; padding:12px; border-radius:10px; background:var(--bg); border:1px solid var(--line2); cursor:pointer; transition:all .2s; font-size:13px; font-weight:600; color:var(--text); }
 .profile-nav-btn:hover { border-color:var(--primary-light); background:var(--card2); }
 .profile-nav-btn.active { background:var(--primary-bg); border-color:var(--primary); color:var(--primary-light); }
 .sb-btn{width:100%;padding:10px 14px;border-radius:8px;font-size:13px;font-weight:600;transition:all .2s;display:flex;align-items:center;justify-content:center;gap:6px;}
@@ -88,7 +88,7 @@ input,textarea,select{font-family:'Plus Jakarta Sans',sans-serif;outline:none;}
 .sb-btn.secondary{background:var(--card2);color:var(--text);border:1px solid var(--line2);}
 .sb-btn:hover{transform:translateY(-1px);box-shadow:0 4px 12px rgba(0,0,0,0.2);}
 .sb-btn.primary:hover{background:var(--primary-hover);}
-.sb-btn.secondary:hover{border-color:var(--primary-light);}
+.sb-btn.secondary:hover{border-color:var(--primary-light); color:var(--text);}
 
 /* ── MAIN ── */
 .main{flex:1;display:flex;flex-direction:column;min-height:100vh;overflow:hidden;background:var(--bg);}
@@ -113,11 +113,11 @@ input,textarea,select{font-family:'Plus Jakarta Sans',sans-serif;outline:none;}
 .user-menu-btn:hover{border-color:var(--primary-light);background:var(--card2);}
 .user-menu-avatar{width:26px;height:26px;border-radius:50%;object-fit:cover;}
 .user-menu-name{font-size:13px;font-weight:600;color:var(--text);}
-.dropdown-content { display:none; position:absolute; right:0; top:48px; background:var(--card); border:1px solid var(--line); border-radius:12px; min-width:180px; box-shadow:0 12px 24px rgba(0,0,0,0.5); z-index:999; padding:8px; flex-direction:column; gap:4px; }
+.dropdown-content { display:none; position:absolute; right:0; top:48px; background:var(--card); border:1px solid var(--line); border-radius:12px; min-width:200px; box-shadow:0 12px 24px rgba(0,0,0,0.5); z-index:999; padding:8px; flex-direction:column; gap:4px; }
 .dropdown-content.show { display:flex; }
 .dropdown-item { padding:10px 12px; border-radius:8px; font-size:13px; font-weight:600; color:var(--text); cursor:pointer; transition:all .2s; display:flex; align-items:center; justify-content:space-between; }
 .dropdown-item:hover { background:var(--card2); color:var(--primary-light); }
-.dd-badge { background:var(--red); color:#fff; font-size:10px; padding:2px 6px; border-radius:12px; font-weight:700; }
+.dd-badge { background:var(--red); color:#fff; font-size:10px; padding:2px 8px; border-radius:12px; font-weight:700; }
 
 /* SCREENS */
 .screen{display:none;flex:1;overflow-y:auto;}
@@ -372,7 +372,7 @@ input,textarea,select{font-family:'Plus Jakarta Sans',sans-serif;outline:none;}
 /* CSS DEL INPUT DE FECHA Y EL CALENDARIO (FORZAR BLANCO) */
 .pub-date-inp{padding:8px 12px;background:var(--bg);border:1px solid var(--line2);border-radius:8px;font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--text);cursor:pointer;transition:border-color .2s; color-scheme: dark;}
 .pub-date-inp:focus{border-color:var(--accent-light);box-shadow:0 0 0 1px var(--accent-light);}
-.pub-date-inp::-webkit-calendar-picker-indicator { cursor: pointer; filter: invert(1) brightness(2) !important; }
+.pub-date-inp::-webkit-calendar-picker-indicator { cursor: pointer; filter: invert(1) sepia(100%) saturate(0%) hue-rotate(0deg) brightness(200%) !important; }
 
 /* Calendar */
 .cal-wrap{background:var(--card);border:1px solid var(--line);border-radius:16px;overflow:hidden;}
@@ -514,8 +514,10 @@ input,textarea,select{font-family:'Plus Jakarta Sans',sans-serif;outline:none;}
   </nav>
   
   <div class="sidebar-footer">
-    <button class="sb-btn secondary" onclick="openModal('m-season')" style="margin-bottom:4px;">➕ Add Season</button>
-    <button class="sb-btn secondary" onclick="openModal('m-category')" style="margin-bottom:4px;">➕ Add Category</button>
+    <div style="display:flex; gap:8px;">
+      <button class="sb-btn secondary" style="flex:1; padding:10px 0;" onclick="openModal('m-season')">➕ Season</button>
+      <button class="sb-btn secondary" style="flex:1; padding:10px 0;" onclick="openModal('m-category')">➕ Client</button>
+    </div>
   </div>
 </aside>
 
@@ -629,6 +631,19 @@ input,textarea,select{font-family:'Plus Jakarta Sans',sans-serif;outline:none;}
     </span>
     Sign in with Google
   </button>
+</div>
+</div>
+
+<div class="overlay" id="m-send-msg" onclick="ovClose(event,'m-send-msg')">
+<div class="modal" style="max-width: 400px;">
+  <div class="modal-title">Send Message</div>
+  <div class="field">
+    <textarea class="field-textarea" id="inp-msg-text" placeholder="Type your message here..."></textarea>
+  </div>
+  <div class="modal-footer">
+    <button class="btn-cancel" onclick="closeModal('m-send-msg')">Cancel</button>
+    <button class="btn-ok" onclick="submitMessage()">Send</button>
+  </div>
 </div>
 </div>
 
@@ -882,45 +897,48 @@ const CloudDB = {
 let DB = { years:[], categories:[], projects:[], publish:[], ideas:[], todos:{}, users:[], notifications:{}, messages:{} };
 let isDbLoaded = false;
 
+// 4. Inicializar y escuchar cambios en TIEMPO REAL
 function initApp() {
   db.collection("workspace").doc("main_data").onSnapshot((doc) => {
     isDbLoaded = true;
     if (doc.exists) {
-      DB = doc.data().db_state;
-      
-      // Migraciones de protección garantizadas
-      if (!DB.users) DB.users = [];
-      if (!DB.notifications) DB.notifications = {};
-      if (!DB.messages) DB.messages = {};
-      if (DB.projects) {
-        DB.projects.forEach((p,i) => {
-          if (!p.links || Array.isArray(p.links)) { p.links = { wip:'', final:'', ref:'' }; }
-          if (p.priority === undefined) p.priority = false;
-          if (p.order === undefined) p.order = i;
-          if (!p.assignees || !Array.isArray(p.assignees)) p.assignees = [];
-          if (p.isPaused === undefined) p.isPaused = false;
-        });
-      } else { DB.projects = []; }
-      if (!DB.ideas) DB.ideas = [];
-      if (!DB.todos) DB.todos = {};
-      
+      DB = doc.data().db_state || {};
     } else {
-      DB.users = [];
-      DB.years = [{ id:'y2026', label:'2026' }];
-      DB.categories = [
-        { id:'cjaba', yearId:'y2026', name:'JABA', color:'#6366f1' },
-        { id:'cjpb',  yearId:'y2026', name:'JPB',  color:'#06b6d4' },
-      ];
-      DB.projects = [];
-      DB.publish = [];
-      DB.ideas = [];
-      DB.todos = {};
-      DB.notifications = {};
-      DB.messages = {};
-      CloudDB.save(DB); 
+      DB = {};
     }
+      
+    // MIGRACIONES AGRESIVAS (Previene que perfiles o proyectos queden en blanco)
+    DB.users = DB.users || [];
+    DB.years = DB.years || [{ id:'y2026', label:'2026' }];
+    DB.categories = DB.categories || [
+      { id:'cjaba', yearId:'y2026', name:'JABA', color:'#6366f1' },
+      { id:'cjpb',  yearId:'y2026', name:'JPB',  color:'#06b6d4' }
+    ];
+    DB.projects = DB.projects || [];
+    DB.publish = DB.publish || [];
+    DB.ideas = DB.ideas || [];
+    DB.todos = DB.todos || {};
+    DB.notifications = DB.notifications || {};
+    DB.messages = DB.messages || {};
+
+    DB.projects.forEach((p,i) => {
+      p.links = p.links || { wip:'', final:'', ref:'' };
+      if (typeof p.links === 'string' || Array.isArray(p.links)) { p.links = { wip:'', final:'', ref:'' }; }
+      p.assignees = p.assignees || [];
+      p.versions = p.versions || [];
+      p.comments = p.comments || [];
+      if(p.isPaused === undefined) p.isPaused = false;
+      if(p.priority === undefined) p.priority = false;
+      p.order = p.order ?? i;
+    });
+
+    // Si el documento era nuevo, lo guardamos para establecer la base en la nube
+    if(!doc.exists) CloudDB.save(DB);
     
-    checkSyncUser(); 
+    // Solo si Firebase Auth ya nos dio un usuario, lo sincronizamos y renderizamos
+    if(currentUserObj) {
+      syncUserAndRender();
+    }
     
   }, (error) => {
     console.error("Error conectando a Firebase.", error);
@@ -983,6 +1001,7 @@ let isPausedGridOpen = false;
 let currentUser = null; 
 let currentUserObj = null; 
 let isMaster = false; 
+let msgTargetUid = null;
 
 function signInWithGoogle() {
   const provider = new firebase.auth.GoogleAuthProvider();
@@ -996,15 +1015,14 @@ function signOut() {
   firebase.auth().signOut();
 }
 
+// Escuchar inicio de sesión de Google
 firebase.auth().onAuthStateChanged((user) => {
   if (user) {
     currentUserObj = user;
     isMaster = MASTER_EMAILS.includes(user.email);
-    
+    // Si la DB ya cargó, procesamos y renderizamos
     if(isDbLoaded) {
-      checkSyncUser();
-      closeModal('m-login');
-      render();
+      syncUserAndRender();
     }
   } else {
     currentUserObj = null;
@@ -1014,32 +1032,37 @@ firebase.auth().onAuthStateChanged((user) => {
   }
 });
 
-function checkSyncUser() {
-  if(isDbLoaded && currentUserObj && DB.users) {
-    let u = DB.users.find(x => x.id === currentUserObj.uid);
-    if(!u) {
-      u = { 
-        id: currentUserObj.uid, 
-        name: currentUserObj.displayName || 'User', 
-        email: currentUserObj.email, 
-        role: 'Team Member',
-        avatar: currentUserObj.photoURL || 'https://ui-avatars.com/api/?name=U' 
-      };
-      DB.users.push(u);
-      save();
-    } else if (u.avatar !== currentUserObj.photoURL || u.name !== currentUserObj.displayName) {
-      u.avatar = currentUserObj.photoURL || u.avatar;
-      u.name = currentUserObj.displayName || u.name;
-      save();
-    }
-    currentUser = u.id;
-    // Si la db acaba de cargar y ya hay usuario logueado, forzamos render.
-    closeModal('m-login');
-    render();
+// Empata la cuenta de Google con nuestra Base de Datos
+function syncUserAndRender() {
+  let u = DB.users.find(x => x.id === currentUserObj.uid);
+  let changed = false;
+
+  if(!u) {
+    u = { 
+      id: currentUserObj.uid, 
+      name: currentUserObj.displayName || 'User', 
+      email: currentUserObj.email, 
+      role: 'Team Member',
+      avatar: currentUserObj.photoURL || 'https://ui-avatars.com/api/?name=U' 
+    };
+    DB.users.push(u);
+    changed = true;
+  } else if (!u.avatar || u.avatar.includes('ui-avatars')) {
+    u.avatar = currentUserObj.photoURL || u.avatar;
+    changed = true;
   }
+
+  currentUser = u.id;
+  if (changed) save();
+  
+  closeModal('m-login');
+  render();
 }
 
-function getAuthUser() { return DB.users.find(x=>x.id===currentUser); }
+function getAuthUser() { 
+  if(!DB.users) return null;
+  return DB.users.find(x=>x.id===currentUser); 
+}
 
 // DROPDOWN DE USUARIO Y NOTIFICACIONES
 function renderTopbarAuth() {
@@ -1060,9 +1083,9 @@ function renderTopbarAuth() {
         <span class="user-menu-name">${u.name} ▾</span>
       </div>
       <div class="dropdown-content" id="user-dropdown">
-        <div class="dropdown-item" onclick="goScreen('profile')">👤 My Profile</div>
-        <div class="dropdown-item" onclick="goScreen('notifications')">🔔 Notifications ${notifBadge}</div>
-        <div class="dropdown-item" onclick="goScreen('messages')">💬 Messages ${msgBadge}</div>
+        <div class="dropdown-item" onclick="goScreen('profile'); toggleDropdown();">👤 My Profile</div>
+        <div class="dropdown-item" onclick="goScreen('notifications'); toggleDropdown();">🔔 Notifications ${notifBadge}</div>
+        <div class="dropdown-item" onclick="goScreen('messages'); toggleDropdown();">💬 Messages ${msgBadge}</div>
         <div class="dropdown-item" style="color:var(--red)" onclick="signOut()">🚪 Logout</div>
       </div>
     </div>
@@ -1098,7 +1121,6 @@ function renderNotifications() {
   }
   document.getElementById('notifications-content').innerHTML = html;
   
-  // Marcar todo como leído al entrar
   let changed = false;
   notifs.forEach(n => { if(!n.read){ n.read = true; changed = true; }});
   if(changed) save();
@@ -1125,14 +1147,12 @@ function renderMessages() {
   }
   document.getElementById('messages-content').innerHTML = html;
   
-  // Marcar todo como leído
   let changed = false;
   msgs.forEach(m => { if(!m.read){ m.read = true; changed = true; }});
   if(changed) save();
 }
 
 // ── PERFIL PÚBLICO EN PANTALLA ──
-let viewingProfileId = null;
 function viewPublicProfile(uid) {
   if(uid === currentUser) { goScreen('profile'); return; }
   viewingProfileId = uid;
@@ -1145,12 +1165,10 @@ function renderPublicProfile() {
   
   let activeP = [], doneP = [];
   DB.projects.forEach(p => {
-    const arr = p.assignees || [];
-    if(!arr.includes(u.id)) return;
+    if(!p.assignees?.includes(u.id)) return false;
     const v = getCurVer(p);
-    const steps = v.steps || [];
-    const allDone = steps.length > 0 && steps.every(s=>s.status==='done');
-    if(allDone) doneP.push(p); else activeP.push(p);
+    if(v && !(v.steps || []).every(s=>s.status==='done')) activeP.push(p);
+    else doneP.push(p);
   });
 
   const renderMini = (p) => {
@@ -1169,7 +1187,7 @@ function renderPublicProfile() {
       <img src="${u.avatar}" class="profile-avatar">
       <div class="profile-info">
         <h2>${u.name}</h2>
-        <p>${u.email} ${u.role ? `· <strong>${u.role}</strong>` : ''}</p>
+        <p>${u.role || 'Team Member'}</p>
       </div>
     </div>
     
@@ -1512,7 +1530,7 @@ function renderDetail() {
   // Populate Mentions Select for Comments
   const cpTag = document.getElementById('cp-tag');
   if(cpTag) {
-    cpTag.innerHTML = `<option value="">Do not tag anyone...</option>` + DB.users.filter(u=>u.id !== currentUser).map(u => `<option value="${u.id}">@${u.name}</option>`).join('');
+    cpTag.innerHTML = `<option value="">No tag...</option>` + DB.users.filter(u=>u.id !== currentUser).map(u => `<option value="${u.id}">@${u.name}</option>`).join('');
   }
 
   renderComments();
@@ -1636,7 +1654,6 @@ function applyFeedback() {
   if(file) resizeImage(file, finishFb); else finishFb(null);
 }
 
-// Ventana centralizada para Eliminar Proyectos o Usuarios
 function askDelete(id, type) { 
   deleteCtx = id; 
   deleteType = type;
@@ -1654,12 +1671,12 @@ function confirmDelete() {
     toast('Project wiped','🗑');
   } else if (deleteType === 'user') {
     DB.users = DB.users.filter(u=>u.id!==deleteCtx);
-    // Eliminarlo de las asignaciones de proyectos
     DB.projects.forEach(p => { 
       if(p.assignees) p.assignees = p.assignees.filter(uid => uid !== deleteCtx); 
     });
     save();
-    renderProfile(); 
+    if (screen === 'profile') renderProfile(); 
+    if (screen === 'projects') renderProjects();
     toast('Profile deleted','🗑');
   }
   closeModal('m-delete'); 
@@ -1708,7 +1725,7 @@ function renderProfile() {
     </div>
   `).join('');
 
-  // Sección exclusiva para el Master (Lista del equipo para eliminar)
+  // Panel maestro de administración de usuarios (Solo para correo Maestro)
   let teamHTML = '';
   if(isMaster) {
     teamHTML = `
@@ -1760,6 +1777,7 @@ function renderProfile() {
     ${teamHTML}
   `;
 }
+
 function addTodo() {
   const text = document.getElementById('new-todo').value.trim(); if(!text) return;
   DB.todos[currentUser].push({id:uid(), text, done:false});
@@ -1782,7 +1800,6 @@ function setPublishDate(pid,date) { const e=DB.publish.find(x=>x.projectId===pid
 function renderPublish() {
   const el=document.getElementById('pub-content');
   if(!DB.publish.length) { 
-    // Muestra el calendario aunque no haya nada en la lista.
     el.innerHTML=`
       <div class="sec-title" style="margin-bottom:14px">COMPLETED PROJECTS QUEUE</div>
       <div style="text-align:center; padding:60px 20px; color:var(--muted); font-size:14px; background:var(--card); border-radius:12px; margin-bottom:32px;">No content ready to publish yet.</div>
@@ -1901,21 +1918,23 @@ function loadProjCats() { const yr=document.getElementById('inp-pyear').value, c
 ═══════════════════════════════════════ */
 function openModal(id) {
   if(id==='m-project'){ document.getElementById('inp-pyear').innerHTML=DB.years.map(y=>`<option value="${y.id}">${y.label}</option>`).join(''); loadProjCats(); buildCTRadios(selContentType); document.getElementById('step-toggles').innerHTML=DEFAULT_STEPS.map(s=>`<div class="stoggle on" data-s="${s}" onclick="this.classList.toggle('on')">${s}</div>`).join(''); tempAssignees = [currentUser]; renderAssignUserList('create-proj-assignees', tempAssignees); document.getElementById('inp-pname').value=''; }
-  if(id==='m-category'){ document.getElementById('inp-cyear').innerHTML=DB.years.map(y=>`<option value="${y.id}">${y.label}</option>`).join(''); selCatColor=CAT_COLORS[0]; buildCatSwatches(); document.getElementById('inp-cname').value=''; }
+  if(id==='m-category'){ document.getElementById('inp-cyear').innerHTML=DB.years.map(y=>`<option value="${y.id}">${y.label}</option>`).join(''); selCatColor=CAT_COLORS[0]; buildCatSwatches(); document.getElementById('inp-cname').value=''; document.getElementById('inp-cnewyear').value=''; }
   if(id==='m-season'){ document.getElementById('inp-season-name').value=''; }
   if(id==='m-step') document.getElementById('inp-sname').value='';
   document.getElementById(id).classList.add('open');
 }
 function closeModal(id){ document.getElementById(id).classList.remove('open'); }
 function ovClose(e,id){ if(e.target.classList.contains('overlay') || e.target.classList.contains('modal-wrap')) closeModal(id); }
+
 function goScreen(name) { 
-  screen=name; 
-  if(name!=='detail') curPid=null; 
-  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active')); 
-  const target = document.getElementById('screen-'+name);
+  screen = name; 
+  if(name !== 'detail') curPid = null; 
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active')); 
+  const target = document.getElementById('screen-' + name);
   if(target) target.classList.add('active'); 
   render(); 
 }
+
 function toast(msg,icon='✓') { const el=document.createElement('div'); el.className='toast'; el.innerHTML=`<span>${icon}</span> ${msg}`; document.body.appendChild(el); setTimeout(()=>el.remove(),2800); }
 
 function render() {
