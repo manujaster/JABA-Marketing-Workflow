@@ -250,7 +250,7 @@ input,textarea,select{font-family:'Plus Jakarta Sans',sans-serif;outline:none;}
 .step-btn.reopen:hover{background:var(--orange);color:#fff;border-color:transparent;}
 .step-btn.danger:hover{background:var(--red);color:#fff;border-color:transparent;}
 
-/* Inline Links (DYNAMIC FORMAT) */
+/* Inline Links Restaurado */
 .links-section{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:20px;margin-bottom:24px;}
 .link-row{display:flex;align-items:center;gap:12px;margin-bottom:10px;background:var(--bg);padding:10px 14px;border-radius:8px;border:1px solid var(--line2);}
 .link-label{font-size:11px;color:var(--primary-light);min-width:70px;font-weight:700;text-transform:uppercase;letter-spacing:0.5px;}
@@ -371,8 +371,8 @@ input,textarea,select{font-family:'Plus Jakarta Sans',sans-serif;outline:none;}
 .pub-date-row{display:flex;align-items:center;gap:12px;}
 .pub-date-lbl{font-size:16px;}
 
-/* CSS DEL INPUT DE FECHA Y EL CALENDARIO (BLANCO FORZADO) */
-.pub-date-inp{padding:8px 12px;background:var(--bg);border:1px solid var(--line2);border-radius:8px;font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--text);cursor:pointer;transition:border-color .2s; color-scheme: dark;}
+/* CSS DEL INPUT DE FECHA Y EL CALENDARIO (FORZAR BLANCO ABSOLUTO) */
+.pub-date-inp{padding:8px 12px;background:var(--bg);border:1px solid var(--line2);border-radius:8px;font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--text);cursor:pointer;transition:border-color .2s;}
 .pub-date-inp:focus{border-color:var(--accent-light);box-shadow:0 0 0 1px var(--accent-light);}
 .pub-date-inp::-webkit-calendar-picker-indicator { cursor: pointer; filter: invert(1) brightness(100) !important; }
 
@@ -945,7 +945,7 @@ function initApp() {
     if (!DB.messages) DB.messages = {};
 
     DB.projects.forEach((p,i) => {
-      // MIGRACIÓN DE LINKS SEGURA: Se fuerza el formato de Array que pide la interfaz actual
+      // MIGRACIÓN DE LINKS: Forzamos Array libre y rescatamos viejos formatos si existían
       if (p.links && !Array.isArray(p.links)) {
         const arr = [];
         if(typeof p.links === 'object') {
@@ -1193,6 +1193,30 @@ function renderMessages() {
   let changed = false;
   msgs.forEach(m => { if(!m.read){ m.read = true; changed = true; }});
   if(changed) save();
+}
+
+// ── PANTALLA DE DIRECTORIO DE EQUIPO ──
+function renderTeam() {
+  const content = document.getElementById('team-content');
+  let html = `<div class="sec-title" style="margin-bottom:24px;">👥 TEAM DIRECTORY</div>`;
+  html += `<div class="proj-grid">`;
+  (DB.users || []).forEach(u => {
+    html += `
+      <div class="project-card" style="align-items:center; flex-direction:row; padding:16px;">
+        <img src="${u.avatar}" style="width:48px; height:48px; border-radius:50%; margin-right:16px; cursor:pointer;" onclick="viewPublicProfile('${u.id}')">
+        <div style="flex:1; cursor:pointer;" onclick="viewPublicProfile('${u.id}')">
+          <div style="font-size:16px; font-weight:700; color:var(--text);">${u.name} ${u.id===currentUser ? '<span style="color:var(--primary-light); font-size:11px;">(You)</span>' : ''}</div>
+          <div style="font-size:12px; color:var(--soft); margin-top:2px;">${u.role || 'Team Member'}</div>
+          <div style="font-size:11px; color:var(--muted); margin-top:4px;">${u.email}</div>
+        </div>
+        ${isMaster && u.id !== currentUser ? `
+          <button class="tb-btn danger" style="padding:6px 12px; font-size:11px;" onclick="event.stopPropagation(); askDelete('${u.id}', 'user')">🗑</button>
+        ` : ''}
+      </div>
+    `;
+  });
+  html += `</div>`;
+  content.innerHTML = html;
 }
 
 // ── PERFIL PÚBLICO EN PANTALLA ──
@@ -1605,7 +1629,7 @@ function renderDetail() {
       <div class="link-inline-add">
         <select id="new-link-type">${linkOpts}</select>
         <input type="text" id="new-link-url" placeholder="Paste URL here...">
-        <button onclick="addInlineLink('${p.id}')">Add</button>
+        <button onclick="addInlineLink('${p.id}')">Add Link</button>
       </div>
     </div>
     <div class="sec-title"><span>✂️ EDITING WORKFLOW</span></div>
@@ -1614,6 +1638,7 @@ function renderDetail() {
     <div class="sec-title"><span>🕒 ITERATION HISTORY</span></div>
     <div class="versions-list">${versHTML}</div>`;
     
+  // Populate Mentions Select for Comments
   const cpTag = document.getElementById('cp-tag');
   if(cpTag) {
     cpTag.innerHTML = `<option value="">No tag...</option>` + DB.users.filter(u=>u.id !== currentUser).map(u => `<option value="${u.id}">@${u.name}</option>`).join('');
@@ -1691,6 +1716,7 @@ function submitComment() {
   const p=getP(curPid);
   p.comments.push({id:uid(),text,img:currentCommentImgB64,date:today(),version:p.currentVersion, authorId:currentUser});
   
+  // Create Notification if tagged
   if(tagUid) {
     if(!DB.notifications) DB.notifications = {};
     if(!DB.notifications[tagUid]) DB.notifications[tagUid] = [];
@@ -1740,6 +1766,7 @@ function applyFeedback() {
   if(file) resizeImage(file, finishFb); else finishFb(null);
 }
 
+// Ventana centralizada para Eliminar Proyectos o Usuarios
 function askDelete(id, type) { 
   deleteCtx = id; 
   deleteType = type;
@@ -1757,12 +1784,14 @@ function confirmDelete() {
     toast('Project wiped','🗑');
   } else if (deleteType === 'user') {
     DB.users = DB.users.filter(u=>u.id!==deleteCtx);
+    // Eliminarlo de las asignaciones de proyectos
     DB.projects.forEach(p => { 
       if(p.assignees) p.assignees = p.assignees.filter(uid => uid !== deleteCtx); 
     });
     save();
-    if(currentUser === deleteCtx) { signOut(); }
-    else { renderProfile(); toast('Profile deleted','🗑'); }
+    if (screen === 'team') renderTeam(); 
+    if (screen === 'projects') renderProjects();
+    toast('Profile deleted','🗑');
   }
   closeModal('m-delete'); 
   deleteCtx=null; deleteType=null; 
@@ -1816,7 +1845,7 @@ function renderProfile() {
       </div>
     `).join('');
 
-    // El perfil personal, exactamente como la imagen que enviaste
+    // EL PERFIL PERSONAL RESTAURADO IDÉNTICO A LA IMAGEN (Botones Delete/Edit y 3 paneles)
     document.getElementById('profile-content').innerHTML = `
       <div class="profile-header">
         <img src="${u.avatar}" class="profile-avatar">
@@ -1876,6 +1905,7 @@ function setPublishDate(pid,date) { const e=DB.publish.find(x=>x.projectId===pid
 function renderPublish() {
   const el=document.getElementById('pub-content');
   if(!DB.publish.length) { 
+    // Muestra el calendario aunque no haya nada en la lista.
     el.innerHTML=`
       <div class="sec-title" style="margin-bottom:14px">COMPLETED PROJECTS QUEUE</div>
       <div style="text-align:center; padding:60px 20px; color:var(--muted); font-size:14px; background:var(--card); border-radius:12px; margin-bottom:32px;">No content ready to publish yet.</div>
@@ -1888,12 +1918,14 @@ function renderPublish() {
   const listHTML=DB.publish.map(entry=>{
     const p=getP(entry.projectId); if(!p) return '';
     const cat=getCat(p.catId);
+    
+    // Obtenemos el Final Link del formato Array
     let finalLink = '';
     if(p.links && Array.isArray(p.links)) {
       const fl = p.links.find(l => l.type === 'final');
       if(fl) finalLink = fl.url;
     }
-    
+
     return `<div class="pub-card">
       ${p.thumbnail ? `<img src="${p.thumbnail}" class="pub-thumb">` : `<div class="pub-thumb" style="display:flex;align-items:center;justify-content:center;color:var(--muted);font-size:32px;border:2px dashed var(--line2)">🎬</div>`}
       <div class="pub-info-wrap">
