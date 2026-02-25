@@ -149,7 +149,7 @@ input,textarea,select{font-family:'Plus Jakarta Sans',sans-serif;outline:none;}
 .project-card:hover .pc-action-btn{opacity:1;}
 .pc-drag{right:12px;cursor:grab;}
 .pc-drag:active{cursor:grabbing;}
-.pc-del{right:48px;cursor:pointer;color:var(--soft);}
+.pc-del{right:48px;cursor:pointer;color:var(--red); background:var(--card2); border:1px solid var(--red); opacity:0.9;}
 .pc-del:hover{background:var(--red);color:#fff;}
 
 .pc-thumb-wrap {width:100%;height:140px;background:var(--card2);display:flex;align-items:center;justify-content:center;border-bottom:1px solid var(--line);overflow:hidden;}
@@ -366,10 +366,10 @@ input,textarea,select{font-family:'Plus Jakarta Sans',sans-serif;outline:none;}
 .pub-date-row{display:flex;align-items:center;gap:12px;}
 .pub-date-lbl{font-size:16px;}
 
-/* CSS DEL INPUT DE FECHA Y EL CALENDARIO (FORZAR BLANCO) */
+/* CSS DEL INPUT DE FECHA Y EL CALENDARIO (BLANCO FORZADO) */
 .pub-date-inp{padding:8px 12px;background:var(--bg);border:1px solid var(--line2);border-radius:8px;font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--text);cursor:pointer;transition:border-color .2s; color-scheme: dark;}
 .pub-date-inp:focus{border-color:var(--accent-light);box-shadow:0 0 0 1px var(--accent-light);}
-.pub-date-inp::-webkit-calendar-picker-indicator { cursor: pointer; filter: invert(1) sepia(100%) saturate(0%) hue-rotate(0deg) brightness(200%) !important; }
+.pub-date-inp::-webkit-calendar-picker-indicator { cursor: pointer; filter: invert(1) brightness(100) !important; }
 
 /* Calendar */
 .cal-wrap{background:var(--card);border:1px solid var(--line);border-radius:16px;overflow:hidden;}
@@ -848,7 +848,7 @@ input,textarea,select{font-family:'Plus Jakarta Sans',sans-serif;outline:none;}
 /* ═══════════════════════════════════════
    CONFIGURACIÓN DE CUENTA MAESTRA
 ═══════════════════════════════════════ */
-// PON AQUÍ TU CORREO DE GOOGLE REAL. Solo este correo podrá eliminar proyectos y perfiles.
+// PON AQUÍ TU CORREO DE GOOGLE. 
 const MASTER_EMAILS = ["manuelrate19@gmail.com"]; 
 
 
@@ -1057,7 +1057,6 @@ function checkAuth() {
   }
 }
 
-// Empata la cuenta de Google con nuestra Base de Datos
 function syncUserAndRender() {
   let u = DB.users.find(x => x.id === currentUserObj.uid);
   let changed = false;
@@ -1345,9 +1344,9 @@ function renderSidebar() {
   });
   if(screen==='publish') document.getElementById('nav-publish').classList.add('active');
   else if(screen==='ideas') document.getElementById('nav-ideas').classList.add('active');
-  else if(screen==='profile') document.getElementById('nav-profile').classList.add('active');
   else if(screen==='team') document.getElementById('nav-team').classList.add('active');
   else if(screen==='projects') document.getElementById('nav-projects').classList.add('active');
+  // Eliminamos nav-profile de aquí porque ahora ya no está en el sidebar, está oculto
 }
 
 function setFilter(catId) { filterCat = catId; curPid = null; goScreen('projects'); }
@@ -1898,7 +1897,6 @@ function renderPublish() {
   el.innerHTML=`<div class="sec-title" style="margin-bottom:14px">COMPLETED PROJECTS QUEUE</div><div class="publish-list">${listHTML}</div><div class="sec-title"><span>📅 SCHEDULING CALENDAR</span></div>${buildCalendarHTML()}`;
   document.querySelectorAll('.cal-day:not(.empty)').forEach(d=>{ d.addEventListener('click',()=>{ const ds=`${calDate.getFullYear()}-${String(calDate.getMonth()+1).padStart(2,'0')}-${String(d.dataset.day).padStart(2,'0')}`; calSelectedDay=calSelectedDay===ds?null:ds; renderPublish(); }); });
 }
-
 function buildCalendarHTML() {
   const y=calDate.getFullYear(), m=calDate.getMonth(), todayStr=today();
   const scheduled={}; DB.publish.filter(x=>x.date).forEach(x=>{ scheduled[x.date]=(scheduled[x.date]||[]); const p=getP(x.projectId); if(p) scheduled[x.date].push(p); });
