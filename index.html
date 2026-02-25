@@ -48,10 +48,10 @@ input,textarea,select{font-family:'Plus Jakarta Sans',sans-serif;outline:none;}
 
 /* ── SIDEBAR ── */
 .sidebar{width:260px;min-width:260px;background:var(--card);border-right:1px solid var(--line);display:flex;flex-direction:column;height:100vh;position:sticky;top:0;overflow:hidden;}
-.sidebar-logo{padding:24px 20px 20px;border-bottom:1px solid var(--line);display:flex;align-items:center;gap:12px;}
-.logo-face{width:48px;height:48px;object-fit:contain;filter:drop-shadow(0 4px 6px rgba(0,0,0,0.3));}
+.sidebar-logo{padding:28px 20px 24px;border-bottom:1px solid var(--line);display:flex;align-items:center;gap:14px;}
+.logo-face{width:56px;height:56px;object-fit:contain;filter:drop-shadow(0 4px 6px rgba(0,0,0,0.3));}
 .logo-text-wrap{display:flex;flex-direction:column;justify-content:center;}
-.logo-text-img{height:24px;object-fit:contain;object-position:left;margin-bottom:4px;}
+.logo-text-img{height:28px;object-fit:contain;object-position:left;margin-bottom:4px;}
 .logo-sub{font-size:11px;color:var(--soft);font-weight:600;letter-spacing:0.5px;}
 
 .sidebar-nav{flex:1;overflow-y:auto;padding:16px 12px;}
@@ -105,7 +105,7 @@ input,textarea,select{font-family:'Plus Jakarta Sans',sans-serif;outline:none;}
 .tb-btn:hover{background:var(--card2);border-color:var(--primary-light);}
 .tb-btn.primary{background:var(--primary);color:#fff;border-color:transparent;}
 .tb-btn.primary:hover{background:var(--primary-hover);transform:translateY(-1px);box-shadow:0 4px 12px rgba(99,102,241,0.3);}
-.tb-btn.danger{border-color:var(--line2);color:var(--red);}
+.tb-btn.danger{border-color:var(--line2);color:var(--red);background:var(--bg);}
 .tb-btn.danger:hover{background:var(--red);color:#fff;border-color:transparent;}
 
 /* USER PROFILE NAV */
@@ -601,6 +601,24 @@ input,textarea,select{font-family:'Plus Jakarta Sans',sans-serif;outline:none;}
 </div>
 </div>
 
+<div class="overlay" id="m-new-user" onclick="ovClose(event,'m-new-user')">
+<div class="modal" style="max-width: 400px;">
+  <div class="modal-title" id="m-user-title">Edit Profile</div>
+  <div class="field">
+    <label class="field-label">Full Name</label>
+    <input class="field-input" id="inp-u-name" placeholder="E.g.: John Doe">
+  </div>
+  <div class="field">
+    <label class="field-label">Role / Position</label>
+    <input class="field-input" id="inp-u-role" placeholder="E.g.: Video Editor">
+  </div>
+  <div class="modal-footer">
+    <button class="btn-cancel" onclick="closeModal('m-new-user');">Cancel</button>
+    <button class="btn-ok" onclick="saveUserProfile()">Save Profile</button>
+  </div>
+</div>
+</div>
+
 <div class="overlay" id="m-assign" onclick="ovClose(event,'m-assign')">
 <div class="modal" style="max-width: 400px;">
   <div class="modal-title">Manage Assignees</div>
@@ -726,7 +744,7 @@ input,textarea,select{font-family:'Plus Jakarta Sans',sans-serif;outline:none;}
 <div class="overlay" id="m-delete" onclick="ovClose(event,'m-delete')">
 <div class="modal">
   <div class="modal-title" style="color:var(--red)" id="m-del-title">Delete Item</div>
-  <div style="font-size:14px;color:var(--soft);margin-bottom:24px">Are you absolutely sure? This action is permanent and cannot be undone.</div>
+  <div style="font-size:14px;color:var(--soft);margin-bottom:24px" id="m-del-desc">Are you absolutely sure? This action is permanent and cannot be undone.</div>
   <div class="modal-footer">
     <button class="btn-cancel" onclick="closeModal('m-delete')">Keep Item</button>
     <button class="btn-ok red" onclick="confirmDelete()">Yes, Delete</button>
@@ -767,7 +785,7 @@ input,textarea,select{font-family:'Plus Jakarta Sans',sans-serif;outline:none;}
 /* ═══════════════════════════════════════
    CONFIGURACIÓN DE CUENTA MAESTRA
 ═══════════════════════════════════════ */
-// Pon tu correo aquí. Solo este correo podrá eliminar proyectos y perfiles.
+// PON AQUÍ TU CORREO DE GOOGLE. Solo este correo podrá eliminar proyectos y perfiles.
 const MASTER_EMAILS = ["manuelrate19@gmail.com"]; 
 
 
@@ -829,14 +847,13 @@ function initApp() {
     if (doc.exists) {
       DB = doc.data().db_state;
       
-      // Migraciones
+      // Migraciones de protección
       if (!DB.users) DB.users = [];
       DB.projects.forEach((p,i) => {
-        if (p.links && !Array.isArray(p.links)) { p.links = []; }
-        if (!p.links) p.links = [];
+        if (!p.links || Array.isArray(p.links)) { p.links = { wip:'', final:'', ref:'' }; }
         if (p.priority === undefined) p.priority = false;
         if (p.order === undefined) p.order = i;
-        if (!p.assignees) p.assignees = [];
+        if (!p.assignees || !Array.isArray(p.assignees)) p.assignees = [];
         if (p.isPaused === undefined) p.isPaused = false;
       });
       if (!DB.ideas) DB.ideas = [];
@@ -856,7 +873,7 @@ function initApp() {
       CloudDB.save(DB); 
     }
     
-    checkSyncUser(); // Revisa si hay que sincronizar el usuario de Auth con la DB
+    checkSyncUser(); 
     if(currentUser) render();
     
   }, (error) => {
@@ -917,9 +934,9 @@ let currentCommentImgB64 = null;
 let editingIdeaId = null;
 let isPausedGridOpen = false;
 
-let currentUser = null; // Guardará el UID de firebase auth
-let currentUserObj = null; // Guardará el objeto completo de auth
-let isMaster = false; // Define si tiene permisos de eliminar
+let currentUser = null; 
+let currentUserObj = null; 
+let isMaster = false; 
 
 function signInWithGoogle() {
   const provider = new firebase.auth.GoogleAuthProvider();
@@ -933,7 +950,6 @@ function signOut() {
   firebase.auth().signOut();
 }
 
-// Escuchamos cambios en la autenticación de Firebase
 firebase.auth().onAuthStateChanged((user) => {
   if (user) {
     currentUserObj = user;
@@ -946,7 +962,7 @@ firebase.auth().onAuthStateChanged((user) => {
     currentUserObj = null;
     currentUser = null;
     isMaster = false;
-    document.getElementById('m-login').classList.add('open'); // Mostrar login
+    document.getElementById('m-login').classList.add('open');
   }
 });
 
@@ -954,21 +970,17 @@ function checkSyncUser() {
   if(isDbLoaded && currentUserObj && DB.users) {
     let u = DB.users.find(x => x.email === currentUserObj.email);
     if(!u) {
-      // Registrar usuario nuevo en la DB
-      DB.users.push({ 
+      u = { 
         id: currentUserObj.uid, 
-        name: currentUserObj.displayName || 'Usuario Nuevo', 
+        name: currentUserObj.displayName || 'User', 
         email: currentUserObj.email, 
+        role: 'Editor',
         avatar: currentUserObj.photoURL || 'https://ui-avatars.com/api/?name=U' 
-      });
-      save();
-    } else if (u.avatar !== currentUserObj.photoURL || u.name !== currentUserObj.displayName) {
-      // Actualizar datos si cambiaron en Google
-      u.avatar = currentUserObj.photoURL || u.avatar;
-      u.name = currentUserObj.displayName || u.name;
+      };
+      DB.users.push(u);
       save();
     }
-    currentUser = currentUserObj.uid;
+    currentUser = u.id;
   }
 }
 
@@ -977,7 +989,6 @@ function getAuthUser() { return DB.users.find(x=>x.id===currentUser); }
 function renderTopbarAuth() {
   const u = getAuthUser();
   if(!u) return '';
-  // Devuelve solo el string de HTML para inyectar en la Topbar
   return `
     <button class="tb-btn primary" onclick="openModal('m-project')">➕ New Project</button>
     <div class="user-menu-btn" onclick="signOut()" title="Click to Sign Out">
@@ -985,6 +996,32 @@ function renderTopbarAuth() {
       <span class="user-menu-name">${u.name} (Logout)</span>
     </div>
   `;
+}
+
+function openEditProfile(id) {
+  editingProfileId = id;
+  const u = DB.users.find(x=>x.id===id);
+  if(!u) return;
+  document.getElementById('inp-u-name').value = u.name || '';
+  document.getElementById('inp-u-role').value = u.role || '';
+  openModal('m-new-user');
+}
+
+function saveUserProfile() {
+  const name = document.getElementById('inp-u-name').value.trim();
+  const role = document.getElementById('inp-u-role').value.trim();
+  if(!name) return alert("Name is required.");
+  
+  if(editingProfileId) {
+    const u = DB.users.find(x=>x.id===editingProfileId);
+    if(u) { 
+      u.name = name; 
+      u.role = role; 
+    }
+  } 
+  save(); closeModal('m-new-user'); 
+  renderTopbarAuth(); render();
+  toast('Profile updated', '👤');
 }
 
 /* ═══════════════════════════════════════
@@ -1063,8 +1100,6 @@ function renderTopbar() {
 
   bc.innerHTML = leftSub;
   title.textContent = leftTitle;
-  
-  // Inyectar Perfil y Botón de crear proyecto en todas las vistas
   right.innerHTML = renderTopbarAuth();
 }
 
@@ -1072,10 +1107,11 @@ function renderTopbar() {
    AVATAR HELPER
 ═══════════════════════════════════════ */
 function renderAvatars(assignees) {
-  if(!assignees || !assignees.length) return '<div class="avatar-empty">+</div>';
+  const arr = assignees || [];
+  if(!arr.length) return '<div class="avatar-empty">+</div>';
   const max = 3;
-  const visible = assignees.slice(0, max);
-  const extra = assignees.length - max;
+  const visible = arr.slice(0, max);
+  const extra = arr.length - max;
   let html = '<div class="avatar-group">';
   visible.forEach(uid => { 
     const u = DB.users.find(x => x.id === uid); 
@@ -1238,9 +1274,10 @@ function renderDetail() {
   }).join('');
 
   const linkOpts = LINK_TYPES.map(t=>`<option value="${t.id}">${t.label}</option>`).join('');
-  const linksHTML = p.links.map((lnk, idx) => {
-    const lbl = LINK_TYPES.find(t=>t.id===lnk.type)?.label || 'Link';
-    return `<div class="link-row"><span class="link-label">${lbl}</span><a class="link-value" href="${lnk.url}" target="_blank" rel="noopener">${lnk.url}</a><button class="link-del-btn" onclick="removeLink('${p.id}',${idx})" title="Delete Link">✕</button></div>`;
+  const linksHTML = LINK_TYPES.map(lt=>{
+    const url = p.links[lt]||'';
+    const lbl = lt==='wip'?'Work in Progress':lt==='final'?'Final Render':'Reference';
+    return `<div class="link-row"><span class="link-label">${lbl}:</span>${url?`<a class="link-value" href="${url}" target="_blank" rel="noopener">${url}</a>`:`<span class="link-value" style="color:var(--muted);text-decoration:none">—</span>`}<button class="link-del-btn" onclick="openLinkModal('${p.id}','${lt}')">✏</button></div>`;
   }).join('');
 
   const versHTML = p.versions.slice().reverse().map(v=>`<div class="version-row ${v.v===p.currentVersion?'vcurrent':''}"><div class="v-tag">${v.v}</div><div class="v-body"><div class="v-desc">${v.feedbackDesc}</div><div class="v-date">📅 ${v.date}</div>${v.v===p.currentVersion?`<div class="v-cur">ACTIVE WORKSPACE</div>`:`<button class="v-switch-btn" onclick="switchVer('${p.id}','${v.v}')">Revert to this</button>`}</div></div>`).join('');
@@ -1266,12 +1303,7 @@ function renderDetail() {
     ${panel}
     <div class="sec-title"><span>📂 PROJECT ASSETS & LINKS</span></div>
     <div class="links-section">
-      <div id="links-list-container">${linksHTML}</div>
-      <div class="link-inline-add">
-        <select id="new-link-type">${linkOpts}</select>
-        <input type="text" id="new-link-url" placeholder="Paste URL (Drive, Dropbox, Frame.io)...">
-        <button onclick="addInlineLink('${p.id}')">Add Link</button>
-      </div>
+      <div>${linksHTML}</div>
     </div>
     <div class="sec-title"><span>✂️ EDITING WORKFLOW</span></div>
     <div class="steps-list">${stepsHTML}</div>
@@ -1284,8 +1316,18 @@ function renderDetail() {
 function togglePause(pid) { const p=getP(pid); p.isPaused = !p.isPaused; save(); renderDetail(); }
 
 /* ── Inline Links & Thumbnails & Steps ── */
-function addInlineLink(pid) { const t = document.getElementById('new-link-type').value, u = document.getElementById('new-link-url').value.trim(); if(!u) return; getP(pid).links.push({type:t, url:u}); save(); renderDetail(); toast('Link attached','🔗'); }
-function removeLink(pid, idx) { getP(pid).links.splice(idx,1); save(); renderDetail(); }
+function openLinkModal(pid,lt) {
+  linkCtx={pid,lt};
+  document.getElementById('inp-linktype').innerHTML = `<option value="${lt}" selected>${lt}</option>`;
+  document.getElementById('inp-linkurl').value = getP(pid).links[lt] || '';
+  openModal('m-link');
+}
+function saveLink() {
+  if(!linkCtx) return;
+  const url = document.getElementById('inp-linkurl').value.trim();
+  getP(linkCtx.pid).links[linkCtx.lt] = url;
+  save(); closeModal('m-link'); renderDetail(); toast('Link saved','🔗');
+}
 function handleThumbnailUpload(e) { if(!e.target.files[0] || !curPid) return; resizeImage(e.target.files[0], (base64) => { getP(curPid).thumbnail = base64; save(); renderDetail(); toast('Thumbnail updated','🖼️'); }); e.target.value = ''; }
 function stepAct(pid,i,action) { const p=getP(pid), ver=getCurVer(p), s=ver.steps[i]; if(action==='start') s.status='active'; else if(action==='complete'){ s.status='done'; if(ver.steps.every(x=>x.status==='done')) ver.waitingFeedback=true; } else if(action==='reopen'){ s.status='active'; ver.waitingFeedback=false; } save(); renderDetail(); renderSidebar(); }
 function openNoteModal(pid,i) { editStepCtx={pid,i}; document.getElementById('inp-note').value=getP(pid)?getCurVer(getP(pid)).steps[i].note||'':''; openModal('m-note'); }
@@ -1297,7 +1339,8 @@ function switchVer(pid,v) { getP(pid).currentVersion=v; save(); renderDetail(); 
 let tempAssignees = [];
 function openAssignModal(pid) {
   curPid = pid;
-  tempAssignees = [...getP(pid).assignees];
+  const p = getP(pid);
+  tempAssignees = p.assignees ? [...p.assignees] : [];
   renderAssignUserList('assign-user-list', tempAssignees);
   openModal('m-assign');
 }
@@ -1372,7 +1415,6 @@ function applyFeedback() {
   if(file) resizeImage(file, finishFb); else finishFb(null);
 }
 
-// Ventana centralizada para Eliminar Proyectos o Usuarios
 function askDelete(id, type) { 
   deleteCtx = id; 
   deleteType = type;
@@ -1390,10 +1432,11 @@ function confirmDelete() {
     toast('Project wiped','🗑');
   } else if (deleteType === 'user') {
     DB.users = DB.users.filter(u=>u.id!==deleteCtx);
-    // Eliminarlo de las asignaciones de proyectos
-    DB.projects.forEach(p => { p.assignees = p.assignees.filter(uid => uid !== deleteCtx); });
+    DB.projects.forEach(p => { 
+      if(p.assignees) p.assignees = p.assignees.filter(uid => uid !== deleteCtx); 
+    });
     save();
-    renderProfile(); // Recargar la lista de perfiles
+    renderProfile(); 
     toast('Profile deleted','🗑');
   }
   closeModal('m-delete'); 
@@ -1408,7 +1451,8 @@ function renderProfile() {
   
   let activeP = [], doneP = [];
   DB.projects.forEach(p => {
-    if(!p.assignees.includes(u.id)) return;
+    const arr = p.assignees || [];
+    if(!arr.includes(u.id)) return;
     const allDone = getCurVer(p).steps.every(s=>s.status==='done');
     if(allDone) doneP.push(p); else activeP.push(p);
   });
@@ -1435,7 +1479,6 @@ function renderProfile() {
     </div>
   `).join('');
 
-  // Sección exclusiva para el Master (Lista del equipo para eliminar)
   let teamHTML = '';
   if(isMaster) {
     teamHTML = `
@@ -1460,7 +1503,10 @@ function renderProfile() {
       <img src="${u.avatar}" class="profile-avatar">
       <div class="profile-info">
         <h2>${u.name}</h2>
-        <p>${u.email}</p>
+        <p>${u.email} ${u.role ? `· <strong>${u.role}</strong>` : ''}</p>
+      </div>
+      <div class="profile-actions">
+        <button class="tb-btn" onclick="openEditProfile('${u.id}')">✏️ Edit Role</button>
       </div>
     </div>
     <div class="profile-grid">
