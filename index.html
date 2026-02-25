@@ -80,6 +80,9 @@ input,textarea,select{font-family:'Plus Jakarta Sans',sans-serif;outline:none;}
 
 /* SIDEBAR FOOTER & PROFILE BTN */
 .sidebar-footer{padding:16px;border-top:1px solid var(--line);display:flex;flex-direction:column;gap:8px;}
+.profile-nav-btn { display:flex; align-items:center; gap:12px; padding:12px; border-radius:10px; background:var(--bg); border:1px solid var(--line2); margin-bottom: 8px; cursor:pointer; transition:all .2s; font-size:13px; font-weight:600; color:var(--text); }
+.profile-nav-btn:hover { border-color:var(--primary-light); background:var(--card2); }
+.profile-nav-btn.active { background:var(--primary-bg); border-color:var(--primary); color:var(--primary-light); }
 .sb-btn{width:100%;padding:10px 14px;border-radius:8px;font-size:13px;font-weight:600;transition:all .2s;display:flex;align-items:center;justify-content:center;gap:6px;}
 .sb-btn.primary{background:var(--primary);color:#fff;}
 .sb-btn.secondary{background:var(--card2);color:var(--text);border:1px solid var(--line2);}
@@ -145,13 +148,11 @@ input,textarea,select{font-family:'Plus Jakarta Sans',sans-serif;outline:none;}
 .project-card.dragging{opacity:.5;box-shadow:0 8px 24px rgba(0,0,0,.5);transform:scale(0.98);}
 .project-card.drag-over{border-color:var(--primary);box-shadow:0 0 0 2px var(--primary-bg);}
 
-.pc-action-btn{position:absolute;top:12px;display:flex;align-items:center;justify-content:center;width:28px;height:28px;border-radius:6px;background:rgba(0,0,0,0.6);color:var(--text);font-size:14px;transition:all .2s;z-index:2;}
-.pc-drag{right:12px;cursor:grab; opacity:0;}
-.project-card:hover .pc-drag{opacity:1;}
+.pc-action-btn{position:absolute;top:12px;display:flex;align-items:center;justify-content:center;width:28px;height:28px;border-radius:6px;background:rgba(0,0,0,0.6);color:var(--text);font-size:14px;opacity:0;transition:all .2s;z-index:2;}
+.project-card:hover .pc-action-btn{opacity:1;}
+.pc-drag{right:12px;cursor:grab;}
 .pc-drag:active{cursor:grabbing;}
-
-/* Botón de eliminar más visible para el master */
-.pc-del{right:48px;cursor:pointer;color:var(--red); background:var(--card2); border:1px solid var(--red); opacity:0.9;}
+.pc-del{right:48px;cursor:pointer;color:var(--soft);}
 .pc-del:hover{background:var(--red);color:#fff;}
 
 .pc-thumb-wrap {width:100%;height:140px;background:var(--card2);display:flex;align-items:center;justify-content:center;border-bottom:1px solid var(--line);overflow:hidden;}
@@ -368,7 +369,7 @@ input,textarea,select{font-family:'Plus Jakarta Sans',sans-serif;outline:none;}
 .pub-date-row{display:flex;align-items:center;gap:12px;}
 .pub-date-lbl{font-size:16px;}
 
-/* CSS DEL INPUT DE FECHA Y EL CALENDARIO (FORZAR BLANCO) */
+/* CSS DEL INPUT DE FECHA Y EL CALENDARIO (BLANCO FORZADO) */
 .pub-date-inp{padding:8px 12px;background:var(--bg);border:1px solid var(--line2);border-radius:8px;font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--text);cursor:pointer;transition:border-color .2s; color-scheme: dark;}
 .pub-date-inp:focus{border-color:var(--accent-light);box-shadow:0 0 0 1px var(--accent-light);}
 .pub-date-inp::-webkit-calendar-picker-indicator { cursor: pointer; filter: invert(1) sepia(100%) !important; }
@@ -643,19 +644,6 @@ input,textarea,select{font-family:'Plus Jakarta Sans',sans-serif;outline:none;}
 </div>
 </div>
 
-<div class="overlay" id="m-send-msg" onclick="ovClose(event,'m-send-msg')">
-<div class="modal" style="max-width: 400px;">
-  <div class="modal-title">Send Message</div>
-  <div class="field">
-    <textarea class="field-textarea" id="inp-msg-text" placeholder="Type your message here..."></textarea>
-  </div>
-  <div class="modal-footer">
-    <button class="btn-cancel" onclick="closeModal('m-send-msg')">Cancel</button>
-    <button class="btn-ok" onclick="submitMessage()">Send</button>
-  </div>
-</div>
-</div>
-
 <div class="overlay" id="m-new-user" onclick="ovClose(event,'m-new-user')">
 <div class="modal" style="max-width: 400px;">
   <div class="modal-title" id="m-user-title">Edit Profile</div>
@@ -851,7 +839,7 @@ input,textarea,select{font-family:'Plus Jakarta Sans',sans-serif;outline:none;}
    CONFIGURACIÓN DE CUENTA MAESTRA
 ═══════════════════════════════════════ */
 // PON AQUÍ TU CORREO DE GOOGLE. 
-const MASTER_EMAILS = ["manuelrate19@gmail.com"]; 
+const MASTER_EMAILS = ["tu_correo_maestro@gmail.com", "tucorreo@gmail.com"]; 
 
 
 /* ═══════════════════════════════════════
@@ -1035,6 +1023,7 @@ function signOut() {
   firebase.auth().signOut();
 }
 
+// Escuchar inicio de sesión de Google
 firebase.auth().onAuthStateChanged((user) => {
   if (user) {
     currentUserObj = user;
@@ -1058,6 +1047,7 @@ function checkAuth() {
   }
 }
 
+// Empata la cuenta de Google con nuestra Base de Datos
 function syncUserAndRender() {
   let u = DB.users.find(x => x.id === currentUserObj.uid);
   let changed = false;
@@ -1072,8 +1062,9 @@ function syncUserAndRender() {
     };
     DB.users.push(u);
     changed = true;
-  } else if (!u.avatar || u.avatar.includes('ui-avatars')) {
+  } else if (!u.avatar || u.avatar.includes('ui-avatars') || u.name !== currentUserObj.displayName) {
     u.avatar = currentUserObj.photoURL || u.avatar;
+    u.name = currentUserObj.displayName || u.name;
     changed = true;
   }
 
@@ -1182,7 +1173,7 @@ function renderTeam() {
   const content = document.getElementById('team-content');
   let html = `<div class="sec-title" style="margin-bottom:24px;">👥 TEAM DIRECTORY</div>`;
   html += `<div class="proj-grid">`;
-  DB.users.forEach(u => {
+  (DB.users || []).forEach(u => {
     html += `
       <div class="project-card" style="align-items:center; flex-direction:row; padding:16px;">
         <img src="${u.avatar}" style="width:48px; height:48px; border-radius:50%; margin-right:16px; cursor:pointer;" onclick="viewPublicProfile('${u.id}')">
@@ -1256,6 +1247,7 @@ function renderPublicProfile() {
             <div class="mini-proj-list">${doneP.length?doneP.map(renderMini).join(''):'<div style="color:var(--muted);font-size:13px;">No completed projects.</div>'}</div>
           </div>
       </div>
+
       <div class="profile-col" style="align-self:start;">
         <div class="pcol-title">💬 Send Private Message</div>
         <div style="display:flex; flex-direction:column;">
@@ -1580,7 +1572,6 @@ function renderDetail() {
     
     <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:16px;">
       <h2 style="font-size:24px; font-weight:800;">${p.name}</h2>
-      ${isMaster ? `<button class="tb-btn danger" onclick="askDelete('${p.id}', 'project')">🗑 Delete Project</button>` : ''}
     </div>
 
     <div class="assignees-block">
@@ -1763,19 +1754,19 @@ function confirmDelete() {
    PROFILE SCREEN
 ═══════════════════════════════════════ */
 function renderProfile() {
-  const u = getAuthUser(); 
-  if(!u) {
-    document.getElementById('profile-content').innerHTML = `
-      <div class="empty-state" style="margin-top:40px;">
-        <div class="empty-icon">👤</div>
-        <div class="empty-text">Loading profile data...</div>
-      </div>`;
-    return;
-  }
-  
-  let activeP = [], doneP = [];
   try {
-    DB.projects.forEach(p => {
+    const u = getAuthUser(); 
+    if(!u) {
+      document.getElementById('profile-content').innerHTML = `
+        <div class="empty-state" style="margin-top:40px;">
+          <div class="empty-icon">👤</div>
+          <div class="empty-text">Loading profile data...</div>
+        </div>`;
+      return;
+    }
+    
+    let activeP = [], doneP = [];
+    (DB.projects || []).forEach(p => {
       const arr = p.assignees || [];
       if(!arr.includes(u.id)) return;
       const v = getCurVer(p);
@@ -1783,60 +1774,64 @@ function renderProfile() {
       const allDone = steps.length > 0 && steps.every(s=>s.status==='done');
       if(allDone) doneP.push(p); else activeP.push(p);
     });
-  } catch(e) { console.error("Error cargando proyectos", e); }
 
-  const renderMini = (p) => {
-    const cat = getCat(p.catId);
-    return `<div class="mini-proj" onclick="openProj('${p.id}')">
-      <div>
-        <div class="mp-name">${p.name}</div>
-        <div class="mp-cat">${cat?.name||''} · ${p.currentVersion}</div>
-      </div>
-      <span style="color:var(--muted)">→</span>
-    </div>`;
-  };
-
-  if(!DB.todos[u.id]) DB.todos[u.id] = [];
-  const todos = DB.todos[u.id];
-
-  const todoHTML = todos.map(t => `
-    <div class="todo-item ${t.done?'done':''}">
-      <input type="checkbox" ${t.done?'checked':''} onchange="toggleTodo('${t.id}')">
-      <span class="todo-text">${t.text}</span>
-      <button class="todo-del" onclick="delTodo('${t.id}')">✕</button>
-    </div>
-  `).join('');
-
-  document.getElementById('profile-content').innerHTML = `
-    <div class="profile-header">
-      <img src="${u.avatar}" class="profile-avatar">
-      <div class="profile-info">
-        <h2>${u.name}</h2>
-        <p>${u.email} ${u.role ? `· <strong>${u.role}</strong>` : ''}</p>
-      </div>
-      <div class="profile-actions">
-        <button class="tb-btn" onclick="openEditProfile('${u.id}')">✏️ Edit Profile</button>
-      </div>
-    </div>
-    <div class="profile-grid">
-      <div class="profile-col">
-        <div class="pcol-title">▶ Assigned Active Projects (${activeP.length})</div>
-        <div class="mini-proj-list">${activeP.length?activeP.map(renderMini).join(''):'<div style="color:var(--muted);font-size:13px;">No active projects.</div>'}</div>
-      </div>
-      <div class="profile-col">
-        <div class="pcol-title">✅ Completed Projects (${doneP.length})</div>
-        <div class="mini-proj-list">${doneP.length?doneP.map(renderMini).join(''):'<div style="color:var(--muted);font-size:13px;">No completed projects.</div>'}</div>
-      </div>
-      <div class="profile-col">
-        <div class="pcol-title">📋 Daily To-Do</div>
-        <div class="todo-input-wrap">
-          <input type="text" id="new-todo" class="todo-input" placeholder="Add a new task..." onkeyup="if(event.key==='Enter') addTodo()">
-          <button class="todo-add-btn" onclick="addTodo()">Add</button>
+    const renderMini = (p) => {
+      const cat = getCat(p.catId);
+      return `<div class="mini-proj" onclick="openProj('${p.id}')">
+        <div>
+          <div class="mp-name">${p.name}</div>
+          <div class="mp-cat">${cat?.name||''} · ${p.currentVersion}</div>
         </div>
-        <div class="todo-list">${todoHTML || '<div style="color:var(--muted);font-size:13px;">All caught up!</div>'}</div>
+        <span style="color:var(--muted)">→</span>
+      </div>`;
+    };
+
+    if(!DB.todos) DB.todos = {};
+    if(!DB.todos[u.id]) DB.todos[u.id] = [];
+    const todos = DB.todos[u.id];
+
+    const todoHTML = todos.map(t => `
+      <div class="todo-item ${t.done?'done':''}">
+        <input type="checkbox" ${t.done?'checked':''} onchange="toggleTodo('${t.id}')">
+        <span class="todo-text">${t.text}</span>
+        <button class="todo-del" onclick="delTodo('${t.id}')">✕</button>
       </div>
-    </div>
-  `;
+    `).join('');
+
+    document.getElementById('profile-content').innerHTML = `
+      <div class="profile-header">
+        <img src="${u.avatar}" class="profile-avatar">
+        <div class="profile-info">
+          <h2>${u.name}</h2>
+          <p>${u.email} ${u.role ? `· <strong>${u.role}</strong>` : ''}</p>
+        </div>
+        <div class="profile-actions">
+          <button class="tb-btn" onclick="openEditProfile('${u.id}')">✏️ Edit Profile</button>
+        </div>
+      </div>
+      <div class="profile-grid">
+        <div class="profile-col">
+          <div class="pcol-title">▶ Assigned Active Projects (${activeP.length})</div>
+          <div class="mini-proj-list">${activeP.length?activeP.map(renderMini).join(''):'<div style="color:var(--muted);font-size:13px;">No active projects.</div>'}</div>
+        </div>
+        <div class="profile-col">
+          <div class="pcol-title">✅ Completed Projects (${doneP.length})</div>
+          <div class="mini-proj-list">${doneP.length?doneP.map(renderMini).join(''):'<div style="color:var(--muted);font-size:13px;">No completed projects.</div>'}</div>
+        </div>
+        <div class="profile-col">
+          <div class="pcol-title">📋 Daily To-Do</div>
+          <div class="todo-input-wrap">
+            <input type="text" id="new-todo" class="todo-input" placeholder="Add a new task..." onkeyup="if(event.key==='Enter') addTodo()">
+            <button class="todo-add-btn" onclick="addTodo()">Add</button>
+          </div>
+          <div class="todo-list">${todoHTML || '<div style="color:var(--muted);font-size:13px;">All caught up!</div>'}</div>
+        </div>
+      </div>
+    `;
+  } catch(e) {
+    console.error("Error in renderProfile:", e);
+    document.getElementById('profile-content').innerHTML = `<div class="empty-state">Error loading profile data. Check console.</div>`;
+  }
 }
 
 function addTodo() {
@@ -1980,7 +1975,7 @@ function loadProjCats() { const yr=document.getElementById('inp-pyear').value, c
 ═══════════════════════════════════════ */
 function openModal(id) {
   if(id==='m-project'){ document.getElementById('inp-pyear').innerHTML=DB.years.map(y=>`<option value="${y.id}">${y.label}</option>`).join(''); loadProjCats(); buildCTRadios(selContentType); document.getElementById('step-toggles').innerHTML=DEFAULT_STEPS.map(s=>`<div class="stoggle on" data-s="${s}" onclick="this.classList.toggle('on')">${s}</div>`).join(''); tempAssignees = [currentUser]; renderAssignUserList('create-proj-assignees', tempAssignees); document.getElementById('inp-pname').value=''; }
-  if(id==='m-category'){ document.getElementById('inp-cyear').innerHTML=DB.years.map(y=>`<option value="${y.id}">${y.label}</option>`).join(''); selCatColor=CAT_COLORS[0]; buildCatSwatches(); document.getElementById('inp-cname').value=''; document.getElementById('inp-cnewyear').value=''; }
+  if(id==='m-category'){ document.getElementById('inp-cyear').innerHTML=DB.years.map(y=>`<option value="${y.id}">${y.label}</option>`).join(''); selCatColor=CAT_COLORS[0]; buildCatSwatches(); document.getElementById('inp-cname').value=''; }
   if(id==='m-season'){ document.getElementById('inp-season-name').value=''; }
   if(id==='m-step') document.getElementById('inp-sname').value='';
   document.getElementById(id).classList.add('open');
