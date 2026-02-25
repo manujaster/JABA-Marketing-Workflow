@@ -80,6 +80,9 @@ input,textarea,select{font-family:'Plus Jakarta Sans',sans-serif;outline:none;}
 
 /* SIDEBAR FOOTER & PROFILE BTN */
 .sidebar-footer{padding:16px;border-top:1px solid var(--line);display:flex;flex-direction:column;gap:8px;}
+.profile-nav-btn { display:flex; align-items:center; gap:12px; padding:12px; border-radius:10px; background:var(--bg); border:1px solid var(--line2); margin-bottom: 8px; cursor:pointer; transition:all .2s; font-size:13px; font-weight:600; color:var(--text); }
+.profile-nav-btn:hover { border-color:var(--primary-light); background:var(--card2); }
+.profile-nav-btn.active { background:var(--primary-bg); border-color:var(--primary); color:var(--primary-light); }
 .sb-btn{width:100%;padding:10px 14px;border-radius:8px;font-size:13px;font-weight:600;transition:all .2s;display:flex;align-items:center;justify-content:center;gap:6px;}
 .sb-btn.primary{background:var(--primary);color:#fff;}
 .sb-btn.secondary{background:var(--card2);color:var(--text);border:1px solid var(--line2);}
@@ -145,11 +148,13 @@ input,textarea,select{font-family:'Plus Jakarta Sans',sans-serif;outline:none;}
 .project-card.dragging{opacity:.5;box-shadow:0 8px 24px rgba(0,0,0,.5);transform:scale(0.98);}
 .project-card.drag-over{border-color:var(--primary);box-shadow:0 0 0 2px var(--primary-bg);}
 
-.pc-action-btn{position:absolute;top:12px;display:flex;align-items:center;justify-content:center;width:28px;height:28px;border-radius:6px;background:rgba(0,0,0,0.6);color:var(--text);font-size:14px;opacity:0;transition:all .2s;z-index:2;}
-.project-card:hover .pc-action-btn{opacity:1;}
-.pc-drag{right:12px;cursor:grab;}
+.pc-action-btn{position:absolute;top:12px;display:flex;align-items:center;justify-content:center;width:28px;height:28px;border-radius:6px;background:rgba(0,0,0,0.6);color:var(--text);font-size:14px;transition:all .2s;z-index:2;}
+.pc-drag{right:12px;cursor:grab; opacity:0;}
+.project-card:hover .pc-drag{opacity:1;}
 .pc-drag:active{cursor:grabbing;}
-.pc-del{right:48px;cursor:pointer;color:var(--soft);}
+
+/* Botón de eliminar para el master */
+.pc-del{right:48px;cursor:pointer;color:var(--red); background:var(--card2); border:1px solid var(--red); opacity:0.9;}
 .pc-del:hover{background:var(--red);color:#fff;}
 
 .pc-thumb-wrap {width:100%;height:140px;background:var(--card2);display:flex;align-items:center;justify-content:center;border-bottom:1px solid var(--line);overflow:hidden;}
@@ -245,13 +250,13 @@ input,textarea,select{font-family:'Plus Jakarta Sans',sans-serif;outline:none;}
 .step-btn.reopen:hover{background:var(--orange);color:#fff;border-color:transparent;}
 .step-btn.danger:hover{background:var(--red);color:#fff;border-color:transparent;}
 
-/* Inline Links Restaurado */
+/* Inline Links (DYNAMIC FORMAT) */
 .links-section{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:20px;margin-bottom:24px;}
 .link-row{display:flex;align-items:center;gap:12px;margin-bottom:10px;background:var(--bg);padding:10px 14px;border-radius:8px;border:1px solid var(--line2);}
 .link-label{font-size:11px;color:var(--primary-light);min-width:70px;font-weight:700;text-transform:uppercase;letter-spacing:0.5px;}
 .link-value{font-size:13px;color:var(--text);text-decoration:none;flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;transition:color .2s;}
 .link-value:hover{color:var(--primary-light);text-decoration:underline;}
-.link-del-btn{background:var(--card2);border-radius:6px;width:26px;height:26px;display:flex;align-items:center;justify-content:center;color:var(--muted);cursor:pointer;transition:all .2s;}
+.link-del-btn{background:var(--card2);border-radius:6px;width:26px;height:26px;display:flex;align-items:center;justify-content:center;color:var(--muted);cursor:pointer;transition:all .2s; border:none;}
 .link-del-btn:hover{background:var(--red);color:#fff;}
 .link-inline-add { display:flex;gap:8px;margin-top:16px;padding-top:16px;border-top:1px dashed var(--line2); }
 .link-inline-add input { flex:1;padding:8px 12px;background:var(--bg);border:1px solid var(--line2);border-radius:8px;font-size:13px;color:var(--text);transition:border-color .2s; }
@@ -366,10 +371,10 @@ input,textarea,select{font-family:'Plus Jakarta Sans',sans-serif;outline:none;}
 .pub-date-row{display:flex;align-items:center;gap:12px;}
 .pub-date-lbl{font-size:16px;}
 
-/* CSS DEL INPUT DE FECHA Y EL CALENDARIO (FORZAR BLANCO ABSOLUTO) */
+/* CSS DEL INPUT DE FECHA Y EL CALENDARIO (BLANCO FORZADO) */
 .pub-date-inp{padding:8px 12px;background:var(--bg);border:1px solid var(--line2);border-radius:8px;font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--text);cursor:pointer;transition:border-color .2s; color-scheme: dark;}
 .pub-date-inp:focus{border-color:var(--accent-light);box-shadow:0 0 0 1px var(--accent-light);}
-.pub-date-inp::-webkit-calendar-picker-indicator { cursor: pointer; filter: invert(1) !important; }
+.pub-date-inp::-webkit-calendar-picker-indicator { cursor: pointer; filter: invert(1) brightness(100) !important; }
 
 /* Calendar */
 .cal-wrap{background:var(--card);border:1px solid var(--line);border-radius:16px;overflow:hidden;}
@@ -413,7 +418,7 @@ input,textarea,select{font-family:'Plus Jakarta Sans',sans-serif;outline:none;}
 .idea-add-icon{font-size:32px;}
 .idea-add-text{font-size:14px;font-weight:700;}
 
-/* Content type tags */
+/* Content type tags generic */
 .ct-longform{background:rgba(99,102,241,0.15);color:var(--primary-light);}
 .ct-short{background:rgba(168,85,247,0.15);color:var(--accent-light);}
 .ct-podcast{background:var(--green-bg);color:var(--green);}
@@ -516,6 +521,9 @@ input,textarea,select{font-family:'Plus Jakarta Sans',sans-serif;outline:none;}
   </nav>
   
   <div class="sidebar-footer">
+    <div class="profile-nav-btn" id="nav-profile" onclick="goScreen('profile')">
+      <span class="nav-icon">👤</span><span>My Profile</span>
+    </div>
     <div style="display:flex; gap:8px;">
       <button class="sb-btn secondary" style="flex:1; padding:10px 0;" onclick="openModal('m-season')">➕ Season</button>
       <button class="sb-btn secondary" style="flex:1; padding:10px 0;" onclick="openModal('m-category')">➕ Client</button>
@@ -865,9 +873,9 @@ const CONTENT_TYPES = [
 ];
 
 const LINK_TYPES = [
-  { id:'final', label: 'Final File' },
+  { id:'final', label: 'Final Render' },
   { id:'wip', label: 'Work in Progress' },
-  { id:'ref', label: 'Reference' }
+  { id:'ref', label: 'References / Assets' }
 ];
 
 const CAT_COLORS = ['#6366f1','#a855f7','#ec4899','#f43f5e','#f59e0b','#10b981','#06b6d4','#3b82f6'];
@@ -903,6 +911,7 @@ const CloudDB = {
 
 let DB = { years:[], categories:[], projects:[], publish:[], ideas:[], todos:{}, users:[], notifications:{}, messages:{} };
 let isDbLoaded = false;
+let linkCtx = null;
 
 function initApp() {
   const localStr = localStorage.getItem('jm-db');
@@ -921,7 +930,7 @@ function initApp() {
       }
     }
       
-    // MIGRACIONES BLINDADAS
+    // MIGRACIONES BLINDADAS (Previene que perfiles o proyectos queden en blanco)
     if (!DB.users) DB.users = [];
     if (!DB.years) DB.years = [{ id:'y2026', label:'2026' }];
     if (!DB.categories) DB.categories = [
@@ -936,15 +945,18 @@ function initApp() {
     if (!DB.messages) DB.messages = {};
 
     DB.projects.forEach((p,i) => {
-      // Migración para los links: restaurar el formato de Array
+      // MIGRACIÓN DE LINKS SEGURA: Se fuerza el formato de Array que pide la interfaz actual
       if (p.links && !Array.isArray(p.links)) {
         const arr = [];
-        if(p.links.wip) arr.push({type:'wip', url: p.links.wip});
-        if(p.links.final) arr.push({type:'final', url: p.links.final});
-        if(p.links.ref) arr.push({type:'ref', url: p.links.ref});
+        if(typeof p.links === 'object') {
+          if(p.links.wip) arr.push({type:'wip', url: p.links.wip});
+          if(p.links.final) arr.push({type:'final', url: p.links.final});
+          if(p.links.ref) arr.push({type:'ref', url: p.links.ref});
+        }
         p.links = arr;
       }
       if (!p.links) p.links = [];
+
       if (!p.assignees || !Array.isArray(p.assignees)) p.assignees = [];
       if (!p.versions) p.versions = [];
       if (!p.comments) p.comments = [];
@@ -1181,30 +1193,6 @@ function renderMessages() {
   let changed = false;
   msgs.forEach(m => { if(!m.read){ m.read = true; changed = true; }});
   if(changed) save();
-}
-
-// ── PANTALLA DE DIRECTORIO DE EQUIPO ──
-function renderTeam() {
-  const content = document.getElementById('team-content');
-  let html = `<div class="sec-title" style="margin-bottom:24px;">👥 TEAM DIRECTORY</div>`;
-  html += `<div class="proj-grid">`;
-  (DB.users || []).forEach(u => {
-    html += `
-      <div class="project-card" style="align-items:center; flex-direction:row; padding:16px;">
-        <img src="${u.avatar}" style="width:48px; height:48px; border-radius:50%; margin-right:16px; cursor:pointer;" onclick="viewPublicProfile('${u.id}')">
-        <div style="flex:1; cursor:pointer;" onclick="viewPublicProfile('${u.id}')">
-          <div style="font-size:16px; font-weight:700; color:var(--text);">${u.name} ${u.id===currentUser ? '<span style="color:var(--primary-light); font-size:11px;">(You)</span>' : ''}</div>
-          <div style="font-size:12px; color:var(--soft); margin-top:2px;">${u.role || 'Team Member'}</div>
-          <div style="font-size:11px; color:var(--muted); margin-top:4px;">${u.email}</div>
-        </div>
-        ${isMaster && u.id !== currentUser ? `
-          <button class="tb-btn danger" style="padding:6px 12px; font-size:11px;" onclick="event.stopPropagation(); askDelete('${u.id}', 'user')">🗑</button>
-        ` : ''}
-      </div>
-    `;
-  });
-  html += `</div>`;
-  content.innerHTML = html;
 }
 
 // ── PERFIL PÚBLICO EN PANTALLA ──
@@ -1579,7 +1567,7 @@ function renderDetail() {
   }).join('');
 
   // ----------------------------------------------------
-  // RESTAURACIÓN DEL SISTEMA DE LINKS DINÁMICO ORIGINAL
+  // SISTEMA DE LINKS DINÁMICO RESTAURADO
   // ----------------------------------------------------
   const linkOpts = LINK_TYPES.map(t=>`<option value="${t.id}">${t.label}</option>`).join('');
   const linksHTML = (p.links || []).map((lnk, idx) => {
@@ -1626,7 +1614,6 @@ function renderDetail() {
     <div class="sec-title"><span>🕒 ITERATION HISTORY</span></div>
     <div class="versions-list">${versHTML}</div>`;
     
-  // Populate Mentions Select for Comments
   const cpTag = document.getElementById('cp-tag');
   if(cpTag) {
     cpTag.innerHTML = `<option value="">No tag...</option>` + DB.users.filter(u=>u.id !== currentUser).map(u => `<option value="${u.id}">@${u.name}</option>`).join('');
@@ -1637,12 +1624,14 @@ function renderDetail() {
 
 function togglePause(pid) { const p=getP(pid); p.isPaused = !p.isPaused; save(); renderDetail(); }
 
-/* ── Inline Links Restored ── */
+/* ── Inline Links Add / Remove ── */
 function addInlineLink(pid) { 
   const t = document.getElementById('new-link-type').value;
   const u = document.getElementById('new-link-url').value.trim(); 
   if(!u) return; 
-  getP(pid).links.push({type:t, url:u}); 
+  const proj = getP(pid);
+  if(!Array.isArray(proj.links)) proj.links = []; // Seguridad extra
+  proj.links.push({type:t, url:u}); 
   save(); 
   renderDetail(); 
   toast('Link attached','🔗'); 
@@ -1702,7 +1691,6 @@ function submitComment() {
   const p=getP(curPid);
   p.comments.push({id:uid(),text,img:currentCommentImgB64,date:today(),version:p.currentVersion, authorId:currentUser});
   
-  // Create Notification if tagged
   if(tagUid) {
     if(!DB.notifications) DB.notifications = {};
     if(!DB.notifications[tagUid]) DB.notifications[tagUid] = [];
@@ -1752,7 +1740,6 @@ function applyFeedback() {
   if(file) resizeImage(file, finishFb); else finishFb(null);
 }
 
-// Ventana centralizada para Eliminar Proyectos o Usuarios
 function askDelete(id, type) { 
   deleteCtx = id; 
   deleteType = type;
@@ -1770,14 +1757,12 @@ function confirmDelete() {
     toast('Project wiped','🗑');
   } else if (deleteType === 'user') {
     DB.users = DB.users.filter(u=>u.id!==deleteCtx);
-    // Eliminarlo de las asignaciones de proyectos
     DB.projects.forEach(p => { 
       if(p.assignees) p.assignees = p.assignees.filter(uid => uid !== deleteCtx); 
     });
     save();
-    if (screen === 'team') renderTeam(); 
-    if (screen === 'projects') renderProjects();
-    toast('Profile deleted','🗑');
+    if(currentUser === deleteCtx) { signOut(); }
+    else { renderProfile(); toast('Profile deleted','🗑'); }
   }
   closeModal('m-delete'); 
   deleteCtx=null; deleteType=null; 
@@ -1831,6 +1816,7 @@ function renderProfile() {
       </div>
     `).join('');
 
+    // El perfil personal, exactamente como la imagen que enviaste
     document.getElementById('profile-content').innerHTML = `
       <div class="profile-header">
         <img src="${u.avatar}" class="profile-avatar">
@@ -1839,7 +1825,8 @@ function renderProfile() {
           <p>${u.email} ${u.role ? `· <strong>${u.role}</strong>` : ''}</p>
         </div>
         <div class="profile-actions">
-          <button class="tb-btn" onclick="openEditProfile('${u.id}')">✏️ Edit Profile</button>
+          <button class="tb-btn" onclick="openEditProfile('${u.id}')">✏️ Edit</button>
+          <button class="tb-btn danger" onclick="askDelete('${u.id}', 'user')">🗑 Delete</button>
         </div>
       </div>
       <div class="profile-grid">
@@ -1889,7 +1876,6 @@ function setPublishDate(pid,date) { const e=DB.publish.find(x=>x.projectId===pid
 function renderPublish() {
   const el=document.getElementById('pub-content');
   if(!DB.publish.length) { 
-    // Muestra el calendario aunque no haya nada en la lista.
     el.innerHTML=`
       <div class="sec-title" style="margin-bottom:14px">COMPLETED PROJECTS QUEUE</div>
       <div style="text-align:center; padding:60px 20px; color:var(--muted); font-size:14px; background:var(--card); border-radius:12px; margin-bottom:32px;">No content ready to publish yet.</div>
@@ -1902,14 +1888,12 @@ function renderPublish() {
   const listHTML=DB.publish.map(entry=>{
     const p=getP(entry.projectId); if(!p) return '';
     const cat=getCat(p.catId);
-    
-    // Obtenemos el Final Link del formato Array (restaurado)
     let finalLink = '';
     if(p.links && Array.isArray(p.links)) {
       const fl = p.links.find(l => l.type === 'final');
       if(fl) finalLink = fl.url;
     }
-
+    
     return `<div class="pub-card">
       ${p.thumbnail ? `<img src="${p.thumbnail}" class="pub-thumb">` : `<div class="pub-thumb" style="display:flex;align-items:center;justify-content:center;color:var(--muted);font-size:32px;border:2px dashed var(--line2)">🎬</div>`}
       <div class="pub-info-wrap">
