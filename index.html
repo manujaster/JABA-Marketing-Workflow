@@ -36,7 +36,9 @@
   --orange-bg: rgba(245, 158, 11, 0.1);
   --red: #ef4444;           
 }
-body{background:var(--bg);color:var(--text);font-family:'Plus Jakarta Sans',sans-serif;min-height:100vh;}
+
+/* Fuerza el calendario del input a verse claro en fondos oscuros */
+body{background:var(--bg);color:var(--text);font-family:'Plus Jakarta Sans',sans-serif;min-height:100vh; color-scheme: dark;}
 button{font-family:'Plus Jakarta Sans',sans-serif;cursor:pointer;border:none;outline:none;}
 input,textarea,select{font-family:'Plus Jakarta Sans',sans-serif;outline:none;}
 
@@ -45,7 +47,7 @@ input,textarea,select{font-family:'Plus Jakarta Sans',sans-serif;outline:none;}
 
 /* ── SIDEBAR ── */
 .sidebar{width:260px;min-width:260px;background:var(--card);border-right:1px solid var(--line);display:flex;flex-direction:column;height:100vh;position:sticky;top:0;overflow:hidden;}
-.sidebar-logo{padding:24px 20px 20px;border-bottom:1px solid var(--line);display:flex;align-items:center;gap:16px;}
+.sidebar-logo{padding:24px 20px 20px;border-bottom:1px solid var(--line);display:flex;align-items:center;gap:12px;}
 .logo-face{width:48px;height:48px;object-fit:contain;filter:drop-shadow(0 4px 6px rgba(0,0,0,0.3));}
 .logo-text-wrap{display:flex;flex-direction:column;justify-content:center;}
 .logo-text-img{height:24px;object-fit:contain;object-position:left;margin-bottom:4px;}
@@ -358,8 +360,11 @@ input,textarea,select{font-family:'Plus Jakarta Sans',sans-serif;outline:none;}
 .pub-remove:hover{background:var(--red);color:#fff;border-color:transparent;}
 .pub-date-row{display:flex;align-items:center;gap:12px;}
 .pub-date-lbl{font-size:16px;}
-.pub-date-inp{padding:8px 12px;background:var(--bg);border:1px solid var(--line2);border-radius:8px;font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--text);cursor:pointer;transition:border-color .2s;}
+
+/* CSS DEL INPUT DE FECHA Y EL CALENDARIO */
+.pub-date-inp{padding:8px 12px;background:var(--bg);border:1px solid var(--line2);border-radius:8px;font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--text);cursor:pointer;transition:border-color .2s; color-scheme: dark;}
 .pub-date-inp:focus{border-color:var(--accent-light);box-shadow:0 0 0 1px var(--accent-light);}
+.pub-date-inp::-webkit-calendar-picker-indicator { filter: invert(0.8); cursor: pointer; }
 
 /* Calendar */
 .cal-wrap{background:var(--card);border:1px solid var(--line);border-radius:16px;overflow:hidden;}
@@ -738,7 +743,7 @@ input,textarea,select{font-family:'Plus Jakarta Sans',sans-serif;outline:none;}
 
 <div class="overlay" id="m-delete" onclick="ovClose(event,'m-delete')">
 <div class="modal">
-  <div class="modal-title" style="color:var(--red)">Delete Item</div>
+  <div class="modal-title" style="color:var(--red)" id="m-del-title">Delete Item</div>
   <div style="font-size:14px;color:var(--soft);margin-bottom:24px">Are you absolutely sure? This action is permanent and cannot be undone.</div>
   <div class="modal-footer">
     <button class="btn-cancel" onclick="closeModal('m-delete')">Keep Item</button>
@@ -909,8 +914,8 @@ let screen = 'projects';
 let filterCat = null;
 let curPid = null;
 let editStepCtx = null;
-let deleteCtx = null; // Can be a project id or user id
-let deleteType = null; // 'project' or 'user'
+let deleteCtx = null; 
+let deleteType = null; 
 let selCatColor = '#6366f1';
 let selContentType = 'longform';
 let calDate = new Date();
@@ -952,13 +957,7 @@ function getAuthUser() { return DB.users.find(x=>x.id===currentUser); }
 function renderTopbarAuth() {
   const u = getAuthUser();
   if(!u) return;
-  document.getElementById('topbar-right').innerHTML = `
-    <button class="tb-btn primary" onclick="openModal('m-project')">➕ New Project</button>
-    <div class="user-menu-btn" onclick="document.getElementById('m-login').classList.add('open')" title="Switch User">
-      <img src="${u.avatar}" class="user-menu-avatar">
-      <span class="user-menu-name">${u.name}</span>
-    </div>
-  `;
+  // El render principal ahora se encarga de inyectarlo para evitar superposiciones
 }
 
 function openEditProfile(id) {
@@ -1042,22 +1041,41 @@ function setFilter(catId) { filterCat = catId; curPid = null; goScreen('projects
 function renderTopbar() {
   const bc = document.getElementById('tb-bc');
   const title = document.getElementById('tb-title');
+  const right = document.getElementById('topbar-right');
+
+  let leftSub = '';
+  let leftTitle = '';
 
   if(screen==='detail' && curPid) {
     const p = getP(curPid), cat = getCat(p.catId), yr = getYr(cat?.yearId);
-    bc.innerHTML = `<span class="bc-link" onclick="setFilter(null)">Workspace</span> <span style="color:var(--muted)">/</span> <span class="bc-link" onclick="setFilter('${cat?.id}')">${cat?.name||'Uncategorized'}</span> <span style="color:var(--muted)">/</span> <span style="color:var(--text)">${p.name}</span>`;
-    title.textContent = p.name;
-    return;
+    leftSub = `<span class="bc-link" onclick="setFilter(null)">Workspace</span> <span style="color:var(--muted)">/</span> <span class="bc-link" onclick="setFilter('${cat?.id}')">${cat?.name||'Uncategorized'}</span> <span style="color:var(--muted)">/</span> <span style="color:var(--text)">${p.name}</span>`;
+    leftTitle = p.name;
   }
-  if(screen==='publish') { bc.innerHTML=''; title.textContent = 'Publish Queue'; return; }
-  if(screen==='ideas') { bc.innerHTML=''; title.textContent = 'Video Ideas & Concepts'; return; }
-  if(screen==='profile') { bc.innerHTML=''; title.textContent = 'My Profile'; return; }
+  else if(screen==='publish') { leftTitle = 'Publish Queue'; }
+  else if(screen==='ideas') { leftTitle = 'Video Ideas & Concepts'; }
+  else if(screen==='profile') { leftTitle = 'My Profile'; }
+  else {
+    if(filterCat) {
+      const cat=getCat(filterCat), yr=getYr(cat?.yearId);
+      leftSub=`<span class="bc-link" onclick="setFilter(null)">Workspace</span> <span style="color:var(--muted)">/</span> <span style="color:var(--text)">${cat?.name||''}</span>`;
+      leftTitle = cat?.name||'';
+    } else { 
+      leftTitle = 'Workspace'; 
+    }
+  }
 
-  if(filterCat) {
-    const cat=getCat(filterCat), yr=getYr(cat?.yearId);
-    bc.innerHTML=`<span class="bc-link" onclick="setFilter(null)">Workspace</span> <span style="color:var(--muted)">/</span> <span style="color:var(--text)">${cat?.name||''}</span>`;
-    title.textContent = cat?.name||'';
-  } else { bc.innerHTML=''; title.textContent = 'Workspace'; }
+  bc.innerHTML = leftSub;
+  title.textContent = leftTitle;
+
+  const u = getAuthUser();
+  let rightHTML = `<button class="tb-btn primary" onclick="openModal('m-project')">➕ New Project</button>`;
+  if(u) {
+    rightHTML += `<div class="user-menu-btn" onclick="document.getElementById('m-login').classList.add('open')" title="Switch User">
+      <img src="${u.avatar}" class="user-menu-avatar">
+      <span class="user-menu-name">${u.name}</span>
+    </div>`;
+  }
+  right.innerHTML = rightHTML;
 }
 
 /* ═══════════════════════════════════════
