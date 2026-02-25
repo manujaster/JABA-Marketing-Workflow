@@ -245,7 +245,7 @@ input,textarea,select{font-family:'Plus Jakarta Sans',sans-serif;outline:none;}
 .step-btn.reopen:hover{background:var(--orange);color:#fff;border-color:transparent;}
 .step-btn.danger:hover{background:var(--red);color:#fff;border-color:transparent;}
 
-/* Inline Links */
+/* Inline Links Restaurado */
 .links-section{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:20px;margin-bottom:24px;}
 .link-row{display:flex;align-items:center;gap:12px;margin-bottom:10px;background:var(--bg);padding:10px 14px;border-radius:8px;border:1px solid var(--line2);}
 .link-label{font-size:11px;color:var(--primary-light);min-width:70px;font-weight:700;text-transform:uppercase;letter-spacing:0.5px;}
@@ -256,7 +256,7 @@ input,textarea,select{font-family:'Plus Jakarta Sans',sans-serif;outline:none;}
 .link-inline-add { display:flex;gap:8px;margin-top:16px;padding-top:16px;border-top:1px dashed var(--line2); }
 .link-inline-add input { flex:1;padding:8px 12px;background:var(--bg);border:1px solid var(--line2);border-radius:8px;font-size:13px;color:var(--text);transition:border-color .2s; }
 .link-inline-add input:focus { border-color:var(--primary-light); }
-.link-inline-add select { padding:8px 12px;background:var(--bg);border:1px solid var(--line2);border-radius:8px;font-size:13px;color:var(--text);width:130px; }
+.link-inline-add select { padding:8px 12px;background:var(--bg);border:1px solid var(--line2);border-radius:8px;font-size:13px;color:var(--text);width:150px; }
 .link-inline-add button { padding:8px 16px;background:var(--card2);color:var(--text);border:1px solid var(--line2);border-radius:8px;font-size:13px;font-weight:600;cursor:pointer;transition:all .2s; }
 .link-inline-add button:hover { background:var(--primary);color:#fff;border-color:transparent; }
 
@@ -366,10 +366,10 @@ input,textarea,select{font-family:'Plus Jakarta Sans',sans-serif;outline:none;}
 .pub-date-row{display:flex;align-items:center;gap:12px;}
 .pub-date-lbl{font-size:16px;}
 
-/* CSS DEL INPUT DE FECHA Y EL CALENDARIO (FORZAR BLANCO) */
+/* CSS DEL INPUT DE FECHA Y EL CALENDARIO (FORZAR BLANCO ABSOLUTO) */
 .pub-date-inp{padding:8px 12px;background:var(--bg);border:1px solid var(--line2);border-radius:8px;font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--text);cursor:pointer;transition:border-color .2s; color-scheme: dark;}
 .pub-date-inp:focus{border-color:var(--accent-light);box-shadow:0 0 0 1px var(--accent-light);}
-.pub-date-inp::-webkit-calendar-picker-indicator { cursor: pointer; filter: invert(1) brightness(100) !important; }
+.pub-date-inp::-webkit-calendar-picker-indicator { cursor: pointer; filter: invert(1) !important; }
 
 /* Calendar */
 .cal-wrap{background:var(--card);border:1px solid var(--line);border-radius:16px;overflow:hidden;}
@@ -413,7 +413,7 @@ input,textarea,select{font-family:'Plus Jakarta Sans',sans-serif;outline:none;}
 .idea-add-icon{font-size:32px;}
 .idea-add-text{font-size:14px;font-weight:700;}
 
-/* Content type tags generic */
+/* Content type tags */
 .ct-longform{background:rgba(99,102,241,0.15);color:var(--primary-light);}
 .ct-short{background:rgba(168,85,247,0.15);color:var(--accent-light);}
 .ct-podcast{background:var(--green-bg);color:var(--green);}
@@ -641,6 +641,19 @@ input,textarea,select{font-family:'Plus Jakarta Sans',sans-serif;outline:none;}
 </div>
 </div>
 
+<div class="overlay" id="m-send-msg" onclick="ovClose(event,'m-send-msg')">
+<div class="modal" style="max-width: 400px;">
+  <div class="modal-title">Send Message</div>
+  <div class="field">
+    <textarea class="field-textarea" id="inp-msg-text" placeholder="Type your message here..."></textarea>
+  </div>
+  <div class="modal-footer">
+    <button class="btn-cancel" onclick="closeModal('m-send-msg')">Cancel</button>
+    <button class="btn-ok" onclick="submitMessage()">Send</button>
+  </div>
+</div>
+</div>
+
 <div class="overlay" id="m-new-user" onclick="ovClose(event,'m-new-user')">
 <div class="modal" style="max-width: 400px;">
   <div class="modal-title" id="m-user-title">Edit Profile</div>
@@ -802,24 +815,6 @@ input,textarea,select{font-family:'Plus Jakarta Sans',sans-serif;outline:none;}
 </div>
 </div>
 
-<div class="overlay" id="m-link" onclick="ovClose(event,'m-link')">
-<div class="modal">
-  <div class="modal-title">Manage Link</div>
-  <div class="field">
-    <label class="field-label">Link Type</label>
-    <select class="field-select" id="inp-linktype" disabled></select>
-  </div>
-  <div class="field">
-    <label class="field-label">URL</label>
-    <input class="field-input" id="inp-linkurl" placeholder="https://...">
-  </div>
-  <div class="modal-footer">
-    <button class="btn-cancel" onclick="closeModal('m-link')">Cancel</button>
-    <button class="btn-ok" onclick="saveLink()">Save Link</button>
-  </div>
-</div>
-</div>
-
 <div class="overlay" id="m-idea" onclick="ovClose(event,'m-idea')">
 <div class="modal">
   <div class="modal-title" id="m-idea-title">New Video Idea</div>
@@ -870,9 +865,9 @@ const CONTENT_TYPES = [
 ];
 
 const LINK_TYPES = [
-  { id:'final', label: 'Final Render' },
+  { id:'final', label: 'Final File' },
   { id:'wip', label: 'Work in Progress' },
-  { id:'ref', label: 'References / Assets' }
+  { id:'ref', label: 'Reference' }
 ];
 
 const CAT_COLORS = ['#6366f1','#a855f7','#ec4899','#f43f5e','#f59e0b','#10b981','#06b6d4','#3b82f6'];
@@ -908,7 +903,6 @@ const CloudDB = {
 
 let DB = { years:[], categories:[], projects:[], publish:[], ideas:[], todos:{}, users:[], notifications:{}, messages:{} };
 let isDbLoaded = false;
-let linkCtx = null;
 
 function initApp() {
   const localStr = localStorage.getItem('jm-db');
@@ -927,7 +921,7 @@ function initApp() {
       }
     }
       
-    // MIGRACIONES BLINDADAS (Previene que perfiles o proyectos queden en blanco)
+    // MIGRACIONES BLINDADAS
     if (!DB.users) DB.users = [];
     if (!DB.years) DB.years = [{ id:'y2026', label:'2026' }];
     if (!DB.categories) DB.categories = [
@@ -942,8 +936,15 @@ function initApp() {
     if (!DB.messages) DB.messages = {};
 
     DB.projects.forEach((p,i) => {
-      // Reestructuración de links por si viene sucio del historial
-      if (!p.links || Array.isArray(p.links) || typeof p.links === 'string') { p.links = { wip:'', final:'', ref:'' }; }
+      // Migración para los links: restaurar el formato de Array
+      if (p.links && !Array.isArray(p.links)) {
+        const arr = [];
+        if(p.links.wip) arr.push({type:'wip', url: p.links.wip});
+        if(p.links.final) arr.push({type:'final', url: p.links.final});
+        if(p.links.ref) arr.push({type:'ref', url: p.links.ref});
+        p.links = arr;
+      }
+      if (!p.links) p.links = [];
       if (!p.assignees || !Array.isArray(p.assignees)) p.assignees = [];
       if (!p.versions) p.versions = [];
       if (!p.comments) p.comments = [];
@@ -1274,14 +1275,22 @@ function renderPublicProfile() {
 }
 
 function sendInlineMessage(uid) {
-  const text = document.getElementById('inline-msg-text').value.trim();
-  if(!text) { alert("Please write a message first."); return; }
-  if(!DB.messages) DB.messages = {};
-  if(!DB.messages[uid]) DB.messages[uid] = [];
-  DB.messages[uid].push({ id: uid(), from: currentUser, text, date: today(), read: false });
-  save();
-  document.getElementById('inline-msg-text').value = '';
-  toast('Message sent', '💬');
+  try {
+    const inputEl = document.getElementById('inline-msg-text');
+    if (!inputEl) return;
+    const text = inputEl.value.trim();
+    if(!text) { alert("Please write a message first."); return; }
+    
+    if(!DB.messages) DB.messages = {};
+    if(!DB.messages[uid]) DB.messages[uid] = [];
+    DB.messages[uid].push({ id: uid(), from: currentUser, text, date: today(), read: false });
+    save();
+    
+    inputEl.value = '';
+    toast('Message sent', '💬');
+  } catch (err) {
+    console.error("Messaging error:", err);
+  }
 }
 
 function openEditProfile(id) {
@@ -1569,11 +1578,17 @@ function renderDetail() {
     return `<div class="step-row ${rowCls}"><div class="step-main"><div class="step-circle">${icon}</div><div class="step-info"><div class="step-name">${s.name}</div>${s.note?`<div class="step-note">${s.note}</div>`:''}</div><div class="step-tag">${tag}</div></div><div class="step-actions">${btns}</div></div>`;
   }).join('');
 
+  // ----------------------------------------------------
+  // RESTAURACIÓN DEL SISTEMA DE LINKS DINÁMICO ORIGINAL
+  // ----------------------------------------------------
   const linkOpts = LINK_TYPES.map(t=>`<option value="${t.id}">${t.label}</option>`).join('');
-  const linksHTML = LINK_TYPES.map(lt=>{
-    const url = p.links[lt]||'';
-    const lbl = lt==='wip'?'Work in Progress':lt==='final'?'Final Render':'Reference';
-    return `<div class="link-row"><span class="link-label">${lbl}:</span>${url?`<a class="link-value" href="${url}" target="_blank" rel="noopener">${url}</a>`:`<span class="link-value" style="color:var(--muted);text-decoration:none">—</span>`}<button class="link-del-btn" onclick="openLinkModal('${p.id}','${lt}')" title="Edit Link">✏</button></div>`;
+  const linksHTML = (p.links || []).map((lnk, idx) => {
+    const lbl = LINK_TYPES.find(t=>t.id===lnk.type)?.label || 'Link';
+    return `<div class="link-row">
+              <span class="link-label">${lbl}</span>
+              <a class="link-value" href="${lnk.url}" target="_blank" rel="noopener">${lnk.url}</a>
+              <button class="link-del-btn" onclick="removeLink('${p.id}',${idx})">✕</button>
+            </div>`;
   }).join('');
 
   const versHTML = (p.versions||[]).slice().reverse().map(v=>`<div class="version-row ${v.v===p.currentVersion?'vcurrent':''}"><div class="v-tag">${v.v}</div><div class="v-body"><div class="v-desc">${v.feedbackDesc}</div><div class="v-date">📅 ${v.date}</div>${v.v===p.currentVersion?`<div class="v-cur">ACTIVE WORKSPACE</div>`:`<button class="v-switch-btn" onclick="switchVer('${p.id}','${v.v}')">Revert to this</button>`}</div></div>`).join('');
@@ -1598,7 +1613,12 @@ function renderDetail() {
     ${panel}
     <div class="sec-title"><span>📂 PROJECT ASSETS & LINKS</span></div>
     <div class="links-section">
-      <div>${linksHTML}</div>
+      <div id="links-list-container">${linksHTML}</div>
+      <div class="link-inline-add">
+        <select id="new-link-type">${linkOpts}</select>
+        <input type="text" id="new-link-url" placeholder="Paste URL here...">
+        <button onclick="addInlineLink('${p.id}')">Add</button>
+      </div>
     </div>
     <div class="sec-title"><span>✂️ EDITING WORKFLOW</span></div>
     <div class="steps-list">${stepsHTML}</div>
@@ -1617,19 +1637,18 @@ function renderDetail() {
 
 function togglePause(pid) { const p=getP(pid); p.isPaused = !p.isPaused; save(); renderDetail(); }
 
-/* ── Inline Links & Thumbnails & Steps ── */
-function openLinkModal(pid,lt) {
-  linkCtx={pid,lt};
-  document.getElementById('inp-linktype').innerHTML = `<option value="${lt}" selected>${lt}</option>`;
-  document.getElementById('inp-linkurl').value = getP(pid).links[lt] || '';
-  openModal('m-link');
+/* ── Inline Links Restored ── */
+function addInlineLink(pid) { 
+  const t = document.getElementById('new-link-type').value;
+  const u = document.getElementById('new-link-url').value.trim(); 
+  if(!u) return; 
+  getP(pid).links.push({type:t, url:u}); 
+  save(); 
+  renderDetail(); 
+  toast('Link attached','🔗'); 
 }
-function saveLink() {
-  if(!linkCtx) return;
-  const url = document.getElementById('inp-linkurl').value.trim();
-  getP(linkCtx.pid).links[linkCtx.lt] = url;
-  save(); closeModal('m-link'); renderDetail(); toast('Link saved','🔗');
-}
+function removeLink(pid, idx) { getP(pid).links.splice(idx,1); save(); renderDetail(); }
+
 function handleThumbnailUpload(e) { if(!e.target.files[0] || !curPid) return; resizeImage(e.target.files[0], (base64) => { getP(curPid).thumbnail = base64; save(); renderDetail(); toast('Thumbnail updated','🖼️'); }); e.target.value = ''; }
 function stepAct(pid,i,action) { const p=getP(pid), ver=getCurVer(p), s=ver.steps[i]; if(action==='start') s.status='active'; else if(action==='complete'){ s.status='done'; if(ver.steps.every(x=>x.status==='done')) ver.waitingFeedback=true; } else if(action==='reopen'){ s.status='active'; ver.waitingFeedback=false; } save(); renderDetail(); renderSidebar(); }
 function openNoteModal(pid,i) { editStepCtx={pid,i}; document.getElementById('inp-note').value=getP(pid)?getCurVer(getP(pid)).steps[i].note||'':''; openModal('m-note'); }
@@ -1882,7 +1901,15 @@ function renderPublish() {
   
   const listHTML=DB.publish.map(entry=>{
     const p=getP(entry.projectId); if(!p) return '';
-    const cat=getCat(p.catId), finalLink=p.links.final;
+    const cat=getCat(p.catId);
+    
+    // Obtenemos el Final Link del formato Array (restaurado)
+    let finalLink = '';
+    if(p.links && Array.isArray(p.links)) {
+      const fl = p.links.find(l => l.type === 'final');
+      if(fl) finalLink = fl.url;
+    }
+
     return `<div class="pub-card">
       ${p.thumbnail ? `<img src="${p.thumbnail}" class="pub-thumb">` : `<div class="pub-thumb" style="display:flex;align-items:center;justify-content:center;color:var(--muted);font-size:32px;border:2px dashed var(--line2)">🎬</div>`}
       <div class="pub-info-wrap">
@@ -1959,7 +1986,7 @@ function createProject() {
   const selSteps=[...document.querySelectorAll('#step-toggles .stoggle.on')].map(t=>t.dataset.s);
   if(!selSteps.length){ alert('Please select at least one pipeline step.'); return; }
   DB.projects.push({
-    id:uid(), catId, name, contentType:selContentType, priority:false, currentVersion:'v1.0', order:DB.projects.length, thumbnail: null, links:{wip:'',final:'',ref:''}, assignees:[...tempAssignees], isPaused:false,
+    id:uid(), catId, name, contentType:selContentType, priority:false, currentVersion:'v1.0', order:DB.projects.length, thumbnail: null, links:[], assignees:[...tempAssignees], isPaused:false,
     versions:[{v:'v1.0',date:today(),feedbackDesc:'Initial workspace created',waitingFeedback:false,steps:selSteps.map((s,i)=>({name:s,status:i===0?'active':'pending',note:''}))}],
     comments:[], publishDate:null
   });
