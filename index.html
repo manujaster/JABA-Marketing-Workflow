@@ -586,6 +586,21 @@ input,textarea,select{font-family:'Plus Jakarta Sans',sans-serif;outline:none;}
     <div class="screen-pad" id="profile-content">
       </div>
   </div>
+  
+  <div class="screen" id="screen-public-profile">
+    <div class="screen-pad" id="public-profile-content-screen">
+      </div>
+  </div>
+
+  <div class="screen" id="screen-notifications">
+    <div class="screen-pad" id="notifications-content" style="max-width: 600px;">
+      </div>
+  </div>
+  
+  <div class="screen" id="screen-messages">
+    <div class="screen-pad" id="messages-content" style="max-width: 600px;">
+      </div>
+  </div>
 
   <div class="screen" id="screen-publish">
     <div class="screen-pad">
@@ -614,34 +629,6 @@ input,textarea,select{font-family:'Plus Jakarta Sans',sans-serif;outline:none;}
     </span>
     Sign in with Google
   </button>
-</div>
-</div>
-
-<div class="overlay" id="m-public-profile" onclick="ovClose(event,'m-public-profile')">
-<div class="modal" style="max-width: 450px;" id="public-profile-content">
-  </div>
-</div>
-
-<div class="overlay" id="m-send-msg" onclick="ovClose(event,'m-send-msg')">
-<div class="modal" style="max-width: 400px;">
-  <div class="modal-title">Send Message</div>
-  <div class="field">
-    <textarea class="field-textarea" id="inp-msg-text" placeholder="Type your message here..."></textarea>
-  </div>
-  <div class="modal-footer">
-    <button class="btn-cancel" onclick="closeModal('m-send-msg')">Cancel</button>
-    <button class="btn-ok" onclick="submitMessage()">Send</button>
-  </div>
-</div>
-</div>
-
-<div class="overlay" id="m-inbox" onclick="ovClose(event,'m-inbox')">
-<div class="modal" style="max-width: 500px;">
-  <div class="modal-title" id="m-inbox-title">Inbox</div>
-  <div id="m-inbox-list" style="max-height: 400px; overflow-y:auto; margin-bottom:20px;"></div>
-  <div class="modal-footer">
-    <button class="btn-cancel" onclick="closeModal('m-inbox')">Close</button>
-  </div>
 </div>
 </div>
 
@@ -901,17 +888,19 @@ function initApp() {
     if (doc.exists) {
       DB = doc.data().db_state;
       
-      // Migraciones de protección
+      // Migraciones de protección garantizadas
       if (!DB.users) DB.users = [];
       if (!DB.notifications) DB.notifications = {};
       if (!DB.messages) DB.messages = {};
-      DB.projects.forEach((p,i) => {
-        if (!p.links || Array.isArray(p.links)) { p.links = { wip:'', final:'', ref:'' }; }
-        if (p.priority === undefined) p.priority = false;
-        if (p.order === undefined) p.order = i;
-        if (!p.assignees || !Array.isArray(p.assignees)) p.assignees = [];
-        if (p.isPaused === undefined) p.isPaused = false;
-      });
+      if (DB.projects) {
+        DB.projects.forEach((p,i) => {
+          if (!p.links || Array.isArray(p.links)) { p.links = { wip:'', final:'', ref:'' }; }
+          if (p.priority === undefined) p.priority = false;
+          if (p.order === undefined) p.order = i;
+          if (!p.assignees || !Array.isArray(p.assignees)) p.assignees = [];
+          if (p.isPaused === undefined) p.isPaused = false;
+        });
+      } else { DB.projects = []; }
       if (!DB.ideas) DB.ideas = [];
       if (!DB.todos) DB.todos = {};
       
@@ -932,7 +921,6 @@ function initApp() {
     }
     
     checkSyncUser(); 
-    if(currentUser) render();
     
   }, (error) => {
     console.error("Error conectando a Firebase.", error);
@@ -995,7 +983,6 @@ let isPausedGridOpen = false;
 let currentUser = null; 
 let currentUserObj = null; 
 let isMaster = false; 
-let msgTargetUid = null;
 
 function signInWithGoogle() {
   const provider = new firebase.auth.GoogleAuthProvider();
@@ -1013,10 +1000,12 @@ firebase.auth().onAuthStateChanged((user) => {
   if (user) {
     currentUserObj = user;
     isMaster = MASTER_EMAILS.includes(user.email);
-    checkSyncUser();
     
-    closeModal('m-login');
-    if(isDbLoaded) render();
+    if(isDbLoaded) {
+      checkSyncUser();
+      closeModal('m-login');
+      render();
+    }
   } else {
     currentUserObj = null;
     currentUser = null;
@@ -1044,6 +1033,9 @@ function checkSyncUser() {
       save();
     }
     currentUser = u.id;
+    // Si la db acaba de cargar y ya hay usuario logueado, forzamos render.
+    closeModal('m-login');
+    render();
   }
 }
 
@@ -1069,8 +1061,8 @@ function renderTopbarAuth() {
       </div>
       <div class="dropdown-content" id="user-dropdown">
         <div class="dropdown-item" onclick="goScreen('profile')">👤 My Profile</div>
-        <div class="dropdown-item" onclick="openInbox('notifications')">🔔 Notifications ${notifBadge}</div>
-        <div class="dropdown-item" onclick="openInbox('messages')">💬 Messages ${msgBadge}</div>
+        <div class="dropdown-item" onclick="goScreen('notifications')">🔔 Notifications ${notifBadge}</div>
+        <div class="dropdown-item" onclick="goScreen('messages')">💬 Messages ${msgBadge}</div>
         <div class="dropdown-item" style="color:var(--red)" onclick="signOut()">🚪 Logout</div>
       </div>
     </div>
@@ -1087,97 +1079,131 @@ window.onclick = function(e) {
   }
 }
 
-// INBOX (Notificaciones y Mensajes)
-function openInbox(type) {
-  const u = getAuthUser();
-  if(!u) return;
-  const list = document.getElementById('m-inbox-list');
-  const title = document.getElementById('m-inbox-title');
-  
-  if(type === 'notifications') {
-    title.textContent = '🔔 Notifications';
-    const notifs = DB.notifications[u.id] || [];
-    if(!notifs.length) {
-      list.innerHTML = `<div style="color:var(--muted); font-size:13px; text-align:center; padding:20px;">No new notifications.</div>`;
-    } else {
-      list.innerHTML = notifs.slice().reverse().map(n => `
-        <div class="msg-bubble ${n.read ? '' : 'unread'}" onclick="if(this.dataset.pid){ goScreen('projects'); openProj('${n.pid}'); closeModal('m-inbox'); }" data-pid="${n.pid||''}" style="${n.pid?'cursor:pointer;':''}">
-          <div class="msg-meta"><span>System</span><span>${n.date}</span></div>
-          <div>${n.text}</div>
-        </div>
-      `).join('');
-    }
-    notifs.forEach(n => n.read = true);
-    save();
+// ── PANTALLAS DE NOTIFICACIONES Y MENSAJES ──
+function renderNotifications() {
+  const u = getAuthUser(); if(!u) return;
+  const notifs = DB.notifications[u.id] || [];
+  let html = `<div class="sec-title">🔔 YOUR NOTIFICATIONS</div>`;
+  if(!notifs.length) {
+    html += `<div class="empty-state" style="padding:40px 20px;"><div class="empty-text">No new notifications</div></div>`;
   } else {
-    title.textContent = '💬 Direct Messages';
-    const msgs = DB.messages[u.id] || [];
-    if(!msgs.length) {
-      list.innerHTML = `<div style="color:var(--muted); font-size:13px; text-align:center; padding:20px;">No messages.</div>`;
-    } else {
-      list.innerHTML = msgs.slice().reverse().map(m => {
-        const sender = DB.users.find(x=>x.id===m.from) || {name:'Unknown'};
-        return `
-        <div class="msg-bubble ${m.read ? '' : 'unread'}">
-          <div class="msg-meta"><span style="color:var(--primary-light); font-weight:700;">${sender.name}</span><span>${m.date}</span></div>
-          <div>${m.text}</div>
-        </div>
-      `}).join('');
-    }
-    msgs.forEach(m => m.read = true);
-    save();
+    html += `<div style="display:flex; flex-direction:column; gap:12px;">`;
+    html += notifs.slice().reverse().map(n => `
+      <div class="msg-bubble ${n.read ? '' : 'unread'}" onclick="if('${n.pid}'){ goScreen('projects'); openProj('${n.pid}'); }" style="${n.pid?'cursor:pointer;':''}">
+        <div class="msg-meta"><span>System</span><span>${n.date}</span></div>
+        <div style="font-size:14px; margin-top:4px;">${n.text}</div>
+      </div>
+    `).join('');
+    html += `</div>`;
   }
+  document.getElementById('notifications-content').innerHTML = html;
   
-  renderTopbar(); 
-  openModal('m-inbox');
+  // Marcar todo como leído al entrar
+  let changed = false;
+  notifs.forEach(n => { if(!n.read){ n.read = true; changed = true; }});
+  if(changed) save();
 }
 
-// Perfil Público (Visto por otros)
-function openPublicProfile(uid) {
-  const u = DB.users.find(x => x.id === uid);
+function renderMessages() {
+  const u = getAuthUser(); if(!u) return;
+  const msgs = DB.messages[u.id] || [];
+  let html = `<div class="sec-title">💬 DIRECT MESSAGES</div>`;
+  if(!msgs.length) {
+    html += `<div class="empty-state" style="padding:40px 20px;"><div class="empty-text">No messages</div></div>`;
+  } else {
+    html += `<div style="display:flex; flex-direction:column; gap:12px;">`;
+    html += msgs.slice().reverse().map(m => {
+      const sender = DB.users.find(x=>x.id===m.from) || {name:'Unknown', avatar:'https://ui-avatars.com/api/?name=U'};
+      return `
+      <div class="msg-bubble ${m.read ? '' : 'unread'}">
+        <div class="msg-meta"><span style="color:var(--primary-light); font-weight:700; display:flex; align-items:center; gap:6px;"><img src="${sender.avatar}" style="width:18px; height:18px; border-radius:50%; object-fit:cover;">${sender.name}</span><span>${m.date}</span></div>
+        <div style="font-size:14px; margin-top:8px;">${m.text}</div>
+        <button class="tb-btn" style="margin-top:12px; font-size:11px; padding:6px 12px; background:var(--bg);" onclick="viewPublicProfile('${sender.id}')">Reply</button>
+      </div>
+    `}).join('');
+    html += `</div>`;
+  }
+  document.getElementById('messages-content').innerHTML = html;
+  
+  // Marcar todo como leído
+  let changed = false;
+  msgs.forEach(m => { if(!m.read){ m.read = true; changed = true; }});
+  if(changed) save();
+}
+
+// ── PERFIL PÚBLICO EN PANTALLA ──
+let viewingProfileId = null;
+function viewPublicProfile(uid) {
+  if(uid === currentUser) { goScreen('profile'); return; }
+  viewingProfileId = uid;
+  goScreen('public-profile');
+}
+
+function renderPublicProfile() {
+  const u = DB.users.find(x => x.id === viewingProfileId);
   if(!u) return;
-  const activeProjs = DB.projects.filter(p => {
-    if(!p.assignees?.includes(u.id)) return false;
+  
+  let activeP = [], doneP = [];
+  DB.projects.forEach(p => {
+    const arr = p.assignees || [];
+    if(!arr.includes(u.id)) return;
     const v = getCurVer(p);
-    return v && !(v.steps || []).every(s=>s.status==='done');
+    const steps = v.steps || [];
+    const allDone = steps.length > 0 && steps.every(s=>s.status==='done');
+    if(allDone) doneP.push(p); else activeP.push(p);
   });
 
-  document.getElementById('public-profile-content').innerHTML = `
-    <div style="display:flex; align-items:center; gap:16px; margin-bottom:20px;">
-      <img src="${u.avatar}" style="width:64px; height:64px; border-radius:50%; border:3px solid var(--card2)">
+  const renderMini = (p) => {
+    const cat = getCat(p.catId);
+    return `<div class="mini-proj" onclick="openProj('${p.id}')">
       <div>
-        <h2 style="font-size:20px; font-weight:800; color:var(--text);">${u.name}</h2>
-        <p style="font-size:13px; color:var(--soft);">${u.role || 'Team Member'}</p>
+        <div class="mp-name">${p.name}</div>
+        <div class="mp-cat">${cat?.name||''} · ${p.currentVersion}</div>
+      </div>
+      <span style="color:var(--muted)">→</span>
+    </div>`;
+  };
+
+  document.getElementById('public-profile-content-screen').innerHTML = `
+    <div class="profile-header">
+      <img src="${u.avatar}" class="profile-avatar">
+      <div class="profile-info">
+        <h2>${u.name}</h2>
+        <p>${u.email} ${u.role ? `· <strong>${u.role}</strong>` : ''}</p>
       </div>
     </div>
-    ${uid !== currentUser ? `<button class="tb-btn primary" style="width:100%; margin-bottom:24px; padding:12px; justify-content:center;" onclick="openSendMsg('${u.id}')">💬 Send Private Message</button>` : ''}
-    <div class="sec-title">▶ ACTIVE WORKSPACE</div>
-    <div style="display:flex; flex-direction:column; gap:8px;">
-      ${activeProjs.length ? activeProjs.map(p => `
-        <div style="background:var(--card2); padding:12px 16px; border-radius:8px; font-size:13px; font-weight:600; color:var(--text); border:1px solid var(--line2); cursor:pointer; transition:all .2s;" onmouseover="this.style.borderColor='var(--primary-light)'" onmouseout="this.style.borderColor='var(--line2)'" onclick="closeModal('m-public-profile'); openProj('${p.id}')">
-          ${p.name}
+    
+    <div class="profile-grid">
+      <div style="display:flex; flex-direction:column; gap:24px;">
+          <div class="profile-col">
+            <div class="pcol-title">▶ Assigned Active Projects (${activeP.length})</div>
+            <div class="mini-proj-list">${activeP.length?activeP.map(renderMini).join(''):'<div style="color:var(--muted);font-size:13px;">No active projects.</div>'}</div>
+          </div>
+          <div class="profile-col">
+            <div class="pcol-title">✅ Completed Projects (${doneP.length})</div>
+            <div class="mini-proj-list">${doneP.length?doneP.map(renderMini).join(''):'<div style="color:var(--muted);font-size:13px;">No completed projects.</div>'}</div>
+          </div>
+      </div>
+
+      <div class="profile-col" style="align-self:start;">
+        <div class="pcol-title">💬 Send Private Message</div>
+        <div style="display:flex; flex-direction:column;">
+          <textarea id="inline-msg-text" class="field-textarea" placeholder="Write a message to ${u.name}..."></textarea>
+          <button class="tb-btn primary" style="align-self:flex-end; margin-top:12px;" onclick="sendInlineMessage('${u.id}')">Send Message</button>
         </div>
-      `).join('') : '<div style="color:var(--muted); font-size:13px;">No active projects at the moment.</div>'}
+      </div>
     </div>
   `;
-  openModal('m-public-profile');
 }
 
-function openSendMsg(uid) {
-  msgTargetUid = uid;
-  document.getElementById('inp-msg-text').value = '';
-  closeModal('m-public-profile');
-  openModal('m-send-msg');
-}
-
-function submitMessage() {
-  const text = document.getElementById('inp-msg-text').value.trim();
-  if(!text || !msgTargetUid) return;
+function sendInlineMessage(uid) {
+  const text = document.getElementById('inline-msg-text').value.trim();
+  if(!text) return;
   if(!DB.messages) DB.messages = {};
-  if(!DB.messages[msgTargetUid]) DB.messages[msgTargetUid] = [];
-  DB.messages[msgTargetUid].push({ id: uid(), from: currentUser, text, date: today(), read: false });
+  if(!DB.messages[uid]) DB.messages[uid] = [];
+  DB.messages[uid].push({ id: uid(), from: currentUser, text, date: today(), read: false });
   save();
-  closeModal('m-send-msg');
+  document.getElementById('inline-msg-text').value = '';
   toast('Message sent', '💬');
 }
 
@@ -1247,7 +1273,7 @@ function renderSidebar() {
   if(screen==='publish') document.getElementById('nav-publish').classList.add('active');
   else if(screen==='ideas') document.getElementById('nav-ideas').classList.add('active');
   else if(screen==='profile') document.getElementById('nav-profile').classList.add('active');
-  else document.getElementById('nav-projects').classList.add('active');
+  else if(screen==='projects') document.getElementById('nav-projects').classList.add('active');
 }
 
 function setFilter(catId) { filterCat = catId; curPid = null; goScreen('projects'); }
@@ -1271,6 +1297,13 @@ function renderTopbar() {
   else if(screen==='publish') { leftTitle = 'Completed Projects'; }
   else if(screen==='ideas') { leftTitle = 'Video Ideas & Concepts'; }
   else if(screen==='profile') { leftTitle = 'My Profile'; }
+  else if(screen==='notifications') { leftTitle = '🔔 Notifications'; }
+  else if(screen==='messages') { leftTitle = '💬 Direct Messages'; }
+  else if(screen==='public-profile') { 
+    const u = DB.users.find(x => x.id === viewingProfileId);
+    leftSub = `<span class="bc-link" onclick="setFilter(null)">Workspace</span> <span style="color:var(--muted)">/</span> <span style="color:var(--text)">Team</span>`;
+    leftTitle = u ? `👤 ${u.name}'s Profile` : 'User Profile'; 
+  }
   else {
     if(filterCat) {
       const cat=getCat(filterCat), yr=getYr(cat?.yearId);
@@ -1284,25 +1317,6 @@ function renderTopbar() {
   bc.innerHTML = leftSub;
   title.textContent = leftTitle;
   right.innerHTML = renderTopbarAuth();
-}
-
-/* ═══════════════════════════════════════
-   AVATAR HELPER
-═══════════════════════════════════════ */
-function renderAvatars(assignees) {
-  const arr = assignees || [];
-  if(!arr.length) return '<div class="avatar-empty">+</div>';
-  const max = 3;
-  const visible = arr.slice(0, max);
-  const extra = arr.length - max;
-  let html = '<div class="avatar-group">';
-  visible.forEach(uid => { 
-    const u = DB.users.find(x => x.id === uid); 
-    if(u) html += `<img src="${u.avatar}" class="avatar-sm" title="${u.name}" onclick="event.stopPropagation(); openPublicProfile('${u.id}')">`; 
-  });
-  if(extra > 0) html += `<div class="avatar-extra">+${extra}</div>`;
-  html += '</div>';
-  return html;
 }
 
 /* ═══════════════════════════════════════
@@ -1592,7 +1606,7 @@ function renderComments() {
     const author = DB.users.find(u=>u.id===c.authorId) || {name:'Unknown', avatar:'https://ui-avatars.com/api/?name=Unknown'};
     return `<div class="comment-card">
       <div class="cc-top">
-        <img src="${author.avatar}" class="cc-author-img" onclick="openPublicProfile('${c.authorId}')" title="View Profile">
+        <img src="${author.avatar}" class="cc-author-img" onclick="viewPublicProfile('${c.authorId}')" title="View Profile">
         <span class="cc-author-name">${author.name}</span>
         <span class="cc-ver">${c.version}</span>
       </div>
@@ -1704,7 +1718,7 @@ function renderProfile() {
         <div class="todo-list">
           ${DB.users.map(user => `
             <div class="todo-item">
-              <img src="${user.avatar}" class="avatar-sm" style="margin:0;">
+              <img src="${user.avatar}" class="avatar-sm" style="margin:0; cursor:default;" onclick="event.stopPropagation();">
               <span class="todo-text" style="font-weight:600; margin-left:10px;">${user.name} <span style="color:var(--muted); font-weight:400;">(${user.email})</span></span>
               ${user.id !== currentUser ? `<button class="todo-del" title="Delete User" onclick="askDelete('${user.id}', 'user')">🗑</button>` : '<span style="font-size:11px; color:var(--primary-light)">You</span>'}
             </div>
@@ -1870,12 +1884,11 @@ function createSeason() {
   save(); closeModal('m-season'); render(); toast('Season created','📁');
 }
 function createCategory() {
-  const name=document.getElementById('inp-cname').value.trim().toUpperCase();
-  const yearId=document.getElementById('inp-cyear').value;
-  if(!name){ alert('Name required.'); return; } 
-  if(!yearId){ alert('Please select a season first.'); return; }
-  DB.categories.push({id:uid(),yearId,name,color:selCatColor}); 
-  save(); closeModal('m-category'); render(); toast('Category created','📁');
+  const name=document.getElementById('inp-cname').value.trim().toUpperCase(), newYr=document.getElementById('inp-cnewyear').value.trim();
+  if(!name){ alert('Name required.'); return; } let yearId;
+  if(newYr&&!isNaN(newYr)&&newYr.length===4){ yearId='y'+newYr; if(!DB.years.find(y=>y.id===yearId)) DB.years.push({id:yearId,label:newYr}); }
+  else { yearId=document.getElementById('inp-cyear').value; if(!yearId){ alert('Select a season.'); return; } }
+  DB.categories.push({id:uid(),yearId,name,color:selCatColor}); save(); closeModal('m-category'); render(); toast('Category created','📁');
 }
 function createStep() { const name=document.getElementById('inp-sname').value.trim(); if(!name) return; getCurVer(getP(curPid)).steps.push({name,status:'pending',note:''}); save(); closeModal('m-step'); renderDetail(); toast('Step added','➕'); }
 
@@ -1895,16 +1908,27 @@ function openModal(id) {
 }
 function closeModal(id){ document.getElementById(id).classList.remove('open'); }
 function ovClose(e,id){ if(e.target.classList.contains('overlay') || e.target.classList.contains('modal-wrap')) closeModal(id); }
-function goScreen(name) { screen=name; if(name!=='detail') curPid=null; document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active')); document.getElementById('screen-'+name).classList.add('active'); render(); }
+function goScreen(name) { 
+  screen=name; 
+  if(name!=='detail') curPid=null; 
+  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active')); 
+  const target = document.getElementById('screen-'+name);
+  if(target) target.classList.add('active'); 
+  render(); 
+}
 function toast(msg,icon='✓') { const el=document.createElement('div'); el.className='toast'; el.innerHTML=`<span>${icon}</span> ${msg}`; document.body.appendChild(el); setTimeout(()=>el.remove(),2800); }
 
 function render() {
-  renderSidebar(); renderTopbar();
+  renderSidebar(); 
+  renderTopbar();
   if(screen==='projects') renderProjects();
   else if(screen==='detail') renderDetail();
   else if(screen==='publish') renderPublish();
   else if(screen==='ideas') renderIdeas();
   else if(screen==='profile') renderProfile();
+  else if(screen==='notifications') renderNotifications();
+  else if(screen==='messages') renderMessages();
+  else if(screen==='public-profile') renderPublicProfile();
 }
 
 // Iniciar aplicación
