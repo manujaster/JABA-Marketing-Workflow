@@ -23,7 +23,7 @@
   --soft: #94a3b8;     
   --text: #f8fafc;     
   
-  --primary: #6366f1;       
+  --primary: #6366f1;        
   --primary-hover: #4f46e5; 
   --primary-light: #818cf8; 
   --primary-bg: rgba(99, 102, 241, 0.1);
@@ -72,11 +72,16 @@ input,textarea,select{font-family:'Plus Jakarta Sans',sans-serif;outline:none;}
 .yr-block.open .yr-chev{transform:rotate(90deg);}
 .yr-cats{display:none;padding-left:12px;margin-top:4px;}
 .yr-block.open .yr-cats{display:block;}
-.cat-item{display:flex;align-items:center;gap:10px;padding:8px 12px;border-radius:8px;cursor:pointer;transition:all .2s;margin-bottom:2px;font-size:13px;font-weight:500;color:var(--soft);border-left:3px solid transparent;}
+.cat-item{display:flex;align-items:center;gap:8px;padding:8px 12px;border-radius:8px;cursor:pointer;transition:all .2s;margin-bottom:2px;font-size:13px;font-weight:500;color:var(--soft);border-left:3px solid transparent;}
 .cat-item:hover{background:var(--card2);color:var(--text);}
 .cat-item.active{background:var(--card2);color:var(--text);font-weight:600;}
 .cat-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0;}
 .cat-count{margin-left:auto;font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--muted);font-weight:500;}
+
+/* Action buttons inside sidebar items */
+.sb-action { font-size: 11px; cursor: pointer; opacity: 0; transition: all .2s; margin-left: 2px; }
+.yr-header:hover .sb-action, .cat-item:hover .sb-action { opacity: 0.6; }
+.sb-action:hover { opacity: 1 !important; transform: scale(1.1); }
 
 /* SIDEBAR FOOTER & PROFILE BTN */
 .sidebar-footer{padding:16px;border-top:1px solid var(--line);display:flex;flex-direction:column;gap:8px;}
@@ -526,7 +531,7 @@ input,textarea,select{font-family:'Plus Jakarta Sans',sans-serif;outline:none;}
     </div>
     <div style="display:flex; gap:8px;">
       <button class="sb-btn secondary" style="flex:1; padding:10px 0;" onclick="openModal('m-season')">➕ Season</button>
-      <button class="sb-btn secondary" style="flex:1; padding:10px 0;" onclick="openModal('m-category')">➕ Client</button>
+      <button class="sb-btn secondary" style="flex:1; padding:10px 0;" onclick="openModal('m-category')">➕ Group</button>
     </div>
   </div>
 </aside>
@@ -703,7 +708,7 @@ input,textarea,select{font-family:'Plus Jakarta Sans',sans-serif;outline:none;}
     <select class="field-select" id="inp-pyear" onchange="loadProjCats()"></select>
   </div>
   <div class="field">
-    <label class="field-label">Client / Category</label>
+    <label class="field-label">Group / Category</label>
     <select class="field-select" id="inp-pcat"></select>
   </div>
   <div class="field">
@@ -727,21 +732,21 @@ input,textarea,select{font-family:'Plus Jakarta Sans',sans-serif;outline:none;}
 
 <div class="overlay" id="m-season" onclick="ovClose(event,'m-season')">
 <div class="modal" style="max-width: 400px;">
-  <div class="modal-title">New Season / Year</div>
+  <div class="modal-title" id="m-season-title">New Season / Year</div>
   <div class="field">
     <label class="field-label">Season Name (e.g. 2027)</label>
     <input class="field-input" id="inp-season-name" placeholder="E.g.: 2027">
   </div>
   <div class="modal-footer">
     <button class="btn-cancel" onclick="closeModal('m-season')">Cancel</button>
-    <button class="btn-ok" onclick="createSeason()">Create Season</button>
+    <button class="btn-ok" onclick="createSeason()">Save Season</button>
   </div>
 </div>
 </div>
 
 <div class="overlay" id="m-category" onclick="ovClose(event,'m-category')">
 <div class="modal">
-  <div class="modal-title">New Client or Category</div>
+  <div class="modal-title" id="m-category-title">New Group or Category</div>
   <div class="field">
     <label class="field-label">Name</label>
     <input class="field-input" id="inp-cname" placeholder="E.g.: JABA, External Client">
@@ -756,7 +761,7 @@ input,textarea,select{font-family:'Plus Jakarta Sans',sans-serif;outline:none;}
   </div>
   <div class="modal-footer">
     <button class="btn-cancel" onclick="closeModal('m-category')">Cancel</button>
-    <button class="btn-ok" onclick="createCategory()">Create Category</button>
+    <button class="btn-ok" onclick="createCategory()">Save Category</button>
   </div>
 </div>
 </div>
@@ -1032,6 +1037,8 @@ let calSelectedDay = null;
 let currentIdeaImgB64 = null;
 let currentCommentImgB64 = null;
 let editingIdeaId = null;
+let editingSeasonId = null;
+let editingCategoryId = null;
 let isPausedGridOpen = false;
 
 let currentUser = null; 
@@ -1352,14 +1359,22 @@ function renderSidebar() {
     blk.innerHTML = `
       <div class="yr-header" onclick="this.parentElement.classList.toggle('open')">
         <span class="yr-label">📁 ${yr.label}</span>
+        ${isMaster ? `
+          <span class="sb-action" title="Edit Season" onclick="event.stopPropagation(); editSeason('${yr.id}')">✏️</span>
+          <span class="sb-action" title="Delete Season" onclick="event.stopPropagation(); askDelete('${yr.id}', 'season')">🗑️</span>
+        ` : ''}
         <span class="yr-chev">▶</span>
       </div>
       <div class="yr-cats">
         ${cats.map(c=>`
           <div class="cat-item ${filterCat===c.id?'active':''}" style="border-left-color:${c.color}" onclick="setFilter('${c.id}')">
             <span class="cat-dot" style="background:${c.color}"></span>
-            <span>${c.name}</span>
+            <span style="flex:1">${c.name}</span>
             <span class="cat-count">${cnts[c.id]||0}</span>
+            ${isMaster ? `
+              <span class="sb-action" title="Edit Category" onclick="event.stopPropagation(); editCategory('${c.id}')">✏️</span>
+              <span class="sb-action" title="Delete Category" onclick="event.stopPropagation(); askDelete('${c.id}', 'category')">🗑️</span>
+            ` : ''}
           </div>`).join('')}
       </div>`;
     tree.appendChild(blk);
@@ -1376,6 +1391,29 @@ function renderSidebar() {
 }
 
 function setFilter(catId) { filterCat = catId; curPid = null; goScreen('projects'); }
+
+function editSeason(id) {
+  editingSeasonId = id;
+  const yr = DB.years.find(y => y.id === id);
+  if(yr) {
+    document.getElementById('inp-season-name').value = yr.label;
+    document.getElementById('m-season-title').textContent = 'Edit Season / Year';
+    document.getElementById('m-season').classList.add('open');
+  }
+}
+
+function editCategory(id) {
+  editingCategoryId = id;
+  const cat = DB.categories.find(c => c.id === id);
+  if(cat) {
+    document.getElementById('inp-cyear').innerHTML = DB.years.map(y=>`<option value="${y.id}" ${y.id === cat.yearId ? 'selected' : ''}>${y.label}</option>`).join('');
+    document.getElementById('inp-cname').value = cat.name;
+    selCatColor = cat.color;
+    buildCatSwatches();
+    document.getElementById('m-category-title').textContent = 'Edit Group or Category';
+    document.getElementById('m-category').classList.add('open');
+  }
+}
 
 /* ═══════════════════════════════════════
    TOPBAR
@@ -1766,11 +1804,17 @@ function applyFeedback() {
   if(file) resizeImage(file, finishFb); else finishFb(null);
 }
 
-// Ventana centralizada para Eliminar Proyectos o Usuarios
+// Ventana centralizada para Eliminar Proyectos, Usuarios, Categorías o Seasons
 function askDelete(id, type) { 
   deleteCtx = id; 
   deleteType = type;
-  document.getElementById('m-del-title').textContent = type === 'user' ? 'Delete Profile' : 'Delete Project';
+  let title = 'Delete Item';
+  if(type === 'user') title = 'Delete Profile';
+  else if(type === 'project') title = 'Delete Project';
+  else if(type === 'season') title = 'Delete Season';
+  else if(type === 'category') title = 'Delete Category';
+  
+  document.getElementById('m-del-title').textContent = title;
   openModal('m-delete'); 
 }
 
@@ -1784,7 +1828,6 @@ function confirmDelete() {
     toast('Project wiped','🗑');
   } else if (deleteType === 'user') {
     DB.users = DB.users.filter(u=>u.id!==deleteCtx);
-    // Eliminarlo de las asignaciones de proyectos
     DB.projects.forEach(p => { 
       if(p.assignees) p.assignees = p.assignees.filter(uid => uid !== deleteCtx); 
     });
@@ -1792,6 +1835,13 @@ function confirmDelete() {
     if (screen === 'team') renderTeam(); 
     if (screen === 'projects') renderProjects();
     toast('Profile deleted','🗑');
+  } else if (deleteType === 'season') {
+    DB.years = DB.years.filter(y => y.id !== deleteCtx);
+    DB.categories = DB.categories.filter(c => c.yearId !== deleteCtx); // Borrado en cascada
+    save(); renderSidebar(); toast('Season deleted','🗑');
+  } else if (deleteType === 'category') {
+    DB.categories = DB.categories.filter(c => c.id !== deleteCtx);
+    save(); renderSidebar(); toast('Category deleted','🗑');
   }
   closeModal('m-delete'); 
   deleteCtx=null; deleteType=null; 
@@ -2008,19 +2058,46 @@ function createProject() {
   });
   save(); closeModal('m-project'); render(); toast('Project deployed','🎬');
 }
+
 function createSeason() {
-  const name=document.getElementById('inp-season-name').value.trim();
+  const name = document.getElementById('inp-season-name').value.trim();
   if(!name){ alert('Season name required.'); return; }
-  DB.years.push({id:'y'+Date.now(), label:name});
-  save(); closeModal('m-season'); render(); toast('Season created','📁');
+  
+  if (editingSeasonId) {
+    const yr = DB.years.find(y => y.id === editingSeasonId);
+    if(yr) yr.label = name;
+    toast('Season updated','📁');
+  } else {
+    DB.years.push({id:'y'+Date.now(), label:name});
+    toast('Season created','📁');
+  }
+  
+  save(); closeModal('m-season'); render();
 }
+
 function createCategory() {
-  const name=document.getElementById('inp-cname').value.trim().toUpperCase(), newYr=document.getElementById('inp-cnewyear').value.trim();
-  if(!name){ alert('Name required.'); return; } let yearId;
-  if(newYr&&!isNaN(newYr)&&newYr.length===4){ yearId='y'+newYr; if(!DB.years.find(y=>y.id===yearId)) DB.years.push({id:yearId,label:newYr}); }
-  else { yearId=document.getElementById('inp-cyear').value; if(!yearId){ alert('Select a season.'); return; } }
-  DB.categories.push({id:uid(),yearId,name,color:selCatColor}); save(); closeModal('m-category'); render(); toast('Category created','📁');
+  const name = document.getElementById('inp-cname').value.trim().toUpperCase();
+  if(!name){ alert('Name required.'); return; } 
+  
+  const yearId = document.getElementById('inp-cyear').value;
+  if(!yearId){ alert('Select a season.'); return; } 
+  
+  if (editingCategoryId) {
+    const cat = DB.categories.find(c => c.id === editingCategoryId);
+    if(cat) {
+      cat.name = name;
+      cat.yearId = yearId;
+      cat.color = selCatColor;
+    }
+    toast('Category updated','📁');
+  } else {
+    DB.categories.push({id:uid(), yearId, name, color:selCatColor}); 
+    toast('Category created','📁');
+  }
+  
+  save(); closeModal('m-category'); render(); 
 }
+
 function createStep() { const name=document.getElementById('inp-sname').value.trim(); if(!name) return; getCurVer(getP(curPid)).steps.push({name,status:'pending',note:''}); save(); closeModal('m-step'); renderDetail(); toast('Step added','➕'); }
 
 function buildCTRadios(selType) { document.getElementById('ct-radios').innerHTML=CONTENT_TYPES.map(ct=>`<div class="ct-radio ${ct.cls} ${selType===ct.id?'sel':''}" onclick="selContentType='${ct.id}'; buildCTRadios('${ct.id}')">${ct.label}</div>`).join(''); }
@@ -2032,8 +2109,8 @@ function loadProjCats() { const yr=document.getElementById('inp-pyear').value, c
 ═══════════════════════════════════════ */
 function openModal(id) {
   if(id==='m-project'){ document.getElementById('inp-pyear').innerHTML=DB.years.map(y=>`<option value="${y.id}">${y.label}</option>`).join(''); loadProjCats(); buildCTRadios(selContentType); document.getElementById('step-toggles').innerHTML=DEFAULT_STEPS.map(s=>`<div class="stoggle on" data-s="${s}" onclick="this.classList.toggle('on')">${s}</div>`).join(''); tempAssignees = [currentUser]; renderAssignUserList('create-proj-assignees', tempAssignees); document.getElementById('inp-pname').value=''; }
-  if(id==='m-category'){ document.getElementById('inp-cyear').innerHTML=DB.years.map(y=>`<option value="${y.id}">${y.label}</option>`).join(''); selCatColor=CAT_COLORS[0]; buildCatSwatches(); document.getElementById('inp-cname').value=''; }
-  if(id==='m-season'){ document.getElementById('inp-season-name').value=''; }
+  if(id==='m-category'){ editingCategoryId = null; document.getElementById('m-category-title').textContent = 'New Group or Category'; document.getElementById('inp-cyear').innerHTML=DB.years.map(y=>`<option value="${y.id}">${y.label}</option>`).join(''); selCatColor=CAT_COLORS[0]; buildCatSwatches(); document.getElementById('inp-cname').value=''; }
+  if(id==='m-season'){ editingSeasonId = null; document.getElementById('m-season-title').textContent = 'New Season / Year'; document.getElementById('inp-season-name').value=''; }
   if(id==='m-step') document.getElementById('inp-sname').value='';
   document.getElementById(id).classList.add('open');
 }
