@@ -172,7 +172,7 @@ input,textarea,select{font-family:'Plus Jakarta Sans',sans-serif;outline:none;}
 .pc-version{font-family:'JetBrains Mono',monospace;font-size:10px;background:var(--card2);border:1px solid var(--line2);padding:3px 8px;border-radius:20px;color:var(--soft);font-weight:600;}
 .priority-star{font-size:16px;cursor:pointer;transition:transform .2s;}
 .priority-star:hover{transform:scale(1.2);}
-.content-type-tag{font-size:10px;padding:3px 8px;border-radius:6px;font-weight:600;background:var(--card2);color:var(--soft);}
+.content-type-tag{font-size:10px;padding:3px 8px;border-radius:6px;font-weight:600;}
 .pc-meta{font-size:12px;color:var(--muted);margin-bottom:12px;display:flex;justify-content:space-between;align-items:center;font-weight:500;}
 .pc-cat-dot{display:inline-block;width:8px;height:8px;border-radius:50%;margin-right:6px;}
 
@@ -424,12 +424,7 @@ input,textarea,select{font-family:'Plus Jakarta Sans',sans-serif;outline:none;}
 .idea-add-text{font-size:14px;font-weight:700;}
 
 /* Content type tags generic */
-.ct-longform{background:rgba(99,102,241,0.15);color:var(--primary-light);}
-.ct-short{background:rgba(168,85,247,0.15);color:var(--accent-light);}
-.ct-podcast{background:var(--green-bg);color:var(--green);}
-.ct-commercial{background:var(--orange-bg);color:var(--orange);}
-.ct-social{background:rgba(236,72,153,0.15);color:#f472b6;}
-.ct-other{background:var(--card2);color:var(--soft);}
+.content-type-tag { padding: 3px 8px; border-radius: 6px; font-weight: 600; font-size: 10px; }
 
 /* ── MODALS ── */
 .overlay{display:none;position:fixed;inset:0;background:rgba(2,6,23,0.85);backdrop-filter:blur(8px);z-index:100;align-items:center;justify-content:center;padding:20px;}
@@ -667,6 +662,23 @@ input,textarea,select{font-family:'Plus Jakarta Sans',sans-serif;outline:none;}
 </div>
 </div>
 
+<div class="overlay" id="m-formats" onclick="ovClose(event,'m-formats')">
+<div class="modal">
+  <div class="modal-title">Manage Format Types</div>
+  <div id="format-list" style="margin-bottom:16px; display:flex; flex-direction:column; gap:8px; max-height:300px; overflow-y:auto;"></div>
+  
+  <div style="font-size:12px; font-weight:700; color:var(--muted); margin-bottom:8px; margin-top:24px;">ADD NEW FORMAT</div>
+  <div style="display:flex; gap:8px; margin-bottom:16px;">
+    <input class="field-input" id="inp-new-format" placeholder="E.g.: TikTok, Documentary...">
+    <input type="color" id="inp-new-format-color" value="#6366f1" style="width:40px; height:40px; padding:0; border:none; border-radius:8px; cursor:pointer; background:transparent;" title="Choose accent color">
+    <button class="tb-btn primary" onclick="addFormat()">Add</button>
+  </div>
+  <div class="modal-footer">
+    <button class="btn-ok" onclick="closeModal('m-formats')">Done</button>
+  </div>
+</div>
+</div>
+
 <div class="overlay" id="m-new-user" onclick="ovClose(event,'m-new-user')">
 <div class="modal" style="max-width: 400px;">
   <div class="modal-title" id="m-user-title">Edit Profile</div>
@@ -712,7 +724,7 @@ input,textarea,select{font-family:'Plus Jakarta Sans',sans-serif;outline:none;}
     <select class="field-select" id="inp-pcat"></select>
   </div>
   <div class="field">
-    <label class="field-label">Format Type</label>
+    <label class="field-label" style="display:flex; justify-content:space-between; align-items:center;">Format Type <span style="color:var(--primary-light); cursor:pointer; text-transform:none; font-weight:600; font-size:12px;" onclick="openFormatsModal()">⚙️ Manage</span></label>
     <div class="ct-radios" id="ct-radios"></div>
   </div>
   <div class="field">
@@ -868,15 +880,6 @@ const MASTER_EMAILS = ["manuelrate19@gmail.com"];
 /* ═══════════════════════════════════════
    DATA & CONSTANTS
 ═══════════════════════════════════════ */
-const CONTENT_TYPES = [
-  { id:'longform', label: 'Long-form Video', cls:'ct-longform' },
-  { id:'short',    label: 'Short / Reel', cls:'ct-short' },
-  { id:'podcast',  label: 'Podcast', cls:'ct-podcast' },
-  { id:'commercial',label: 'Commercial', cls:'ct-commercial'},
-  { id:'social',   label: 'Social', cls:'ct-social' },
-  { id:'other',    label: 'Other', cls:'ct-other' },
-];
-
 const LINK_TYPES = [
   { id:'final', label: 'Final Render' },
   { id:'wip', label: 'Work in Progress' },
@@ -914,7 +917,7 @@ const CloudDB = {
   }
 };
 
-let DB = { years:[], categories:[], projects:[], publish:[], ideas:[], todos:{}, users:[], notifications:{}, messages:{} };
+let DB = { years:[], categories:[], projects:[], publish:[], ideas:[], todos:{}, users:[], notifications:{}, messages:{}, contentTypes:[] };
 let isDbLoaded = false;
 let linkCtx = null;
 
@@ -948,6 +951,18 @@ function initApp() {
     if (!DB.todos) DB.todos = {};
     if (!DB.notifications) DB.notifications = {};
     if (!DB.messages) DB.messages = {};
+    
+    // Migración e inicialización de Formatos de Video editables
+    if (!DB.contentTypes || DB.contentTypes.length === 0) {
+      DB.contentTypes = [
+        { id:'longform', label: 'Long-form Video', color:'#818cf8' },
+        { id:'short',    label: 'Short / Reel', color:'#c084fc' },
+        { id:'podcast',  label: 'Podcast', color:'#10b981' },
+        { id:'commercial',label: 'Commercial', color:'#f59e0b' },
+        { id:'social',   label: 'Social', color:'#f472b6' },
+        { id:'other',    label: 'Other', color:'#94a3b8' }
+      ];
+    }
 
     DB.projects.forEach((p,i) => {
       // MIGRACIÓN DE LINKS: Forzamos Array libre y rescatamos viejos formatos si existían
@@ -1018,8 +1033,13 @@ function getP(id) { return DB.projects.find(p=>p.id===id); }
 function getCat(id) { return DB.categories.find(c=>c.id===id); }
 function getYr(id) { return DB.years.find(y=>y.id===id); }
 function getCurVer(proj) { return (proj.versions || []).find(v=>v.v===proj.currentVersion) || { steps: [] }; }
-function ctClass(ct) { return 'ct-'+(ct||'other'); }
-function ctLabel(ct) { const match = CONTENT_TYPES.find(c=>c.id===ct); return match ? match.label : 'Other'; }
+
+// Renderizador Dinámico de Etiquetas de Formato
+function renderCTTag(ctId) {
+  const ct = DB.contentTypes.find(c => c.id === ctId) || DB.contentTypes[0] || { label:'Unknown', color:'#ffffff' };
+  // Usamos hexadecimal con '26' al final para darle transparencia al fondo (~15%)
+  return `<span class="content-type-tag" style="color:${ct.color}; background:${ct.color}26; border: 1px solid ${ct.color}40;">${ct.label}</span>`;
+}
 
 /* ═══════════════════════════════════════
    STATE & GOOGLE AUTHENTICATION
@@ -1031,7 +1051,7 @@ let editStepCtx = null;
 let deleteCtx = null; 
 let deleteType = null; 
 let selCatColor = '#6366f1';
-let selContentType = 'longform';
+let selContentType = null;
 let calDate = new Date();
 let calSelectedDay = null;
 let currentIdeaImgB64 = null;
@@ -1190,7 +1210,7 @@ function renderMessages() {
       <div class="msg-bubble ${m.read ? '' : 'unread'}">
         <div class="msg-meta"><span style="color:var(--primary-light); font-weight:700; display:flex; align-items:center; gap:6px;"><img src="${sender.avatar}" style="width:18px; height:18px; border-radius:50%; object-fit:cover;">${sender.name}</span><span>${m.date}</span></div>
         <div style="font-size:14px; margin-top:8px;">${m.text}</div>
-        <button class="tb-btn" style="margin-top:12px; font-size:11px; padding:6px 12px; background:var(--bg);" onclick="viewPublicProfile('${sender.id}')">Reply</button>
+        <button class="tb-btn" style="margin-top:12px; font-size:11px; padding:6px 12px; background:var(--bg);" onclick="openMsgModal('${sender.id}')">Reply</button>
       </div>
     `}).join('');
     html += `</div>`;
@@ -1200,6 +1220,26 @@ function renderMessages() {
   let changed = false;
   msgs.forEach(m => { if(!m.read){ m.read = true; changed = true; }});
   if(changed) save();
+}
+
+function openMsgModal(targetUid) {
+  msgTargetUid = targetUid;
+  document.getElementById('inp-msg-text').value = '';
+  openModal('m-send-msg');
+}
+
+function submitMessage() {
+  const text = document.getElementById('inp-msg-text').value.trim();
+  if(!text) { alert("Please write a message."); return; }
+  if(!msgTargetUid) return;
+  
+  if(!DB.messages) DB.messages = {};
+  if(!DB.messages[msgTargetUid]) DB.messages[msgTargetUid] = [];
+  DB.messages[msgTargetUid].push({ id: uid(), from: currentUser, text, date: today(), read: false });
+  save();
+  
+  closeModal('m-send-msg');
+  toast('Message sent', '💬');
 }
 
 // ── PANTALLA DE DIRECTORIO DE EQUIPO ──
@@ -1556,7 +1596,7 @@ function renderProjects() {
         </div>
         <div class="pc-badges" style="margin-bottom:14px;">
           <span class="priority-star" onclick="togglePriority(event,'${p.id}')" title="Priority">${p.priority?'⭐':'☆'}</span>
-          <span class="content-type-tag ${ctClass(p.contentType)}">${ctLabel(p.contentType)}</span>
+          ${renderCTTag(p.contentType)}
           <span class="pc-version">${p.currentVersion}</span>
         </div>
         <div class="steps-bar-wrap"><div class="steps-bar">${pips}</div></div>
@@ -1804,7 +1844,7 @@ function applyFeedback() {
   if(file) resizeImage(file, finishFb); else finishFb(null);
 }
 
-// Ventana centralizada para Eliminar Proyectos, Usuarios, Categorías o Seasons
+// Ventana centralizada para Eliminar Proyectos, Usuarios, Categorías, Formatos o Seasons
 function askDelete(id, type) { 
   deleteCtx = id; 
   deleteType = type;
@@ -1813,6 +1853,7 @@ function askDelete(id, type) {
   else if(type === 'project') title = 'Delete Project';
   else if(type === 'season') title = 'Delete Season';
   else if(type === 'category') title = 'Delete Category';
+  else if(type === 'format') title = 'Delete Format Type';
   
   document.getElementById('m-del-title').textContent = title;
   openModal('m-delete'); 
@@ -1842,6 +1883,18 @@ function confirmDelete() {
   } else if (deleteType === 'category') {
     DB.categories = DB.categories.filter(c => c.id !== deleteCtx);
     save(); renderSidebar(); toast('Category deleted','🗑');
+  } else if (deleteType === 'format') {
+    if(DB.contentTypes.length <= 1) {
+      alert("You must have at least one format type.");
+      closeModal('m-delete');
+      return;
+    }
+    DB.contentTypes = DB.contentTypes.filter(c => c.id !== deleteCtx);
+    // Cambiamos los proyectos huérfanos al primer formato disponible
+    const fallbackId = DB.contentTypes[0].id;
+    DB.projects.forEach(p => { if(p.contentType === deleteCtx) p.contentType = fallbackId; });
+    save(); renderFormatsList(); buildCTRadios(selContentType); renderProjects();
+    toast('Format deleted','🗑');
   }
   closeModal('m-delete'); 
   deleteCtx=null; deleteType=null; 
@@ -1979,7 +2032,7 @@ function renderPublish() {
     return `<div class="pub-card">
       ${p.thumbnail ? `<img src="${p.thumbnail}" class="pub-thumb">` : `<div class="pub-thumb" style="display:flex;align-items:center;justify-content:center;color:var(--muted);font-size:32px;border:2px dashed var(--line2)">🎬</div>`}
       <div class="pub-info-wrap">
-        <div class="pub-top"><div class="pub-info"><div class="pub-name">${p.name}</div><div class="pub-meta"><span class="pc-cat-dot" style="background:${cat?.color||'var(--primary)'}"></span> ${cat?.name||''} · <span class="content-type-tag ${ctClass(p.contentType)} ml-2">${ctLabel(p.contentType)}</span></div></div></div>
+        <div class="pub-top"><div class="pub-info"><div class="pub-name">${p.name}</div><div class="pub-meta"><span class="pc-cat-dot" style="background:${cat?.color||'var(--primary)'}"></span> ${cat?.name||''} <span style="margin-left:8px;">${renderCTTag(p.contentType)}</span></div></div></div>
         <div class="pub-date-row">
           <span class="pub-date-lbl">📅 Release:</span>
           <input type="date" class="pub-date-inp" value="${entry.date||''}" onchange="setPublishDate('${p.id}',this.value)">
@@ -2100,7 +2153,49 @@ function createCategory() {
 
 function createStep() { const name=document.getElementById('inp-sname').value.trim(); if(!name) return; getCurVer(getP(curPid)).steps.push({name,status:'pending',note:''}); save(); closeModal('m-step'); renderDetail(); toast('Step added','➕'); }
 
-function buildCTRadios(selType) { document.getElementById('ct-radios').innerHTML=CONTENT_TYPES.map(ct=>`<div class="ct-radio ${ct.cls} ${selType===ct.id?'sel':''}" onclick="selContentType='${ct.id}'; buildCTRadios('${ct.id}')">${ct.label}</div>`).join(''); }
+/* Funciones dinámicas para Format Types */
+function openFormatsModal() {
+  renderFormatsList();
+  document.getElementById('inp-new-format').value = '';
+  openModal('m-formats');
+}
+
+function renderFormatsList() {
+  const container = document.getElementById('format-list');
+  container.innerHTML = DB.contentTypes.map(ct => `
+    <div style="display:flex; align-items:center; justify-content:space-between; background:var(--bg); padding:10px 12px; border-radius:8px; border:1px solid var(--line2);">
+      <div style="display:flex; align-items:center; gap:10px;">
+        <span style="display:inline-block; width:12px; height:12px; border-radius:50%; background:${ct.color};"></span>
+        <span style="font-size:13px; font-weight:600; color:var(--text);">${ct.label}</span>
+      </div>
+      ${isMaster ? `<button class="tb-btn danger" style="padding:4px 8px; font-size:11px;" onclick="askDelete('${ct.id}', 'format')">🗑</button>` : ''}
+    </div>
+  `).join('');
+}
+
+function addFormat() {
+  const label = document.getElementById('inp-new-format').value.trim();
+  const color = document.getElementById('inp-new-format-color').value;
+  if(!label) return;
+  DB.contentTypes.push({ id: 'ct_'+Date.now(), label, color });
+  save();
+  document.getElementById('inp-new-format').value = '';
+  renderFormatsList();
+  buildCTRadios(selContentType);
+  renderProjects();
+  toast('Format added', '✅');
+}
+
+function buildCTRadios(selType) { 
+  if(!DB.contentTypes.find(c=>c.id===selType)) {
+    selContentType = DB.contentTypes[0]?.id;
+    selType = selContentType;
+  }
+  document.getElementById('ct-radios').innerHTML=DB.contentTypes.map(ct=>
+    `<div class="ct-radio ${selType===ct.id?'sel':''}" style="${selType===ct.id ? `border-color:${ct.color}; background:${ct.color}26; color:${ct.color};` : `border-color:var(--line2);`}" onclick="selContentType='${ct.id}'; buildCTRadios('${ct.id}')">${ct.label}</div>`
+  ).join(''); 
+}
+
 function buildCatSwatches() { document.getElementById('cat-swatches').innerHTML=CAT_COLORS.map((c,i)=>`<div class="swatch ${c===selCatColor?'sel':''}" style="background:${c}" onclick="selCatColor='${c}'; buildCatSwatches()"></div>`).join(''); }
 function loadProjCats() { const yr=document.getElementById('inp-pyear').value, cats=DB.categories.filter(c=>c.yearId===yr); document.getElementById('inp-pcat').innerHTML=cats.length?cats.map(c=>`<option value="${c.id}">${c.name}</option>`).join(''):`<option value="">No categories available</option>`; }
 
