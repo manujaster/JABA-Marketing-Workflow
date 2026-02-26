@@ -2020,7 +2020,7 @@ function applyFeedback() {
   const finishFb = (imgData) => {
     const p=getP(curPid), lastV=p.versions[p.versions.length-1].v;
     const major=parseInt(lastV.replace('v','').split('.')[0])+1, newV=`v${major}.0`;
-    p.versions.push({v:newV,date:today(),feedbackDesc:desc||'Visual feedback revision',waitingFeedback:false,steps:selSteps.map((n,i)=>({name:n,status:i===0?'active':'pending',note:''}))});
+    p.versions.push({v:newV,date:today(),feedbackDesc:desc||'Visual feedback revision',waitingFeedback:false,steps:selSteps.map((n,i)=>({name:n,status:'pending',note:''}))});
     p.currentVersion=newV; DB.publish=DB.publish.filter(x=>x.projectId!==p.id);
     p.comments.push({id:uid(),text:`🔁 Auto-log: Version bumped to ${newV} | ${desc}`,img:imgData,date:today(),version:newV, authorId:currentUser});
     save(); closeModal('m-feedback'); renderDetail(); renderSidebar(); toast('Revision tracked successfully','🔁');
@@ -2290,7 +2290,7 @@ function createProject() {
   if(!selSteps.length){ alert('Please select at least one pipeline step.'); return; }
   DB.projects.push({
     id:uid(), catId, name, contentType:selContentType, priority:false, currentVersion:'v1.0', order:DB.projects.length, thumbnail: null, links:[], assignees:[...tempAssignees], isPaused:false,
-    versions:[{v:'v1.0',date:today(),feedbackDesc:'Initial workspace created',waitingFeedback:false,steps:selSteps.map((s,i)=>({name:s,status:i===0?'active':'pending',note:''}))}],
+    versions:[{v:'v1.0',date:today(),feedbackDesc:'Initial workspace created',waitingFeedback:false,steps:selSteps.map((s,i)=>({name:s,status:'pending',note:''}))}],
     comments:[], publishDate:null
   });
   save(); closeModal('m-project'); render(); toast('Project deployed','🎬');
