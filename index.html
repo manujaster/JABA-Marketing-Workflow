@@ -1217,15 +1217,24 @@ window.onclick = function(e) {
 function renderNotifications() {
   const u = getAuthUser(); if(!u) return;
   const notifs = DB.notifications[u.id] || [];
-  let html = `<div class="sec-title">🔔 YOUR NOTIFICATIONS</div>`;
+  
+  // Se agregó el botón de "Clear All" al título
+  let html = `<div class="sec-title" style="display:flex; justify-content:space-between; align-items:center;">
+                <span>🔔 YOUR NOTIFICATIONS</span>
+                ${notifs.length > 0 ? `<button class="tb-btn" style="padding:4px 10px; font-size:11px;" onclick="clearAllNotifications()">Clear All</button>` : ''}
+              </div>`;
+              
   if(!notifs.length) {
     html += `<div class="empty-state" style="padding:40px 20px;"><div class="empty-text">No new notifications</div></div>`;
   } else {
     html += `<div style="display:flex; flex-direction:column; gap:12px;">`;
     html += notifs.slice().reverse().map(n => `
-      <div class="msg-bubble ${n.read ? '' : 'unread'}" onclick="if('${n.pid}'){ goScreen('projects'); openProj('${n.pid}'); }" style="${n.pid?'cursor:pointer;':''}">
-        <div class="msg-meta"><span>System</span><span>${n.date}</span></div>
-        <div style="font-size:14px; margin-top:4px;">${n.text}</div>
+      <div class="msg-bubble ${n.read ? '' : 'unread'}" onclick="if('${n.pid}'){ goScreen('projects'); openProj('${n.pid}'); }" style="${n.pid?'cursor:pointer;':''} display: flex; align-items: flex-start; justify-content: space-between;">
+        <div style="flex:1;">
+          <div class="msg-meta"><span>System</span><span>${n.date}</span></div>
+          <div style="font-size:14px; margin-top:4px;">${n.text}</div>
+        </div>
+        <button class="link-del-btn" style="margin-left: 12px; flex-shrink: 0;" onclick="deleteNotification('${n.id}', event)" title="Delete">✕</button>
       </div>
     `).join('');
     html += `</div>`;
@@ -1234,7 +1243,32 @@ function renderNotifications() {
   
   let changed = false;
   notifs.forEach(n => { if(!n.read){ n.read = true; changed = true; }});
-  if(changed) save();
+  if(changed) { save(); renderTopbarAuth(); }
+}
+
+// NUEVA FUNCIÓN: Borrar una notificación individual
+function deleteNotification(id, event) {
+  if(event) event.stopPropagation(); // Evita que al hacer clic en la X, te lleve al proyecto
+  const u = getAuthUser();
+  if(!u || !DB.notifications[u.id]) return;
+  
+  // Filtramos la base de datos para quitar la notificación seleccionada
+  DB.notifications[u.id] = DB.notifications[u.id].filter(n => n.id !== id);
+  save();
+  renderNotifications();
+  renderTopbarAuth(); // Actualiza el contador rojo del perfil
+}
+
+// NUEVA FUNCIÓN: Borrar todas de golpe
+function clearAllNotifications() {
+  if(!confirm('Are you sure you want to clear all notifications?')) return;
+  const u = getAuthUser();
+  if(!u) return;
+  
+  DB.notifications[u.id] = [];
+  save();
+  renderNotifications();
+  renderTopbarAuth();
 }
 
 let activeChatUser = null; // Guarda con quién estamos chateando actualmente
