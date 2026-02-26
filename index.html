@@ -1203,6 +1203,16 @@ function renderTopbarAuth() {
   `;
 }
 
+function toggleDropdown() {
+  document.getElementById('user-dropdown').classList.toggle('show');
+}
+window.onclick = function(e) {
+  if (!e.target.closest('#user-dropdown-wrap')) {
+    const dd = document.getElementById('user-dropdown');
+    if(dd && dd.classList.contains('show')) dd.classList.remove('show');
+  }
+}  
+
 // ── PANTALLAS DE NOTIFICACIONES Y MENSAJES ──
 function renderNotifications() {
   const u = getAuthUser(); if(!u) return;
