@@ -1333,23 +1333,23 @@ function renderPublicProfile() {
   `;
 }
 
-function sendInlineMessage(uid) {
-  try {
-    const inputEl = document.getElementById('inline-msg-text');
-    if (!inputEl) return;
-    const text = inputEl.value.trim();
-    if(!text) { alert("Please write a message first."); return; }
-    
-    if(!DB.messages) DB.messages = {};
-    if(!DB.messages[uid]) DB.messages[uid] = [];
-    DB.messages[uid].push({ id: uid(), from: currentUser, text, date: today(), read: false });
-    save();
-    
-    inputEl.value = '';
-    toast('Message sent', '💬');
-  } catch (err) {
-    console.error("Messaging error:", err);
-  }
+function sendInlineMessage(targetUid) {
+  try {
+    const inputEl = document.getElementById('inline-msg-text');
+    if (!inputEl) return;
+    const text = inputEl.value.trim();
+    if(!text) { alert("Please write a message first."); return; }
+    
+    if(!DB.messages) DB.messages = {};
+    if(!DB.messages[targetUid]) DB.messages[targetUid] = [];
+    DB.messages[targetUid].push({ id: uid(), from: currentUser, text, date: today(), read: false });
+    save();
+    
+    inputEl.value = '';
+    toast('Message sent', '💬');
+  } catch (err) {
+    console.error("Messaging error:", err);
+  }
 }
 
 function openEditProfile(id) {
