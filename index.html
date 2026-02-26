@@ -1849,7 +1849,7 @@ function renderDetail() {
     }
     btns+=`<button class="step-btn" onclick="openNoteModal('${p.id}',${i})">📝 Note</button>`;
     if(!ver.waitingFeedback&&!inPub && !p.isPaused) btns+=`<button class="step-btn danger" onclick="delStep('${p.id}',${i})">✕</button>`;
-    return `<div class="step-row ${rowCls}"><div class="step-main"><div class="step-circle">${icon}</div><div class="step-info"><div class="step-name">${s.name}</div>${s.note?`<div class="step-note">${s.note}</div>`:''}</div><div class="step-tag">${tag}</div></div><div class="step-actions">${btns}</div></div>`;
+    return `<div class="step-row ${rowCls}" draggable="true" ondragstart="stepDragStart(event, ${i})" ondragover="stepDragOver(event)" ondragleave="stepDragLeave(event)" ondrop="stepDrop(event, ${i})" ondragend="stepDragEnd(event)"><div class="step-main"><div style="cursor:grab; color:var(--muted); font-size:18px; padding-right:12px; user-select:none; transition:color 0.2s;" onmouseover="this.style.color='var(--text)'" onmouseout="this.style.color='var(--muted)'" title="Drag to reorder">⠿</div><div class="step-circle">${icon}</div><div class="step-info"><div class="step-name">${s.name}</div>${s.note?`<div class="step-note">${s.note}</div>`:''}</div><div class="step-tag">${tag}</div></div><div class="step-actions">${btns}</div></div>`;
   }).join('');
 
   // ----------------------------------------------------
@@ -1930,6 +1930,48 @@ function stepAct(pid,i,action) { const p=getP(pid), ver=getCurVer(p), s=ver.step
 function openNoteModal(pid,i) { editStepCtx={pid,i}; document.getElementById('inp-note').value=getP(pid)?getCurVer(getP(pid)).steps[i].note||'':''; openModal('m-note'); }
 function saveStepNote() { if(!editStepCtx) return; getCurVer(getP(editStepCtx.pid)).steps[editStepCtx.i].note=document.getElementById('inp-note').value.trim(); save(); closeModal('m-note'); renderDetail(); toast('Status note saved','📝'); }
 function delStep(pid,i) { if(!confirm('Remove this stage?')) return; getCurVer(getP(pid)).steps.splice(i,1); save(); renderDetail(); }
+
+let dragStepIdx = null;
+function stepDragStart(e, i) { 
+  dragStepIdx = i; 
+  e.currentTarget.style.opacity = '0.5'; 
+  e.currentTarget.style.transform = 'scale(0.98)'; 
+  e.dataTransfer.effectAllowed = 'move'; 
+}
+function stepDragEnd(e) { 
+  e.currentTarget.style.opacity = '1'; 
+  e.currentTarget.style.transform = 'none'; 
+  dragStepIdx = null; 
+  document.querySelectorAll('.step-row').forEach(c => {
+    c.style.boxShadow = 'none';
+    c.style.borderColor = 'var(--line)';
+  }); 
+}
+function stepDragOver(e) { 
+  e.preventDefault(); 
+  e.dataTransfer.dropEffect = 'move'; 
+  e.currentTarget.style.borderColor = 'var(--primary)';
+  e.currentTarget.style.boxShadow = '0 0 0 2px var(--primary-bg)';
+}
+function stepDragLeave(e) { 
+  e.currentTarget.style.borderColor = 'var(--line)';
+  e.currentTarget.style.boxShadow = 'none';
+}
+function stepDrop(e, targetIdx) {
+  e.preventDefault(); 
+  if (dragStepIdx === null || dragStepIdx === targetIdx) return;
+  
+  const p = getP(curPid);
+  const steps = getCurVer(p).steps;
+  
+  // Saca el paso de su posición original y lo mete en la nueva
+  const [movedStep] = steps.splice(dragStepIdx, 1);
+  steps.splice(targetIdx, 0, movedStep);
+  
+  save(); 
+  renderDetail(); 
+  toast('Pipeline reordered', '🔄');
+}  
 function switchVer(pid,v) { getP(pid).currentVersion=v; save(); renderDetail(); toast(`Workspace reverted to: ${v}`,'🔄'); }
 
 /* ── Assignees Modal ── */
