@@ -526,6 +526,32 @@ input,textarea,select{font-family:'Plus Jakarta Sans',sans-serif;outline:none;}
 /* Corrección para que la ventana de formatos salga al frente */
 #m-formats { z-index: 110; }  
   
+/* --- OPCIONES DE VISTA PARA PROYECTOS --- */
+.view-btn { background: transparent; border: 1px solid transparent; color: var(--muted); padding: 4px 8px; border-radius: 6px; cursor: pointer; transition: 0.2s; font-size: 16px; }
+.view-btn:hover { color: var(--text); background: var(--card2); }
+.view-btn.active { background: var(--card2); color: var(--text); border-color: var(--line2); }
+
+/* Grilla Grande (Por defecto) */
+#proj-grid.view-grid-large, #paused-grid.view-grid-large { grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); }
+
+/* Grilla Mediana */
+#proj-grid.view-grid-medium, #paused-grid.view-grid-medium { grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); }
+.view-grid-medium .pc-thumb-wrap { height: 110px; }
+.view-grid-medium .pc-name { font-size: 14px; }
+.view-grid-medium .steps-bar-wrap { margin: 8px 0; }
+
+/* Vista de Lista */
+#proj-grid.view-list, #paused-grid.view-list { grid-template-columns: 1fr; }
+.view-list .project-card { display: flex; flex-direction: row; align-items: center; padding: 12px 16px; height: auto; border-top: 1px solid var(--line2) !important; border-left: 4px solid var(--line2); }
+.view-list .pc-thumb-wrap { width: 100px; height: 60px; margin: 0 16px 0 0; flex-shrink: 0; border-radius: 6px; }
+.view-list .pc-body { display: flex; flex-direction: row; flex: 1; align-items: center; justify-content: space-between; gap: 16px; padding: 0; margin-top: 0; }
+.view-list .pc-top { margin: 0; flex: 1.5; min-width: 200px; display: flex; align-items: center; gap: 12px; }
+.view-list .pc-meta { display: flex; flex-direction: column; flex: 1; margin: 0; align-items: flex-start; gap: 4px; }
+.view-list .pc-badges { margin: 0; flex: 1; display: flex; align-items: center; }
+.view-list .steps-bar-wrap { flex: 2; margin: 0; }
+.view-list .pc-bottom { margin: 0; padding: 0; border: none; flex: 1; justify-content: flex-end; }
+.view-list .pc-drag { position: static; opacity: 1; margin-right: 12px; }
+  
 </style>
 </head>
 <body>
@@ -584,9 +610,9 @@ input,textarea,select{font-family:'Plus Jakarta Sans',sans-serif;outline:none;}
 
   <div class="screen active" id="screen-projects">
     <div class="screen-pad">
-      <div class="filter-bar">
+     <div class="filter-bar" style="display:flex; align-items:center; gap:12px; flex-wrap:wrap;">
         <span style="font-size:18px; color:var(--muted)">🔍</span>
-        <input type="text" id="search-proj" class="search-input" placeholder="Search projects by name..." onkeyup="renderProjects()">
+        <input type="text" id="search-proj" class="search-input" style="flex:1; min-width:200px;" placeholder="Search projects by name..." onkeyup="renderProjects()">
         <select id="filter-format" class="filter-select" onchange="renderProjects()">
           <option value="all">All Formats</option>
         </select>
@@ -596,6 +622,12 @@ input,textarea,select{font-family:'Plus Jakarta Sans',sans-serif;outline:none;}
           <option value="in_progress">In Progress</option>
           <option value="finished">Finished (Ready)</option>
         </select>
+        
+        <div style="display:flex; gap:4px; padding-left:12px; border-left:1px solid var(--line2);">
+          <button class="view-btn" id="btn-view-large" onclick="changeView('grid-large')" title="Grilla Grande">🔲</button>
+          <button class="view-btn" id="btn-view-medium" onclick="changeView('grid-medium')" title="Grilla Mediana">🍱</button>
+          <button class="view-btn" id="btn-view-list" onclick="changeView('list')" title="Lista">📄</button>
+        </div>
       </div>
 
       <div class="proj-grid" id="proj-grid"></div>
@@ -2557,7 +2589,8 @@ function toast(msg,icon='✓') { const el=document.createElement('div'); el.clas
 function render() {
   renderSidebar(); 
   renderTopbar();
-  renderFormatFilter(); // ¡Aquí encendemos el nuevo filtro!
+  renderFormatFilter(); 
+  applyViewMode(); // ¡Aquí encendemos el cambio de vista!
   if(screen==='projects') renderProjects();
   else if(screen==='detail') renderDetail();
   else if(screen==='publish') renderPublish();
@@ -2592,6 +2625,33 @@ function unqueueProject(pid) {
   renderSidebar(); // Para actualizar la burbujita roja de notificaciones de la izquierda
   toast('Removed from Queue', '🔙');
 }
+
+let currentView = localStorage.getItem('jaba_view') || 'grid-large';
+
+function changeView(mode) {
+  currentView = mode;
+  localStorage.setItem('jaba_view', mode); // Guarda tu preferencia en el navegador
+  applyViewMode();
+}
+
+function applyViewMode() {
+  const grid = document.getElementById('proj-grid');
+  const pausedGrid = document.getElementById('paused-grid');
+  if(!grid) return;
+  
+  // Limpiamos las clases de vista anteriores
+  grid.classList.remove('view-grid-large', 'view-grid-medium', 'view-list');
+  if(pausedGrid) pausedGrid.classList.remove('view-grid-large', 'view-grid-medium', 'view-list');
+  
+  // Aplicamos la nueva
+  grid.classList.add('view-' + currentView);
+  if(pausedGrid) pausedGrid.classList.add('view-' + currentView);
+  
+  // Pintamos el botón seleccionado
+  document.querySelectorAll('.view-btn').forEach(b => b.classList.remove('active'));
+  const activeBtn = document.getElementById('btn-view-' + currentView.replace('grid-', ''));
+  if(activeBtn) activeBtn.classList.add('active');
+}  
   
 </script>
 </body>
