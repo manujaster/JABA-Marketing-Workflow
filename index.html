@@ -1857,8 +1857,7 @@ function renderDetail() {
 
   let panel = '';
   if(p.isPaused) panel=`<div class="action-panel panel-gray"><div class="ap-title" style="color:var(--text)">⏸ Project Paused</div><div class="ap-sub">This project is currently on hold.</div><div class="ap-buttons"><button class="ap-btn resume" onclick="togglePause('${p.id}')">▶ Resume Project</button></div></div>`;
-  else if(inPub) panel=`<div class="action-panel panel-purple"><div class="ap-title" style="color:var(--accent-light)">🚀 In Publish Queue</div><div class="ap-sub">You can view/edit the release date in the Publish Queue tab.</div><div class="ap-buttons"><button class="ap-btn publish" onclick="goScreen('publish')">View Queue →</button><button class="ap-btn resume" onclick="togglePause('${p.id}')">⏸ Pause</button></div></div>`;
-  else if(ver.waitingFeedback) panel=`<div class="action-panel panel-orange"><div class="ap-title" style="color:var(--orange)">⏳ Awaiting Client Feedback</div><div class="ap-sub">Timeline is exported. Log new revision requests when received.</div><div class="ap-buttons"><button class="ap-btn feedback" onclick="openFbModal()">Log Feedback</button><button class="ap-btn publish" onclick="sendToPublish('${p.id}')">Approve & Queue</button><button class="ap-btn resume" onclick="togglePause('${p.id}')">⏸ Pause</button></div></div>`;
+  else if(inPub) panel=`<div class="action-panel panel-purple"><div class="ap-title" style="color:var(--accent-light)">🚀 In Publish Queue</div><div class="ap-sub">You can view/edit the release date in the Publish Queue tab.</div><div class="ap-buttons"><button class="ap-btn publish" onclick="goScreen('publish')">View Queue →</button><button class="ap-btn feedback" onclick="openFbModal()">Needs Revisions</button><button class="ap-btn resume" onclick="unqueueProject('${p.id}')" style="background:var(--card2); border: 1px solid var(--line2); color:var(--text);">🔙 Unqueue</button><button class="ap-btn resume" onclick="togglePause('${p.id}')">⏸ Pause</button></div></div>`;  else if(ver.waitingFeedback) panel=`<div class="action-panel panel-orange"><div class="ap-title" style="color:var(--orange)">⏳ Awaiting Client Feedback</div><div class="ap-sub">Timeline is exported. Log new revision requests when received.</div><div class="ap-buttons"><button class="ap-btn feedback" onclick="openFbModal()">Log Feedback</button><button class="ap-btn publish" onclick="sendToPublish('${p.id}')">Approve & Queue</button><button class="ap-btn resume" onclick="togglePause('${p.id}')">⏸ Pause</button></div></div>`;
   else if(allDone) panel=`<div class="action-panel panel-green"><div class="ap-title" style="color:var(--green)">✅ All Stages Complete!</div><div class="ap-sub">Ready for final export or pending client review.</div><div class="ap-buttons"><button class="ap-btn publish" onclick="sendToPublish('${p.id}')">Queue to Publish</button><button class="ap-btn feedback" onclick="openFbModal()">Needs Revisions</button><button class="ap-btn resume" onclick="togglePause('${p.id}')">⏸ Pause</button></div></div>`;
   else panel=`<div class="action-panel panel-gray"><div class="ap-title" style="color:var(--text)">▶ Project Active</div><div class="ap-sub">Working on current stages.</div><div class="ap-buttons"><button class="ap-btn resume" onclick="togglePause('${p.id}')" style="background:var(--card3);color:var(--text)">⏸ Pause Project</button></div></div>`;
 
@@ -2579,6 +2578,17 @@ function changeProjectCategory(pid, newCatId) {
 function changeProjectFormat(pid, newFormatId) {
   const p = getP(pid);
   if(p) { p.contentType = newFormatId; save(); renderDetail(); renderProjects(); toast('Format updated', '⚙️'); }
+}
+
+function unqueueProject(pid) {
+  // Saca el proyecto de la lista de publicados
+  DB.publish = DB.publish.filter(x => x.projectId !== pid);
+  save();
+  
+  // Refresca la pantalla para mostrar el panel verde de completado
+  renderDetail();
+  renderSidebar(); // Para actualizar la burbujita roja de notificaciones de la izquierda
+  toast('Removed from Queue', '🔙');
 }
   
 </script>
