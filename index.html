@@ -1767,7 +1767,7 @@ function renderProjects() {
 
     const pips = steps.map(s=>`<div class="step-pip ${ver.waitingFeedback&&s.status==='done'?'waiting':s.status}" title="${s.name}"></div>`).join('');
     
-   return `<div class="project-card" style="border-top: 4px solid ${cat?.color || 'var(--line)'};" draggable="true" ondragstart="dragStart(event,'${p.id}')" ondragover="dragOver(event)" ondragleave="dragLeave(event)" ondrop="drop(event,'${p.id}')" ondragend="dragEnd(event)">`;
+    return `<div class="project-card" style="border-top: 4px solid ${cat?.color || 'var(--line)'};" draggable="true" ondragstart="dragStart(event,'${p.id}')" ondragover="dragOver(event)" ondragleave="dragLeave(event)" ondrop="drop(event,'${p.id}')" ondragend="dragEnd(event)">
       
       ${isMaster ? `<div class="pc-action-btn pc-del" title="Delete Project" onclick="event.stopPropagation(); askDelete('${p.id}', 'project')">🗑</div>` : ''}
       
@@ -1856,9 +1856,6 @@ function renderDetail() {
     return `<div class="step-row ${rowCls}" draggable="true" ondragstart="stepDragStart(event, ${i})" ondragover="stepDragOver(event)" ondragleave="stepDragLeave(event)" ondrop="stepDrop(event, ${i})" ondragend="stepDragEnd(event)"><div class="step-main"><div style="cursor:grab; color:var(--muted); font-size:18px; padding-right:12px; user-select:none; transition:color 0.2s;" onmouseover="this.style.color='var(--text)'" onmouseout="this.style.color='var(--muted)'" title="Drag to reorder">⠿</div><div class="step-circle">${icon}</div><div class="step-info"><div class="step-name">${s.name}</div>${s.note?`<div class="step-note">${s.note}</div>`:''}</div><div class="step-tag">${tag}</div></div><div class="step-actions">${btns}</div></div>`;
   }).join('');
 
-  // ----------------------------------------------------
-  // SISTEMA DE LINKS DINÁMICO RESTAURADO
-  // ----------------------------------------------------
   const linkOpts = LINK_TYPES.map(t=>`<option value="${t.id}">${t.label}</option>`).join('');
   const linksHTML = (p.links || []).map((lnk, idx) => {
     const lbl = LINK_TYPES.find(t=>t.id===lnk.type)?.label || 'Link';
@@ -1871,6 +1868,8 @@ function renderDetail() {
 
   const versHTML = (p.versions||[]).slice().reverse().map(v=>`<div class="version-row ${v.v===p.currentVersion?'vcurrent':''}"><div class="v-tag">${v.v}</div><div class="v-body"><div class="v-desc">${v.feedbackDesc}</div><div class="v-date">📅 ${v.date}</div>${v.v===p.currentVersion?`<div class="v-cur">ACTIVE WORKSPACE</div>`:`<button class="v-switch-btn" onclick="switchVer('${p.id}','${v.v}')">Revert to this</button>`}</div></div>`).join('');
   const thumbHtml = p.thumbnail ? `<img src="${p.thumbnail}" class="detail-thumb">` : `<div class="detail-thumb-label"><span>🖼️</span><span>Set Project Thumbnail</span></div>`;
+  
+  const cat = getCat(p.catId);
 
   document.getElementById('detail-left').innerHTML=`
     <div class="detail-thumb-wrap" onclick="document.getElementById('upload-thumb-input').click()">
@@ -1880,7 +1879,8 @@ function renderDetail() {
     <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:16px;">
       <h2 style="font-size:24px; font-weight:800;">${p.name}</h2>
     </div>
-<div style="display:flex; gap:16px; margin-bottom: 24px; background: var(--bg); padding: 16px; border-radius: 12px; border-left: 4px solid ${cat?.color || 'var(--line2)'}; border-top: 1px solid var(--line2); border-right: 1px solid var(--line2); border-bottom: 1px solid var(--line2);">
+
+    <div style="display:flex; gap:16px; margin-bottom: 24px; background: var(--bg); padding: 16px; border-radius: 12px; border-left: 4px solid ${cat?.color || 'var(--line2)'}; border-top: 1px solid var(--line2); border-right: 1px solid var(--line2); border-bottom: 1px solid var(--line2);">
        <div style="flex:1;">
          <div style="font-size:11px; font-weight:700; color:var(--muted); margin-bottom:6px; text-transform:uppercase; letter-spacing:0.5px;">📁 Group / Category</div>
          <select class="field-select" style="padding:8px 12px; font-size:13px;" onchange="changeProjectCategory('${p.id}', this.value)">
@@ -1918,7 +1918,6 @@ function renderDetail() {
     <div class="sec-title"><span>🕒 ITERATION HISTORY</span></div>
     <div class="versions-list">${versHTML}</div>`;
     
-  // Populate Mentions Select for Comments
   const cpTag = document.getElementById('cp-tag');
   if(cpTag) {
     cpTag.innerHTML = `<option value="">No tag...</option>` + DB.users.filter(u=>u.id !== currentUser).map(u => `<option value="${u.id}">@${u.name}</option>`).join('');
@@ -2548,6 +2547,17 @@ function render() {
 
 // Iniciar aplicación
 initApp();
+
+function changeProjectCategory(pid, newCatId) {
+  const p = getP(pid);
+  if(p) { p.catId = newCatId; save(); renderDetail(); renderSidebar(); renderTopbar(); toast('Category updated', '📁'); }
+}
+
+function changeProjectFormat(pid, newFormatId) {
+  const p = getP(pid);
+  if(p) { p.contentType = newFormatId; save(); renderDetail(); renderProjects(); toast('Format updated', '⚙️'); }
+}
+  
 </script>
 </body>
 </html>
