@@ -703,11 +703,11 @@ input,textarea,select{font-family:'Plus Jakarta Sans',sans-serif;outline:none;}
   <div class="modal-title">Manage Format Types</div>
   <div id="format-list" style="margin-bottom:16px; display:flex; flex-direction:column; gap:8px; max-height:300px; overflow-y:auto;"></div>
   
-  <div style="font-size:12px; font-weight:700; color:var(--muted); margin-bottom:8px; margin-top:24px;">ADD NEW FORMAT</div>
+<div id="m-format-action-title" style="font-size:12px; font-weight:700; color:var(--muted); margin-bottom:8px; margin-top:24px;">ADD NEW FORMAT</div>
   <div style="display:flex; gap:8px; margin-bottom:16px;">
     <input class="field-input" id="inp-new-format" placeholder="E.g.: TikTok, Documentary...">
     <input type="color" id="inp-new-format-color" value="#6366f1" style="width:40px; height:40px; padding:0; border:none; border-radius:8px; cursor:pointer; background:transparent;" title="Choose accent color">
-    <button class="tb-btn primary" onclick="addFormat()">Add</button>
+    <button id="btn-format-action" class="tb-btn primary" onclick="addFormat()">Add</button>
   </div>
   <div class="modal-footer">
     <button class="btn-ok" onclick="closeModal('m-formats')">Done</button>
@@ -2380,9 +2380,29 @@ function createCategory() {
 function createStep() { const name=document.getElementById('inp-sname').value.trim(); if(!name) return; getCurVer(getP(curPid)).steps.push({name,status:'pending',note:''}); save(); closeModal('m-step'); renderDetail(); toast('Step added','➕'); }
 
 /* Funciones dinámicas para Format Types */
+let editingFormatId = null;
+
 function openFormatsModal() {
-  renderFormatsList();
+  editingFormatId = null;
+  document.getElementById('m-format-action-title').textContent = 'ADD NEW FORMAT';
+  document.getElementById('btn-format-action').textContent = 'Add';
   document.getElementById('inp-new-format').value = '';
+  document.getElementById('inp-new-format-color').value = '#6366f1';
+  
+  // Magia de seguridad: Si NO eres master, ocultamos los campos de crear/editar
+  if (!isMaster) {
+    document.getElementById('m-format-action-title').style.display = 'none';
+    document.getElementById('inp-new-format').style.display = 'none';
+    document.getElementById('inp-new-format-color').style.display = 'none';
+    document.getElementById('btn-format-action').style.display = 'none';
+  } else {
+    document.getElementById('m-format-action-title').style.display = 'block';
+    document.getElementById('inp-new-format').style.display = 'block';
+    document.getElementById('inp-new-format-color').style.display = 'block';
+    document.getElementById('btn-format-action').style.display = 'block';
+  }
+
+  renderFormatsList();
   openModal('m-formats');
 }
 
@@ -2394,22 +2414,57 @@ function renderFormatsList() {
         <span style="display:inline-block; width:12px; height:12px; border-radius:50%; background:${ct.color};"></span>
         <span style="font-size:13px; font-weight:600; color:var(--text);">${ct.label}</span>
       </div>
-      ${isMaster ? `<button class="tb-btn danger" style="padding:4px 8px; font-size:11px;" onclick="askDelete('${ct.id}', 'format')">🗑</button>` : ''}
+      ${isMaster ? `
+      <div style="display:flex; gap:6px;">
+        <button class="tb-btn" style="padding:4px 8px; font-size:11px;" onclick="editFormat('${ct.id}')">✏️</button>
+        <button class="tb-btn danger" style="padding:4px 8px; font-size:11px;" onclick="askDelete('${ct.id}', 'format')">🗑</button>
+      </div>` : ''}
     </div>
   `).join('');
+}
+
+function editFormat(id) {
+  const ct = DB.contentTypes.find(c => c.id === id);
+  if(ct) {
+    editingFormatId = id;
+    document.getElementById('inp-new-format').value = ct.label;
+    document.getElementById('inp-new-format-color').value = ct.color;
+    document.getElementById('m-format-action-title').textContent = 'EDIT FORMAT';
+    document.getElementById('btn-format-action').textContent = 'Save';
+  }
 }
 
 function addFormat() {
   const label = document.getElementById('inp-new-format').value.trim();
   const color = document.getElementById('inp-new-format-color').value;
   if(!label) return;
-  DB.contentTypes.push({ id: 'ct_'+Date.now(), label, color });
+
+  if(editingFormatId) {
+    // Si estamos editando, actualizamos el existente
+    const ct = DB.contentTypes.find(c => c.id === editingFormatId);
+    if(ct) {
+      ct.label = label;
+      ct.color = color;
+    }
+    toast('Format updated', '✅');
+  } else {
+    // Si es nuevo, lo creamos
+    DB.contentTypes.push({ id: 'ct_'+Date.now(), label, color });
+    toast('Format added', '✅');
+  }
+  
   save();
+  
+  // Resetear la caja para que vuelva a decir "Add"
+  editingFormatId = null;
   document.getElementById('inp-new-format').value = '';
+  document.getElementById('inp-new-format-color').value = '#6366f1';
+  document.getElementById('m-format-action-title').textContent = 'ADD NEW FORMAT';
+  document.getElementById('btn-format-action').textContent = 'Add';
+  
   renderFormatsList();
   buildCTRadios(selContentType);
   renderProjects();
-  toast('Format added', '✅');
 }
 
 function buildCTRadios(selType) { 
