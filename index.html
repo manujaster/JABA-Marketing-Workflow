@@ -527,7 +527,8 @@ input,textarea,select{font-family:'Plus Jakarta Sans',sans-serif;outline:none;}
 #m-formats { z-index: 110; }  
   
 /* --- OPCIONES DE VISTA PARA PROYECTOS --- */
-.view-btn { background: transparent; border: 1px solid transparent; color: var(--muted); padding: 4px 8px; border-radius: 6px; cursor: pointer; transition: 0.2s; font-size: 16px; }
+.view-btn { background: transparent; border: 1px solid transparent; color: var(--muted); padding: 6px; border-radius: 6px; cursor: pointer; transition: 0.2s; display: flex; align-items: center; justify-content: center; }
+.view-btn svg { width: 18px; height: 18px; stroke-width: 1.5; } /* Controla el tamaño y grosor de los nuevos íconos */
 .view-btn:hover { color: var(--text); background: var(--card2); }
 .view-btn.active { background: var(--card2); color: var(--text); border-color: var(--line2); }
 
@@ -624,9 +625,15 @@ input,textarea,select{font-family:'Plus Jakarta Sans',sans-serif;outline:none;}
         </select>
         
         <div style="display:flex; gap:4px; padding-left:12px; border-left:1px solid var(--line2);">
-          <button class="view-btn" id="btn-view-large" onclick="changeView('grid-large')" title="Grilla Grande">🔲</button>
-          <button class="view-btn" id="btn-view-medium" onclick="changeView('grid-medium')" title="Grilla Mediana">🍱</button>
-          <button class="view-btn" id="btn-view-list" onclick="changeView('list')" title="Lista">📄</button>
+          <button class="view-btn" id="btn-view-large" onclick="changeView('grid-large')" title="Large Grid View">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect></svg>
+          </button>
+          <button class="view-btn" id="btn-view-medium" onclick="changeView('grid-medium')" title="Medium Grid View">
+             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="5" height="5"></rect><rect x="9.5" y="3" width="5" height="5"></rect><rect x="16" y="3" width="5" height="5"></rect><rect x="3" y="9.5" width="5" height="5"></rect><rect x="9.5" y="9.5" width="5" height="5"></rect><rect x="16" y="9.5" width="5" height="5"></rect><rect x="3" y="16" width="5" height="5"></rect><rect x="9.5" y="16" width="5" height="5"></rect><rect x="16" y="16" width="5" height="5"></rect></svg>
+          </button>
+          <button class="view-btn" id="btn-view-list" onclick="changeView('list')" title="List View">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><line x1="8" y1="6" x2="21" y2="6"></line><line x1="8" y1="12" x2="21" y2="12"></line><line x1="8" y1="18" x2="21" y2="18"></line><line x1="3" y1="6" x2="3.01" y2="6"></line><line x1="3" y1="12" x2="3.01" y2="12"></line><line x1="3" y1="18" x2="3.01" y2="18"></line></svg>
+          </button>
         </div>
       </div>
 
