@@ -149,7 +149,7 @@ input,textarea,select{font-family:'Plus Jakarta Sans',sans-serif;outline:none;}
 /* ── PROJECT LIST ── */
 .proj-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:16px;margin-bottom:32px;}
 .project-card{background:var(--card);border:1px solid var(--line);border-radius:12px;overflow:hidden;transition:all .2s;cursor:pointer;display:flex;flex-direction:column;position:relative;}
-.project-card:hover{border-color:var(--primary-light);transform:translateY(-4px);box-shadow:0 12px 24px -8px rgba(0,0,0,0.5);}
+.project-card:hover{border-color:var(--hover-color, var(--primary-light));transform:translateY(-4px);box-shadow:0 12px 24px -8px rgba(0,0,0,0.5);}
 .project-card.dragging{opacity:.5;box-shadow:0 8px 24px rgba(0,0,0,.5);transform:scale(0.98);}
 .project-card.drag-over{border-color:var(--primary);box-shadow:0 0 0 2px var(--primary-bg);}
 
@@ -1829,8 +1829,7 @@ function renderProjects() {
     
     const formatColor = DB.contentTypes.find(c => c.id === p.contentType)?.color || 'var(--line)';
 
-    return `<div class="project-card" style="border-top: 4px solid ${formatColor};" draggable="true" ondragstart="dragStart(event,'${p.id}')" ondragover="dragOver(event)" ondragleave="dragLeave(event)" ondrop="drop(event,'${p.id}')" ondragend="dragEnd(event)">
-      
+    return `<div class="project-card" style="border-top: 4px solid ${formatColor}; --hover-color: ${formatColor};" draggable="true" ondragstart="dragStart(event,'${p.id}')" ondragover="dragOver(event)" ondragleave="dragLeave(event)" ondrop="drop(event,'${p.id}')" ondragend="dragEnd(event)">      
       ${isMaster ? `<div class="pc-action-btn pc-del" title="Delete Project" onclick="event.stopPropagation(); askDelete('${p.id}', 'project')">🗑</div>` : ''}
       
       <div class="pc-action-btn pc-drag" title="Drag to reorder">⠿</div>
