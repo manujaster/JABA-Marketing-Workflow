@@ -587,6 +587,9 @@ input,textarea,select{font-family:'Plus Jakarta Sans',sans-serif;outline:none;}
       <div class="filter-bar">
         <span style="font-size:18px; color:var(--muted)">🔍</span>
         <input type="text" id="search-proj" class="search-input" placeholder="Search projects by name..." onkeyup="renderProjects()">
+        <select id="filter-format" class="filter-select" onchange="renderProjects()">
+          <option value="all">All Formats</option>
+        </select>
         <select id="filter-state" class="filter-select" onchange="renderProjects()">
           <option value="all">All Active Projects</option>
           <option value="not_started">Not Started</option>
@@ -1713,6 +1716,18 @@ function togglePausedGrid() {
   document.getElementById('paused-chev').style.transform = isPausedGridOpen ? 'rotate(90deg)' : 'none';
 }
 
+function renderFormatFilter() {
+  const sel = document.getElementById('filter-format');
+  if(!sel) return;
+  const currentVal = sel.value;
+  let html = `<option value="all">All Formats</option>`;
+  DB.contentTypes.forEach(ct => {
+    html += `<option value="${ct.id}">${ct.label}</option>`;
+  });
+  sel.innerHTML = html;
+  if(currentVal && currentVal !== 'all' && DB.contentTypes.find(c=>c.id===currentVal)) sel.value = currentVal;
+}
+
 function renderProjects() {
   const grid = document.getElementById('proj-grid');
   const pausedGrid = document.getElementById('paused-grid');
@@ -1720,6 +1735,8 @@ function renderProjects() {
   
   const searchQ = document.getElementById('search-proj').value.toLowerCase();
   const filterState = document.getElementById('filter-state').value;
+  // Leemos lo que dice el nuevo filtro de formatos
+  const filterFormat = document.getElementById('filter-format') ? document.getElementById('filter-format').value : 'all';
 
   let activeProjs = [];
   let pausedProjs = [];
@@ -1727,6 +1744,8 @@ function renderProjects() {
   DB.projects.forEach(p => {
     if(filterCat && p.catId !== filterCat) return;
     if(searchQ && !p.name.toLowerCase().includes(searchQ)) return;
+    // Si el filtro no dice "all" y el formato del proyecto no coincide, lo saltamos
+    if(filterFormat !== 'all' && p.contentType !== filterFormat) return;
 
     const ver = getCurVer(p);
     const steps = ver.steps || [];
@@ -1767,7 +1786,6 @@ function renderProjects() {
 
     const pips = steps.map(s=>`<div class="step-pip ${ver.waitingFeedback&&s.status==='done'?'waiting':s.status}" title="${s.name}"></div>`).join('');
     
-    // Obtenemos el color del formato
     const formatColor = DB.contentTypes.find(c => c.id === p.contentType)?.color || 'var(--line)';
 
     return `<div class="project-card" style="border-top: 4px solid ${formatColor};" draggable="true" ondragstart="dragStart(event,'${p.id}')" ondragover="dragOver(event)" ondragleave="dragLeave(event)" ondrop="drop(event,'${p.id}')" ondragend="dragEnd(event)">
@@ -2538,6 +2556,7 @@ function toast(msg,icon='✓') { const el=document.createElement('div'); el.clas
 function render() {
   renderSidebar(); 
   renderTopbar();
+  renderFormatFilter(); // ¡Aquí encendemos el nuevo filtro!
   if(screen==='projects') renderProjects();
   else if(screen==='detail') renderDetail();
   else if(screen==='publish') renderPublish();
