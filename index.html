@@ -1767,7 +1767,7 @@ function renderProjects() {
 
     const pips = steps.map(s=>`<div class="step-pip ${ver.waitingFeedback&&s.status==='done'?'waiting':s.status}" title="${s.name}"></div>`).join('');
     
-    return `<div class="project-card" draggable="true" ondragstart="dragStart(event,'${p.id}')" ondragover="dragOver(event)" ondragleave="dragLeave(event)" ondrop="drop(event,'${p.id}')" ondragend="dragEnd(event)">
+   return `<div class="project-card" style="border-top: 4px solid ${cat?.color || 'var(--line)'};" draggable="true" ondragstart="dragStart(event,'${p.id}')" ondragover="dragOver(event)" ondragleave="dragLeave(event)" ondrop="drop(event,'${p.id}')" ondragend="dragEnd(event)">`;
       
       ${isMaster ? `<div class="pc-action-btn pc-del" title="Delete Project" onclick="event.stopPropagation(); askDelete('${p.id}', 'project')">🗑</div>` : ''}
       
@@ -1880,6 +1880,20 @@ function renderDetail() {
     <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:16px;">
       <h2 style="font-size:24px; font-weight:800;">${p.name}</h2>
     </div>
+<div style="display:flex; gap:16px; margin-bottom: 24px; background: var(--bg); padding: 16px; border-radius: 12px; border-left: 4px solid ${cat?.color || 'var(--line2)'}; border-top: 1px solid var(--line2); border-right: 1px solid var(--line2); border-bottom: 1px solid var(--line2);">
+       <div style="flex:1;">
+         <div style="font-size:11px; font-weight:700; color:var(--muted); margin-bottom:6px; text-transform:uppercase; letter-spacing:0.5px;">📁 Group / Category</div>
+         <select class="field-select" style="padding:8px 12px; font-size:13px;" onchange="changeProjectCategory('${p.id}', this.value)">
+           ${DB.categories.map(c => `<option value="${c.id}" ${c.id === p.catId ? 'selected' : ''}>${c.name}</option>`).join('')}
+         </select>
+       </div>
+       <div style="flex:1;">
+         <div style="font-size:11px; font-weight:700; color:var(--muted); margin-bottom:6px; text-transform:uppercase; letter-spacing:0.5px;">⚙️ Format Type</div>
+         <select class="field-select" style="padding:8px 12px; font-size:13px;" onchange="changeProjectFormat('${p.id}', this.value)">
+           ${DB.contentTypes.map(ct => `<option value="${ct.id}" ${ct.id === p.contentType ? 'selected' : ''}>${ct.label}</option>`).join('')}
+         </select>
+       </div>
+    </div>
 
     <div class="assignees-block">
       <div>
@@ -1914,6 +1928,16 @@ function renderDetail() {
 }
 
 function togglePause(pid) { const p=getP(pid); p.isPaused = !p.isPaused; save(); renderDetail(); }
+  
+  function changeProjectCategory(pid, newCatId) {
+  const p = getP(pid);
+  if(p) { p.catId = newCatId; save(); renderDetail(); renderSidebar(); renderTopbar(); toast('Category updated', '📁'); }
+}
+
+function changeProjectFormat(pid, newFormatId) {
+  const p = getP(pid);
+  if(p) { p.contentType = newFormatId; save(); renderDetail(); renderProjects(); toast('Format updated', '⚙️'); }
+}
 
 /* ── Inline Links Add / Remove ── */
 function addInlineLink(pid) { 
