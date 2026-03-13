@@ -2010,10 +2010,16 @@ function renderDetail() {
   const p = getP(curPid); if(!p) return;
   const ver = getCurVer(p), steps = ver.steps || [], allDone = steps.length > 0 && steps.every(s=>s.status==='done');
   const inPub = DB.publish.find(x=>x.projectId===p.id);
+  
+  // Nueva variable para saber si está publicado
+  const isPub = p.isPublished || p.state === 'published';
 
   let panel = '';
-  if(p.isPaused) panel=`<div class="action-panel panel-gray"><div class="ap-title" style="color:var(--text)">⏸ Project Paused</div><div class="ap-sub">This project is currently on hold.</div><div class="ap-buttons"><button class="ap-btn resume" onclick="togglePause('${p.id}')">▶ Resume Project</button></div></div>`;
-  else if(inPub) panel=`<div class="action-panel panel-purple"><div class="ap-title" style="color:var(--accent-light)">🚀 In Publish Queue</div><div class="ap-sub">You can view/edit the release date in the Publish Queue tab.</div><div class="ap-buttons"><button class="ap-btn publish" onclick="goScreen('publish')">View Queue →</button><button class="ap-btn feedback" onclick="openFbModal()">Needs Revisions</button><button class="ap-btn resume" onclick="unqueueProject('${p.id}')" style="background:var(--card2); border: 1px solid var(--line2); color:var(--text);">🔙 Unqueue</button><button class="ap-btn resume" onclick="togglePause('${p.id}')">⏸ Pause</button></div></div>`;  else if(ver.waitingFeedback) panel=`<div class="action-panel panel-orange"><div class="ap-title" style="color:var(--orange)">⏳ Awaiting Client Feedback</div><div class="ap-sub">Timeline is exported. Log new revision requests when received.</div><div class="ap-buttons"><button class="ap-btn feedback" onclick="openFbModal()">Log Feedback</button><button class="ap-btn publish" onclick="sendToPublish('${p.id}')">Approve & Queue</button><button class="ap-btn resume" onclick="togglePause('${p.id}')">⏸ Pause</button></div></div>`;
+  // Si está publicado, mostramos el banner de victoria y quitamos todos los botones
+  if(isPub) panel=`<div class="action-panel panel-green" style="border: 1px solid var(--green); box-shadow: 0 0 20px rgba(0, 255, 128, 0.15);"><div class="ap-title" style="color:var(--green)">✨ Project Published</div><div class="ap-sub">This project is fully completed, approved, and published.</div></div>`;
+  else if(p.isPaused) panel=`<div class="action-panel panel-gray"><div class="ap-title" style="color:var(--text)">⏸ Project Paused</div><div class="ap-sub">This project is currently on hold.</div><div class="ap-buttons"><button class="ap-btn resume" onclick="togglePause('${p.id}')">▶ Resume Project</button></div></div>`;
+  else if(inPub) panel=`<div class="action-panel panel-purple"><div class="ap-title" style="color:var(--accent-light)">🚀 In Publish Queue</div><div class="ap-sub">You can view/edit the release date in the Publish Queue tab.</div><div class="ap-buttons"><button class="ap-btn publish" onclick="goScreen('publish')">View Queue →</button><button class="ap-btn feedback" onclick="openFbModal()">Needs Revisions</button><button class="ap-btn resume" onclick="unqueueProject('${p.id}')" style="background:var(--card2); border: 1px solid var(--line2); color:var(--text);">🔙 Unqueue</button><button class="ap-btn resume" onclick="togglePause('${p.id}')">⏸ Pause</button></div></div>`; 
+  else if(ver.waitingFeedback) panel=`<div class="action-panel panel-orange"><div class="ap-title" style="color:var(--orange)">⏳ Awaiting Client Feedback</div><div class="ap-sub">Timeline is exported. Log new revision requests when received.</div><div class="ap-buttons"><button class="ap-btn feedback" onclick="openFbModal()">Log Feedback</button><button class="ap-btn publish" onclick="sendToPublish('${p.id}')">Approve & Queue</button><button class="ap-btn resume" onclick="togglePause('${p.id}')">⏸ Pause</button></div></div>`;
   else if(allDone) panel=`<div class="action-panel panel-green"><div class="ap-title" style="color:var(--green)">✅ All Stages Complete!</div><div class="ap-sub">Ready for final export or pending client review.</div><div class="ap-buttons"><button class="ap-btn publish" onclick="sendToPublish('${p.id}')">Queue to Publish</button><button class="ap-btn feedback" onclick="openFbModal()">Needs Revisions</button><button class="ap-btn resume" onclick="togglePause('${p.id}')">⏸ Pause</button></div></div>`;
   else panel=`<div class="action-panel panel-gray"><div class="ap-title" style="color:var(--text)">▶ Project Active</div><div class="ap-sub">Working on current stages.</div><div class="ap-buttons"><button class="ap-btn resume" onclick="togglePause('${p.id}')" style="background:var(--card3);color:var(--text)">⏸ Pause Project</button></div></div>`;
 
@@ -2022,13 +2028,18 @@ function renderDetail() {
     const icon = s.status==='done'?'✓':s.status==='active'?'▶':'';
     const tag = s.status==='done'?'Done':s.status==='active'?'In Progress':'Pending';
     let btns='';
-    if(!ver.waitingFeedback&&!inPub && !p.isPaused){
+    
+    // Bloqueamos la edición de etapas si está publicado
+    if(!ver.waitingFeedback && !inPub && !p.isPaused && !isPub){
       if(s.status==='pending') btns+=`<button class="step-btn start" onclick="stepAct('${p.id}',${i},'start')">Start Stage</button>`;
       if(s.status==='active')  btns+=`<button class="step-btn complete" onclick="stepAct('${p.id}',${i},'complete')">Mark Complete</button>`;
       if(s.status==='done')    btns+=`<button class="step-btn reopen" onclick="stepAct('${p.id}',${i},'reopen')">↺ Reopen</button>`;
     }
     btns+=`<button class="step-btn" onclick="openNoteModal('${p.id}',${i})">📝 Note</button>`;
-    if(!ver.waitingFeedback&&!inPub && !p.isPaused) btns+=`<button class="step-btn danger" onclick="delStep('${p.id}',${i})">✕</button>`;
+    
+    // Bloqueamos poder borrar etapas si está publicado
+    if(!ver.waitingFeedback && !inPub && !p.isPaused && !isPub) btns+=`<button class="step-btn danger" onclick="delStep('${p.id}',${i})">✕</button>`;
+    
     return `<div class="step-row ${rowCls}" draggable="true" ondragstart="stepDragStart(event, ${i})" ondragover="stepDragOver(event)" ondragleave="stepDragLeave(event)" ondrop="stepDrop(event, ${i})" ondragend="stepDragEnd(event)"><div class="step-main"><div style="cursor:grab; color:var(--muted); font-size:18px; padding-right:12px; user-select:none; transition:color 0.2s;" onmouseover="this.style.color='var(--text)'" onmouseout="this.style.color='var(--muted)'" title="Drag to reorder">⠿</div><div class="step-circle">${icon}</div><div class="step-info"><div class="step-name">${s.name}</div>${s.note?`<div class="step-note">${s.note}</div>`:''}</div><div class="step-tag">${tag}</div></div><div class="step-actions">${btns}</div></div>`;
   }).join('');
 
@@ -2091,7 +2102,7 @@ function renderDetail() {
     </div>
     <div class="sec-title"><span>✂️ EDITING WORKFLOW</span></div>
     <div class="steps-list">${stepsHTML}</div>
-    <button class="tb-btn" style="margin-bottom:32px" onclick="openModal('m-step')">+ Add Custom Stage</button>
+    ${!isPub ? `<button class="tb-btn" style="margin-bottom:32px" onclick="openModal('m-step')">+ Add Custom Stage</button>` : ''}
     <div class="sec-title"><span>🕒 ITERATION HISTORY</span></div>
     <div class="versions-list">${versHTML}</div>`;
     
