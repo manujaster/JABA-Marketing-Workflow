@@ -556,6 +556,33 @@ input,textarea,select{font-family:'Plus Jakarta Sans',sans-serif;outline:none;}
 /* Estilos para las tarjetas de la cola de publicación */
 .pub-card { transition: all 0.2s ease; border: 1px solid var(--line2); }
 .pub-card:hover { border-color: var(--hover-color, var(--primary-light)) !important; transform: translateY(-2px); box-shadow: 0 8px 24px rgba(0,0,0,0.2); }  
+
+/* --- ESTILO ESPECIAL PARA PROYECTOS PUBLICADOS (Glow Verde) --- */
+.project-card.is-published {
+  border-color: var(--green, #00ff80) !important; 
+  box-shadow: 0 0 15px rgba(0, 255, 128, 0.5) !important; 
+  transition: box-shadow 0.3s ease;
+}
+
+.project-card.is-published:hover {
+  box-shadow: 0 0 25px rgba(0, 255, 128, 0.8) !important; 
+}
+
+/* Etiqueta flotante de "Published" */
+.published-badge {
+  position: absolute;
+  top: -10px;
+  right: -10px;
+  background: var(--green, #00ff80);
+  color: #000; 
+  padding: 4px 10px;
+  border-radius: 20px;
+  font-size: 10px;
+  font-weight: 800;
+  text-transform: uppercase;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+  z-index: 10;
+}  
   
 </style>
 </head>
@@ -1780,7 +1807,6 @@ function renderProjects() {
   
   const searchQ = document.getElementById('search-proj').value.toLowerCase();
   const filterState = document.getElementById('filter-state').value;
-  // Leemos lo que dice el nuevo filtro de formatos
   const filterFormat = document.getElementById('filter-format') ? document.getElementById('filter-format').value : 'all';
 
   let activeProjs = [];
@@ -1789,9 +1815,10 @@ function renderProjects() {
   DB.projects.forEach(p => {
     if(filterCat && p.catId !== filterCat) return;
     if(searchQ && !p.name.toLowerCase().includes(searchQ)) return;
-    // Si el filtro no dice "all" y el formato del proyecto no coincide, lo saltamos
     if(filterFormat !== 'all' && p.contentType !== filterFormat) return;
 
+    // --- NUEVA LÓGICA DE ESTADOS ---
+    // Determinamos el estado real del proyecto
     const ver = getCurVer(p);
     const steps = ver.steps || [];
     const doneN = steps.filter(s=>s.status==='done').length;
@@ -1799,9 +1826,14 @@ function renderProjects() {
     const inProgress = doneN > 0 || steps.some(s=>s.status==='active');
     
     let state = 'not_started';
-    if(allDone) state = 'finished';
-    else if(inProgress) state = 'in_progress';
+    if (p.isPublished || p.state === 'published') state = 'published';
+    else if (allDone) state = 'finished';
+    else if (inProgress) state = 'in_progress';
 
+    // Guardamos el estado calculado temporalmente en el objeto para poder filtrarlo después
+    p._tempState = state; 
+
+    // Filtramos por estado si es necesario
     if(filterState !== 'all' && filterState !== state) return;
 
     if(p.isPaused) pausedProjs.push(p);
@@ -1822,20 +1854,24 @@ function renderProjects() {
     const actStep = steps.find(s=>s.status==='active'), inPub = DB.publish.find(x=>x.projectId===p.id);
 
     let statusLbl='', statusCls='';
-    if(p.isPaused){ statusLbl=`⏸ Paused`; statusCls='s-paused'; }
+    if(p.isPublished || p.state === 'published') { statusLbl=`✅ Published`; statusCls='s-done'; }
+    else if(p.isPaused){ statusLbl=`⏸ Paused`; statusCls='s-paused'; }
     else if(inPub){ statusLbl=`🚀 Queued`; statusCls='s-publish'; }
     else if(ver.waitingFeedback){ statusLbl=`⏳ Awaiting Feedback`; statusCls='s-waiting'; }
-    else if(allDone){ statusLbl=`✅ Finished`; statusCls='s-done'; }
+    else if(allDone){ statusLbl=`🎉 Finished`; statusCls='s-done'; }
     else if(actStep){ statusLbl=`▶ Editing: ${actStep.name}`; statusCls='s-active'; }
     else { statusLbl='Pending'; statusCls=''; }
 
     const pips = steps.map(s=>`<div class="step-pip ${ver.waitingFeedback&&s.status==='done'?'waiting':s.status}" title="${s.name}"></div>`).join('');
-    
     const formatColor = DB.contentTypes.find(c => c.id === p.contentType)?.color || 'var(--line)';
 
-    return `<div class="project-card" style="border-top: 4px solid ${formatColor}; --hover-color: ${formatColor};" draggable="true" ondragstart="dragStart(event,'${p.id}')" ondragover="dragOver(event)" ondragleave="dragLeave(event)" ondrop="drop(event,'${p.id}')" ondragend="dragEnd(event)">      
+    // Verificamos si es publicado para agregarle la clase CSS nueva y el badge
+    const isPubClass = (p.isPublished || p.state === 'published') ? 'is-published' : '';
+    const pubBadge = (p.isPublished || p.state === 'published') ? `<div class="published-badge">Published</div>` : '';
+
+    return `<div class="project-card ${isPubClass}" style="border-top: 4px solid ${formatColor}; --hover-color: ${formatColor}; position:relative;" draggable="true" ondragstart="dragStart(event,'${p.id}')" ondragover="dragOver(event)" ondragleave="dragLeave(event)" ondrop="drop(event,'${p.id}')" ondragend="dragEnd(event)">      
+      ${pubBadge}
       ${isMaster ? `<div class="pc-action-btn pc-del" title="Delete Project" onclick="event.stopPropagation(); askDelete('${p.id}', 'project')">🗑</div>` : ''}
-      
       <div class="pc-action-btn pc-drag" title="Drag to reorder">⠿</div>
       ${p.thumbnail ? `<div class="pc-thumb-wrap"><img src="${p.thumbnail}" class="pc-thumb"></div>` : ''}
       <div class="pc-body" onclick="openProj('${p.id}')">
@@ -1864,11 +1900,67 @@ function renderProjects() {
     </div>`;
   };
 
+  // --- LÓGICA DE AGRUPACIÓN (Categoría > Estado) ---
   if(!activeProjs.length && !pausedProjs.length) {
     grid.innerHTML=`<div class="empty-state"><div class="empty-icon">📂</div><div class="empty-text">No projects found</div><div class="empty-sub">Adjust your search or filters.</div></div>`;
     wrapper.style.display = 'none';
   } else {
-    grid.innerHTML = activeProjs.map(buildCard).join('');
+    // 1. Agrupar activos por Categoría
+    let finalHTML = '';
+    const catsInUse = [...new Set(activeProjs.map(p => p.catId))]; 
+
+    catsInUse.forEach(catId => {
+      const cat = getCat(catId);
+      const catName = cat ? cat.name : 'Uncategorized';
+      const catColor = cat ? cat.color : 'var(--line)';
+      const projsInCat = activeProjs.filter(p => p.catId === catId);
+
+      // Si no hay proyectos activos en esta categoría, saltamos
+      if(projsInCat.length === 0) return;
+
+      finalHTML += `
+      <div class="category-group" style="margin-bottom: 40px;">
+        <div style="font-size: 20px; font-weight: 800; color: var(--text); margin-bottom: 16px; border-bottom: 2px solid ${catColor}; padding-bottom: 8px; display:inline-block;">
+          <span style="color:${catColor}; margin-right:8px;">●</span>${catName}
+        </div>
+        
+        <div style="display: flex; flex-wrap: wrap; gap: 24px; align-items: flex-start;">
+      `;
+
+      // 2. Definir las sub-secciones (Estados)
+      const stateGroups = [
+        { id: 'not_started', name: 'Not Started', color: 'var(--muted)' },
+        { id: 'in_progress', name: 'In Progress', color: 'var(--primary-light)' },
+        { id: 'finished', name: 'Finished (Queue)', color: 'var(--green)' },
+        { id: 'published', name: 'Published', color: 'var(--green)' }
+      ];
+
+      // 3. Dibujar cada columna de estado
+      stateGroups.forEach(sg => {
+        const projsInState = projsInCat.filter(p => p._tempState === sg.id);
+        
+        // Si no hay proyectos en este estado, mostramos una columna vacía o la ocultamos (decidí ocultarla si está vacía para mantener limpio el tablero, a menos que prefieras ver las columnas vacías siempre)
+        if(projsInState.length > 0) {
+          finalHTML += `
+          <div class="state-column" style="flex: 1; min-width: 300px; background: var(--bg); border: 1px solid var(--line2); border-radius: 12px; padding: 16px;">
+            <div style="font-size: 14px; font-weight: 700; color: ${sg.color}; margin-bottom: 16px; text-transform: uppercase; letter-spacing: 0.5px;">${sg.name} (${projsInState.length})</div>
+            <div style="display: flex; flex-direction: column; gap: 16px;">
+              ${projsInState.map(buildCard).join('')}
+            </div>
+          </div>
+          `;
+        }
+      });
+
+      finalHTML += `</div></div>`; // Cerramos la grilla de columnas y el grupo de categoría
+    });
+
+    // Inyectamos todo el HTML generado en el grid
+    grid.innerHTML = finalHTML;
+    // Removemos las clases de "grilla grande" porque ahora usamos columnas flex
+    grid.className = ''; 
+
+    // Paused projects se quedan igual abajo
     if(pausedProjs.length > 0) {
       wrapper.style.display = 'block';
       document.getElementById('paused-count').textContent = pausedProjs.length;
@@ -2697,13 +2789,19 @@ function markAsPublished(pid) {
   // 1. Lo sacamos de la cola de publicación (desaparece de esta pantalla)
   DB.publish = DB.publish.filter(x => x.projectId !== pid);
   
-  // 2. Le ponemos una etiqueta interna para saber que ya fue publicado 100%
+  // 2. Le cambiamos el estado oficial a "publicado" y activamos su etiqueta
+  p.state = 'published';
   p.isPublished = true;
   
+  // 3. Guardamos los cambios en la base de datos
   save();
-  renderPublish(); // Recarga la pantalla
-  toast('Project marked as officially Published!', '🎉');
-}  
+  
+  // 4. Recargamos la pantalla actual
+  renderPublish(); 
+  
+  // Aviso de éxito
+  toast('Project marked as Published!', '🎉');
+}
   
 </script>
 </body>
