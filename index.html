@@ -2581,7 +2581,6 @@ function buildCalendarHTML() {
     const ds=`${y}-${String(m+1).padStart(2,'0')}-${String(d).padStart(2,'0')}`;
     const hasEv=scheduled[ds]?.length>0, isSel=calSelectedDay===ds;
     
-    // --- Lógica para mostrar las etiquetas de los proyectos en el cuadrito ---
     let projsHTML = '';
     if(hasEv) {
       projsHTML = scheduled[ds].slice(0, 3).map(p => {
@@ -2589,13 +2588,11 @@ function buildCalendarHTML() {
          return `<div class="cal-proj-label" style="background:${formatColor}33; color:${formatColor}; border: 1px solid ${formatColor}66;" title="${p.name}">${p.name}</div>`;
       }).join('');
       
-      // Si hay más de 3 proyectos ese día, ponemos un '+X' para no saturar la vista
       if(scheduled[ds].length > 3) {
         projsHTML += `<div class="cal-proj-label" style="background:var(--card2); color:var(--text); text-align:center;">+${scheduled[ds].length - 3} más</div>`;
       }
     }
 
-    // Dibujamos el día con el onclick para abrir el Modal
     dayHTML+=`<div class="cal-day ${ds===todayStr?'today':''} ${hasEv?'has-events':''} ${ds<todayStr&&ds!==todayStr?'past':''} ${isSel?'selected':''}" 
                    data-day="${d}" 
                    style="${hasEv ? 'cursor:pointer; transition: 0.2s;' : ''}"
@@ -2607,7 +2604,7 @@ function buildCalendarHTML() {
               </div>`;
   }
 
-  // --- Lógica de la Ventana Emergente (Modal) ---
+  // --- Lógica de la Ventana Emergente ---
   let det=''; 
   if(calSelectedDay && scheduled[calSelectedDay]){ 
     det = `
@@ -2621,11 +2618,27 @@ function buildCalendarHTML() {
         <div style="display:flex; flex-direction:column; gap:12px; max-height: 60vh; overflow-y:auto; padding-right:8px;">
           ${scheduled[calSelectedDay].map(p=>{
             const formatColor = DB.contentTypes?.find(c => c.id === p.contentType)?.color || 'var(--primary)';
+            
+            // INTELIGENCIA DE LINKS: Buscamos un link (priorizamos el que sea tipo 'final')
+            let finalUrl = '';
+            if (p.links && p.links.length > 0) {
+              const finalLink = p.links.find(l => l.type === 'final') || p.links[0];
+              finalUrl = finalLink.url;
+            }
+            
+            // Preparamos la acción del clic dependiendo de si encontró un link o no
+            const clickAction = finalUrl 
+              ? "window.open('" + finalUrl + "', '_blank'); calSelectedDay=null; renderPublish();" 
+              : "calSelectedDay=null; renderPublish(); openProj('" + p.id + "');";
+            
+            // Cambiamos el texto para que quede claro qué va a pasar
+            const actionText = finalUrl ? '▶ Click to open Final Render' : '⚠️ No link attached (Click to open project)';
+
             return `
-            <div style="background:var(--card); border-left:4px solid ${formatColor}; border-radius:10px; padding:16px; cursor:pointer; transition:all 0.2s; display:flex; align-items:center; justify-content:space-between; border-top:1px solid var(--line2); border-right:1px solid var(--line2); border-bottom:1px solid var(--line2);" onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 8px 16px rgba(0,0,0,0.2)'" onmouseout="this.style.transform='none'; this.style.boxShadow='none'" onclick="calSelectedDay=null; renderPublish(); openProj('${p.id}')">
+            <div style="background:var(--card); border-left:4px solid ${formatColor}; border-radius:10px; padding:16px; cursor:pointer; transition:all 0.2s; display:flex; align-items:center; justify-content:space-between; border-top:1px solid var(--line2); border-right:1px solid var(--line2); border-bottom:1px solid var(--line2);" onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 8px 16px rgba(0,0,0,0.2)'" onmouseout="this.style.transform='none'; this.style.boxShadow='none'" onclick="${clickAction}">
               <div>
                 <div style="font-size:16px; font-weight:800; color:var(--text); margin-bottom:4px;">${p.name}</div>
-                <div style="font-size:12px; color:var(--muted); font-weight:600;">▶ Click to open project</div>
+                <div style="font-size:12px; color:var(--muted); font-weight:600;">${actionText}</div>
               </div>
               ${p.thumbnail ? `<img src="${p.thumbnail}" style="width:60px; height:40px; border-radius:6px; object-fit:cover;">` : `<div style="font-size:24px;">🎬</div>`}
             </div>
