@@ -594,6 +594,30 @@ input,textarea,select{font-family:'Plus Jakarta Sans',sans-serif;outline:none;}
 }
 .cat-sub-item:hover { background: var(--card2); color: var(--text); }
 .cat-sub-item.active { background: var(--card2); color: var(--text); border-left: 2px solid var(--primary); }
+
+/* --- ESTILOS MEJORADOS PARA EL CALENDARIO --- */
+.cal-day { 
+  min-height: 80px !important; /* Más altos para que quepa el texto */
+  display: flex !important; 
+  flex-direction: column !important; 
+  align-items: flex-end !important; /* Número arriba a la derecha */
+  justify-content: flex-start !important; 
+  padding: 6px !important; 
+  gap: 4px;
+}
+.cal-day-num { font-weight: 800; margin-bottom: 2px; }
+.cal-proj-label { 
+  font-size: 9px; 
+  font-weight: 700; 
+  padding: 3px 6px; 
+  border-radius: 4px; 
+  white-space: nowrap; 
+  overflow: hidden; 
+  text-overflow: ellipsis; 
+  width: 100%; 
+  text-align: left;
+  align-self: flex-start;
+}  
   
 </style>
 </head>
@@ -2518,16 +2542,91 @@ function renderPublish() {
 }
 function buildCalendarHTML() {
   const y=calDate.getFullYear(), m=calDate.getMonth(), todayStr=today();
-  const scheduled={}; DB.publish.filter(x=>x.date).forEach(x=>{ scheduled[x.date]=(scheduled[x.date]||[]); const p=getP(x.projectId); if(p) scheduled[x.date].push(p); });
+  const scheduled={}; 
+  
+  DB.publish.filter(x=>x.date).forEach(x=>{ 
+    scheduled[x.date]=(scheduled[x.date]||[]); 
+    const p=getP(x.projectId); 
+    if(p) scheduled[x.date].push(p); 
+  });
+
   let dayHTML='';
-  for(let i=0;i<new Date(y,m,1).getDay();i++) dayHTML+=`<div class="cal-day empty"></div>`;
+  for(let i=0;i<new Date(y,m,1).getDay();i++) {
+    dayHTML+=`<div class="cal-day empty"></div>`;
+  }
+  
   for(let d=1;d<=new Date(y,m+1,0).getDate();d++){
     const ds=`${y}-${String(m+1).padStart(2,'0')}-${String(d).padStart(2,'0')}`;
     const hasEv=scheduled[ds]?.length>0, isSel=calSelectedDay===ds;
-    dayHTML+=`<div class="cal-day ${ds===todayStr?'today':''} ${hasEv?'has-events':''} ${ds<todayStr&&ds!==todayStr?'past':''} ${isSel?'selected':''}" data-day="${d}">${d}${hasEv?`<div class="cal-day-dots">${scheduled[ds].slice(0,3).map(()=>`<div class="cal-dot"></div>`).join('')}</div>`:''}</div>`;
+    
+    // --- Lógica para mostrar las etiquetas de los proyectos en el cuadrito ---
+    let projsHTML = '';
+    if(hasEv) {
+      projsHTML = scheduled[ds].slice(0, 3).map(p => {
+         const formatColor = DB.contentTypes?.find(c => c.id === p.contentType)?.color || 'var(--primary)';
+         return `<div class="cal-proj-label" style="background:${formatColor}33; color:${formatColor}; border: 1px solid ${formatColor}66;" title="${p.name}">${p.name}</div>`;
+      }).join('');
+      
+      // Si hay más de 3 proyectos ese día, ponemos un '+X' para no saturar la vista
+      if(scheduled[ds].length > 3) {
+        projsHTML += `<div class="cal-proj-label" style="background:var(--card2); color:var(--text); text-align:center;">+${scheduled[ds].length - 3} más</div>`;
+      }
+    }
+
+    // Dibujamos el día con el onclick para abrir el Modal
+    dayHTML+=`<div class="cal-day ${ds===todayStr?'today':''} ${hasEv?'has-events':''} ${ds<todayStr&&ds!==todayStr?'past':''} ${isSel?'selected':''}" 
+                   data-day="${d}" 
+                   style="${hasEv ? 'cursor:pointer; transition: 0.2s;' : ''}"
+                   onmouseover="${hasEv ? 'this.style.background=\'var(--card)\'' : ''}"
+                   onmouseout="${hasEv ? 'this.style.background=\'\'' : ''}"
+                   ${hasEv ? `onclick="calSelectedDay='${ds}'; renderPublish();"` : ''}>
+                <div class="cal-day-num">${d}</div>
+                ${projsHTML}
+              </div>`;
   }
-  let det=''; if(calSelectedDay && scheduled[calSelectedDay]){ det=`<div style="background:var(--card);border:1px solid var(--primary-light);border-radius:12px;padding:20px;margin-top:20px;"><div style="font-size:14px;font-weight:800;margin-bottom:12px;color:var(--text);">📅 Releases for ${calSelectedDay}</div>${scheduled[calSelectedDay].map(p=>`<div style="background:var(--bg);border-left:4px solid var(--accent);border-radius:8px;padding:12px 16px;margin-bottom:8px; cursor:pointer;" onclick="openProj('${p.id}')"><div style="font-size:14px;font-weight:700;color:var(--text)">${p.name}</div></div>`).join('')}</div>`; }
-  return `<div class="cal-wrap"><div class="cal-hd"><button class="cal-nav" onclick="calDate.setMonth(calDate.getMonth()-1); calSelectedDay=null; renderPublish()">◀</button><div class="cal-month">${['January','February','March','April','May','June','July','August','September','October','November','December'][m]} ${y}</div><button class="cal-nav" onclick="calDate.setMonth(calDate.getMonth()+1); calSelectedDay=null; renderPublish()">▶</button></div><div class="cal-body"><div class="cal-dnames">${['Su','Mo','Tu','We','Th','Fr','Sa'].map(d=>`<div class="cal-dname">${d}</div>`).join('')}</div><div class="cal-days">${dayHTML}</div></div></div>${det}`;
+
+  // --- Lógica de la Ventana Emergente (Modal) ---
+  let det=''; 
+  if(calSelectedDay && scheduled[calSelectedDay]){ 
+    det = `
+    <div class="cal-modal-overlay" onclick="calSelectedDay=null; renderPublish();" style="position:fixed; top:0; left:0; width:100vw; height:100vh; background:rgba(0,0,0,0.6); z-index:9999; display:flex; align-items:center; justify-content:center; backdrop-filter:blur(4px);">
+      <div class="cal-modal-content" onclick="event.stopPropagation()" style="background:var(--bg); border:1px solid var(--line2); border-radius:16px; padding:24px; width:450px; max-width:90%; box-shadow: 0 20px 40px rgba(0,0,0,0.4);">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px;">
+          <div style="font-size:20px; font-weight:800; color:var(--text);">📅 Releases for ${calSelectedDay}</div>
+          <button onclick="calSelectedDay=null; renderPublish();" style="background:var(--card2); border:none; color:var(--text); width:32px; height:32px; border-radius:50%; cursor:pointer; font-weight:bold; transition:0.2s;" onmouseover="this.style.background='var(--red)'; this.style.color='#fff';" onmouseout="this.style.background='var(--card2)'; this.style.color='var(--text)';">✕</button>
+        </div>
+        
+        <div style="display:flex; flex-direction:column; gap:12px; max-height: 60vh; overflow-y:auto; padding-right:8px;">
+          ${scheduled[calSelectedDay].map(p=>{
+            const formatColor = DB.contentTypes?.find(c => c.id === p.contentType)?.color || 'var(--primary)';
+            return `
+            <div style="background:var(--card); border-left:4px solid ${formatColor}; border-radius:10px; padding:16px; cursor:pointer; transition:all 0.2s; display:flex; align-items:center; justify-content:space-between; border-top:1px solid var(--line2); border-right:1px solid var(--line2); border-bottom:1px solid var(--line2);" onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 8px 16px rgba(0,0,0,0.2)'" onmouseout="this.style.transform='none'; this.style.boxShadow='none'" onclick="calSelectedDay=null; renderPublish(); openProj('${p.id}')">
+              <div>
+                <div style="font-size:16px; font-weight:800; color:var(--text); margin-bottom:4px;">${p.name}</div>
+                <div style="font-size:12px; color:var(--muted); font-weight:600;">▶ Click to open project</div>
+              </div>
+              ${p.thumbnail ? `<img src="${p.thumbnail}" style="width:60px; height:40px; border-radius:6px; object-fit:cover;">` : `<div style="font-size:24px;">🎬</div>`}
+            </div>
+            `;
+          }).join('')}
+        </div>
+      </div>
+    </div>
+    `; 
+  }
+
+  return `<div class="cal-wrap">
+            <div class="cal-hd">
+              <button class="cal-nav" onclick="calDate.setMonth(calDate.getMonth()-1); calSelectedDay=null; renderPublish()">◀</button>
+              <div class="cal-month">${['January','February','March','April','May','June','July','August','September','October','November','December'][m]} ${y}</div>
+              <button class="cal-nav" onclick="calDate.setMonth(calDate.getMonth()+1); calSelectedDay=null; renderPublish()">▶</button>
+            </div>
+            <div class="cal-body">
+              <div class="cal-dnames">${['Su','Mo','Tu','We','Th','Fr','Sa'].map(d=>`<div class="cal-dname">${d}</div>`).join('')}</div>
+              <div class="cal-days">${dayHTML}</div>
+            </div>
+          </div>
+          ${det}`;
 }
 
 /* ═══════════════════════════════════════
