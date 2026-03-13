@@ -583,6 +583,17 @@ input,textarea,select{font-family:'Plus Jakarta Sans',sans-serif;outline:none;}
   box-shadow: 0 4px 8px rgba(0,0,0,0.3);
   z-index: 10;
 }  
+
+/* --- SUB-MENÚ DE ESTADOS EN EL SIDEBAR --- */
+.cat-sub-menu { padding-left: 24px; padding-right: 12px; margin-top: 4px; margin-bottom: 8px; display: flex; flex-direction: column; gap: 4px; }
+.cat-sub-item { 
+  display: flex; justify-content: space-between; align-items: center;
+  padding: 6px 12px; border-radius: 6px; background: rgba(0,0,0,0.2); 
+  color: var(--muted); font-size: 11px; font-weight: 700; letter-spacing: 0.5px;
+  cursor: pointer; transition: 0.2s;
+}
+.cat-sub-item:hover { background: var(--card2); color: var(--text); }
+.cat-sub-item.active { background: var(--card2); color: var(--text); border-left: 2px solid var(--primary); }
   
 </style>
 </head>
@@ -1646,19 +1657,85 @@ function saveUserProfile() {
 ═══════════════════════════════════════ */
 function renderSidebar() {
   const tree = document.getElementById('sidebar-tree');
+  
+  // Contadores maestros
   const cnts = {};
-  DB.projects.forEach(p=>{ cnts[p.catId]=(cnts[p.catId]||0)+1; });
+  const stateCnts = {}; // Nuevo contador para los sub-estados
+
+  // Leemos en qué estado está el filtro superior para iluminar el botón correcto
+  const curState = document.getElementById('filter-state') ? document.getElementById('filter-state').value : 'all';
+
+  DB.projects.forEach(p => { 
+    cnts[p.catId] = (cnts[p.catId] || 0) + 1; 
+
+    // Calculamos el estado de cada proyecto igual que en renderProjects
+    const ver = getCurVer(p);
+    const steps = ver.steps || [];
+    const doneN = steps.filter(s=>s.status==='done').length;
+    const allDone = steps.length > 0 && doneN === steps.length;
+    const inProgress = doneN > 0 || steps.some(s=>s.status==='active');
+    
+    let state = 'not_started';
+    if (p.isPublished || p.state === 'published') state = 'published';
+    else if(allDone) state = 'finished';
+    else if(inProgress) state = 'in_progress';
+
+    // Sumamos al contador de sub-estados
+    if(!stateCnts[p.catId]) stateCnts[p.catId] = { not_started:0, in_progress:0, finished:0, published:0 };
+    stateCnts[p.catId][state]++;
+  });
 
   const badge = document.getElementById('pub-badge');
   badge.textContent = DB.publish.length;
-  badge.classList.toggle('show', DB.publish.length>0);
+  badge.classList.toggle('show', DB.publish.length > 0);
 
   tree.innerHTML = '';
-  DB.years.forEach(yr=>{
-    const cats = DB.categories.filter(c=>c.yearId===yr.id);
+  DB.years.forEach(yr => {
+    const cats = DB.categories.filter(c => c.yearId === yr.id);
     if(!cats.length) return;
     const blk = document.createElement('div');
     blk.className = 'yr-block open';
+    
+    let catsHTML = cats.map(c => {
+      const sc = stateCnts[c.id] || { not_started:0, in_progress:0, finished:0, published:0 };
+      const isCatActive = (filterCat === c.id);
+      
+      // Construimos el sub-menú SOLO si esta categoría está seleccionada
+      let subMenuHTML = '';
+      if (isCatActive) {
+        subMenuHTML = `
+          <div class="cat-sub-menu">
+            <div class="cat-sub-item ${curState==='not_started'?'active':''}" onclick="event.stopPropagation(); setFilter('${c.id}', 'not_started')">
+              <span>NOT STARTED</span> <span>${sc.not_started}</span>
+            </div>
+            <div class="cat-sub-item ${curState==='in_progress'?'active':''}" onclick="event.stopPropagation(); setFilter('${c.id}', 'in_progress')">
+              <span>IN PROGRESS</span> <span>${sc.in_progress}</span>
+            </div>
+            <div class="cat-sub-item ${curState==='finished'?'active':''}" onclick="event.stopPropagation(); setFilter('${c.id}', 'finished')">
+              <span>FINISHED (QUEUE)</span> <span>${sc.finished}</span>
+            </div>
+            <div class="cat-sub-item ${curState==='published'?'active':''}" onclick="event.stopPropagation(); setFilter('${c.id}', 'published')">
+              <span>PUBLISHED</span> <span>${sc.published}</span>
+            </div>
+          </div>
+        `;
+      }
+
+      return `
+      <div style="display:flex; flex-direction:column;">
+        <div class="cat-item ${isCatActive ? 'active' : ''}" style="border-left-color:${c.color}" onclick="setFilter('${c.id}', 'all')">
+          <span class="cat-dot" style="background:${c.color}"></span>
+          <span style="flex:1">${c.name}</span>
+          <span class="cat-count">${cnts[c.id]||0}</span>
+          ${isMaster ? `
+            <span class="sb-action" title="Edit Category" onclick="event.stopPropagation(); editCategory('${c.id}')">✏️</span>
+            <span class="sb-action" title="Delete Category" onclick="event.stopPropagation(); askDelete('${c.id}', 'category')">🗑️</span>
+          ` : ''}
+        </div>
+        ${subMenuHTML}
+      </div>`;
+    }).join('');
+
     blk.innerHTML = `
       <div class="yr-header" onclick="this.parentElement.classList.toggle('open')">
         <span class="yr-label">📁 ${yr.label}</span>
@@ -1669,16 +1746,7 @@ function renderSidebar() {
         <span class="yr-chev">▶</span>
       </div>
       <div class="yr-cats">
-        ${cats.map(c=>`
-          <div class="cat-item ${filterCat===c.id?'active':''}" style="border-left-color:${c.color}" onclick="setFilter('${c.id}')">
-            <span class="cat-dot" style="background:${c.color}"></span>
-            <span style="flex:1">${c.name}</span>
-            <span class="cat-count">${cnts[c.id]||0}</span>
-            ${isMaster ? `
-              <span class="sb-action" title="Edit Category" onclick="event.stopPropagation(); editCategory('${c.id}')">✏️</span>
-              <span class="sb-action" title="Delete Category" onclick="event.stopPropagation(); askDelete('${c.id}', 'category')">🗑️</span>
-            ` : ''}
-          </div>`).join('')}
+        ${catsHTML}
       </div>`;
     tree.appendChild(blk);
   });
@@ -1693,7 +1761,17 @@ function renderSidebar() {
   else if(screen==='projects') document.getElementById('nav-projects').classList.add('active');
 }
 
-function setFilter(catId) { filterCat = catId; curPid = null; goScreen('projects'); }
+// NUEVO setFilter: Ahora recibe la categoría y también el estado
+function setFilter(catId, stateId = 'all') { 
+  filterCat = catId; 
+  
+  // Magia: Forzamos el filtro de la barra superior para que haga el trabajo por nosotros
+  const stateDropdown = document.getElementById('filter-state');
+  if(stateDropdown) stateDropdown.value = stateId;
+
+  curPid = null; 
+  goScreen('projects'); 
+}
 
 function editSeason(id) {
   editingSeasonId = id;
