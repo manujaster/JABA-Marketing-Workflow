@@ -618,6 +618,28 @@ input,textarea,select{font-family:'Plus Jakarta Sans',sans-serif;outline:none;}
   text-align: left;
   align-self: flex-start;
 }  
+
+/* --- FIX PARA QUE EL CALENDARIO NO SE CORTE --- */
+.cal-body {
+  width: 100%;
+  box-sizing: border-box;
+  padding-right: 8px; /* Un pequeño margen para respirar */
+}
+
+.cal-days, .cal-dnames {
+  display: grid !important;
+  grid-template-columns: repeat(7, 1fr) !important; /* Fuerza 7 columnas exactas */
+  gap: 8px !important; /* Espacio uniforme entre días */
+  width: 100% !important;
+  box-sizing: border-box !important;
+}
+
+.cal-day {
+  width: auto !important; /* Deja que el grid decida el tamaño */
+  min-width: 0 !important; /* Evita que un texto largo rompa la caja */
+  box-sizing: border-box !important;
+  overflow: hidden; /* Mantiene todo dentro de su caja */
+}
   
 </style>
 </head>
