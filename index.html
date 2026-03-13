@@ -1817,8 +1817,7 @@ function renderProjects() {
     if(searchQ && !p.name.toLowerCase().includes(searchQ)) return;
     if(filterFormat !== 'all' && p.contentType !== filterFormat) return;
 
-    // --- NUEVA LÓGICA DE ESTADOS ---
-    // Determinamos el estado real del proyecto
+    // Detectamos el estado para filtros futuros del menú lateral
     const ver = getCurVer(p);
     const steps = ver.steps || [];
     const doneN = steps.filter(s=>s.status==='done').length;
@@ -1827,13 +1826,9 @@ function renderProjects() {
     
     let state = 'not_started';
     if (p.isPublished || p.state === 'published') state = 'published';
-    else if (allDone) state = 'finished';
-    else if (inProgress) state = 'in_progress';
+    else if(allDone) state = 'finished';
+    else if(inProgress) state = 'in_progress';
 
-    // Guardamos el estado calculado temporalmente en el objeto para poder filtrarlo después
-    p._tempState = state; 
-
-    // Filtramos por estado si es necesario
     if(filterState !== 'all' && filterState !== state) return;
 
     if(p.isPaused) pausedProjs.push(p);
@@ -1865,7 +1860,7 @@ function renderProjects() {
     const pips = steps.map(s=>`<div class="step-pip ${ver.waitingFeedback&&s.status==='done'?'waiting':s.status}" title="${s.name}"></div>`).join('');
     const formatColor = DB.contentTypes.find(c => c.id === p.contentType)?.color || 'var(--line)';
 
-    // Verificamos si es publicado para agregarle la clase CSS nueva y el badge
+    // Aplicamos el glow verde y el cartelito a los publicados
     const isPubClass = (p.isPublished || p.state === 'published') ? 'is-published' : '';
     const pubBadge = (p.isPublished || p.state === 'published') ? `<div class="published-badge">Published</div>` : '';
 
@@ -1900,67 +1895,13 @@ function renderProjects() {
     </div>`;
   };
 
-  // --- LÓGICA DE AGRUPACIÓN (Categoría > Estado) ---
   if(!activeProjs.length && !pausedProjs.length) {
     grid.innerHTML=`<div class="empty-state"><div class="empty-icon">📂</div><div class="empty-text">No projects found</div><div class="empty-sub">Adjust your search or filters.</div></div>`;
     wrapper.style.display = 'none';
   } else {
-    // 1. Agrupar activos por Categoría
-    let finalHTML = '';
-    const catsInUse = [...new Set(activeProjs.map(p => p.catId))]; 
-
-    catsInUse.forEach(catId => {
-      const cat = getCat(catId);
-      const catName = cat ? cat.name : 'Uncategorized';
-      const catColor = cat ? cat.color : 'var(--line)';
-      const projsInCat = activeProjs.filter(p => p.catId === catId);
-
-      // Si no hay proyectos activos en esta categoría, saltamos
-      if(projsInCat.length === 0) return;
-
-      finalHTML += `
-      <div class="category-group" style="margin-bottom: 40px;">
-        <div style="font-size: 20px; font-weight: 800; color: var(--text); margin-bottom: 16px; border-bottom: 2px solid ${catColor}; padding-bottom: 8px; display:inline-block;">
-          <span style="color:${catColor}; margin-right:8px;">●</span>${catName}
-        </div>
-        
-        <div style="display: flex; flex-wrap: wrap; gap: 24px; align-items: flex-start;">
-      `;
-
-      // 2. Definir las sub-secciones (Estados)
-      const stateGroups = [
-        { id: 'not_started', name: 'Not Started', color: 'var(--muted)' },
-        { id: 'in_progress', name: 'In Progress', color: 'var(--primary-light)' },
-        { id: 'finished', name: 'Finished (Queue)', color: 'var(--green)' },
-        { id: 'published', name: 'Published', color: 'var(--green)' }
-      ];
-
-      // 3. Dibujar cada columna de estado
-      stateGroups.forEach(sg => {
-        const projsInState = projsInCat.filter(p => p._tempState === sg.id);
-        
-        // Si no hay proyectos en este estado, mostramos una columna vacía o la ocultamos (decidí ocultarla si está vacía para mantener limpio el tablero, a menos que prefieras ver las columnas vacías siempre)
-        if(projsInState.length > 0) {
-          finalHTML += `
-          <div class="state-column" style="flex: 1; min-width: 300px; background: var(--bg); border: 1px solid var(--line2); border-radius: 12px; padding: 16px;">
-            <div style="font-size: 14px; font-weight: 700; color: ${sg.color}; margin-bottom: 16px; text-transform: uppercase; letter-spacing: 0.5px;">${sg.name} (${projsInState.length})</div>
-            <div style="display: flex; flex-direction: column; gap: 16px;">
-              ${projsInState.map(buildCard).join('')}
-            </div>
-          </div>
-          `;
-        }
-      });
-
-      finalHTML += `</div></div>`; // Cerramos la grilla de columnas y el grupo de categoría
-    });
-
-    // Inyectamos todo el HTML generado en el grid
-    grid.innerHTML = finalHTML;
-    // Removemos las clases de "grilla grande" porque ahora usamos columnas flex
-    grid.className = ''; 
-
-    // Paused projects se quedan igual abajo
+    grid.innerHTML = activeProjs.map(buildCard).join('');
+    // Forzamos a que vuelva a tener el estilo de grilla correcto
+    applyViewMode(); 
     if(pausedProjs.length > 0) {
       wrapper.style.display = 'block';
       document.getElementById('paused-count').textContent = pausedProjs.length;
