@@ -552,6 +552,10 @@ input,textarea,select{font-family:'Plus Jakarta Sans',sans-serif;outline:none;}
 .view-list .steps-bar-wrap { flex: 2; margin: 0; }
 .view-list .pc-bottom { margin: 0; padding: 0; border: none; flex: 1; justify-content: flex-end; }
 .view-list .pc-drag { position: static; opacity: 1; margin-right: 12px; }
+
+/* Estilos para las tarjetas de la cola de publicación */
+.pub-card { transition: all 0.2s ease; border: 1px solid var(--line2); }
+.pub-card:hover { border-color: var(--hover-color, var(--primary-light)) !important; transform: translateY(-2px); box-shadow: 0 8px 24px rgba(0,0,0,0.2); }  
   
 </style>
 </head>
@@ -2320,7 +2324,7 @@ function removeFromPublish(pid, e) { if(e) e.stopPropagation(); DB.publish=DB.pu
 function setPublishDate(pid,date) { const e=DB.publish.find(x=>x.projectId===pid); if(e){ e.date=date; save(); renderPublish(); toast('Date scheduled','📅'); } }
 
 function renderPublish() {
-  const el=document.getElementById('pub-content');
+  const el = document.getElementById('pub-content');
   if(!DB.publish.length) { 
     // Muestra el calendario aunque no haya nada en la lista.
     el.innerHTML=`
@@ -2331,36 +2335,63 @@ function renderPublish() {
     `; 
     return; 
   }
-  
-  const listHTML=DB.publish.map(entry=>{
-    const p=getP(entry.projectId); if(!p) return '';
-    const cat=getCat(p.catId);
-    
-    // Obtenemos el Final Link del formato Array
-    let finalLink = '';
-    if(p.links && Array.isArray(p.links)) {
-      const fl = p.links.find(l => l.type === 'final');
-      if(fl) finalLink = fl.url;
-    }
 
-    return `<div class="pub-card">
-      ${p.thumbnail ? `<img src="${p.thumbnail}" class="pub-thumb">` : `<div class="pub-thumb" style="display:flex;align-items:center;justify-content:center;color:var(--muted);font-size:32px;border:2px dashed var(--line2)">🎬</div>`}
-      <div class="pub-info-wrap">
-        <div class="pub-top"><div class="pub-info"><div class="pub-name">${p.name}</div><div class="pub-meta"><span class="pc-cat-dot" style="background:${cat?.color||'var(--primary)'}"></span> ${cat?.name||''} <span style="margin-left:8px;">${renderCTTag(p.contentType)}</span></div></div></div>
-        <div class="pub-date-row">
-          <span class="pub-date-lbl">📅 Release:</span>
-          <input type="date" class="pub-date-inp" value="${entry.date||''}" onchange="setPublishDate('${p.id}',this.value)">
+  let html = `<div class="sec-title" style="margin-bottom:14px">COMPLETED PROJECTS QUEUE</div>
+              <div style="display:flex; flex-direction:column; gap:16px; margin-bottom:32px;">`;
+
+  DB.publish.forEach(pub => {
+    const p = getP(pub.projectId);
+    if(!p) return;
+    const cat = getCat(p.catId);
+    
+    // Obtenemos el color dinámico del formato
+    const formatColor = DB.contentTypes.find(c => c.id === p.contentType)?.color || 'var(--primary)';
+
+    // Construimos la imagen clicable
+    const thumbHTML = p.thumbnail 
+      ? `<img src="${p.thumbnail}" style="width:180px; height:100px; object-fit:cover; border-radius:8px; cursor:pointer;" onclick="openProj('${p.id}')">` 
+      : `<div style="width:180px; height:100px; background:var(--card2); border-radius:8px; display:flex; align-items:center; justify-content:center; cursor:pointer; font-size:32px;" onclick="openProj('${p.id}')">🎬</div>`;
+
+    // Si tiene un link cargado en los assets, el botón lo abre. Si no, no hace nada.
+    const renderBtn = (p.links && p.links.length > 0) 
+      ? `<button onclick="window.open('${p.links[0].url}', '_blank')" style="background:var(--primary); border:none; color:white; padding:8px 16px; border-radius:6px; cursor:pointer; font-weight:600; transition:0.2s;" onmouseover="this.style.opacity='0.8'" onmouseout="this.style.opacity='1'">▶ View Final Render</button>` 
+      : `<button style="background:var(--card2); border:none; color:var(--muted); padding:8px 16px; border-radius:6px; font-weight:600; cursor:not-allowed;">▶ No Link Available</button>`;
+
+    html += `
+    <div class="pub-card" style="display:flex; justify-content:space-between; align-items:center; background:var(--bg); padding:16px; border-radius:12px; --hover-color:${formatColor};">
+      <div style="display:flex; gap:20px; align-items:center;">
+        ${thumbHTML}
+        <div style="display:flex; flex-direction:column; gap:8px;">
+          <div style="font-size:20px; font-weight:800; cursor:pointer; transition:0.2s;" onclick="openProj('${p.id}')" onmouseover="this.style.color='var(--hover-color)'" onmouseout="this.style.color='var(--text)'">${p.name}</div>
+          <div style="display:flex; align-items:center; gap:8px; font-size:12px; color:var(--muted);">
+            <span class="pc-cat-dot" style="background:${cat?.color||'var(--primary)'}"></span>${cat?.name||'Uncategorized'}
+            ${renderCTTag(p.contentType)}
+          </div>
+          <div style="display:flex; align-items:center; gap:8px; margin-top:4px;">
+            <span style="font-size:14px; color:var(--text);">📅 Release:</span>
+            <input type="date" value="${pub.date||''}" onchange="updatePubDate('${p.id}', this.value)" style="background:transparent; border:1px solid var(--line2); color:var(--text); padding:4px 8px; border-radius:6px; font-family:inherit; font-size:14px; cursor:pointer;">
+          </div>
         </div>
       </div>
-      <div class="pub-actions">
-        <button class="pub-remove" onclick="removeFromPublish('${p.id}', event)">✕ Remove</button>
-        ${finalLink ? `<a href="${finalLink}" target="_blank" class="pub-btn-view">▶ View Final Render</a>` : `<button class="pub-btn-view" style="background:var(--card2);color:var(--text);box-shadow:none" onclick="openProj('${p.id}')">Attach Render Link</button>`}
+      
+      <div style="display:flex; flex-direction:column; gap:12px; align-items:flex-end;">
+        <div style="display:flex; gap:8px;">
+          <button onclick="openProj('${p.id}')" style="background:transparent; border:1px solid var(--line2); color:var(--text); padding:6px 12px; border-radius:6px; cursor:pointer; font-weight:600; transition:0.2s;" onmouseover="this.style.background='var(--card2)'" onmouseout="this.style.background='transparent'">📂 Open</button>
+          <button onclick="removePublish('${p.id}')" style="background:transparent; border:1px solid var(--line2); color:var(--text); padding:6px 12px; border-radius:6px; cursor:pointer; font-weight:600; transition:0.2s;" onmouseover="this.style.background='var(--card2)'" onmouseout="this.style.background='transparent'">✕ Remove</button>
+        </div>
+        <div style="display:flex; gap:8px;">
+          ${renderBtn}
+          <button onclick="markAsPublished('${p.id}')" style="background:var(--green); border:none; color:white; padding:8px 16px; border-radius:6px; cursor:pointer; font-weight:600; transition:0.2s;" onmouseover="this.style.opacity='0.8'" onmouseout="this.style.opacity='1'">✅ Published</button>
+        </div>
       </div>
-    </div>`;
-  }).join('');
+    </div>
+    `;
+  });
 
-  el.innerHTML=`<div class="sec-title" style="margin-bottom:14px">COMPLETED PROJECTS QUEUE</div><div class="publish-list">${listHTML}</div><div class="sec-title"><span>📅 SCHEDULING CALENDAR</span></div>${buildCalendarHTML()}`;
-  document.querySelectorAll('.cal-day:not(.empty)').forEach(d=>{ d.addEventListener('click',()=>{ const ds=`${calDate.getFullYear()}-${String(calDate.getMonth()+1).padStart(2,'0')}-${String(d.dataset.day).padStart(2,'0')}`; calSelectedDay=calSelectedDay===ds?null:ds; renderPublish(); }); });
+  html += `</div>
+           <div class="sec-title" style="margin-bottom:14px">📅 PUBLISH CALENDAR</div>
+           ${buildCalendarHTML()}`;
+  el.innerHTML = html;
 }
 function buildCalendarHTML() {
   const y=calDate.getFullYear(), m=calDate.getMonth(), todayStr=today();
@@ -2657,6 +2688,21 @@ function applyViewMode() {
   document.querySelectorAll('.view-btn').forEach(b => b.classList.remove('active'));
   const activeBtn = document.getElementById('btn-view-' + currentView.replace('grid-', ''));
   if(activeBtn) activeBtn.classList.add('active');
+}  
+
+function markAsPublished(pid) {
+  const p = getP(pid);
+  if(!p) return;
+  
+  // 1. Lo sacamos de la cola de publicación (desaparece de esta pantalla)
+  DB.publish = DB.publish.filter(x => x.projectId !== pid);
+  
+  // 2. Le ponemos una etiqueta interna para saber que ya fue publicado 100%
+  p.isPublished = true;
+  
+  save();
+  renderPublish(); // Recarga la pantalla
+  toast('Project marked as officially Published!', '🎉');
 }  
   
 </script>
