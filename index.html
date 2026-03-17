@@ -2968,6 +2968,25 @@ function markAsPublished(pid) {
   // Aviso de éxito
   toast('Project marked as Published!', '🎉');
 }
+
+function updatePubDate(pid, newDate) {
+  // 1. Buscamos el proyecto dentro de la cola de publicación
+  const pubEntry = DB.publish.find(x => x.projectId === pid);
+  
+  if (pubEntry) {
+    // 2. Le asignamos la nueva fecha
+    pubEntry.date = newDate;
+    
+    // 3. Guardamos los cambios en la base de datos para que no se borren al actualizar
+    save(); 
+    
+    // 4. Recargamos la pantalla para que el calendario se pinte inmediatamente
+    renderPublish(); 
+    
+    // Opcional: mostramos un mensajito de éxito (si tienes la función toast)
+    if(typeof toast === 'function') toast('Release date updated!', '📅');
+  }
+}  
   
 </script>
 </body>
