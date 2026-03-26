@@ -1082,7 +1082,7 @@ const db = firebase.firestore();
 const CloudDB = {
   async save(data) {
     try {
-      await db.collection("workspace").doc("main_data").set({ db_state: data });
+      await db.collection("workspace").doc("main_data").set({ db_state: data }, { merge: true });
     } catch (error) {
       console.error("Error guardando en la nube:", error);
     }
@@ -1277,6 +1277,7 @@ function checkAuth() {
 }
 
 function syncUserAndRender() {
+  if (!isDbLoaded) return;
   let u = DB.users.find(x => x.id === currentUserObj.uid);
   let changed = false;
 
