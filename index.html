@@ -1157,7 +1157,11 @@ function initApp() {
       if (p.order === undefined) p.order = i;
     });
 
-    if(!doc.exists) CloudDB.save(DB);
+    // NUNCA guardar si el doc no existe — podría sobreescribir con datos vacíos
+    // Solo inicializar en Firebase si hay proyectos reales cargados desde localStorage
+    if(!doc.exists && localDB && localDB.projects && localDB.projects.length > 0) {
+      CloudDB.save(DB);
+    }
     
     if(currentUserObj) {
       syncUserAndRender();
@@ -1257,7 +1261,9 @@ firebase.auth().onAuthStateChanged((user) => {
   if (user) {
     currentUserObj = user;
     isMaster = MASTER_EMAILS.includes(user.email);
-    if(isDbLoaded) {
+    if (!isDbLoaded) {
+      initApp(); // Solo inicializar cuando hay usuario autenticado
+    } else {
       syncUserAndRender();
     }
   } else {
@@ -2898,8 +2904,7 @@ function render() {
   else if(screen==='public-profile') renderPublicProfile();
 }
 
-// Iniciar aplicación
-initApp();
+// initApp() se llama dentro de onAuthStateChanged, solo cuando hay un usuario autenticado
 
 function changeProjectCategory(pid, newCatId) {
   const p = getP(pid);
