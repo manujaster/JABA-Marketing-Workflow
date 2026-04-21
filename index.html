@@ -1371,6 +1371,26 @@ function signOut() {
 }
 
 // Escuchar inicio de sesión de Google
+signInWithGoogle = function() {
+  const provider = new firebase.auth.GoogleAuthProvider();
+  firebase.auth().signInWithPopup(provider).catch(err => {
+    console.error(err);
+    if(err && err.code === 'auth/unauthorized-domain') {
+      const host = window.location.hostname;
+      alert(
+        "Este dominio no esta autorizado en Firebase Authentication.\n\n" +
+        "Dominio actual: " + host + "\n\n" +
+        "Debes agregarlo en Firebase Console:\n" +
+        "Authentication > Settings > Authorized domains\n\n" +
+        "Agrega exactamente este dominio: " + host + "\n\n" +
+        "Luego recarga la app e intenta iniciar sesion otra vez."
+      );
+      return;
+    }
+    alert("Error al iniciar sesion: " + err.message);
+  });
+};
+
 firebase.auth().onAuthStateChanged((user) => {
   if (user) {
     currentUserObj = user;
