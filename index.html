@@ -191,6 +191,12 @@ input,textarea,select{font-family:'Plus Jakarta Sans',sans-serif;outline:none;}
 .s-waiting{color:var(--orange);}
 .s-publish{color:var(--accent-light);}
 .s-paused{color:var(--muted);}
+.pc-schedule{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:12px;padding:10px 12px;background:var(--bg);border:1px solid var(--line2);border-radius:10px;}
+.pc-schedule-label{font-size:11px;font-weight:700;letter-spacing:.4px;text-transform:uppercase;color:var(--muted);}
+.pc-schedule-date{font-size:12px;font-weight:700;color:var(--text);margin-top:3px;}
+.pc-schedule-empty{color:var(--soft);font-weight:600;}
+.pc-date-input{padding:6px 8px;background:var(--card2);border:1px solid var(--line2);border-radius:8px;color:var(--text);font-size:12px;cursor:pointer;}
+.pc-date-input:focus{border-color:var(--primary-light);}
 .pc-right-badges{display:flex;gap:6px;}
 .badge{font-size:10px;padding:3px 8px;border-radius:6px;font-weight:700;}
 .badge-publish{background:rgba(168,85,247,0.15);color:var(--accent-light);}
@@ -402,6 +408,32 @@ input,textarea,select{font-family:'Plus Jakarta Sans',sans-serif;outline:none;}
 .cal-day-dots{display:flex;gap:3px;margin-top:4px;}
 .cal-dot{width:6px;height:6px;border-radius:50%;background:var(--accent-light);}
 .cal-day.selected .cal-dot{background:#fff;}
+.cal-toolbar{display:flex;gap:12px;align-items:center;flex-wrap:wrap;margin-bottom:18px;padding:14px 16px;background:var(--card);border:1px solid var(--line);border-radius:14px;}
+.cal-toolbar .filter-select{min-width:180px;}
+.cal-toggle{display:flex;align-items:center;gap:8px;padding:10px 14px;background:var(--card);border:1px solid var(--line2);border-radius:10px;font-size:13px;font-weight:600;color:var(--text);}
+.cal-toggle input{accent-color:var(--orange);}
+.cal-summary{margin-left:auto;font-size:12px;color:var(--muted);font-weight:600;}
+.cal-legend{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:16px;}
+.cal-legend-item{display:flex;align-items:center;gap:8px;padding:8px 12px;border-radius:999px;background:var(--card);border:1px solid var(--line2);font-size:12px;font-weight:700;color:var(--text);}
+.cal-legend-swatch{width:10px;height:10px;border-radius:50%;}
+.cal-legend-swatch.queue{background:var(--accent-light);}
+.cal-legend-swatch.target{background:var(--orange);}
+.cal-legend-swatch.overdue{background:var(--red);}
+.deadline-strip{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px;margin-bottom:20px;}
+.deadline-card{background:linear-gradient(180deg, rgba(15,23,42,0.95), rgba(2,6,23,0.95));border:1px solid var(--line2);border-radius:14px;padding:16px;cursor:pointer;transition:all .2s;}
+.deadline-card:hover{transform:translateY(-2px);border-color:var(--primary-light);}
+.deadline-card.overdue{border-color:rgba(239,68,68,0.65);box-shadow:0 0 0 1px rgba(239,68,68,0.18);}
+.deadline-kicker{font-size:11px;font-weight:800;letter-spacing:.6px;text-transform:uppercase;margin-bottom:8px;}
+.deadline-kicker.queue{color:var(--accent-light);}
+.deadline-kicker.target{color:var(--orange);}
+.deadline-title{font-size:15px;font-weight:800;color:var(--text);margin-bottom:6px;}
+.deadline-meta{font-size:12px;color:var(--soft);margin-bottom:8px;}
+.deadline-date{font-size:13px;font-weight:700;color:var(--text);}
+.deadline-date.overdue{color:var(--red);}
+.mini-deadline.overdue{color:var(--red)!important;}
+.cal-day.has-queue{box-shadow:inset 0 0 0 1px rgba(192,132,252,0.35);}
+.cal-day.has-target{box-shadow:inset 0 0 0 1px rgba(245,158,11,0.35);}
+.cal-day.has-overdue{border-color:rgba(239,68,68,0.7);background:rgba(239,68,68,0.12);}
 
 /* ── IDEAS SCREEN ── */
 .ideas-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:16px;}
@@ -1152,6 +1184,7 @@ function initApp() {
       if (!p.assignees || !Array.isArray(p.assignees)) p.assignees = [];
       if (!p.versions) p.versions = [];
       if (!p.comments) p.comments = [];
+      if (p.publishDate === undefined) p.publishDate = null;
       if (p.isPaused === undefined) p.isPaused = false;
       if (p.priority === undefined) p.priority = false;
       if (p.order === undefined) p.order = i;
@@ -1211,6 +1244,84 @@ function getP(id) { return DB.projects.find(p=>p.id===id); }
 function getCat(id) { return DB.categories.find(c=>c.id===id); }
 function getYr(id) { return DB.years.find(y=>y.id===id); }
 function getCurVer(proj) { return (proj.versions || []).find(v=>v.v===proj.currentVersion) || { steps: [] }; }
+function formatPlannedDate(dateStr) {
+  if(!dateStr) return 'No date scheduled';
+  const d = new Date(dateStr + 'T00:00:00');
+  if(isNaN(d.getTime())) return dateStr;
+  return d.toLocaleDateString('en-US', { month:'short', day:'numeric', year:'numeric' });
+}
+function getPublishQueueEntry(pid) {
+  return (DB.publish || []).find(x => x.projectId === pid) || null;
+}
+function getProjectDeadlineMeta(p) {
+  const queue = getPublishQueueEntry(p.id);
+  if(queue && queue.date) return { date: queue.date, label:'Publish Queue', kind:'queue' };
+  if(p.publishDate) return { date: p.publishDate, label:'Target Publish', kind:'target' };
+  return null;
+}
+function getProjectCalendarEntries() {
+  const entries = [];
+  (DB.projects || []).forEach(p => {
+    if(p.publishDate) {
+      entries.push({ date:p.publishDate, projectId:p.id, type:'target', label:'Target Publish', project:p });
+    }
+  });
+  (DB.publish || []).forEach(x => {
+    const p = getP(x.projectId);
+    if(p && x.date) entries.push({ date:x.date, projectId:p.id, type:'queue', label:'Publish Queue', project:p });
+  });
+  return entries.sort((a,b) => {
+    if(a.date !== b.date) return a.date.localeCompare(b.date);
+    if(a.type === b.type) return a.project.name.localeCompare(b.project.name);
+    return a.type === 'queue' ? -1 : 1;
+  });
+}
+function isPastDeadline(dateStr) {
+  return !!dateStr && dateStr < today();
+}
+function sortProjectsByDeadline(projects) {
+  return projects.slice().sort((a,b) => {
+    const da = getProjectDeadlineMeta(a)?.date || '9999-12-31';
+    const db = getProjectDeadlineMeta(b)?.date || '9999-12-31';
+    if(da !== db) return da.localeCompare(db);
+    return a.name.localeCompare(b.name);
+  });
+}
+function getFilteredCalendarEntries() {
+  return getProjectCalendarEntries().filter(entry => {
+    if(calFilterCategory !== 'all' && entry.project.catId !== calFilterCategory) return false;
+    if(calFilterUser !== 'all' && !(entry.project.assignees || []).includes(calFilterUser)) return false;
+    if(calOverdueOnly && !isPastDeadline(entry.date)) return false;
+    return true;
+  });
+}
+function getUpcomingCalendarEntries(limit=6) {
+  return getFilteredCalendarEntries()
+    .filter(entry => !isPastDeadline(entry.date))
+    .slice(0, limit);
+}
+function setCalendarFilterUser(value) {
+  calFilterUser = value;
+  calSelectedDay = null;
+  renderPublish();
+}
+function setCalendarFilterCategory(value) {
+  calFilterCategory = value;
+  calSelectedDay = null;
+  renderPublish();
+}
+function toggleCalendarOverdue(checked) {
+  calOverdueOnly = checked;
+  calSelectedDay = null;
+  renderPublish();
+}
+function resetCalendarFilters() {
+  calFilterUser = 'all';
+  calFilterCategory = 'all';
+  calOverdueOnly = false;
+  calSelectedDay = null;
+  renderPublish();
+}
 
 // Renderizador Dinámico de Etiquetas de Formato
 function renderCTTag(ctId) {
@@ -1232,6 +1343,9 @@ let selCatColor = '#6366f1';
 let selContentType = null;
 let calDate = new Date();
 let calSelectedDay = null;
+let calFilterUser = 'all';
+let calFilterCategory = 'all';
+let calOverdueOnly = false;
 let currentIdeaImgB64 = null;
 let currentCommentImgB64 = null;
 let editingIdeaId = null;
@@ -1612,12 +1726,19 @@ function renderPublicProfile() {
     });
   } catch(e) { console.error(e); }
 
+  activeP = sortProjectsByDeadline(activeP);
+  doneP = sortProjectsByDeadline(doneP);
+
   const renderMini = (p) => {
     const cat = getCat(p.catId);
+    const deadline = getProjectDeadlineMeta(p);
     return `<div class="mini-proj" onclick="openProj('${p.id}')">
       <div>
         <div class="mp-name">${p.name}</div>
         <div class="mp-cat">${cat?.name||''} · ${p.currentVersion}</div>
+        ${deadline
+          ? `<div class="mini-deadline ${isPastDeadline(deadline.date) ? 'overdue' : ''}" style="font-size:11px; color:${isPastDeadline(deadline.date) ? 'var(--red)' : 'var(--orange)'}; font-weight:700; margin-top:4px;">${deadline.label}: ${formatPlannedDate(deadline.date)}</div>`
+          : `<div style="font-size:11px; color:var(--muted); margin-top:4px;">No deadline scheduled</div>`}
       </div>
       <span style="color:var(--muted)">→</span>
     </div>`;
@@ -1992,6 +2113,7 @@ function renderProjects() {
 
     const pips = steps.map(s=>`<div class="step-pip ${ver.waitingFeedback&&s.status==='done'?'waiting':s.status}" title="${s.name}"></div>`).join('');
     const formatColor = DB.contentTypes.find(c => c.id === p.contentType)?.color || 'var(--line)';
+    const plannedDateText = p.publishDate ? formatPlannedDate(p.publishDate) : 'No date scheduled';
 
     // Aplicamos el glow verde y el cartelito a los publicados
     const isPubClass = (p.isPublished || p.state === 'published') ? 'is-published' : '';
@@ -2015,6 +2137,13 @@ function renderProjects() {
           <span class="priority-star" onclick="togglePriority(event,'${p.id}')" title="Priority">${p.priority?'⭐':'☆'}</span>
           ${renderCTTag(p.contentType)}
           <span class="pc-version">${p.currentVersion}</span>
+        </div>
+        <div class="pc-schedule" onclick="event.stopPropagation()">
+          <div>
+            <div class="pc-schedule-label">Target Publish</div>
+            <div class="pc-schedule-date ${p.publishDate ? '' : 'pc-schedule-empty'}">${plannedDateText}</div>
+          </div>
+          <input class="pc-date-input" type="date" value="${p.publishDate||''}" onchange="updateProjectPublishDate('${p.id}', this.value)" onclick="event.stopPropagation()">
         </div>
         <div class="steps-bar-wrap"><div class="steps-bar">${pips}</div></div>
         <div class="pc-bottom">
@@ -2135,6 +2264,13 @@ function renderDetail() {
            ${DB.contentTypes.map(ct => `<option value="${ct.id}" ${ct.id === p.contentType ? 'selected' : ''}>${ct.label}</option>`).join('')}
          </select>
        </div>
+       <div style="flex:1;">
+         <div style="font-size:11px; font-weight:700; color:var(--muted); margin-bottom:6px; text-transform:uppercase; letter-spacing:0.5px;">Target Publish Date</div>
+         <div style="display:flex; gap:8px; align-items:center;">
+           <input class="field-select" type="date" style="padding:8px 12px; font-size:13px; width:100%;" value="${p.publishDate||''}" onchange="updateProjectPublishDate('${p.id}', this.value)">
+           ${p.publishDate ? `<button class="tb-btn" style="padding:8px 12px;" onclick="updateProjectPublishDate('${p.id}', '')">Clear</button>` : ''}
+         </div>
+       </div>
     </div>
 
     <div class="assignees-block">
@@ -2181,6 +2317,16 @@ function changeProjectFormat(pid, newFormatId) {
 }
 
 /* ── Inline Links Add / Remove ── */
+function updateProjectPublishDate(pid, newDate) {
+  const p = getP(pid);
+  if(!p) return;
+  p.publishDate = newDate || null;
+  save();
+  if(screen === 'detail' && curPid === pid) renderDetail();
+  renderProjects();
+  toast(newDate ? 'Target publish date saved' : 'Target publish date cleared','📅');
+}
+
 function addInlineLink(pid) { 
   const t = document.getElementById('new-link-type').value;
   const u = document.getElementById('new-link-url').value.trim(); 
@@ -2420,12 +2566,19 @@ function renderProfile() {
       if(allDone) doneP.push(p); else activeP.push(p);
     });
 
+    activeP = sortProjectsByDeadline(activeP);
+    doneP = sortProjectsByDeadline(doneP);
+
     const renderMini = (p) => {
       const cat = getCat(p.catId);
+      const deadline = getProjectDeadlineMeta(p);
       return `<div class="mini-proj" onclick="openProj('${p.id}')">
         <div>
           <div class="mp-name">${p.name}</div>
           <div class="mp-cat">${cat?.name||''} · ${p.currentVersion}</div>
+          ${deadline
+            ? `<div class="mini-deadline ${isPastDeadline(deadline.date) ? 'overdue' : ''}" style="font-size:11px; color:${isPastDeadline(deadline.date) ? 'var(--red)' : 'var(--orange)'}; font-weight:700; margin-top:4px;">${deadline.label}: ${formatPlannedDate(deadline.date)}</div>`
+            : `<div style="font-size:11px; color:var(--muted); margin-top:4px;">No deadline scheduled</div>`}
         </div>
         <span style="color:var(--muted)">→</span>
       </div>`;
@@ -2502,13 +2655,54 @@ function setPublishDate(pid,date) { const e=DB.publish.find(x=>x.projectId===pid
 
 function renderPublish() {
   const el = document.getElementById('pub-content');
+  const calendarEntries = getFilteredCalendarEntries();
+  const upcomingEntries = calOverdueOnly ? calendarEntries.slice(0,6) : getUpcomingCalendarEntries(6);
+  const userOptions = DB.users.map(u => `<option value="${u.id}" ${u.id===calFilterUser?'selected':''}>${u.name}</option>`).join('');
+  const catOptions = DB.categories.map(c => `<option value="${c.id}" ${c.id===calFilterCategory?'selected':''}>${c.name}</option>`).join('');
+  const toolbarHTML = `
+    <div class="cal-toolbar">
+      <select class="filter-select" onchange="setCalendarFilterUser(this.value)">
+        <option value="all">All Team Members</option>
+        ${userOptions}
+      </select>
+      <select class="filter-select" onchange="setCalendarFilterCategory(this.value)">
+        <option value="all">All Categories</option>
+        ${catOptions}
+      </select>
+      <label class="cal-toggle">
+        <input type="checkbox" ${calOverdueOnly ? 'checked' : ''} onchange="toggleCalendarOverdue(this.checked)">
+        Overdue only
+      </label>
+      <button class="tb-btn" onclick="resetCalendarFilters()">Reset</button>
+      <div class="cal-summary">${calendarEntries.length} visible items</div>
+    </div>
+    <div class="cal-legend">
+      <div class="cal-legend-item"><span class="cal-legend-swatch queue"></span>Publish Queue</div>
+      <div class="cal-legend-item"><span class="cal-legend-swatch target"></span>Target Deadline</div>
+      <div class="cal-legend-item"><span class="cal-legend-swatch overdue"></span>Overdue</div>
+    </div>`;
+  const upcomingHTML = upcomingEntries.length
+    ? `<div class="deadline-strip">${upcomingEntries.map(entry => {
+        const cat = getCat(entry.project.catId);
+        return `<div class="deadline-card ${isPastDeadline(entry.date) ? 'overdue' : ''}" onclick="openProj('${entry.project.id}')">
+          <div class="deadline-kicker ${entry.type}">${entry.label}</div>
+          <div class="deadline-title">${entry.project.name}</div>
+          <div class="deadline-meta">${cat?.name||'Uncategorized'} · ${DB.contentTypes.find(c => c.id === entry.project.contentType)?.label || 'Format'}</div>
+          <div class="deadline-date ${isPastDeadline(entry.date) ? 'overdue' : ''}">${formatPlannedDate(entry.date)}</div>
+        </div>`;
+      }).join('')}</div>`
+    : `<div style="text-align:center; padding:24px 20px; color:var(--muted); font-size:13px; background:var(--card); border:1px solid var(--line); border-radius:14px; margin-bottom:20px;">No deadlines match the current filters.</div>`;
+
   if(!DB.publish.length) { 
-    // Muestra el calendario aunque no haya nada en la lista.
     el.innerHTML=`
       <div class="sec-title" style="margin-bottom:14px">COMPLETED PROJECTS QUEUE</div>
       <div style="text-align:center; padding:60px 20px; color:var(--muted); font-size:14px; background:var(--card); border-radius:12px; margin-bottom:32px;">No content ready to publish yet.</div>
-      <div class="sec-title" style="margin-bottom:14px">📅 PUBLISH CALENDAR</div>
-      ${buildCalendarHTML()}
+      <div class="sec-title" style="margin-bottom:14px">DEADLINE SPOTLIGHT</div>
+      ${upcomingHTML}
+      <div class="sec-title" style="margin-bottom:14px">GENERAL WORKSPACE CALENDAR</div>
+      <div style="margin-bottom:14px; color:var(--muted); font-size:13px;">Shows publish queue dates and target deadlines for all projects.</div>
+      ${toolbarHTML}
+      ${buildCalendarHTML(calendarEntries)}
     `; 
     return; 
   }
@@ -2554,7 +2748,7 @@ function renderPublish() {
       <div style="display:flex; flex-direction:column; gap:12px; align-items:flex-end;">
         <div style="display:flex; gap:8px;">
           <button onclick="openProj('${p.id}')" style="background:transparent; border:1px solid var(--line2); color:var(--text); padding:6px 12px; border-radius:6px; cursor:pointer; font-weight:600; transition:0.2s;" onmouseover="this.style.background='var(--card2)'" onmouseout="this.style.background='transparent'">📂 Open</button>
-          <button onclick="removePublish('${p.id}')" style="background:transparent; border:1px solid var(--line2); color:var(--text); padding:6px 12px; border-radius:6px; cursor:pointer; font-weight:600; transition:0.2s;" onmouseover="this.style.background='var(--card2)'" onmouseout="this.style.background='transparent'">✕ Remove</button>
+          <button onclick="removeFromPublish('${p.id}')" style="background:transparent; border:1px solid var(--line2); color:var(--text); padding:6px 12px; border-radius:6px; cursor:pointer; font-weight:600; transition:0.2s;" onmouseover="this.style.background='var(--card2)'" onmouseout="this.style.background='transparent'">✕ Remove</button>
         </div>
         <div style="display:flex; gap:8px;">
           ${renderBtn}
@@ -2566,18 +2760,21 @@ function renderPublish() {
   });
 
   html += `</div>
-           <div class="sec-title" style="margin-bottom:14px">📅 PUBLISH CALENDAR</div>
-           ${buildCalendarHTML()}`;
+           <div class="sec-title" style="margin-bottom:14px">DEADLINE SPOTLIGHT</div>
+           ${upcomingHTML}
+           <div class="sec-title" style="margin-bottom:14px">GENERAL WORKSPACE CALENDAR</div>
+           <div style="margin-bottom:14px; color:var(--muted); font-size:13px;">Shows publish queue dates and target deadlines for all projects.</div>
+           ${toolbarHTML}
+           ${buildCalendarHTML(calendarEntries)}`;
   el.innerHTML = html;
 }
-function buildCalendarHTML() {
+function buildCalendarHTML(entries = getFilteredCalendarEntries()) {
   const y=calDate.getFullYear(), m=calDate.getMonth(), todayStr=today();
   const scheduled={}; 
   
-  DB.publish.filter(x=>x.date).forEach(x=>{ 
-    scheduled[x.date]=(scheduled[x.date]||[]); 
-    const p=getP(x.projectId); 
-    if(p) scheduled[x.date].push(p); 
+  entries.forEach(entry=>{ 
+    scheduled[entry.date]=(scheduled[entry.date]||[]); 
+    scheduled[entry.date].push(entry); 
   });
 
   let dayHTML='';
@@ -2587,21 +2784,26 @@ function buildCalendarHTML() {
   
   for(let d=1;d<=new Date(y,m+1,0).getDate();d++){
     const ds=`${y}-${String(m+1).padStart(2,'0')}-${String(d).padStart(2,'0')}`;
-    const hasEv=scheduled[ds]?.length>0, isSel=calSelectedDay===ds;
+    const dayEntries = scheduled[ds] || [];
+    const hasEv=dayEntries.length>0, isSel=calSelectedDay===ds;
+    const hasQueue = dayEntries.some(entry => entry.type === 'queue');
+    const hasTarget = dayEntries.some(entry => entry.type === 'target');
+    const hasOverdue = dayEntries.some(entry => isPastDeadline(entry.date));
     
     let projsHTML = '';
     if(hasEv) {
-      projsHTML = scheduled[ds].slice(0, 3).map(p => {
-         const formatColor = DB.contentTypes?.find(c => c.id === p.contentType)?.color || 'var(--primary)';
-         return `<div class="cal-proj-label" style="background:${formatColor}33; color:${formatColor}; border: 1px solid ${formatColor}66;" title="${p.name}">${p.name}</div>`;
+      projsHTML = scheduled[ds].slice(0, 3).map(entry => {
+         const formatColor = DB.contentTypes?.find(c => c.id === entry.project.contentType)?.color || 'var(--primary)';
+         const shortLabel = entry.type === 'queue' ? 'Queue' : 'Target';
+         return `<div class="cal-proj-label" style="background:${formatColor}33; color:${formatColor}; border: 1px solid ${formatColor}66;" title="${entry.project.name} • ${entry.label}">${entry.project.name} · ${shortLabel}</div>`;
       }).join('');
       
-      if(scheduled[ds].length > 3) {
-        projsHTML += `<div class="cal-proj-label" style="background:var(--card2); color:var(--text); text-align:center;">+${scheduled[ds].length - 3} más</div>`;
+      if(dayEntries.length > 3) {
+        projsHTML += `<div class="cal-proj-label" style="background:var(--card2); color:var(--text); text-align:center;">+${dayEntries.length - 3} más</div>`;
       }
     }
 
-    dayHTML+=`<div class="cal-day ${ds===todayStr?'today':''} ${hasEv?'has-events':''} ${ds<todayStr&&ds!==todayStr?'past':''} ${isSel?'selected':''}" 
+    dayHTML+=`<div class="cal-day ${ds===todayStr?'today':''} ${hasEv?'has-events':''} ${ds<todayStr&&ds!==todayStr?'past':''} ${isSel?'selected':''} ${hasQueue?'has-queue':''} ${hasTarget?'has-target':''} ${hasOverdue?'has-overdue':''}" 
                    data-day="${d}" 
                    style="${hasEv ? 'cursor:pointer; transition: 0.2s;' : ''}"
                    onmouseover="${hasEv ? 'this.style.background=\'var(--card)\'' : ''}"
@@ -2619,12 +2821,13 @@ function buildCalendarHTML() {
     <div class="cal-modal-overlay" onclick="calSelectedDay=null; renderPublish();" style="position:fixed; top:0; left:0; width:100vw; height:100vh; background:rgba(0,0,0,0.6); z-index:9999; display:flex; align-items:center; justify-content:center; backdrop-filter:blur(4px);">
       <div class="cal-modal-content" onclick="event.stopPropagation()" style="background:var(--bg); border:1px solid var(--line2); border-radius:16px; padding:24px; width:450px; max-width:90%; box-shadow: 0 20px 40px rgba(0,0,0,0.4);">
         <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px;">
-          <div style="font-size:20px; font-weight:800; color:var(--text);">📅 Releases for ${calSelectedDay}</div>
+          <div style="font-size:20px; font-weight:800; color:var(--text);">📅 Schedule for ${formatPlannedDate(calSelectedDay)}</div>
           <button onclick="calSelectedDay=null; renderPublish();" style="background:var(--card2); border:none; color:var(--text); width:32px; height:32px; border-radius:50%; cursor:pointer; font-weight:bold; transition:0.2s;" onmouseover="this.style.background='var(--red)'; this.style.color='#fff';" onmouseout="this.style.background='var(--card2)'; this.style.color='var(--text)';">✕</button>
         </div>
         
         <div style="display:flex; flex-direction:column; gap:12px; max-height: 60vh; overflow-y:auto; padding-right:8px;">
-          ${scheduled[calSelectedDay].map(p=>{
+          ${scheduled[calSelectedDay].map(entry=>{
+            const p = entry.project;
             const formatColor = DB.contentTypes?.find(c => c.id === p.contentType)?.color || 'var(--primary)';
             
             // INTELIGENCIA DE LINKS: Buscamos un link (priorizamos el que sea tipo 'final')
@@ -2641,11 +2844,13 @@ function buildCalendarHTML() {
             
             // Cambiamos el texto para que quede claro qué va a pasar
             const actionText = finalUrl ? '▶ Click to open Final Render' : '⚠️ No link attached (Click to open project)';
+            const eventTag = entry.type === 'queue' ? 'Publish Queue' : 'Target Deadline';
 
             return `
             <div style="background:var(--card); border-left:4px solid ${formatColor}; border-radius:10px; padding:16px; cursor:pointer; transition:all 0.2s; display:flex; align-items:center; justify-content:space-between; border-top:1px solid var(--line2); border-right:1px solid var(--line2); border-bottom:1px solid var(--line2);" onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 8px 16px rgba(0,0,0,0.2)'" onmouseout="this.style.transform='none'; this.style.boxShadow='none'" onclick="${clickAction}">
               <div>
                 <div style="font-size:16px; font-weight:800; color:var(--text); margin-bottom:4px;">${p.name}</div>
+                <div style="font-size:11px; color:${entry.type === 'queue' ? 'var(--accent-light)' : 'var(--orange)'}; font-weight:800; text-transform:uppercase; letter-spacing:0.5px; margin-bottom:4px;">${eventTag}</div>
                 <div style="font-size:12px; color:var(--muted); font-weight:600;">${actionText}</div>
               </div>
               ${p.thumbnail ? `<img src="${p.thumbnail}" style="width:60px; height:40px; border-radius:6px; object-fit:cover;">` : `<div style="font-size:24px;">🎬</div>`}
