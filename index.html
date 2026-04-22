@@ -4090,6 +4090,8 @@ function renderActionNotesBody() {
   ensureTodosReady();
   // Show ALL projects (user can pick any)
   const assignedProjs = (DB.projects || []).filter(p => !p.isPaused);
+  const anProjSearch = (document.getElementById('an-proj-search')?.value || '').toLowerCase();
+  const filteredProjs = anProjSearch ? assignedProjs.filter(p => p.name.toLowerCase().includes(anProjSearch)) : assignedProjs;
   const ideas = DB.ideas || [];
 
   // Member selector (master only)
@@ -4105,8 +4107,9 @@ function renderActionNotesBody() {
 
   // Project cards
   const projCardsHTML = assignedProjs.length
-    ? `<div class="an-proj-grid">
-        ${assignedProjs.map(p => {
+    ? `<div style="margin-bottom:10px;"><input id="an-proj-search" class="task-add-input" style="width:100%;background:var(--bg);border:1px solid var(--line2);border-radius:8px;padding:8px 12px;font-size:13px;" placeholder="Search projects..." oninput="document.getElementById('action-notes-body').innerHTML=renderActionNotesBody()" value="${anProjSearch}"></div>
+      <div class="an-proj-grid">
+        ${filteredProjs.map(p => {
           const cat = getCat(p.catId);
           const ver = getCurVer(p);
           const activeStep = (ver.steps||[]).find(s => s.status === 'active' || s.status === 'waiting');
@@ -4232,14 +4235,13 @@ async function buildAndDownloadDocx(user, todayTasks, weekTasks, projects, ideas
     });
   }
 
-  const { Document, Packer, Paragraph, TextRun, Table, TableRow, TableCell,
-          AlignmentType, HeadingLevel, BorderStyle, WidthType, ShadingType,
-          LevelFormat, VerticalAlign } = window.docx;
+  const { Document, Packer, Paragraph, TextRun,
+          AlignmentType, BorderStyle, LevelFormat } = window.docx;
 
   const dateStr = new Date().toLocaleDateString('en-US', { weekday:'long', year:'numeric', month:'long', day:'numeric' });
-  const priEmoji = { high:'🔴', medium:'🟡', low:'⚪' };
-  const cellBorder = { style: BorderStyle.SINGLE, size: 1, color: 'E2E8F0' };
-  const borders = { top: cellBorder, bottom: cellBorder, left: cellBorder, right: cellBorder };
+  const priLabel = { high:'[HIGH]', medium:'[MED]', low:'[LOW]' };
+  // Strip non-BMP chars that break docx TextRun
+  const safe = (s) => String(s||'').replace(/[\u{10000}-\u{10FFFF}]/gu, '').replace(/[\uD800-\uDFFF]/g, '').trim();
 
   // Helper: section heading paragraph
   const sectionHead = (text) => new Paragraph({
@@ -4270,20 +4272,20 @@ async function buildAndDownloadDocx(user, todayTasks, weekTasks, projects, ideas
   }));
   children.push(new Paragraph({
     children: [
-      new TextRun({ text: `${user.name}  ·  `, size: 24, font: 'Arial', color: '64748B' }),
-      new TextRun({ text: user.role || 'Team Member', size: 24, font: 'Arial', color: '64748B', italics: true }),
-      new TextRun({ text: `  ·  ${dateStr}`, size: 24, font: 'Arial', color: '64748B' })
+      new TextRun({ text: safe(`${user.name}  ·  `), size: 24, font: 'Arial', color: '64748B' }),
+      new TextRun({ text: safe(user.role || 'Team Member'), size: 24, font: 'Arial', color: '64748B', italics: true }),
+      new TextRun({ text: safe(`  ·  ${dateStr}`), size: 24, font: 'Arial', color: '64748B' })
     ],
     spacing: { before: 0, after: 400 }
   }));
 
   // ── TODAY TASKS ──
   if (todayTasks.length) {
-    children.push(sectionHead('Today\'s Tasks'));
+    children.push(sectionHead('Today Tasks'));
     const activeTasks = todayTasks.filter(t => t.status !== 'on-hold');
     const holdTasks = todayTasks.filter(t => t.status === 'on-hold');
     activeTasks.forEach(t => {
-      children.push(bulletItem(`${priEmoji[t.priority] || '🟡'}  ${t.text}`));
+      children.push(bulletItem(safe(`${priLabel[t.priority] || '[MED]'}  ${t.text}`)));
     });
     if (holdTasks.length) {
       children.push(spacer());
@@ -4300,11 +4302,11 @@ async function buildAndDownloadDocx(user, todayTasks, weekTasks, projects, ideas
     weekWithTasks.forEach(day => {
       const dayTasks = weekTasks.filter(t => t.day === day);
       children.push(new Paragraph({
-        children: [new TextRun({ text: day, bold: true, size: 22, font: 'Arial', color: '334155' })],
+        children: [new TextRun({ text: safe(day), bold: true, size: 22, font: 'Arial', color: '334155' })],
         spacing: { before: 160, after: 80 }
       }));
       dayTasks.forEach(t => {
-        children.push(bulletItem(`${priEmoji[t.priority] || '🟡'}  ${t.text}${t.status === 'on-hold' ? '  [ON HOLD]' : ''}`));
+        children.push(bulletItem(safe(`${priLabel[t.priority] || '[MED]'}  ${t.text}${t.status === 'on-hold' ? '  [ON HOLD]' : ''}`)));
       });
     });
     children.push(spacer());
@@ -4324,7 +4326,7 @@ async function buildAndDownloadDocx(user, todayTasks, weekTasks, projects, ideas
 
       // Project name
       children.push(new Paragraph({
-        children: [new TextRun({ text: p.name, bold: true, size: 26, font: 'Arial', color: '1E293B' })],
+        children: [new TextRun({ text: safe(p.name), bold: true, size: 26, font: 'Arial', color: '1E293B' })],
         spacing: { before: 240, after: 80 }
       }));
 
@@ -4335,13 +4337,13 @@ async function buildAndDownloadDocx(user, todayTasks, weekTasks, projects, ideas
         p.currentVersion,
         steps.length ? `${doneCount}/${steps.length} steps done` : ''
       ].filter(Boolean).join('  ·  ');
-      children.push(bodyText(metaParts, { color: '64748B', size: 20 }));
+      children.push(bodyText(safe(metaParts), { color: '64748B', size: 20 }));
 
       // Deadline
       if (deadline) {
         const overdue = isPastDeadline(deadline.date);
         children.push(bodyText(
-          `${deadline.label}: ${formatPlannedDate(deadline.date)}${overdue ? '  ⚠ OVERDUE' : ''}`,
+          safe(`${deadline.label}: ${formatPlannedDate(deadline.date)}${overdue ? '  OVERDUE' : ''}`),
           { bold: true, color: overdue ? 'EF4444' : 'F59E0B', size: 20 }
         ));
       }
@@ -4349,7 +4351,7 @@ async function buildAndDownloadDocx(user, todayTasks, weekTasks, projects, ideas
       // Project description (from step notes)
       const stepNotes = (ver.steps || []).filter(s => s.note).map(s => `${s.name}: ${s.note}`).join(' · ');
       if (stepNotes) {
-        children.push(bodyText(stepNotes, { italics: true, color: '64748B', size: 20 }));
+        children.push(bodyText(safe(stepNotes), { italics: true, color: '64748B', size: 20 }));
       }
 
       // Active steps
@@ -4360,7 +4362,7 @@ async function buildAndDownloadDocx(user, todayTasks, weekTasks, projects, ideas
           spacing: { before: 120, after: 40 }
         }));
         activeSteps.forEach(s => {
-          children.push(bulletItem(`${s.name}${s.note ? ': ' + s.note : ''}`));
+          children.push(bulletItem(safe(`${s.name}${s.note ? ': ' + s.note : ''}`)));
         });
       }
 
@@ -4371,7 +4373,7 @@ async function buildAndDownloadDocx(user, todayTasks, weekTasks, projects, ideas
           children: [new TextRun({ text: 'Links:', size: 20, font: 'Arial', bold: true, color: '64748B' })],
           spacing: { before: 120, after: 40 }
         }));
-        links.forEach(l => children.push(bulletItem(`${l.type.toUpperCase()}: ${l.url}`)));
+        links.forEach(l => children.push(bulletItem(safe(`${(l.type||'').toUpperCase()}: ${l.url}`))));
       }
     });
     children.push(spacer());
@@ -4383,11 +4385,11 @@ async function buildAndDownloadDocx(user, todayTasks, weekTasks, projects, ideas
     ideas.forEach(idea => {
       const narrative = idea.body || '';
       children.push(new Paragraph({
-        children: [new TextRun({ text: `💡 ${idea.title}`, bold: true, size: 24, font: 'Arial', color: '1E293B' })],
+        children: [new TextRun({ text: safe(idea.title), bold: true, size: 24, font: 'Arial', color: '1E293B' })],
         spacing: { before: 200, after: 80 }
       }));
-      if (narrative) children.push(bodyText(narrative.slice(0, 400) + (narrative.length > 400 ? '...' : ''), { italics: true, color: '334155' }));
-      if (idea.link) children.push(bodyText(`Reference: ${idea.link}`, { color: '6366F1', size: 20 }));
+      if (narrative) children.push(bodyText(safe(narrative).slice(0, 400), { italics: true, color: '334155' }));
+      if (idea.link) children.push(bodyText(safe(`Reference: ${idea.link}`), { color: '6366F1', size: 20 }));
     });
   }
 
