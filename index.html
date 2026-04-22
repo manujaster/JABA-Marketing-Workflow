@@ -353,6 +353,12 @@ input,textarea,select{font-family:'Plus Jakarta Sans',sans-serif;outline:none;}
 .mini-proj:hover{border-color:var(--primary-light);}
 .mp-name{font-size:13px;font-weight:600;color:var(--text);}
 .mp-cat{font-size:11px;color:var(--muted);}
+.pagination{display:flex;justify-content:center;align-items:center;gap:8px;flex-wrap:wrap;margin-top:20px;}
+.page-btn{min-width:38px;height:38px;padding:0 12px;border-radius:10px;border:1px solid var(--line2);background:var(--card);color:var(--text);font-size:13px;font-weight:700;transition:all .2s;}
+.page-btn:hover{background:var(--card2);border-color:var(--primary-light);}
+.page-btn.active{background:var(--primary);border-color:transparent;color:#fff;}
+.page-btn:disabled{opacity:.45;cursor:not-allowed;}
+.page-info{font-size:12px;color:var(--muted);font-weight:600;margin:0 6px;}
 .todo-input-wrap{display:flex;gap:8px;margin-bottom:16px;}
 .todo-input{flex:1;background:var(--bg);border:1px solid var(--line2);padding:8px 12px;border-radius:8px;color:var(--text);font-size:13px;}
 .todo-add-btn{background:var(--primary);color:#fff;border:none;padding:8px 12px;border-radius:8px;font-weight:600;cursor:pointer;}
@@ -454,6 +460,27 @@ input,textarea,select{font-family:'Plus Jakarta Sans',sans-serif;outline:none;}
 .idea-add-card:hover{border-color:var(--primary-light);color:var(--primary-light);background:var(--primary-bg);}
 .idea-add-icon{font-size:32px;}
 .idea-add-text{font-size:14px;font-weight:700;}
+.idea-card.compact{padding:18px;}
+.idea-card.compact .idea-title{margin-bottom:8px;}
+.idea-meta-row{display:flex;align-items:center;justify-content:space-between;gap:10px;font-size:11px;color:var(--muted);margin-top:auto;padding-top:10px;border-top:1px dashed var(--line2);}
+.idea-open-hint{font-size:11px;color:var(--primary-light);font-weight:700;}
+.idea-doc-shell{display:grid;grid-template-columns:minmax(0,1fr) 320px;gap:24px;}
+.idea-doc-main,.idea-doc-side{background:var(--card);border:1px solid var(--line);border-radius:18px;}
+.idea-doc-main{padding:28px;}
+.idea-doc-side{padding:22px;align-self:start;position:sticky;top:104px;}
+.idea-doc-title-input{width:100%;background:transparent;border:none;border-bottom:1px solid var(--line2);padding:0 0 16px;font-size:32px;font-weight:800;color:var(--text);margin-bottom:20px;}
+.idea-doc-title-input:focus{outline:none;border-color:var(--primary-light);}
+.idea-doc-editor{width:100%;min-height:440px;background:var(--bg);border:1px solid var(--line2);border-radius:16px;padding:22px;font-size:15px;line-height:1.7;color:var(--text);resize:vertical;}
+.idea-doc-editor:focus{outline:none;border-color:var(--primary-light);box-shadow:0 0 0 1px var(--primary-light);}
+.idea-doc-preview{width:100%;border-radius:14px;border:1px solid var(--line2);margin-top:14px;background:var(--bg);}
+.idea-doc-actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:22px;}
+.idea-doc-meta{font-size:12px;color:var(--muted);margin-bottom:16px;}
+.idea-doc-empty{font-size:13px;color:var(--muted);padding:18px;border:1px dashed var(--line2);border-radius:12px;background:var(--bg);}
+@media (max-width: 960px){
+  .idea-doc-shell{grid-template-columns:1fr;}
+  .idea-doc-side{position:static;top:auto;}
+  .profile-actions{position:static;margin-left:auto;}
+}
 
 /* Content type tags generic */
 .content-type-tag { padding: 3px 8px; border-radius: 6px; font-weight: 600; font-size: 10px; }
@@ -696,6 +723,9 @@ input,textarea,select{font-family:'Plus Jakarta Sans',sans-serif;outline:none;}
       <span class="nav-icon">🚀</span><span>Completed Projects</span>
       <span class="nav-badge" id="pub-badge"></span>
     </div>
+    <div class="nav-item" id="nav-calendar" onclick="goScreen('calendar')">
+      <span class="nav-icon">ðŸ“…</span><span>Calendar</span>
+    </div>
     <div class="nav-item" id="nav-ideas" onclick="goScreen('ideas')">
       <span class="nav-icon">💡</span><span>Video Ideas</span>
     </div>
@@ -760,6 +790,7 @@ input,textarea,select{font-family:'Plus Jakarta Sans',sans-serif;outline:none;}
       </div>
 
       <div class="proj-grid" id="proj-grid"></div>
+      <div id="proj-pagination"></div>
 
       <div id="paused-wrapper" style="display:none; margin-top:24px;">
         <div class="paused-header" onclick="togglePausedGrid()">
@@ -767,6 +798,7 @@ input,textarea,select{font-family:'Plus Jakarta Sans',sans-serif;outline:none;}
           <span>Paused Projects (<span id="paused-count">0</span>)</span>
         </div>
         <div class="paused-grid" id="paused-grid"></div>
+        <div id="paused-pagination" style="margin-top:16px;"></div>
       </div>
     </div>
   </div>
@@ -829,9 +861,21 @@ input,textarea,select{font-family:'Plus Jakarta Sans',sans-serif;outline:none;}
     </div>
   </div>
 
+  <div class="screen" id="screen-calendar">
+    <div class="screen-pad">
+      <div id="calendar-content"></div>
+    </div>
+  </div>
+
   <div class="screen" id="screen-ideas">
     <div class="screen-pad">
       <div class="ideas-grid" id="ideas-grid"></div>
+    </div>
+  </div>
+
+  <div class="screen" id="screen-idea-doc">
+    <div class="screen-pad">
+      <div id="idea-doc-content"></div>
     </div>
   </div>
 
@@ -1303,24 +1347,45 @@ function getUpcomingCalendarEntries(limit=6) {
 function setCalendarFilterUser(value) {
   calFilterUser = value;
   calSelectedDay = null;
-  renderPublish();
+  renderCalendarScreen();
 }
 function setCalendarFilterCategory(value) {
   calFilterCategory = value;
   calSelectedDay = null;
-  renderPublish();
+  renderCalendarScreen();
 }
 function toggleCalendarOverdue(checked) {
   calOverdueOnly = checked;
   calSelectedDay = null;
-  renderPublish();
+  renderCalendarScreen();
 }
 function resetCalendarFilters() {
   calFilterUser = 'all';
   calFilterCategory = 'all';
   calOverdueOnly = false;
   calSelectedDay = null;
-  renderPublish();
+  renderCalendarScreen();
+}
+function paginate(items, page, perPage) {
+  const totalPages = Math.max(1, Math.ceil(items.length / perPage));
+  const safePage = Math.min(Math.max(page, 1), totalPages);
+  const start = (safePage - 1) * perPage;
+  return { items: items.slice(start, start + perPage), page: safePage, totalPages };
+}
+function renderPagination(containerId, page, totalPages, callbackName) {
+  const el = document.getElementById(containerId);
+  if(!el) return;
+  if(totalPages <= 1) { el.innerHTML = ''; return; }
+  const pages = [];
+  for(let i=1;i<=totalPages;i++) {
+    pages.push(`<button class="page-btn ${i===page?'active':''}" onclick="${callbackName}(${i})">${i}</button>`);
+  }
+  el.innerHTML = `<div class="pagination">
+    <button class="page-btn" ${page===1?'disabled':''} onclick="${callbackName}(${page-1})">‹</button>
+    ${pages.join('')}
+    <button class="page-btn" ${page===totalPages?'disabled':''} onclick="${callbackName}(${page+1})">›</button>
+    <span class="page-info">Page ${page} of ${totalPages}</span>
+  </div>`;
 }
 
 // Renderizador Dinámico de Etiquetas de Formato
@@ -1346,9 +1411,15 @@ let calSelectedDay = null;
 let calFilterUser = 'all';
 let calFilterCategory = 'all';
 let calOverdueOnly = false;
+let projectsPage = 1;
+let pausedProjectsPage = 1;
+let publishPage = 1;
+const PROJECTS_PER_PAGE = 12;
+const PUBLISH_PER_PAGE = 8;
 let currentIdeaImgB64 = null;
 let currentCommentImgB64 = null;
 let editingIdeaId = null;
+let viewingIdeaId = null;
 let editingSeasonId = null;
 let editingCategoryId = null;
 let isPausedGridOpen = false;
@@ -1947,11 +2018,12 @@ function renderSidebar() {
     tree.appendChild(blk);
   });
 
-  ['nav-projects','nav-publish','nav-ideas','nav-profile','nav-team'].forEach(id=>{
+  ['nav-projects','nav-publish','nav-calendar','nav-ideas','nav-profile','nav-team'].forEach(id=>{
     if(document.getElementById(id)) document.getElementById(id).classList.remove('active');
   });
   if(screen==='publish') document.getElementById('nav-publish').classList.add('active');
-  else if(screen==='ideas') document.getElementById('nav-ideas').classList.add('active');
+  else if(screen==='calendar') document.getElementById('nav-calendar').classList.add('active');
+  else if(screen==='ideas' || screen==='idea-doc') document.getElementById('nav-ideas').classList.add('active');
   else if(screen==='profile') document.getElementById('nav-profile').classList.add('active');
   else if(screen==='team') document.getElementById('nav-team').classList.add('active');
   else if(screen==='projects') document.getElementById('nav-projects').classList.add('active');
@@ -2009,7 +2081,13 @@ function renderTopbar() {
     leftTitle = p.name;
   }
   else if(screen==='publish') { leftTitle = 'Completed Projects'; }
+  else if(screen==='calendar') { leftTitle = 'Workspace Calendar'; }
   else if(screen==='ideas') { leftTitle = 'Video Ideas & Concepts'; }
+  else if(screen==='idea-doc') {
+    const idea = DB.ideas.find(x => x.id === viewingIdeaId);
+    leftSub = `<span class="bc-link" onclick="goScreen('ideas')">Video Ideas</span> <span style="color:var(--muted)">/</span> <span style="color:var(--text)">Document</span>`;
+    leftTitle = idea ? idea.title : 'New Idea Document';
+  }
   else if(screen==='profile') { leftTitle = 'My Profile'; }
   else if(screen==='team') { leftTitle = 'Team Directory'; }
   else if(screen==='notifications') { leftTitle = '🔔 Notifications'; }
@@ -2078,6 +2156,8 @@ function renderProjects() {
   const grid = document.getElementById('proj-grid');
   const pausedGrid = document.getElementById('paused-grid');
   const wrapper = document.getElementById('paused-wrapper');
+  const projPagination = document.getElementById('proj-pagination');
+  const pausedPagination = document.getElementById('paused-pagination');
   
   const searchQ = document.getElementById('search-proj').value.toLowerCase();
   const filterState = document.getElementById('filter-state').value;
@@ -2179,19 +2259,38 @@ function renderProjects() {
 
   if(!activeProjs.length && !pausedProjs.length) {
     grid.innerHTML=`<div class="empty-state"><div class="empty-icon">📂</div><div class="empty-text">No projects found</div><div class="empty-sub">Adjust your search or filters.</div></div>`;
+    if(projPagination) projPagination.innerHTML = '';
+    if(pausedPagination) pausedPagination.innerHTML = '';
     wrapper.style.display = 'none';
   } else {
-    grid.innerHTML = activeProjs.map(buildCard).join('');
+    const activePageData = paginate(activeProjs, projectsPage, PROJECTS_PER_PAGE);
+    projectsPage = activePageData.page;
+    grid.innerHTML = activePageData.items.map(buildCard).join('');
+    renderPagination('proj-pagination', activePageData.page, activePageData.totalPages, 'setProjectsPage');
     // Forzamos a que vuelva a tener el estilo de grilla correcto
     applyViewMode(); 
     if(pausedProjs.length > 0) {
+      const pausedPageData = paginate(pausedProjs, pausedProjectsPage, PROJECTS_PER_PAGE);
+      pausedProjectsPage = pausedPageData.page;
       wrapper.style.display = 'block';
       document.getElementById('paused-count').textContent = pausedProjs.length;
-      pausedGrid.innerHTML = pausedProjs.map(buildCard).join('');
+      pausedGrid.innerHTML = pausedPageData.items.map(buildCard).join('');
+      renderPagination('paused-pagination', pausedPageData.page, pausedPageData.totalPages, 'setPausedProjectsPage');
     } else {
       wrapper.style.display = 'none';
+      if(pausedPagination) pausedPagination.innerHTML = '';
     }
   }
+}
+
+function setProjectsPage(page) {
+  projectsPage = page;
+  renderProjects();
+}
+
+function setPausedProjectsPage(page) {
+  pausedProjectsPage = page;
+  renderProjects();
 }
 
 let dragId = null;
@@ -2828,7 +2927,7 @@ function buildCalendarHTML(entries = getFilteredCalendarEntries()) {
                    style="${hasEv ? 'cursor:pointer; transition: 0.2s;' : ''}"
                    onmouseover="${hasEv ? 'this.style.background=\'var(--card)\'' : ''}"
                    onmouseout="${hasEv ? 'this.style.background=\'\'' : ''}"
-                   ${hasEv ? `onclick="calSelectedDay='${ds}'; renderPublish();"` : ''}>
+                   ${hasEv ? `onclick="calSelectedDay='${ds}'; renderCalendarScreen();"` : ''}>
                 <div class="cal-day-num">${d}</div>
                 ${projsHTML}
               </div>`;
@@ -2838,11 +2937,11 @@ function buildCalendarHTML(entries = getFilteredCalendarEntries()) {
   let det=''; 
   if(calSelectedDay && scheduled[calSelectedDay]){ 
     det = `
-    <div class="cal-modal-overlay" onclick="calSelectedDay=null; renderPublish();" style="position:fixed; top:0; left:0; width:100vw; height:100vh; background:rgba(0,0,0,0.6); z-index:9999; display:flex; align-items:center; justify-content:center; backdrop-filter:blur(4px);">
+    <div class="cal-modal-overlay" onclick="calSelectedDay=null; renderCalendarScreen();" style="position:fixed; top:0; left:0; width:100vw; height:100vh; background:rgba(0,0,0,0.6); z-index:9999; display:flex; align-items:center; justify-content:center; backdrop-filter:blur(4px);">
       <div class="cal-modal-content" onclick="event.stopPropagation()" style="background:var(--bg); border:1px solid var(--line2); border-radius:16px; padding:24px; width:450px; max-width:90%; box-shadow: 0 20px 40px rgba(0,0,0,0.4);">
         <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px;">
           <div style="font-size:20px; font-weight:800; color:var(--text);">📅 Schedule for ${formatPlannedDate(calSelectedDay)}</div>
-          <button onclick="calSelectedDay=null; renderPublish();" style="background:var(--card2); border:none; color:var(--text); width:32px; height:32px; border-radius:50%; cursor:pointer; font-weight:bold; transition:0.2s;" onmouseover="this.style.background='var(--red)'; this.style.color='#fff';" onmouseout="this.style.background='var(--card2)'; this.style.color='var(--text)';">✕</button>
+          <button onclick="calSelectedDay=null; renderCalendarScreen();" style="background:var(--card2); border:none; color:var(--text); width:32px; height:32px; border-radius:50%; cursor:pointer; font-weight:bold; transition:0.2s;" onmouseover="this.style.background='var(--red)'; this.style.color='#fff';" onmouseout="this.style.background='var(--card2)'; this.style.color='var(--text)';">✕</button>
         </div>
         
         <div style="display:flex; flex-direction:column; gap:12px; max-height: 60vh; overflow-y:auto; padding-right:8px;">
@@ -2859,8 +2958,8 @@ function buildCalendarHTML(entries = getFilteredCalendarEntries()) {
             
             // Preparamos la acción del clic dependiendo de si encontró un link o no
             const clickAction = finalUrl 
-              ? "window.open('" + finalUrl + "', '_blank'); calSelectedDay=null; renderPublish();" 
-              : "calSelectedDay=null; renderPublish(); openProj('" + p.id + "');";
+              ? "window.open('" + finalUrl + "', '_blank'); calSelectedDay=null; renderCalendarScreen();" 
+              : "calSelectedDay=null; renderCalendarScreen(); openProj('" + p.id + "');";
             
             // Cambiamos el texto para que quede claro qué va a pasar
             const actionText = finalUrl ? '▶ Click to open Final Render' : '⚠️ No link attached (Click to open project)';
@@ -2885,9 +2984,9 @@ function buildCalendarHTML(entries = getFilteredCalendarEntries()) {
 
   return `<div class="cal-wrap">
             <div class="cal-hd">
-              <button class="cal-nav" onclick="calDate.setMonth(calDate.getMonth()-1); calSelectedDay=null; renderPublish()">◀</button>
+              <button class="cal-nav" onclick="calDate.setMonth(calDate.getMonth()-1); calSelectedDay=null; renderCalendarScreen()">◀</button>
               <div class="cal-month">${['January','February','March','April','May','June','July','August','September','October','November','December'][m]} ${y}</div>
-              <button class="cal-nav" onclick="calDate.setMonth(calDate.getMonth()+1); calSelectedDay=null; renderPublish()">▶</button>
+              <button class="cal-nav" onclick="calDate.setMonth(calDate.getMonth()+1); calSelectedDay=null; renderCalendarScreen()">▶</button>
             </div>
             <div class="cal-body">
               <div class="cal-dnames">${['Su','Mo','Tu','We','Th','Fr','Sa'].map(d=>`<div class="cal-dname">${d}</div>`).join('')}</div>
@@ -3121,7 +3220,9 @@ function render() {
   if(screen==='projects') renderProjects();
   else if(screen==='detail') renderDetail();
   else if(screen==='publish') renderPublish();
+  else if(screen==='calendar') renderCalendarScreen();
   else if(screen==='ideas') renderIdeas();
+  else if(screen==='idea-doc') renderIdeaDoc();
   else if(screen==='profile') renderProfile();
   else if(screen==='team') renderTeam();
   else if(screen==='notifications') renderNotifications();
@@ -3219,6 +3320,240 @@ function updatePubDate(pid, newDate) {
   }
 }  
   
+function setPublishPage(page) {
+  publishPage = page;
+  renderPublish();
+}
+
+function renderPublish() {
+  const el = document.getElementById('pub-content');
+  if(!el) return;
+  const queue = (DB.publish || []).filter(pub => getP(pub.projectId));
+  if(!queue.length) {
+    el.innerHTML = `<div class="empty-state"><div class="empty-icon">🚀</div><div class="empty-text">No completed projects queued</div><div class="empty-sub">Projects approved for release will appear here.</div></div>`;
+    return;
+  }
+
+  const pageData = paginate(queue, publishPage, PUBLISH_PER_PAGE);
+  publishPage = pageData.page;
+  let html = `<div class="sec-title" style="margin-bottom:14px">COMPLETED PROJECTS QUEUE</div>
+              <div style="display:flex; flex-direction:column; gap:16px; margin-bottom:24px;">`;
+
+  pageData.items.forEach(pub => {
+    const p = getP(pub.projectId);
+    if(!p) return;
+    const cat = getCat(p.catId);
+    const formatColor = DB.contentTypes.find(c => c.id === p.contentType)?.color || 'var(--primary)';
+    const thumbHTML = p.thumbnail
+      ? `<img src="${p.thumbnail}" style="width:180px; height:100px; object-fit:cover; border-radius:8px; cursor:pointer;" onclick="openProj('${p.id}')">`
+      : `<div style="width:180px; height:100px; background:var(--card2); border-radius:8px; display:flex; align-items:center; justify-content:center; cursor:pointer; font-size:32px;" onclick="openProj('${p.id}')">🎬</div>`;
+    const renderBtn = (p.links && p.links.length > 0)
+      ? `<button onclick="window.open('${p.links[0].url}', '_blank')" style="background:var(--primary); border:none; color:white; padding:8px 16px; border-radius:6px; cursor:pointer; font-weight:600; transition:0.2s;" onmouseover="this.style.opacity='0.8'" onmouseout="this.style.opacity='1'">▶ View Final Render</button>`
+      : `<button style="background:var(--card2); border:none; color:var(--muted); padding:8px 16px; border-radius:6px; font-weight:600; cursor:not-allowed;">▶ No Link Available</button>`;
+
+    html += `
+    <div class="pub-card" style="display:flex; justify-content:space-between; align-items:center; background:var(--bg); padding:16px; border-radius:12px; --hover-color:${formatColor};">
+      <div style="display:flex; gap:20px; align-items:center;">
+        ${thumbHTML}
+        <div style="display:flex; flex-direction:column; gap:8px;">
+          <div style="font-size:20px; font-weight:800; cursor:pointer; transition:0.2s;" onclick="openProj('${p.id}')" onmouseover="this.style.color='var(--hover-color)'" onmouseout="this.style.color='var(--text)'">${p.name}</div>
+          <div style="display:flex; align-items:center; gap:8px; font-size:12px; color:var(--muted);">
+            <span class="pc-cat-dot" style="background:${cat?.color||'var(--primary)'}"></span>${cat?.name||'Uncategorized'}
+            ${renderCTTag(p.contentType)}
+          </div>
+          <div style="display:flex; align-items:center; gap:8px; margin-top:4px;">
+            <span style="font-size:14px; color:var(--text);">📅 Release:</span>
+            <input type="date" value="${pub.date||''}" onchange="updatePubDate('${p.id}', this.value)" style="background:transparent; border:1px solid var(--line2); color:var(--text); padding:4px 8px; border-radius:6px; font-family:inherit; font-size:14px; cursor:pointer;">
+          </div>
+        </div>
+      </div>
+      <div style="display:flex; flex-direction:column; gap:12px; align-items:flex-end;">
+        <div style="display:flex; gap:8px;">
+          <button onclick="openProj('${p.id}')" style="background:transparent; border:1px solid var(--line2); color:var(--text); padding:6px 12px; border-radius:6px; cursor:pointer; font-weight:600; transition:0.2s;" onmouseover="this.style.background='var(--card2)'" onmouseout="this.style.background='transparent'">📂 Open</button>
+          <button onclick="removeFromPublish('${p.id}')" style="background:transparent; border:1px solid var(--line2); color:var(--text); padding:6px 12px; border-radius:6px; cursor:pointer; font-weight:600; transition:0.2s;" onmouseover="this.style.background='var(--card2)'" onmouseout="this.style.background='transparent'">✕ Remove</button>
+        </div>
+        <div style="display:flex; gap:8px;">
+          ${renderBtn}
+          <button onclick="markAsPublished('${p.id}')" style="background:var(--green); border:none; color:white; padding:8px 16px; border-radius:6px; cursor:pointer; font-weight:600; transition:0.2s;" onmouseover="this.style.opacity='0.8'" onmouseout="this.style.opacity='1'">✅ Published</button>
+        </div>
+      </div>
+    </div>`;
+  });
+
+  html += `</div><div id="publish-pagination"></div>`;
+  el.innerHTML = html;
+  renderPagination('publish-pagination', pageData.page, pageData.totalPages, 'setPublishPage');
+}
+
+function renderCalendarScreen() {
+  const el = document.getElementById('calendar-content');
+  if(!el) return;
+  const calendarEntries = getFilteredCalendarEntries();
+  const spotlightEntries = calOverdueOnly ? calendarEntries.slice(0,6) : getUpcomingCalendarEntries(6);
+  const userOptions = DB.users.map(u => `<option value="${u.id}" ${u.id===calFilterUser?'selected':''}>${u.name}</option>`).join('');
+  const catOptions = DB.categories.map(c => `<option value="${c.id}" ${c.id===calFilterCategory?'selected':''}>${c.name}</option>`).join('');
+  const spotlightHTML = spotlightEntries.length
+    ? `<div class="deadline-strip">${spotlightEntries.map(entry => {
+        const cat = getCat(entry.project.catId);
+        return `<div class="deadline-card ${isPastDeadline(entry.date) ? 'overdue' : ''}" onclick="openProj('${entry.project.id}')">
+          <div class="deadline-kicker ${entry.type}">${entry.label}</div>
+          <div class="deadline-title">${entry.project.name}</div>
+          <div class="deadline-meta">${cat?.name||'Uncategorized'} · ${DB.contentTypes.find(c => c.id === entry.project.contentType)?.label || 'Format'}</div>
+          <div class="deadline-date ${isPastDeadline(entry.date) ? 'overdue' : ''}">${formatPlannedDate(entry.date)}</div>
+        </div>`;
+      }).join('')}</div>`
+    : `<div style="text-align:center; padding:24px 20px; color:var(--muted); font-size:13px; background:var(--card); border:1px solid var(--line); border-radius:14px; margin-bottom:20px;">No deadlines match the current filters.</div>`;
+
+  el.innerHTML = `
+    <div class="sec-title" style="margin-bottom:14px">DEADLINE SPOTLIGHT</div>
+    ${spotlightHTML}
+    <div class="sec-title" style="margin-bottom:14px">GENERAL WORKSPACE CALENDAR</div>
+    <div style="margin-bottom:14px; color:var(--muted); font-size:13px;">Shows target deadlines and publish queue dates for all projects.</div>
+    <div class="cal-toolbar">
+      <select class="filter-select" onchange="setCalendarFilterUser(this.value)">
+        <option value="all">All Team Members</option>
+        ${userOptions}
+      </select>
+      <select class="filter-select" onchange="setCalendarFilterCategory(this.value)">
+        <option value="all">All Categories</option>
+        ${catOptions}
+      </select>
+      <label class="cal-toggle">
+        <input type="checkbox" ${calOverdueOnly ? 'checked' : ''} onchange="toggleCalendarOverdue(this.checked)">
+        Overdue only
+      </label>
+      <button class="tb-btn" onclick="resetCalendarFilters()">Reset</button>
+      <div class="cal-summary">${calendarEntries.length} visible items</div>
+    </div>
+    <div class="cal-legend">
+      <div class="cal-legend-item"><span class="cal-legend-swatch queue"></span>Publish Queue</div>
+      <div class="cal-legend-item"><span class="cal-legend-swatch target"></span>Target Deadline</div>
+      <div class="cal-legend-item"><span class="cal-legend-swatch overdue"></span>Overdue</div>
+    </div>
+    ${buildCalendarHTML(calendarEntries)}
+  `;
+}
+
+function openIdeaDoc(id=null) {
+  editingIdeaId = id;
+  viewingIdeaId = id;
+  const idea = id ? DB.ideas.find(i=>i.id===id) : null;
+  currentIdeaImgB64 = idea?.img || null;
+  goScreen('idea-doc');
+}
+
+function escapeIdeaDocValue(value='') {
+  return String(value)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;');
+}
+
+function renderIdeas() {
+  const grid=document.getElementById('ideas-grid');
+  if(!grid) return;
+  let html=`<div class="idea-add-card" onclick="openIdeaDoc()"><div class="idea-add-icon">💡</div><div class="idea-add-text">Create New Idea Document</div></div>`;
+  if(DB.ideas.length) {
+    html+=DB.ideas.slice().reverse().map(idea=>`
+      <div class="idea-card compact" onclick="openIdeaDoc('${idea.id}')">
+        <div class="idea-top">
+          <div class="idea-emoji">📝</div>
+          <div class="idea-title">${idea.title}</div>
+        </div>
+        <div class="idea-open-hint">Open full document →</div>
+        <div class="idea-meta-row">
+          <span>${idea.updatedAt || idea.date || ''}</span>
+          <span>${idea.link ? '🔗 Ref' : 'Draft'}</span>
+        </div>
+      </div>`).join('');
+  }
+  grid.innerHTML=html;
+}
+
+function renderIdeaDoc() {
+  const host = document.getElementById('idea-doc-content');
+  if(!host) return;
+  const idea = editingIdeaId ? DB.ideas.find(i=>i.id===editingIdeaId) : null;
+  if(editingIdeaId && !idea) {
+    host.innerHTML = `<div class="empty-state"><div class="empty-text">Idea not found</div></div>`;
+    return;
+  }
+  const title = idea?.title || '';
+  const body = idea?.body || '';
+  const link = idea?.link || '';
+  const meta = idea ? `Created ${idea.date || today()}${idea.updatedAt ? ` · Updated ${idea.updatedAt}` : ''}` : 'New document';
+  const preview = currentIdeaImgB64 || idea?.img || null;
+  host.innerHTML = `
+    <div class="idea-doc-shell">
+      <div class="idea-doc-main">
+        <div class="idea-doc-meta">${meta}</div>
+        <input id="idea-doc-title" class="idea-doc-title-input" placeholder="Untitled idea..." value="${escapeIdeaDocValue(title)}">
+        <textarea id="idea-doc-body" class="idea-doc-editor" placeholder="Write freely here, as if this were your working document...">${escapeIdeaDocValue(body)}</textarea>
+        <div class="idea-doc-actions">
+          <button class="tb-btn primary" onclick="saveIdeaDoc()">Save Document</button>
+          <button class="tb-btn" onclick="goScreen('ideas')">Back to Ideas</button>
+          ${idea ? `<button class="tb-btn danger" onclick="deleteIdeaDoc('${idea.id}')">Delete</button>` : ''}
+        </div>
+      </div>
+      <div class="idea-doc-side">
+        <div class="sec-title" style="margin-bottom:14px;"><span>References</span></div>
+        <div class="field">
+          <label class="field-label">Reference URL</label>
+          <input class="field-input" id="idea-doc-link" placeholder="https://..." value="${escapeIdeaDocValue(link)}">
+        </div>
+        <div class="field">
+          <label class="field-label">Image / Moodboard</label>
+          <input type="file" id="idea-doc-file" accept="image/*" class="field-input" onchange="previewIdeaDocImage(event)">
+          ${preview ? `<img id="idea-doc-preview" src="${preview}" class="idea-doc-preview">` : `<div id="idea-doc-preview-empty" class="idea-doc-empty">Attach an image, moodboard or reference frame.</div>`}
+        </div>
+      </div>
+    </div>`;
+}
+
+function previewIdeaDocImage(e) {
+  if(!e.target.files[0]) return;
+  resizeImage(e.target.files[0], (b64) => {
+    currentIdeaImgB64 = b64;
+    renderIdeaDoc();
+  });
+}
+
+function saveIdeaDoc() {
+  const title = (document.getElementById('idea-doc-title')?.value || '').trim();
+  const body = (document.getElementById('idea-doc-body')?.value || '').trim();
+  const link = (document.getElementById('idea-doc-link')?.value || '').trim();
+  if(!title){ alert('Title required.'); return; }
+  if(editingIdeaId) {
+    const idea = DB.ideas.find(i=>i.id===editingIdeaId);
+    if(!idea) return;
+    idea.title = title;
+    idea.body = body;
+    idea.link = link;
+    idea.img = currentIdeaImgB64;
+    idea.updatedAt = today();
+    viewingIdeaId = idea.id;
+  } else {
+    const newIdea = { id:uid(), title, body, link, img:currentIdeaImgB64, date:today(), updatedAt:today() };
+    DB.ideas.push(newIdea);
+    editingIdeaId = newIdea.id;
+    viewingIdeaId = newIdea.id;
+  }
+  save();
+  renderIdeaDoc();
+  toast('Idea document saved','💡');
+}
+
+function deleteIdeaDoc(id) {
+  if(!confirm('Delete this idea document?')) return;
+  DB.ideas = DB.ideas.filter(i=>i.id!==id);
+  save();
+  editingIdeaId = null;
+  viewingIdeaId = null;
+  currentIdeaImgB64 = null;
+  goScreen('ideas');
+  toast('Idea deleted','✕');
+}
 </script>
 </body>
 </html>
