@@ -709,6 +709,65 @@ input,textarea,select{font-family:'Plus Jakarta Sans',sans-serif;outline:none;}
 .mywork-layout { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
 .mywork-col { display: flex; flex-direction: column; gap: 16px; }
 .mywork-col-full { grid-column: 1 / -1; }
+.mywork-col-span-2 { grid-column: 1 / -1; }
+.work-section-subtitle { font-size: 12px; color: var(--muted); font-weight: 500; }
+.work-section-body { display: flex; flex-direction: column; }
+.month-task-list { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 14px; padding: 18px 20px; }
+.month-task-card {
+  background: linear-gradient(180deg, rgba(99,102,241,0.08), rgba(15,23,42,0.7));
+  border: 1px solid var(--line2);
+  border-radius: 14px;
+  overflow: hidden;
+}
+.month-task-card .task-item { border-bottom: none; padding: 14px 16px; }
+.month-task-card .task-item:hover { background: rgba(255,255,255,0.02); }
+.month-task-card-footer {
+  padding: 0 16px 14px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+}
+.month-task-meta {
+  font-size: 11px;
+  color: var(--soft);
+  text-transform: uppercase;
+  letter-spacing: .4px;
+  font-weight: 700;
+}
+.month-empty {
+  padding: 22px 20px;
+  color: var(--muted);
+  font-size: 13px;
+  border-top: 1px solid var(--line);
+}
+.task-block-accent {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  flex-shrink: 0;
+  margin-top: 4px;
+}
+.task-block-accent.month { background: var(--accent-light); box-shadow: 0 0 10px rgba(192,132,252,0.35); }
+.task-block-accent.week { background: var(--orange); box-shadow: 0 0 10px rgba(245,158,11,0.3); }
+.task-block-accent.today { background: var(--primary-light); box-shadow: 0 0 10px rgba(129,140,248,0.35); }
+.task-scope-badge {
+  font-size: 10px;
+  font-weight: 800;
+  padding: 2px 7px;
+  border-radius: 999px;
+  letter-spacing: .35px;
+  text-transform: uppercase;
+}
+.task-scope-badge.month { background: rgba(168,85,247,0.12); color: var(--accent-light); }
+.task-scope-badge.week { background: rgba(245,158,11,0.12); color: var(--orange); }
+.task-scope-badge.today { background: rgba(99,102,241,0.14); color: var(--primary-light); }
+.work-empty-state {
+  padding: 18px 20px;
+  color: var(--muted);
+  font-size: 12px;
+  border-top: 1px solid var(--line);
+}
 
 /* Assigned projects strip */
 .mywork-assigned-strip { display: flex; flex-direction: column; gap: 10px; }
@@ -804,6 +863,12 @@ input,textarea,select{font-family:'Plus Jakarta Sans',sans-serif;outline:none;}
 .week-day-tasks { display: none; }
 .week-day-group.open .week-day-tasks { display: block; }
 .week-empty { padding: 10px 20px 14px; font-size: 12px; color: var(--muted); font-style: italic; }
+
+@media (max-width: 980px) {
+  .mywork-layout { grid-template-columns: 1fr; }
+  .mywork-col-span-2 { grid-column: auto; }
+  .month-task-list { grid-template-columns: 1fr; }
+}
 
 /* Meeting upload panel */
 
@@ -3773,6 +3838,30 @@ function deleteIdeaDoc(id) {
 
 const DAYS_OF_WEEK = ['Monday','Tuesday','Wednesday','Thursday','Friday','Saturday','Sunday'];
 const PRIORITY_LABELS = { high:'High', medium:'Medium', low:'Low' };
+const WORK_BUCKET_LABELS = { month:'Month', week:'Week', today:'Today' };
+
+function getTodayWeekdayName() {
+  const dayIndex = new Date().getDay();
+  return DAYS_OF_WEEK[dayIndex === 0 ? 6 : dayIndex - 1];
+}
+
+function normalizeTodoTask(t) {
+  const rawDay = t.day || '';
+  const bucket = t.bucket || (rawDay === 'today' ? 'today' : rawDay === 'month' ? 'month' : 'week');
+  const weekDay = t.weekDay || (bucket === 'week' && DAYS_OF_WEEK.includes(rawDay) ? rawDay : getTodayWeekdayName());
+  return {
+    id: t.id || uid(),
+    text: t.text || '',
+    done: t.done || false,
+    status: t.status || (t.done ? 'done' : 'active'),
+    priority: t.priority || 'medium',
+    bucket,
+    weekDay,
+    day: bucket === 'today' ? 'today' : bucket === 'month' ? 'month' : weekDay,
+    createdAt: t.createdAt || today(),
+    monthKey: t.monthKey || today().slice(0,7)
+  };
+}
 
 // ── Migrate / ensure DB.todos structure ──
 function ensureTodosReady() {
@@ -3780,16 +3869,11 @@ function ensureTodosReady() {
   const u = getAuthUser();
   if (!u) return;
   if (!DB.todos[u.id]) DB.todos[u.id] = [];
-  // Migrate old flat todos (just {id,text,done}) to new structure
-  DB.todos[u.id] = DB.todos[u.id].map(t => ({
-    id:       t.id || uid(),
-    text:     t.text || '',
-    done:     t.done || false,
-    status:   t.status || (t.done ? 'done' : 'active'), // 'active' | 'on-hold' | 'done'
-    priority: t.priority || 'medium',
-    day:      t.day || 'today',   // 'today' | 'Monday' .. 'Sunday'
-    createdAt: t.createdAt || today()
-  }));
+  DB.todos[u.id] = DB.todos[u.id].map(normalizeTodoTask);
+}
+
+function getTodosByBucket(todos, bucket) {
+  return todos.filter(t => (t.bucket || (t.day === 'today' ? 'today' : 'week')) === bucket);
 }
 
 // ── Render the full My Work screen ──
@@ -3801,8 +3885,11 @@ function renderMyWork() {
   if (!u) { host.innerHTML = '<div class="empty-state"><div class="empty-text">Please log in.</div></div>'; return; }
 
   const todos = DB.todos[u.id] || [];
-  const todayTasks  = todos.filter(t => t.day === 'today');
-  const weekTasks   = todos.filter(t => t.day !== 'today');
+  const monthTasks = getTodosByBucket(todos, 'month');
+  const weekTasks = getTodosByBucket(todos, 'week');
+  const todayTasks = getTodosByBucket(todos, 'today');
+  const monthPending = monthTasks.filter(t => t.status !== 'done').length;
+  const weekPending = weekTasks.filter(t => t.status !== 'done').length;
   const activeTodayCount = todayTasks.filter(t => t.status !== 'done').length;
 
   // Update sidebar badge
@@ -3813,23 +3900,52 @@ function renderMyWork() {
   const assignedHTML = buildAssignedStrip(u);
 
   host.innerHTML = `
-    <!-- Assigned Projects -->
     ${assignedHTML}
 
     <div class="mywork-layout" style="margin-top:24px;">
+      <div class="mywork-col mywork-col-span-2">
+        <div class="work-section">
+          <div class="work-section-header">
+            <div>
+              <div class="work-section-title">
+                <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8h18"/><path d="M7 3v3"/><path d="M17 3v3"/><rect x="3" y="5" width="18" height="16" rx="2"/></svg>
+                Monthly Focus
+              </div>
+              <div class="work-section-subtitle">Big-picture responsibilities, recurring priorities and items that should stay visible all month.</div>
+            </div>
+            <span class="work-count">${monthPending} pending</span>
+          </div>
+          <div class="work-section-body">
+            ${renderMonthTasks(monthTasks)}
+            <div class="task-add-row">
+              <input class="task-add-input" id="new-task-month" placeholder="Add a monthly responsibility or follow-up..." onkeyup="if(event.key==='Enter') addWorkTask('month')">
+              <div class="task-add-selects">
+                <select class="task-mini-select" id="new-task-month-pri">
+                  <option value="high">High</option>
+                  <option value="medium" selected>Medium</option>
+                  <option value="low">Low</option>
+                </select>
+              </div>
+              <button class="task-add-btn" onclick="addWorkTask('month')">+ Add</button>
+            </div>
+          </div>
+        </div>
+      </div>
 
-      <!-- TODAY column -->
       <div class="mywork-col">
         <div class="work-section">
           <div class="work-section-header">
-            <div class="work-section-title">
-              <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
-              Today
+            <div>
+              <div class="work-section-title">
+                <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                Today
+              </div>
+              <div class="work-section-subtitle">Day-to-day execution. Use this as the short list of what you are actually touching right now.</div>
             </div>
-            <span class="work-count">${todayTasks.filter(t=>t.status!=='done').length} pending</span>
+            <span class="work-count">${activeTodayCount} pending</span>
           </div>
           <div class="task-list" id="task-list-today">
-            ${renderTaskItems(todayTasks, 'today')}
+            ${renderTaskItems(todayTasks, { bucket: 'today', emptyText: 'No tasks planned for today yet.' })}
           </div>
           <div class="task-add-row">
             <input class="task-add-input" id="new-task-today" placeholder="Add a task for today..." onkeyup="if(event.key==='Enter') addWorkTask('today')">
@@ -3849,11 +3965,14 @@ function renderMyWork() {
       <div class="mywork-col">
         <div class="work-section">
           <div class="work-section-header">
-            <div class="work-section-title">
-              <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
-              This Week
+            <div>
+              <div class="work-section-title">
+                <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+                This Week
+              </div>
+              <div class="work-section-subtitle">Weekly planning grouped by weekday, so you can organize what belongs to each part of the week.</div>
             </div>
-            <span class="work-count">${weekTasks.filter(t=>t.status!=='done').length} pending</span>
+            <span class="work-count">${weekPending} pending</span>
           </div>
           <div id="week-days-list">
             ${renderWeekDays(weekTasks)}
@@ -3946,8 +4065,10 @@ function buildAssignedStrip(u) {
     </div>`;
 }
 
-function renderTaskItems(tasks, listId) {
-  if (!tasks.length) return `<div class="week-empty">No tasks here yet.</div>`;
+function renderTaskItems(tasks, options = {}) {
+  const bucket = options.bucket || 'week';
+  const emptyText = options.emptyText || 'No tasks here yet.';
+  if (!tasks.length) return `<div class="week-empty">${emptyText}</div>`;
   // Sort: active first, on-hold second, done last; within active sort by priority
   const order = { active: 0, 'on-hold': 1, done: 2 };
   const priOrder = { high: 0, medium: 1, low: 2 };
@@ -3958,15 +4079,19 @@ function renderTaskItems(tasks, listId) {
   return sorted.map(t => {
     const isDone = t.status === 'done';
     const isHold = t.status === 'on-hold';
+    const taskBucket = t.bucket || bucket;
+    const weekDay = t.weekDay || (DAYS_OF_WEEK.includes(t.day) ? t.day : null);
     return `
       <div class="task-item ${isDone?'done':''} ${isHold?'on-hold':''}" id="titem-${t.id}">
+        <div class="task-block-accent ${taskBucket}"></div>
         <div class="task-check ${isDone?'checked':''}" onclick="toggleWorkTask('${t.id}')"></div>
         <div class="task-body">
           <div class="task-text">${escapeHtml(t.text)}</div>
           <div class="task-tags">
             <span class="task-priority ${t.priority}">${PRIORITY_LABELS[t.priority]||t.priority}</span>
+            <span class="task-scope-badge ${taskBucket}">${WORK_BUCKET_LABELS[taskBucket] || 'Task'}</span>
             ${isHold ? '<span class="task-status-badge on-hold">On Hold</span>' : ''}
-            ${t.day && t.day !== 'today' ? `<span class="task-day-badge">${t.day.slice(0,3)}</span>` : ''}
+            ${taskBucket === 'week' && weekDay ? `<span class="task-day-badge">${weekDay.slice(0,3)}</span>` : ''}
           </div>
         </div>
         <div class="task-actions">
@@ -3983,10 +4108,27 @@ function renderTaskItems(tasks, listId) {
   }).join('');
 }
 
+function renderMonthTasks(monthTasks) {
+  if (!monthTasks.length) {
+    return `<div class="month-empty">No monthly items yet. Add the recurring work, follow-ups or goals you want visible across the month.</div>`;
+  }
+  return `<div class="month-task-list">
+    ${monthTasks.map(task => `
+      <div class="month-task-card">
+        ${renderTaskItems([task], { bucket: 'month' })}
+        <div class="month-task-card-footer">
+          <div class="month-task-meta">Visible this month</div>
+          <div class="month-task-meta">${task.status === 'done' ? 'Completed' : task.status === 'on-hold' ? 'On hold' : 'In focus'}</div>
+        </div>
+      </div>
+    `).join('')}
+  </div>`;
+}
+
 function renderWeekDays(weekTasks) {
-  const todayName = DAYS_OF_WEEK[new Date().getDay() === 0 ? 6 : new Date().getDay() - 1];
+  const todayName = getTodayWeekdayName();
   return DAYS_OF_WEEK.map(day => {
-    const dayTasks = weekTasks.filter(t => t.day === day);
+    const dayTasks = weekTasks.filter(t => (t.weekDay || t.day) === day);
     const pending = dayTasks.filter(t => t.status !== 'done').length;
     const isToday = day === todayName;
     const isOpen = isToday || pending > 0;
@@ -4003,7 +4145,7 @@ function renderWeekDays(weekTasks) {
           </div>
         </div>
         <div class="week-day-tasks">
-          ${dayTasks.length ? renderTaskItems(dayTasks, day) : '<div class="week-empty">Nothing scheduled.</div>'}
+          ${dayTasks.length ? renderTaskItems(dayTasks, { bucket: 'week', emptyText: 'Nothing scheduled.' }) : '<div class="week-empty">Nothing scheduled.</div>'}
         </div>
       </div>`;
   }).join('');
@@ -4018,19 +4160,22 @@ function addWorkTask(mode) {
   const u = getAuthUser(); if (!u) return;
   ensureTodosReady();
 
-  let inputId, priId, dayId;
+  let inputId, priId, dayId, bucket;
   if (mode === 'today') {
-    inputId = 'new-task-today'; priId = 'new-task-today-pri';
+    inputId = 'new-task-today'; priId = 'new-task-today-pri'; bucket = 'today';
+  } else if (mode === 'month') {
+    inputId = 'new-task-month'; priId = 'new-task-month-pri'; bucket = 'month';
   } else {
-    inputId = 'new-task-week'; priId = 'new-task-week-pri'; dayId = 'new-task-week-day';
+    inputId = 'new-task-week'; priId = 'new-task-week-pri'; dayId = 'new-task-week-day'; bucket = 'week';
   }
 
   const text = document.getElementById(inputId)?.value.trim();
   if (!text) return;
   const priority = document.getElementById(priId)?.value || 'medium';
-  const day = mode === 'today' ? 'today' : (document.getElementById(dayId)?.value || 'Monday');
+  const weekDay = bucket === 'week' ? (document.getElementById(dayId)?.value || 'Monday') : getTodayWeekdayName();
+  const day = bucket === 'today' ? 'today' : bucket === 'month' ? 'month' : weekDay;
 
-  DB.todos[u.id].push({ id: uid(), text, done: false, status: 'active', priority, day, createdAt: today() });
+  DB.todos[u.id].push({ id: uid(), text, done: false, status: 'active', priority, bucket, weekDay, day, monthKey: today().slice(0,7), createdAt: today() });
   document.getElementById(inputId).value = '';
   save();
   renderMyWork();
@@ -4208,9 +4353,9 @@ async function generateActionNotes() {
 
   try {
     ensureTodosReady();
-    const todos = DB.todos[targetUser.id] || [];
-    const todayTasks = todos.filter(t => t.day === 'today' && t.status !== 'done');
-    const weekTasks  = todos.filter(t => t.day !== 'today' && t.status !== 'done');
+    const todos = (DB.todos[targetUser.id] || []).map(normalizeTodoTask);
+    const todayTasks = todos.filter(t => t.bucket === 'today' && t.status !== 'done');
+    const weekTasks  = todos.filter(t => t.bucket === 'week' && t.status !== 'done');
 
     await buildAndDownloadDocx(targetUser, todayTasks, weekTasks, selectedProjs, selectedIdeas);
 
