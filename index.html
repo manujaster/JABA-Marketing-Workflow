@@ -838,6 +838,66 @@ input,textarea,select{font-family:'Plus Jakarta Sans',sans-serif;outline:none;}
 .meeting-confirm-btn:hover { background: var(--primary-hover); }
 .meeting-confirm-btn:disabled { background: var(--card3); color: var(--muted); cursor: not-allowed; }
 
+
+/* ══════════════════════════════════════
+   ACTION NOTES GENERATOR
+══════════════════════════════════════ */
+.action-notes-panel { background: var(--card); border: 1px solid var(--line); border-radius: 16px; overflow: hidden; }
+.an-body { padding: 20px; display: flex; flex-direction: column; gap: 20px; }
+
+/* Member selector (master only) */
+.an-member-row { display: flex; align-items: center; gap: 12px; background: var(--bg); border: 1px solid var(--line2); border-radius: 10px; padding: 10px 14px; }
+.an-member-avatar { width: 32px; height: 32px; border-radius: 50%; object-fit: cover; flex-shrink: 0; }
+.an-member-select { flex: 1; background: transparent; border: none; color: var(--text); font-size: 13px; font-weight: 600; cursor: pointer; }
+.an-member-select:focus { outline: none; }
+
+/* Selectable project cards */
+.an-proj-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 10px; }
+.an-proj-card {
+  display: flex; align-items: center; gap: 10px;
+  background: var(--bg); border: 2px solid var(--line2);
+  border-radius: 10px; padding: 10px 12px; cursor: pointer; transition: all .2s;
+}
+.an-proj-card:hover { border-color: var(--primary-light); background: var(--card2); }
+.an-proj-card.selected { border-color: var(--primary); background: var(--primary-bg); }
+.an-proj-thumb { width: 36px; height: 36px; border-radius: 6px; object-fit: cover; flex-shrink: 0; display:flex; align-items:center; justify-content:center; font-size:16px; overflow:hidden; }
+.an-proj-thumb img { width:100%; height:100%; object-fit:cover; }
+.an-proj-info { flex: 1; min-width: 0; }
+.an-proj-name { font-size: 12px; font-weight: 700; color: var(--text); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.an-proj-meta { font-size: 10px; color: var(--muted); margin-top: 2px; }
+.an-proj-check { width: 16px; height: 16px; border-radius: 4px; border: 2px solid var(--line2); flex-shrink: 0; display: flex; align-items: center; justify-content: center; transition: all .2s; }
+.an-proj-card.selected .an-proj-check { background: var(--primary); border-color: var(--primary); }
+.an-proj-card.selected .an-proj-check::after { content: ''; width: 4px; height: 7px; border: 2px solid #fff; border-top: none; border-left: none; transform: rotate(45deg) translateY(-1px); display: block; }
+
+/* Selectable idea cards */
+.an-idea-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 10px; }
+.an-idea-card {
+  display: flex; flex-direction: column; gap: 6px;
+  background: var(--bg); border: 2px solid var(--line2);
+  border-radius: 10px; padding: 12px; cursor: pointer; transition: all .2s;
+}
+.an-idea-card:hover { border-color: var(--accent-light); }
+.an-idea-card.selected { border-color: var(--accent); background: rgba(168,85,247,0.08); }
+.an-idea-title { font-size: 12px; font-weight: 700; color: var(--text); }
+.an-idea-preview { font-size: 11px; color: var(--muted); overflow: hidden; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; }
+
+/* Generate button */
+.an-generate-btn {
+  width: 100%; padding: 14px; border-radius: 12px;
+  background: linear-gradient(135deg, var(--primary), var(--accent));
+  color: #fff; font-size: 14px; font-weight: 800; letter-spacing: .3px;
+  border: none; cursor: pointer; transition: all .2s; display: flex; align-items: center; justify-content: center; gap: 10px;
+}
+.an-generate-btn:hover { opacity: 0.9; transform: translateY(-1px); box-shadow: 0 6px 20px rgba(99,102,241,0.35); }
+.an-generate-btn:disabled { background: var(--card3); color: var(--muted); cursor: not-allowed; transform: none; box-shadow: none; }
+.an-generate-btn svg { width: 18px; height: 18px; stroke: #fff; fill: none; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+
+/* Progress */
+.an-progress { display: flex; flex-direction: column; align-items: center; gap: 16px; padding: 32px; color: var(--muted); font-size: 13px; font-weight: 600; }
+.an-progress-bar-wrap { width: 100%; height: 4px; background: var(--line2); border-radius: 2px; overflow: hidden; }
+.an-progress-bar { height: 100%; background: linear-gradient(90deg, var(--primary), var(--accent)); border-radius: 2px; transition: width .4s ease; }
+.an-progress-step { font-size: 12px; color: var(--primary-light); font-weight: 700; }
+
 </style>
 </head>
 <body>
@@ -3869,6 +3929,22 @@ function renderMyWork() {
         </div>
       </div>
 
+      <!-- ACTION NOTES GENERATOR full width -->
+      <div class="mywork-col mywork-col-full">
+        <div class="action-notes-panel">
+          <div class="work-section-header">
+            <div class="work-section-title">
+              <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
+              Action Notes Generator
+            </div>
+            <span style="font-size:11px; color:var(--muted); font-weight:600;">Generates a .docx ready for your next call</span>
+          </div>
+          <div id="action-notes-body">
+            ${renderActionNotesBody()}
+          </div>
+        </div>
+      </div>
+
     </div>
   `;
 }
@@ -4320,6 +4396,447 @@ function resetMeetingUpload() {
   // Reset file input
   const fi = document.getElementById('meeting-file-input');
   if (fi) fi.value = '';
+}
+
+
+/* ═══════════════════════════════════════════════════════════
+   ACTION NOTES GENERATOR
+   - Select member (master can pick anyone)
+   - Select active projects → Claude writes narrative per project
+   - Select ideas from Video Ideas
+   - Generates a polished .docx with tasks + projects + ideas
+═══════════════════════════════════════════════════════════ */
+
+let anSelectedProjects = new Set();
+let anSelectedIdeas    = new Set();
+let anTargetUserId     = null;  // null = current user
+
+// ── Initial render of the panel body ──
+function renderActionNotesBody() {
+  const u = getAuthUser(); if (!u) return '';
+  anTargetUserId = anTargetUserId || u.id;
+  const targetUser = DB.users.find(x => x.id === anTargetUserId) || u;
+
+  // Projects assigned to target user (not paused, not fully done → no re-render needed)
+  ensureTodosReady();
+  const assignedProjs = (DB.projects || []).filter(p =>
+    (p.assignees || []).includes(targetUser.id) && !p.isPaused
+  );
+  const ideas = DB.ideas || [];
+
+  // Member selector (master only)
+  const memberSelectorHTML = isMaster ? `
+    <div class="an-member-row">
+      <img class="an-member-avatar" src="${targetUser.avatar}" id="an-avatar-img">
+      <select class="an-member-select" id="an-member-select" onchange="changeActionNotesMember(this.value)">
+        ${(DB.users || []).map(usr =>
+          `<option value="${usr.id}" ${usr.id === anTargetUserId ? 'selected' : ''}>${usr.name} — ${usr.role || 'Team Member'}</option>`
+        ).join('')}
+      </select>
+    </div>` : '';
+
+  // Project cards
+  const projCardsHTML = assignedProjs.length
+    ? `<div class="an-proj-grid">
+        ${assignedProjs.map(p => {
+          const cat = getCat(p.catId);
+          const ver = getCurVer(p);
+          const activeStep = (ver.steps||[]).find(s => s.status === 'active' || s.status === 'waiting');
+          const sel = anSelectedProjects.has(p.id);
+          const thumb = p.thumbnail
+            ? `<div class="an-proj-thumb"><img src="${p.thumbnail}"></div>`
+            : `<div class="an-proj-thumb" style="background:${cat?.color||'var(--primary)'}26;color:${cat?.color||'var(--primary)'}">🎬</div>`;
+          return `
+            <div class="an-proj-card ${sel?'selected':''}" onclick="toggleANProject('${p.id}')">
+              ${thumb}
+              <div class="an-proj-info">
+                <div class="an-proj-name">${p.name}</div>
+                <div class="an-proj-meta">${cat?.name||''} · ${p.currentVersion}${activeStep ? ' · ' + activeStep.name : ''}</div>
+              </div>
+              <div class="an-proj-check"></div>
+            </div>`;
+        }).join('')}
+      </div>`
+    : `<div style="color:var(--muted); font-size:13px; padding:8px 0;">No active projects assigned to this member.</div>`;
+
+  // Idea cards
+  const ideaCardsHTML = ideas.length
+    ? `<div class="an-idea-grid">
+        ${ideas.slice().reverse().map(idea => {
+          const sel = anSelectedIdeas.has(idea.id);
+          return `
+            <div class="an-idea-card ${sel?'selected':''}" onclick="toggleANIdea('${idea.id}')">
+              <div class="an-idea-title">${idea.title}</div>
+              <div class="an-idea-preview">${idea.body ? idea.body.slice(0,80) + (idea.body.length>80?'…':'') : 'No description.'}</div>
+            </div>`;
+        }).join('')}
+      </div>`
+    : `<div style="color:var(--muted); font-size:13px; padding:8px 0;">No ideas saved yet in Video Ideas.</div>`;
+
+  const anySelected = anSelectedProjects.size > 0 || anSelectedIdeas.size > 0;
+
+  return `
+    <div class="an-body">
+      ${memberSelectorHTML}
+
+      <div>
+        <div class="sec-title" style="margin-bottom:12px;"><span>Projects to include</span></div>
+        ${projCardsHTML}
+      </div>
+
+      <div>
+        <div class="sec-title" style="margin-bottom:12px;"><span>Ideas to include</span></div>
+        ${ideaCardsHTML}
+      </div>
+
+      <button class="an-generate-btn" id="an-gen-btn" onclick="generateActionNotes()" ${anySelected?'':'disabled'}>
+        <svg viewBox="0 0 24 24"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
+        Generate Action Notes .docx
+      </button>
+    </div>`;
+}
+
+function changeActionNotesMember(uid) {
+  anTargetUserId = uid;
+  anSelectedProjects.clear();
+  anSelectedIdeas.clear();
+  document.getElementById('action-notes-body').innerHTML = renderActionNotesBody();
+}
+
+function toggleANProject(pid) {
+  if (anSelectedProjects.has(pid)) anSelectedProjects.delete(pid);
+  else anSelectedProjects.add(pid);
+  document.getElementById('action-notes-body').innerHTML = renderActionNotesBody();
+}
+
+function toggleANIdea(iid) {
+  if (anSelectedIdeas.has(iid)) anSelectedIdeas.delete(iid);
+  else anSelectedIdeas.add(iid);
+  document.getElementById('action-notes-body').innerHTML = renderActionNotesBody();
+}
+
+// ── Main generator ──
+async function generateActionNotes() {
+  const u = getAuthUser(); if (!u) return;
+  const targetUser = DB.users.find(x => x.id === (anTargetUserId || u.id)) || u;
+  const host = document.getElementById('action-notes-body');
+
+  const selectedProjs = [...anSelectedProjects].map(pid => DB.projects.find(p => p.id === pid)).filter(Boolean);
+  const selectedIdeas = [...anSelectedIdeas].map(iid => (DB.ideas||[]).find(i => i.id === iid)).filter(Boolean);
+
+  if (!selectedProjs.length && !selectedIdeas.length) {
+    toast('Select at least one project or idea first', '⚠');
+    return;
+  }
+
+  // Show progress UI
+  const showProgress = (pct, step) => {
+    host.innerHTML = `
+      <div class="an-progress">
+        <div class="ai-spinner"></div>
+        <div class="an-progress-step">${step}</div>
+        <div class="an-progress-bar-wrap" style="width:300px;">
+          <div class="an-progress-bar" style="width:${pct}%"></div>
+        </div>
+      </div>`;
+  };
+
+  try {
+    showProgress(10, 'Gathering task data...');
+
+    // Build tasks summary for the target user
+    ensureTodosReady();
+    const todos = DB.todos[targetUser.id] || [];
+    const todayTasks = todos.filter(t => t.day === 'today' && t.status !== 'done');
+    const weekTasks  = todos.filter(t => t.day !== 'today' && t.status !== 'done');
+
+    showProgress(25, 'Asking Claude to analyze projects...');
+
+    // Build project context strings
+    const projectContexts = selectedProjs.map(p => {
+      const cat = getCat(p.catId);
+      const ver = getCurVer(p);
+      const steps = ver.steps || [];
+      const doneSteps = steps.filter(s => s.status === 'done').map(s => s.name);
+      const activeSteps = steps.filter(s => s.status === 'active' || s.status === 'waiting').map(s => s.name + (s.note ? ` (note: ${s.note})` : ''));
+      const pendingSteps = steps.filter(s => s.status === 'pending').map(s => s.name);
+      const deadline = getProjectDeadlineMeta(p);
+      const links = (p.links || []).map(l => `${l.type}: ${l.url}`).join(', ');
+      return `PROJECT: "${p.name}"
+Category: ${cat?.name || 'Uncategorized'}
+Version: ${p.currentVersion}
+Format: ${DB.contentTypes.find(c => c.id === p.contentType)?.label || 'Unknown'}
+Completed steps: ${doneSteps.join(', ') || 'None'}
+Active/waiting steps: ${activeSteps.join(', ') || 'None'}
+Pending steps: ${pendingSteps.join(', ') || 'None'}
+Deadline: ${deadline ? `${deadline.label} on ${deadline.date}` : 'Not set'}
+Links: ${links || 'None'}`;
+    }).join('\n\n');
+
+    // Build ideas context
+    const ideasContext = selectedIdeas.map(idea =>
+      `IDEA: "${idea.title}"\nDescription: ${idea.body || 'No description.'}\nReference: ${idea.link || 'None'}`
+    ).join('\n\n');
+
+    // AI call - generate narrative descriptions per project
+    const aiPrompt = `You are a project coordinator writing a concise Action Notes document for a video production marketing team.
+
+Team member: ${targetUser.name} (${targetUser.role || 'Team Member'})
+Date: ${new Date().toLocaleDateString('en-US', { weekday:'long', year:'numeric', month:'long', day:'numeric' })}
+
+${projectContexts ? `PROJECTS:\n${projectContexts}` : ''}
+${ideasContext ? `\nVIDEO IDEAS:\n${ideasContext}` : ''}
+
+Write a professional narrative description for each project (2-3 sentences max per project). Focus on: current status, what's actively being worked on, any blockers or notes, and next milestone. For ideas, write 1-2 sentences summarizing the concept and its potential.
+
+Return ONLY a JSON object, no markdown, no explanation:
+{
+  "projects": [{"id": "same name as input", "narrative": "2-3 sentence description"}],
+  "ideas": [{"id": "same title as input", "narrative": "1-2 sentence summary"}]
+}`;
+
+    const aiResp = await fetch('https://api.anthropic.com/v1/messages', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        model: 'claude-sonnet-4-20250514',
+        max_tokens: 1500,
+        messages: [{ role: 'user', content: aiPrompt }]
+      })
+    });
+
+    const aiData = await aiResp.json();
+    const rawAI = (aiData.content || []).map(b => b.text || '').join('');
+    let narratives = { projects: [], ideas: [] };
+    try {
+      narratives = JSON.parse(rawAI.replace(/```json|```/g, '').trim());
+    } catch(e) { console.warn('AI parse error, using fallback', e); }
+
+    showProgress(70, 'Building document...');
+
+    // Build docx using docxjs via CDN
+    await buildAndDownloadDocx(targetUser, todayTasks, weekTasks, selectedProjs, selectedIdeas, narratives);
+
+    showProgress(100, 'Done!');
+    setTimeout(() => {
+      document.getElementById('action-notes-body').innerHTML = renderActionNotesBody();
+      toast('Action Notes downloaded!', '📄');
+    }, 800);
+
+  } catch(err) {
+    console.error(err);
+    host.innerHTML = renderActionNotesBody();
+    toast('Error generating document: ' + err.message, '⚠');
+  }
+}
+
+// ── Build and trigger download of the .docx ──
+async function buildAndDownloadDocx(user, todayTasks, weekTasks, projects, ideas, narratives) {
+  // Load docx library from CDN if not present
+  if (!window.docx) {
+    await new Promise((res, rej) => {
+      const s = document.createElement('script');
+      s.src = 'https://unpkg.com/docx@8.5.0/build/index.js';
+      s.onload = res; s.onerror = rej;
+      document.head.appendChild(s);
+    });
+  }
+
+  const { Document, Packer, Paragraph, TextRun, Table, TableRow, TableCell,
+          AlignmentType, HeadingLevel, BorderStyle, WidthType, ShadingType,
+          LevelFormat, VerticalAlign } = window.docx;
+
+  const dateStr = new Date().toLocaleDateString('en-US', { weekday:'long', year:'numeric', month:'long', day:'numeric' });
+  const priEmoji = { high:'🔴', medium:'🟡', low:'⚪' };
+  const cellBorder = { style: BorderStyle.SINGLE, size: 1, color: 'E2E8F0' };
+  const borders = { top: cellBorder, bottom: cellBorder, left: cellBorder, right: cellBorder };
+
+  // Helper: section heading paragraph
+  const sectionHead = (text) => new Paragraph({
+    children: [new TextRun({ text, bold: true, size: 26, color: '4F46E5', font: 'Arial' })],
+    spacing: { before: 400, after: 160 },
+    border: { bottom: { style: BorderStyle.SINGLE, size: 6, color: '6366F1', space: 1 } }
+  });
+
+  const bodyText = (text, opts = {}) => new Paragraph({
+    children: [new TextRun({ text, size: 22, font: 'Arial', ...opts })],
+    spacing: { before: 60, after: 60 }
+  });
+
+  const bulletItem = (text, bold = false) => new Paragraph({
+    numbering: { reference: 'bullets', level: 0 },
+    children: [new TextRun({ text, size: 22, font: 'Arial', bold })],
+    spacing: { before: 40, after: 40 }
+  });
+
+  const spacer = () => new Paragraph({ children: [new TextRun('')], spacing: { before: 80, after: 80 } });
+
+  const children = [];
+
+  // ── HEADER ──
+  children.push(new Paragraph({
+    children: [new TextRun({ text: 'Action Notes', bold: true, size: 52, font: 'Arial', color: '0F172A' })],
+    spacing: { before: 0, after: 120 }
+  }));
+  children.push(new Paragraph({
+    children: [
+      new TextRun({ text: `${user.name}  ·  `, size: 24, font: 'Arial', color: '64748B' }),
+      new TextRun({ text: user.role || 'Team Member', size: 24, font: 'Arial', color: '64748B', italics: true }),
+      new TextRun({ text: `  ·  ${dateStr}`, size: 24, font: 'Arial', color: '64748B' })
+    ],
+    spacing: { before: 0, after: 400 }
+  }));
+
+  // ── TODAY TASKS ──
+  if (todayTasks.length) {
+    children.push(sectionHead('Today\'s Tasks'));
+    const activeTasks = todayTasks.filter(t => t.status !== 'on-hold');
+    const holdTasks = todayTasks.filter(t => t.status === 'on-hold');
+    activeTasks.forEach(t => {
+      children.push(bulletItem(`${priEmoji[t.priority] || '🟡'}  ${t.text}`));
+    });
+    if (holdTasks.length) {
+      children.push(spacer());
+      children.push(bodyText('On Hold:', { bold: true, color: 'A855F7', size: 20 }));
+      holdTasks.forEach(t => children.push(bulletItem(`${t.text}`, false)));
+    }
+    children.push(spacer());
+  }
+
+  // ── WEEK TASKS ──
+  const weekWithTasks = DAYS_OF_WEEK.filter(day => weekTasks.some(t => t.day === day));
+  if (weekWithTasks.length) {
+    children.push(sectionHead('This Week'));
+    weekWithTasks.forEach(day => {
+      const dayTasks = weekTasks.filter(t => t.day === day);
+      children.push(new Paragraph({
+        children: [new TextRun({ text: day, bold: true, size: 22, font: 'Arial', color: '334155' })],
+        spacing: { before: 160, after: 80 }
+      }));
+      dayTasks.forEach(t => {
+        children.push(bulletItem(`${priEmoji[t.priority] || '🟡'}  ${t.text}${t.status === 'on-hold' ? '  [ON HOLD]' : ''}`));
+      });
+    });
+    children.push(spacer());
+  }
+
+  // ── PROJECTS ──
+  if (projects.length) {
+    children.push(sectionHead('Projects in Progress'));
+    projects.forEach(p => {
+      const cat = getCat(p.catId);
+      const ver = getCurVer(p);
+      const steps = ver.steps || [];
+      const doneCount = steps.filter(s => s.status === 'done').length;
+      const narrative = narratives.projects?.find(n => n.id === p.name)?.narrative || '';
+      const deadline = getProjectDeadlineMeta(p);
+      const format = DB.contentTypes.find(c => c.id === p.contentType)?.label || '';
+
+      // Project name
+      children.push(new Paragraph({
+        children: [new TextRun({ text: p.name, bold: true, size: 26, font: 'Arial', color: '1E293B' })],
+        spacing: { before: 240, after: 80 }
+      }));
+
+      // Meta row
+      const metaParts = [
+        cat?.name || 'Uncategorized',
+        format,
+        p.currentVersion,
+        steps.length ? `${doneCount}/${steps.length} steps done` : ''
+      ].filter(Boolean).join('  ·  ');
+      children.push(bodyText(metaParts, { color: '64748B', size: 20 }));
+
+      // Deadline
+      if (deadline) {
+        const overdue = isPastDeadline(deadline.date);
+        children.push(bodyText(
+          `${deadline.label}: ${formatPlannedDate(deadline.date)}${overdue ? '  ⚠ OVERDUE' : ''}`,
+          { bold: true, color: overdue ? 'EF4444' : 'F59E0B', size: 20 }
+        ));
+      }
+
+      // AI narrative
+      if (narrative) {
+        children.push(spacer());
+        children.push(bodyText(narrative, { italics: true, color: '334155' }));
+      }
+
+      // Active steps
+      const activeSteps = steps.filter(s => s.status === 'active' || s.status === 'waiting');
+      if (activeSteps.length) {
+        children.push(new Paragraph({
+          children: [new TextRun({ text: 'Currently active:', size: 20, font: 'Arial', bold: true, color: '4F46E5' })],
+          spacing: { before: 120, after: 40 }
+        }));
+        activeSteps.forEach(s => {
+          children.push(bulletItem(`${s.name}${s.note ? ': ' + s.note : ''}`));
+        });
+      }
+
+      // Links
+      const links = (p.links || []).filter(l => l.url);
+      if (links.length) {
+        children.push(new Paragraph({
+          children: [new TextRun({ text: 'Links:', size: 20, font: 'Arial', bold: true, color: '64748B' })],
+          spacing: { before: 120, after: 40 }
+        }));
+        links.forEach(l => children.push(bulletItem(`${l.type.toUpperCase()}: ${l.url}`)));
+      }
+    });
+    children.push(spacer());
+  }
+
+  // ── IDEAS ──
+  if (ideas.length) {
+    children.push(sectionHead('Video Ideas'));
+    ideas.forEach(idea => {
+      const narrative = narratives.ideas?.find(n => n.id === idea.title)?.narrative || idea.body || '';
+      children.push(new Paragraph({
+        children: [new TextRun({ text: `💡 ${idea.title}`, bold: true, size: 24, font: 'Arial', color: '1E293B' })],
+        spacing: { before: 200, after: 80 }
+      }));
+      if (narrative) children.push(bodyText(narrative, { italics: true, color: '334155' }));
+      if (idea.link) children.push(bodyText(`Reference: ${idea.link}`, { color: '6366F1', size: 20 }));
+    });
+  }
+
+  // ── BUILD DOC ──
+  const doc = new Document({
+    numbering: {
+      config: [{
+        reference: 'bullets',
+        levels: [{
+          level: 0, format: LevelFormat.BULLET, text: '\u2022',
+          alignment: AlignmentType.LEFT,
+          style: { paragraph: { indent: { left: 720, hanging: 360 } } }
+        }]
+      }]
+    },
+    styles: {
+      default: { document: { run: { font: 'Arial', size: 22 } } }
+    },
+    sections: [{
+      properties: {
+        page: {
+          size: { width: 12240, height: 15840 },
+          margin: { top: 1440, right: 1440, bottom: 1440, left: 1440 }
+        }
+      },
+      children
+    }]
+  });
+
+  const buffer = await Packer.toBuffer(doc);
+  const blob = new Blob([buffer], { type: 'application/vnd.openxmlformats-officedocument.wordprocessingml.document' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  const safeName = user.name.replace(/\s+/g, '_');
+  const dateTag = new Date().toISOString().split('T')[0];
+  a.href = url;
+  a.download = `Action_Notes_${safeName}_${dateTag}.docx`;
+  a.click();
+  URL.revokeObjectURL(url);
 }
 
 </script>
