@@ -59,7 +59,8 @@ input,textarea,select{font-family:'Plus Jakarta Sans',sans-serif;outline:none;}
 .nav-item{display:flex;align-items:center;gap:12px;padding:10px 12px;border-radius:8px;cursor:pointer;transition:all .2s;font-size:14px;font-weight:500;color:var(--soft);margin-bottom:2px;}
 .nav-item:hover{background:var(--card2);color:var(--text);}
 .nav-item.active{background:var(--primary-bg);color:var(--primary-light);font-weight:600;}
-.nav-icon{font-size:16px;width:20px;text-align:center;opacity:0.8;}
+.nav-icon{font-size:16px;width:20px;text-align:center;opacity:0.8;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.nav-icon svg{width:17px;height:17px;stroke:currentColor;stroke-width:1.8;fill:none;stroke-linecap:round;stroke-linejoin:round;}
 .nav-item.active .nav-icon{opacity:1;}
 .nav-badge{margin-left:auto;font-family:'JetBrains Mono',monospace;font-size:10px;background:var(--red);color:#fff;padding:2px 8px;border-radius:12px;display:none;font-weight:700;}
 .nav-badge.show{display:block;}
@@ -717,21 +718,21 @@ input,textarea,select{font-family:'Plus Jakarta Sans',sans-serif;outline:none;}
   <nav class="sidebar-nav">
     <div class="snl">WORKSPACE</div>
     <div class="nav-item active" id="nav-projects" onclick="goScreen('projects')">
-      <span class="nav-icon">📁</span><span>Projects</span>
+      <span class="nav-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 7a2 2 0 0 1 2-2h4l2 2h8a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg></span><span>Projects</span>
     </div>
     <div class="nav-item" id="nav-publish" onclick="goScreen('publish')">
-      <span class="nav-icon">🚀</span><span>Completed Projects</span>
+      <span class="nav-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg></span><span>Completed Projects</span>
       <span class="nav-badge" id="pub-badge"></span>
     </div>
     <div class="nav-item" id="nav-calendar" onclick="goScreen('calendar')">
-      <span class="nav-icon">ðŸ“…</span><span>Calendar</span>
+      <span class="nav-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg></span><span>Calendar</span>
     </div>
     <div class="nav-item" id="nav-ideas" onclick="goScreen('ideas')">
-      <span class="nav-icon">💡</span><span>Video Ideas</span>
+      <span class="nav-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M12 2v2M12 20v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M2 12h2M20 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg></span><span>Video Ideas</span>
     </div>
     
     <div class="nav-item" id="nav-team" onclick="goScreen('team')">
-      <span class="nav-icon">👥</span><span>Team Directory</span>
+      <span class="nav-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg></span><span>Team Directory</span>
     </div>
 
     <div class="snl" style="margin-top:20px">CLIENTS & SEASONS</div>
@@ -740,11 +741,11 @@ input,textarea,select{font-family:'Plus Jakarta Sans',sans-serif;outline:none;}
   
   <div class="sidebar-footer">
     <div class="profile-nav-btn" id="nav-profile" onclick="goScreen('profile')">
-      <span class="nav-icon">👤</span><span>My Profile</span>
+      <span class="nav-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></span><span>My Profile</span>
     </div>
     <div style="display:flex; gap:8px;">
-      <button class="sb-btn secondary" style="flex:1; padding:10px 0;" onclick="openModal('m-season')">➕ Season</button>
-      <button class="sb-btn secondary" style="flex:1; padding:10px 0;" onclick="openModal('m-category')">➕ Group</button>
+      <button class="sb-btn secondary" style="flex:1; padding:10px 0;" onclick="openModal('m-season')">+ Season</button>
+      <button class="sb-btn secondary" style="flex:1; padding:10px 0;" onclick="openModal('m-category')">+ Group</button>
     </div>
   </div>
 </aside>
@@ -1255,8 +1256,19 @@ function initApp() {
   });
 }
 
-function save() { 
-  CloudDB.save(DB); 
+let _saveToastTimer = null;
+function save() {
+  CloudDB.save(DB);
+  // Indicador visual de guardado (aparece brevemente, no interrumpe)
+  const existing = document.getElementById('save-indicator');
+  if(existing) existing.remove();
+  if(_saveToastTimer) clearTimeout(_saveToastTimer);
+  const el = document.createElement('div');
+  el.id = 'save-indicator';
+  el.innerHTML = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> Saved';
+  el.style.cssText = 'position:fixed;bottom:32px;left:32px;background:var(--card);border:1px solid var(--green);color:var(--green);padding:8px 14px;border-radius:10px;font-size:12px;font-weight:700;z-index:9999;display:flex;align-items:center;gap:7px;box-shadow:0 4px 12px rgba(0,0,0,0.3);animation:ti .25s cubic-bezier(0.16,1,0.3,1);';
+  document.body.appendChild(el);
+  _saveToastTimer = setTimeout(() => { if(el.parentNode) el.remove(); }, 2000);
 }
 
 /* ═══════════════════════════════════════
@@ -1611,14 +1623,11 @@ function deleteNotification(id, event) {
 
 // NUEVA FUNCIÓN: Borrar todas de golpe
 function clearAllNotifications() {
-  if(!confirm('Are you sure you want to clear all notifications?')) return;
-  const u = getAuthUser();
-  if(!u) return;
-  
-  DB.notifications[u.id] = [];
-  save();
-  renderNotifications();
-  renderTopbarAuth();
+  deleteCtx = '__notifs__';
+  deleteType = 'notifications';
+  document.getElementById('m-del-title').textContent = 'Clear All Notifications';
+  document.getElementById('m-del-desc').textContent = 'Are you sure you want to remove all your notifications? This cannot be undone.';
+  openModal('m-delete');
 }
 
 let activeChatUser = null; // Guarda con quién estamos chateando actualmente
@@ -2463,7 +2472,13 @@ function handleThumbnailUpload(e) { if(!e.target.files[0] || !curPid) return; re
 function stepAct(pid,i,action) { const p=getP(pid), ver=getCurVer(p), s=ver.steps[i]; if(action==='start') s.status='active'; else if(action==='complete'){ s.status='done'; if(ver.steps.every(x=>x.status==='done')) ver.waitingFeedback=true; } else if(action==='reopen'){ s.status='active'; ver.waitingFeedback=false; } save(); renderDetail(); renderSidebar(); }
 function openNoteModal(pid,i) { editStepCtx={pid,i}; document.getElementById('inp-note').value=getP(pid)?getCurVer(getP(pid)).steps[i].note||'':''; openModal('m-note'); }
 function saveStepNote() { if(!editStepCtx) return; getCurVer(getP(editStepCtx.pid)).steps[editStepCtx.i].note=document.getElementById('inp-note').value.trim(); save(); closeModal('m-note'); renderDetail(); toast('Status note saved','📝'); }
-function delStep(pid,i) { if(!confirm('Remove this stage?')) return; getCurVer(getP(pid)).steps.splice(i,1); save(); renderDetail(); }
+function delStep(pid,i) {
+  deleteCtx = JSON.stringify({pid, i});
+  deleteType = 'step';
+  document.getElementById('m-del-title').textContent = 'Remove Stage';
+  document.getElementById('m-del-desc').textContent = 'Are you sure you want to remove this production stage? This cannot be undone.';
+  openModal('m-delete');
+}
 
 let dragStepIdx = null;
 function stepDragStart(e, i) { 
@@ -2655,6 +2670,30 @@ function confirmDelete() {
     DB.projects.forEach(p => { if(p.contentType === deleteCtx) p.contentType = fallbackId; });
     save(); renderFormatsList(); buildCTRadios(selContentType); renderProjects();
     toast('Format deleted','🗑');
+  }
+  else if (deleteType === 'step') {
+    try {
+      const ctx = JSON.parse(deleteCtx);
+      getCurVer(getP(ctx.pid)).steps.splice(ctx.i, 1);
+      save(); renderDetail();
+      toast('Stage removed','🗑');
+    } catch(e) { console.error(e); }
+  } else if (deleteType === 'idea') {
+    DB.ideas = DB.ideas.filter(i=>i.id!==deleteCtx);
+    save();
+    editingIdeaId = null;
+    viewingIdeaId = null;
+    currentIdeaImgB64 = null;
+    goScreen('ideas');
+    toast('Idea deleted','🗑');
+  } else if (deleteType === 'notifications') {
+    const u = getAuthUser();
+    if(u) {
+      DB.notifications[u.id] = [];
+      save();
+      renderNotifications();
+      renderTopbarAuth();
+    }
   }
   closeModal('m-delete'); 
   deleteCtx=null; deleteType=null; 
@@ -3545,14 +3584,11 @@ function saveIdeaDoc() {
 }
 
 function deleteIdeaDoc(id) {
-  if(!confirm('Delete this idea document?')) return;
-  DB.ideas = DB.ideas.filter(i=>i.id!==id);
-  save();
-  editingIdeaId = null;
-  viewingIdeaId = null;
-  currentIdeaImgB64 = null;
-  goScreen('ideas');
-  toast('Idea deleted','✕');
+  deleteCtx = id;
+  deleteType = 'idea';
+  document.getElementById('m-del-title').textContent = 'Delete Idea Document';
+  document.getElementById('m-del-desc').textContent = 'Are you sure? This idea document will be permanently removed.';
+  openModal('m-delete');
 }
 </script>
 </body>
