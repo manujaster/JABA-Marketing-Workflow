@@ -870,6 +870,325 @@ input,textarea,select{font-family:'Plus Jakarta Sans',sans-serif;outline:none;}
   .month-task-list { grid-template-columns: 1fr; }
 }
 
+/* Planner redesign */
+.planner-shell {
+  background: #f8fafc;
+  color: #0f172a;
+  border: 1px solid #dbe4f0;
+  border-radius: 22px;
+  box-shadow: 0 20px 60px rgba(2, 6, 23, 0.18);
+  overflow: hidden;
+}
+.planner-topbar {
+  padding: 22px 28px 18px;
+  background: linear-gradient(180deg, #ffffff, #f7f9fc);
+  border-bottom: 1px solid #dbe4f0;
+}
+.planner-title-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 18px;
+  margin-bottom: 14px;
+  flex-wrap: wrap;
+}
+.planner-title {
+  font-size: 36px;
+  line-height: 1.05;
+  letter-spacing: -1.2px;
+  font-weight: 800;
+  color: #1e293b;
+}
+.planner-subtitle {
+  font-size: 14px;
+  color: #64748b;
+  font-weight: 500;
+}
+.planner-stats {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+.planner-stat {
+  background: #ffffff;
+  border: 1px solid #dbe4f0;
+  border-radius: 14px;
+  padding: 10px 14px;
+  min-width: 110px;
+}
+.planner-stat-label {
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: .5px;
+  color: #64748b;
+  font-weight: 700;
+  margin-bottom: 4px;
+}
+.planner-stat-value {
+  font-size: 22px;
+  font-weight: 800;
+  color: #0f172a;
+}
+.planner-toolbar {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+.planner-toolbar-note {
+  font-size: 12px;
+  color: #64748b;
+  font-weight: 600;
+  margin-left: auto;
+}
+.planner-tool-btn {
+  height: 42px;
+  border-radius: 12px;
+  border: 1px solid #d7e0ec;
+  background: #ffffff;
+  color: #334155;
+  padding: 0 16px;
+  font-size: 14px;
+  font-weight: 700;
+  cursor: default;
+}
+.planner-tool-btn.primary {
+  background: #2563eb;
+  border-color: #2563eb;
+  color: #fff;
+}
+.planner-board {
+  padding: 18px 0 26px;
+}
+.planner-group {
+  margin: 0 18px 18px;
+  border: 1px solid #dbe4f0;
+  border-radius: 18px;
+  overflow: hidden;
+  background: #ffffff;
+}
+.planner-group-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 16px 22px;
+  background: #ffffff;
+  border-bottom: 1px solid #e5edf5;
+}
+.planner-group-title {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 18px;
+  font-weight: 800;
+  color: #1e293b;
+  letter-spacing: -0.3px;
+}
+.planner-group-dot {
+  width: 12px;
+  height: 12px;
+  border-radius: 999px;
+  flex-shrink: 0;
+}
+.planner-group-subtitle {
+  font-size: 13px;
+  color: #64748b;
+  font-weight: 500;
+  margin-top: 4px;
+}
+.planner-group-meta {
+  font-size: 13px;
+  color: #475569;
+  font-weight: 700;
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 999px;
+  padding: 8px 12px;
+  white-space: nowrap;
+}
+.planner-table-wrap {
+  overflow-x: auto;
+}
+.planner-table {
+  width: 100%;
+  border-collapse: collapse;
+  table-layout: fixed;
+}
+.planner-table thead th {
+  background: #f8fafc;
+  color: #334155;
+  font-size: 13px;
+  font-weight: 700;
+  padding: 14px 16px;
+  text-align: left;
+  border-bottom: 1px solid #e2e8f0;
+  border-right: 1px solid #e2e8f0;
+}
+.planner-table thead th:last-child,
+.planner-table tbody td:last-child {
+  border-right: none;
+}
+.planner-table tbody td {
+  padding: 14px 16px;
+  border-bottom: 1px solid #e8eef5;
+  border-right: 1px solid #e8eef5;
+  vertical-align: middle;
+  background: #ffffff;
+}
+.planner-table tbody tr:hover td {
+  background: #f8fbff;
+}
+.planner-col-check { width: 52px; text-align: center; }
+.planner-col-item { width: 42%; }
+.planner-col-priority,
+.planner-col-status,
+.planner-col-scope { width: 16%; }
+.planner-col-actions { width: 150px; }
+.planner-check {
+  width: 22px;
+  height: 22px;
+  border-radius: 6px;
+  border: 1.5px solid #c7d2e0;
+  background: #fff;
+  cursor: pointer;
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+.planner-check.checked {
+  background: #10b981;
+  border-color: #10b981;
+}
+.planner-check.checked::after {
+  content: '';
+  width: 6px;
+  height: 10px;
+  border: 2px solid #fff;
+  border-top: 0;
+  border-left: 0;
+  transform: rotate(45deg) translateY(-1px);
+}
+.planner-item-name {
+  font-size: 15px;
+  line-height: 1.45;
+  color: #0f172a;
+  font-weight: 600;
+}
+.planner-item-name.done {
+  text-decoration: line-through;
+  color: #94a3b8;
+}
+.planner-item-note {
+  margin-top: 6px;
+  font-size: 12px;
+  color: #64748b;
+}
+.planner-pill {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 34px;
+  border-radius: 10px;
+  padding: 0 12px;
+  font-size: 13px;
+  font-weight: 700;
+  white-space: nowrap;
+}
+.planner-pill.priority-high { background: #fff1f2; color: #e11d48; }
+.planner-pill.priority-medium { background: #fff7ed; color: #ea580c; }
+.planner-pill.priority-low { background: #f1f5f9; color: #64748b; }
+.planner-pill.status-active { background: #e0f2fe; color: #0284c7; }
+.planner-pill.status-done { background: #dcfce7; color: #16a34a; }
+.planner-pill.status-on-hold { background: #f3e8ff; color: #9333ea; }
+.planner-pill.scope-month { background: #f5f3ff; color: #7c3aed; }
+.planner-pill.scope-week { background: #eff6ff; color: #2563eb; }
+.planner-pill.scope-today { background: #eef2ff; color: #4338ca; }
+.planner-row-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.planner-row-btn {
+  height: 34px;
+  min-width: 34px;
+  border-radius: 10px;
+  border: 1px solid #d7e0ec;
+  background: #fff;
+  color: #334155;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 10px;
+  font-size: 12px;
+  font-weight: 700;
+  cursor: pointer;
+}
+.planner-row-btn:hover {
+  background: #f8fafc;
+}
+.planner-row-btn.danger {
+  color: #dc2626;
+}
+.planner-addbar {
+  display: grid;
+  grid-template-columns: minmax(220px, 1.7fr) repeat(2, minmax(120px, .7fr)) auto;
+  gap: 10px;
+  padding: 14px 16px;
+  background: #f8fafc;
+  border-top: 1px solid #e2e8f0;
+}
+.planner-add-input,
+.planner-add-select {
+  height: 42px;
+  border: 1px solid #d7e0ec;
+  border-radius: 12px;
+  background: #ffffff;
+  color: #0f172a;
+  font-size: 14px;
+  font-weight: 500;
+  padding: 0 14px;
+  outline: none;
+}
+.planner-add-input::placeholder { color: #94a3b8; }
+.planner-add-input:focus,
+.planner-add-select:focus {
+  border-color: #93c5fd;
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.12);
+}
+.planner-add-btn {
+  height: 42px;
+  border-radius: 12px;
+  border: none;
+  background: #2563eb;
+  color: #fff;
+  font-size: 14px;
+  font-weight: 800;
+  padding: 0 16px;
+  cursor: pointer;
+}
+.planner-empty {
+  padding: 20px 22px;
+  font-size: 14px;
+  color: #64748b;
+  background: #ffffff;
+}
+.planner-secondary {
+  margin-top: 22px;
+}
+.planner-secondary .work-section,
+.planner-secondary .action-notes-panel {
+  background: var(--card);
+}
+
+@media (max-width: 980px) {
+  .planner-title { font-size: 30px; }
+  .planner-addbar { grid-template-columns: 1fr; }
+  .planner-toolbar-note { margin-left: 0; width: 100%; }
+}
+
 /* Meeting upload panel */
 
 
@@ -3877,7 +4196,7 @@ function getTodosByBucket(todos, bucket) {
 }
 
 // ── Render the full My Work screen ──
-function renderMyWork() {
+function renderMyWorkLegacy() {
   const host = document.getElementById('mywork-content');
   if (!host) return;
   ensureTodosReady();
@@ -4011,6 +4330,261 @@ function renderMyWork() {
       </div>
 
     </div>
+  `;
+}
+
+function renderMyWork() {
+  const host = document.getElementById('mywork-content');
+  if (!host) return;
+  ensureTodosReady();
+  const u = getAuthUser();
+  if (!u) {
+    host.innerHTML = '<div class="empty-state"><div class="empty-text">Please log in.</div></div>';
+    return;
+  }
+
+  const todos = DB.todos[u.id] || [];
+  const monthTasks = getTodosByBucket(todos, 'month');
+  const weekTasks = getTodosByBucket(todos, 'week');
+  const todayTasks = getTodosByBucket(todos, 'today');
+  const monthPending = monthTasks.filter(t => t.status !== 'done').length;
+  const weekPending = weekTasks.filter(t => t.status !== 'done').length;
+  const activeTodayCount = todayTasks.filter(t => t.status !== 'done').length;
+
+  const badge = document.getElementById('mywork-badge');
+  if (badge) {
+    badge.textContent = activeTodayCount;
+    badge.classList.toggle('show', activeTodayCount > 0);
+  }
+
+  const assignedHTML = buildAssignedStrip(u);
+
+  host.innerHTML = `
+    <div class="planner-shell">
+      <div class="planner-topbar">
+        <div class="planner-title-row">
+          <div>
+            <div class="planner-title">My Work Schedule</div>
+            <div class="planner-subtitle">A clean planning board for your month, week and day-to-day execution.</div>
+          </div>
+          <div class="planner-stats">
+            <div class="planner-stat">
+              <div class="planner-stat-label">Month</div>
+              <div class="planner-stat-value">${monthPending}</div>
+            </div>
+            <div class="planner-stat">
+              <div class="planner-stat-label">Week</div>
+              <div class="planner-stat-value">${weekPending}</div>
+            </div>
+            <div class="planner-stat">
+              <div class="planner-stat-label">Today</div>
+              <div class="planner-stat-value">${activeTodayCount}</div>
+            </div>
+          </div>
+        </div>
+        <div class="planner-toolbar">
+          <button class="planner-tool-btn primary">New item</button>
+          <button class="planner-tool-btn">Month</button>
+          <button class="planner-tool-btn">Week</button>
+          <button class="planner-tool-btn">Today</button>
+          <div class="planner-toolbar-note">Structured like a weekly planning table, with room for monthly visibility and daily execution.</div>
+        </div>
+      </div>
+
+      <div class="planner-board">
+        ${renderPlannerGroup('month', 'Month Focus', 'High-level responsibilities and recurring priorities for the current month.', monthTasks, '#7c3aed')}
+        ${renderWeekPlanner(weekTasks)}
+        ${renderPlannerGroup('today', 'Today', 'What you are actively working on right now.', todayTasks, '#2563eb')}
+      </div>
+    </div>
+
+    <div class="planner-secondary">
+      ${assignedHTML}
+      <div class="mywork-layout" style="margin-top:24px;">
+        <div class="mywork-col mywork-col-full">
+          <div class="action-notes-panel">
+            <div class="work-section-header">
+              <div class="work-section-title">
+                <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
+                Action Notes Generator
+              </div>
+              <span style="font-size:11px; color:var(--muted); font-weight:600;">Generates a .docx ready for your next call</span>
+            </div>
+            <div id="action-notes-body">
+              ${renderActionNotesBody()}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  `;
+}
+
+function getStatusLabel(status) {
+  if (status === 'done') return 'Done';
+  if (status === 'on-hold') return 'On Hold';
+  return 'In Progress';
+}
+
+function renderPlannerRows(tasks, bucket) {
+  const order = { active: 0, 'on-hold': 1, done: 2 };
+  const priOrder = { high: 0, medium: 1, low: 2 };
+  const sorted = [...tasks].sort((a, b) => {
+    if (order[a.status] !== order[b.status]) return order[a.status] - order[b.status];
+    return priOrder[a.priority] - priOrder[b.priority];
+  });
+
+  return sorted.map(t => {
+    const weekLabel = bucket === 'week' ? (t.weekDay || t.day || '') : '';
+    return `
+      <tr>
+        <td class="planner-col-check"><button class="planner-check ${t.status === 'done' ? 'checked' : ''}" onclick="toggleWorkTask('${t.id}')"></button></td>
+        <td class="planner-col-item">
+          <div class="planner-item-name ${t.status === 'done' ? 'done' : ''}">${escapeHtml(t.text)}</div>
+          <div class="planner-item-note">${bucket === 'month' ? 'Monthly visibility item' : bucket === 'today' ? 'Current execution list' : weekLabel ? 'Scheduled for ' + weekLabel : 'Scheduled this week'}</div>
+        </td>
+        <td class="planner-col-priority"><span class="planner-pill priority-${t.priority}">${PRIORITY_LABELS[t.priority] || t.priority}</span></td>
+        <td class="planner-col-status"><span class="planner-pill status-${t.status === 'on-hold' ? 'on-hold' : t.status === 'done' ? 'done' : 'active'}">${getStatusLabel(t.status)}</span></td>
+        <td class="planner-col-scope"><span class="planner-pill scope-${bucket}">${bucket === 'week' ? weekLabel || 'Week' : WORK_BUCKET_LABELS[bucket]}</span></td>
+        <td class="planner-col-actions">
+          <div class="planner-row-actions">
+            <button class="planner-row-btn" onclick="toggleTaskHold('${t.id}')">${t.status === 'on-hold' ? 'Resume' : 'Hold'}</button>
+            <button class="planner-row-btn danger" onclick="deleteWorkTask('${t.id}')">Delete</button>
+          </div>
+        </td>
+      </tr>
+    `;
+  }).join('');
+}
+
+function renderPlannerAddBar(bucket) {
+  if (bucket === 'month') {
+    return `
+      <div class="planner-addbar">
+        <input class="planner-add-input" id="new-task-month" placeholder="Add a monthly responsibility or follow-up..." onkeyup="if(event.key==='Enter') addWorkTask('month')">
+        <select class="planner-add-select" id="new-task-month-pri">
+          <option value="high">High priority</option>
+          <option value="medium" selected>Medium priority</option>
+          <option value="low">Low priority</option>
+        </select>
+        <div></div>
+        <button class="planner-add-btn" onclick="addWorkTask('month')">Add item</button>
+      </div>
+    `;
+  }
+  if (bucket === 'today') {
+    return `
+      <div class="planner-addbar">
+        <input class="planner-add-input" id="new-task-today" placeholder="Add what you will work on today..." onkeyup="if(event.key==='Enter') addWorkTask('today')">
+        <select class="planner-add-select" id="new-task-today-pri">
+          <option value="high">High priority</option>
+          <option value="medium" selected>Medium priority</option>
+          <option value="low">Low priority</option>
+        </select>
+        <div></div>
+        <button class="planner-add-btn" onclick="addWorkTask('today')">Add item</button>
+      </div>
+    `;
+  }
+  return `
+    <div class="planner-addbar">
+      <input class="planner-add-input" id="new-task-week" placeholder="Add a task into this week..." onkeyup="if(event.key==='Enter') addWorkTask('week')">
+      <select class="planner-add-select" id="new-task-week-day">
+        ${DAYS_OF_WEEK.map(d => `<option value="${d}">${d}</option>`).join('')}
+      </select>
+      <select class="planner-add-select" id="new-task-week-pri">
+        <option value="high">High priority</option>
+        <option value="medium" selected>Medium priority</option>
+        <option value="low">Low priority</option>
+      </select>
+      <button class="planner-add-btn" onclick="addWorkTask('week')">Add item</button>
+    </div>
+  `;
+}
+
+function renderPlannerTable(tasks, bucket, includeAddBar = true) {
+  if (!tasks.length) return `<div class="planner-empty">No items here yet.</div>${includeAddBar ? renderPlannerAddBar(bucket) : ''}`;
+  return `
+    <div class="planner-table-wrap">
+      <table class="planner-table">
+        <thead>
+          <tr>
+            <th class="planner-col-check"></th>
+            <th class="planner-col-item">Item</th>
+            <th class="planner-col-priority">Priority</th>
+            <th class="planner-col-status">Status</th>
+            <th class="planner-col-scope">${bucket === 'week' ? 'Day' : 'Scope'}</th>
+            <th class="planner-col-actions">Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          ${renderPlannerRows(tasks, bucket)}
+        </tbody>
+      </table>
+    </div>
+    ${includeAddBar ? renderPlannerAddBar(bucket) : ''}
+  `;
+}
+
+function renderPlannerGroup(bucket, title, subtitle, tasks, color) {
+  const pending = tasks.filter(t => t.status !== 'done').length;
+  return `
+    <section class="planner-group">
+      <div class="planner-group-header">
+        <div>
+          <div class="planner-group-title"><span class="planner-group-dot" style="background:${color}"></span>${title}</div>
+          <div class="planner-group-subtitle">${subtitle}</div>
+        </div>
+        <div class="planner-group-meta">${pending} pending</div>
+      </div>
+      ${renderPlannerTable(tasks, bucket)}
+    </section>
+  `;
+}
+
+function renderWeekPlanner(weekTasks) {
+  const dayColors = {
+    Monday: '#7c3aed',
+    Tuesday: '#3b82f6',
+    Wednesday: '#0ea5e9',
+    Thursday: '#14b8a6',
+    Friday: '#f59e0b',
+    Saturday: '#f97316',
+    Sunday: '#ef4444'
+  };
+  const groups = DAYS_OF_WEEK.map(day => {
+    const tasks = weekTasks.filter(t => (t.weekDay || t.day) === day);
+    const pending = tasks.filter(t => t.status !== 'done').length;
+    return `
+      <section class="planner-group">
+        <div class="planner-group-header">
+          <div>
+            <div class="planner-group-title"><span class="planner-group-dot" style="background:${dayColors[day] || '#64748b'}"></span>${day}</div>
+            <div class="planner-group-subtitle">${day === getTodayWeekdayName() ? 'Today inside your weekly plan.' : 'Scheduled work for this day.'}</div>
+          </div>
+          <div class="planner-group-meta">${pending} pending</div>
+        </div>
+        ${tasks.length ? renderPlannerTable(tasks, 'week', false) : `<div class="planner-empty">Nothing scheduled for ${day} yet.</div>`}
+      </section>
+    `;
+  }).join('');
+
+  return `
+    <section class="planner-group">
+      <div class="planner-group-header">
+        <div>
+          <div class="planner-group-title"><span class="planner-group-dot" style="background:#2563eb"></span>This Week</div>
+          <div class="planner-group-subtitle">Your weekly board, grouped by day in a clean planning-table layout.</div>
+        </div>
+        <div class="planner-group-meta">${weekTasks.filter(t => t.status !== 'done').length} pending</div>
+      </div>
+      <div style="padding:18px 18px 4px; background:#f8fafc;">
+        ${renderPlannerAddBar('week')}
+      </div>
+      <div style="padding:0 0 10px;">
+        ${groups}
+      </div>
+    </section>
   `;
 }
 
