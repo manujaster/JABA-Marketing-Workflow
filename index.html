@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>JABA Marketing Workflow</title>
-<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 
 <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
 <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
@@ -1481,6 +1481,444 @@ input,textarea,select{font-family:'Plus Jakarta Sans',sans-serif;outline:none;}
 .mb-summary-line { font-size: 13px; color: #475569; line-height: 1.5; }
 .mb-summary-line strong { color: #0f172a; }
 
+/* DESIGN SYSTEM OVERRIDES */
+:root{
+  --bg: #f2f2f2;
+  --card: #ffffff;
+  --card2: #f7f7f5;
+  --card3: #ecece8;
+  --line: #e6e6e6;
+  --line2: #d9d9d9;
+  --muted: #999999;
+  --soft: #666666;
+  --text: #111111;
+  --primary: #bfff00;
+  --primary-hover: #d6ff57;
+  --primary-light: #d6ff57;
+  --primary-bg: #eef8c8;
+  --accent: #8b5cf6;
+  --accent-light: #8b5cf6;
+  --green: #22c55e;
+  --green-bg: #dcfce7;
+  --orange: #f97316;
+  --orange-bg: #fff1e8;
+  --red: #ef4444;
+  --shadow-sm: 0 2px 8px rgba(0,0,0,0.04);
+  --shadow-md: 0 6px 18px rgba(0,0,0,0.06);
+  --shadow-lg: 0 12px 28px rgba(0,0,0,0.08);
+  --radius-sm: 10px;
+  --radius-md: 14px;
+  --radius-lg: 16px;
+  --radius-xl: 20px;
+  --radius-pill: 999px;
+}
+
+html, body { background: var(--bg); color: var(--text); font-family: Inter, "SF Pro Display", system-ui, sans-serif; color-scheme: light; }
+body, button, input, textarea, select { font-family: Inter, "SF Pro Display", system-ui, sans-serif; }
+button, .tb-btn, .sb-btn, .page-btn, .view-btn, .nav-item, .cat-item, .user-menu-btn, .planner-nav-btn, .planner-secondary-btn, .an-generate-btn {
+  transition: all 180ms cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+.app { background: var(--bg); }
+.sidebar {
+  width: 248px;
+  min-width: 248px;
+  background: #f5f5f3;
+  border-right: 1px solid var(--line);
+}
+.sidebar-logo { padding: 28px 22px 20px; border-bottom: 1px solid var(--line); }
+.logo-face { width: 46px; height: 46px; filter: none; }
+.logo-text-img { height: 26px; }
+.logo-sub { font-size: 13px; font-weight: 500; color: var(--soft); letter-spacing: 0; }
+.sidebar-nav { padding: 18px 14px; }
+.snl { font-size: 11px; color: var(--soft); padding: 16px 12px 8px; }
+.nav-item, .profile-nav-btn {
+  min-height: 48px;
+  border-radius: 14px;
+  color: #202020;
+  padding: 12px 14px;
+  font-size: 14px;
+  font-weight: 500;
+}
+.nav-item:hover, .profile-nav-btn:hover, .cat-item:hover, .yr-header:hover {
+  background: #ffffff;
+  color: var(--text);
+  border-color: var(--line2);
+}
+.nav-item.active, .profile-nav-btn.active {
+  background: linear-gradient(90deg, #eff8c9 0%, #f7f8df 100%);
+  color: var(--text);
+  box-shadow: inset 0 0 0 1px rgba(191,255,0,.24);
+}
+.nav-icon { width: 18px; color: #222; opacity: 1; }
+.nav-badge {
+  background: #e7f3b8;
+  color: var(--text);
+  font-family: Inter, sans-serif;
+  font-size: 11px;
+  font-weight: 700;
+  padding: 3px 8px;
+  border-radius: 999px;
+}
+.yr-header, .cat-item {
+  border-radius: 12px;
+  color: #222;
+  border: 1px solid transparent;
+}
+.yr-label, .cat-item.active { color: var(--text); }
+.cat-count, .yr-chev { color: var(--soft); }
+.sidebar-footer { padding: 18px 14px 18px; border-top: 1px solid var(--line); }
+.sb-btn {
+  min-height: 44px;
+  border-radius: 12px;
+  font-size: 14px;
+  font-weight: 600;
+  box-shadow: none;
+}
+.sb-btn.primary, .tb-btn.primary, .todo-add-btn, .cp-send, .an-generate-btn {
+  background: var(--primary);
+  color: #111;
+  border: 1px solid transparent;
+}
+.sb-btn.primary:hover, .tb-btn.primary:hover, .todo-add-btn:hover, .cp-send:hover, .an-generate-btn:hover {
+  background: var(--primary-hover);
+  color: #111;
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-md);
+}
+.sb-btn.secondary, .tb-btn, .page-btn, .cal-nav, .field-select, .field-input, .todo-input, .task-mini-select, .task-add-input, .filter-select, .search-input {
+  background: #fff;
+  color: var(--text);
+  border: 1px solid var(--line);
+}
+.sb-btn.secondary:hover, .tb-btn:hover, .page-btn:hover, .cal-nav:hover, .view-btn:hover {
+  background: #fff;
+  border-color: #cfcfcf;
+  box-shadow: var(--shadow-sm);
+}
+
+.main { background: var(--bg); }
+.topbar {
+  min-height: 80px;
+  padding: 24px 32px 18px;
+  background: transparent;
+  border-bottom: none;
+  position: static;
+}
+.topbar-left { display: flex; flex-direction: column; gap: 8px; }
+.tb-bc {
+  min-height: 20px;
+  font-size: 14px;
+  color: var(--soft);
+  margin-bottom: 0;
+  font-weight: 400;
+}
+.tb-title {
+  font-size: 40px;
+  line-height: 48px;
+  font-weight: 700;
+  letter-spacing: -0.03em;
+  color: var(--text);
+}
+.topbar-right { gap: 16px; }
+.tb-btn {
+  min-height: 48px;
+  padding: 0 20px;
+  border-radius: 14px;
+  font-size: 14px;
+  font-weight: 600;
+}
+.tb-btn.danger {
+  background: #fee2e2;
+  color: var(--red);
+  border-color: #f9c7c7;
+}
+.user-menu-btn {
+  min-height: 48px;
+  gap: 12px;
+  padding: 8px 14px 8px 10px;
+  border-radius: 14px;
+  background: #fff;
+  border: 1px solid var(--line);
+}
+.user-menu-avatar {
+  width: 34px;
+  height: 34px;
+  border-radius: 999px;
+  border: 1px solid rgba(191,255,0,.35);
+  background: #edf6c7;
+}
+.user-menu-name { font-size: 14px; font-weight: 600; color: var(--text); }
+.topbar-badge { background: #111; color: #fff; box-shadow: none; }
+.dropdown-content {
+  background: #fff;
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  box-shadow: var(--shadow-lg);
+}
+.dropdown-item { color: var(--text); }
+.dropdown-item:hover { background: #f7f7f5; color: var(--text); }
+
+.screen-pad { max-width: 1440px; padding: 0 32px 32px; }
+.screen { background: transparent; }
+
+.filter-bar, .cal-toolbar, .cal-wrap, .profile-header, .profile-col, .publish-list .pub-card, .work-section, .planner-shell,
+.planner-board, .planner-secondary > *, .idea-card, .idea-add-card, .idea-doc-main, .idea-doc-side, .detail-thumb-wrap,
+.assignees-block, .links-section, .step-row, .version-row, .comment-card, .modal, .action-notes-panel, .cal-modal-overlay > div {
+  background: #fff;
+  border-color: var(--line);
+  box-shadow: var(--shadow-sm);
+}
+.filter-bar {
+  padding: 0;
+  gap: 16px;
+  background: transparent;
+  border: none;
+  box-shadow: none;
+  margin-bottom: 28px;
+}
+.search-input, .filter-select, .field-input, .field-select, .field-textarea, .todo-input, .task-add-input, .task-mini-select, .cp-ta, .cp-send, .cp-tag, .idea-doc-editor, .idea-doc-title-input, .pub-date-inp, .pc-date-input {
+  border-radius: 14px;
+  border: 1px solid var(--line);
+  background: #fff;
+  color: var(--text);
+}
+.search-input, .filter-select, .field-input, .field-select, .todo-input, .task-add-input, .task-mini-select { min-height: 48px; padding: 0 16px; }
+.field-textarea, .cp-ta, .idea-doc-editor { padding: 16px; }
+.search-input::placeholder, .todo-input::placeholder, .task-add-input::placeholder, .field-input::placeholder, .cp-ta::placeholder, .idea-doc-editor::placeholder {
+  color: var(--muted);
+}
+.search-input:focus, .filter-select:focus, .field-input:focus, .field-select:focus, .field-textarea:focus, .todo-input:focus, .task-add-input:focus, .task-mini-select:focus, .cp-ta:focus, .idea-doc-editor:focus, .pc-date-input:focus, .pub-date-inp:focus {
+  border-color: #cde76b;
+  box-shadow: 0 0 0 3px rgba(191,255,0,0.22);
+}
+.view-btn {
+  width: 48px;
+  height: 48px;
+  border-radius: 14px;
+  border: 1px solid var(--line);
+  background: #fff;
+  color: var(--soft);
+  padding: 0;
+}
+.view-btn.active {
+  background: var(--primary-bg);
+  color: var(--text);
+  border-color: rgba(191,255,0,.45);
+}
+
+.proj-grid { gap: 20px; }
+.project-card, .pub-card, .mini-proj, .assigned-proj-card, .deadline-card {
+  border-radius: 20px;
+  background: #fff;
+  border: 1px solid var(--line);
+  box-shadow: var(--shadow-sm);
+}
+.project-card:hover, .pub-card:hover, .idea-card:hover, .mini-proj:hover, .assigned-proj-card:hover, .deadline-card:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
+}
+.pc-thumb-wrap { background: #f7f7f5; border-bottom: 1px solid var(--line); }
+.pc-body { padding: 20px; }
+.pc-name, .pub-name, .deadline-title, .idea-title, .step-name, .pcol-title, .work-section-title, .planner-title, .profile-info h2 {
+  color: var(--text);
+}
+.pc-name { font-size: 18px; line-height: 1.35; }
+.pc-meta, .idea-body, .deadline-meta, .profile-info p, .mp-cat, .work-section-subtitle, .planner-subtitle, .planner-toolbar-note, .mb-summary-line {
+  color: var(--soft);
+}
+.pc-version, .badge, .content-type-tag, .task-priority, .task-scope-badge, .task-status-badge, .task-day-badge, .planner-context-pill, .work-count, .planner-group-meta, .page-info {
+  border-radius: 999px;
+}
+.pc-version {
+  background: #f7f7f5;
+  border-color: var(--line);
+  color: var(--soft);
+}
+.pc-schedule, .todo-item, .link-row, .user-check, .cp-input, .cp-header, .cp-list, .apj-step, .an-proj-card, .an-idea-card, .mb-meta-card, .mb-summary-box {
+  background: #fafaf8;
+  border-color: var(--line);
+}
+.pc-schedule-date, .cc-text, .todo-text, .link-value { color: var(--text); }
+.pc-status { font-size: 13px; }
+.s-active { color: #3b82f6; }
+.s-done { color: #22c55e; }
+.s-waiting { color: #8b5cf6; }
+.s-publish { color: #8b5cf6; }
+.s-paused { color: var(--soft); }
+.badge-publish { background: #ede9fe; color: #8b5cf6; }
+.badge-priority { background: #fee2e2; color: #ef4444; }
+.step-pip { background: #e9e9e9; }
+.step-pip.active { background: #3b82f6; }
+.step-pip.done { background: #22c55e; }
+.step-pip.waiting { background: #8b5cf6; }
+
+.profile-header, .profile-col {
+  border-radius: 20px;
+  padding: 28px;
+}
+.profile-avatar {
+  width: 72px;
+  height: 72px;
+  border: none;
+  background: #eef8c8;
+}
+.profile-grid { gap: 20px; }
+.pcol-title {
+  font-size: 18px;
+  padding-bottom: 14px;
+  border-bottom: 1px solid var(--line);
+}
+.todo-item {
+  min-height: 56px;
+  border-radius: 14px;
+}
+.todo-item input[type="checkbox"] { accent-color: #99cc00; }
+
+.cal-wrap { border-radius: 20px; padding: 8px; overflow: visible; }
+.cal-hd {
+  padding: 18px 18px 8px;
+  border-bottom: none;
+}
+.cal-body { padding: 0 12px 12px; }
+.cal-dname, .cal-dnames { color: var(--soft); }
+.cal-day {
+  background: #fff;
+  border: 1px solid #ebebeb;
+  color: var(--text);
+  border-radius: 0;
+}
+.cal-day.empty { background: transparent; border: none; }
+.cal-day.today {
+  background: #f7fbeb;
+  border-color: #dceea2;
+  color: var(--text);
+}
+.cal-day.has-events { background: #fff; border-color: #ececec; }
+.cal-day.selected { background: #eef8c8; color: var(--text); border-color: #dceea2; }
+.cal-legend-item { background: #fff; border-color: var(--line); color: var(--text); }
+.deadline-card {
+  background: #fff;
+}
+.deadline-kicker.queue { color: #8b5cf6; }
+.deadline-kicker.target { color: #f97316; }
+.deadline-date { color: var(--text); }
+
+.ideas-grid { grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 20px; }
+.idea-card, .idea-add-card, .idea-doc-main, .idea-doc-side {
+  border-radius: 20px;
+}
+.idea-add-card {
+  background: #f7f7f5;
+  border-color: #dbe8b3;
+}
+.idea-add-card:hover { background: #fbfdea; }
+.idea-open-hint, .idea-link { color: #5c7f00; }
+.idea-link { background: #fbfdea; border-color: #dbe8b3; }
+
+.planner-shell, .work-section, .planner-group, .planner-group-header, .planner-board {
+  border-radius: 20px;
+}
+.planner-shell {
+  background: #fff;
+  border: 1px solid var(--line);
+  box-shadow: var(--shadow-sm);
+}
+.planner-topbar, .planner-context-bar, .planner-board, .planner-group, .planner-table-wrap { background: transparent; }
+.planner-title { font-size: 24px; font-weight: 700; letter-spacing: -0.02em; color: var(--text); }
+.planner-stats, .planner-stat, .planner-context-pill, .planner-group-meta, .planner-secondary-btn, .planner-nav-btn {
+  background: #fff;
+  border: 1px solid var(--line);
+  box-shadow: none;
+}
+.planner-stat {
+  border-radius: 16px;
+  min-width: 140px;
+  padding: 18px 18px;
+}
+.planner-stat-label { color: var(--soft); text-transform: uppercase; font-size: 11px; font-weight: 700; letter-spacing: .05em; }
+.planner-stat-value { color: var(--text); font-weight: 700; }
+.planner-view-switch {
+  background: transparent;
+  gap: 10px;
+}
+.planner-view-btn {
+  min-height: 44px;
+  padding: 0 24px;
+  border-radius: 14px;
+  background: #fff;
+  border: 1px solid var(--line);
+  color: var(--text);
+  font-size: 14px;
+  font-weight: 600;
+}
+.planner-view-btn.active {
+  background: var(--primary-bg);
+  border-color: rgba(191,255,0,.45);
+  color: var(--text);
+}
+.planner-toolbar-note, .planner-context-label, .planner-group-subtitle { color: var(--soft); }
+.planner-context-pill {
+  padding: 12px 16px;
+  border-radius: 16px;
+}
+.planner-context-value { color: var(--text); font-weight: 700; }
+.planner-secondary-btn, .planner-nav-btn {
+  min-height: 44px;
+  border-radius: 14px;
+  color: var(--text);
+}
+.planner-secondary-btn:hover, .planner-nav-btn:hover { box-shadow: var(--shadow-sm); }
+.planner-table {
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  overflow: hidden;
+  background: #fff;
+}
+.planner-table thead th {
+  background: #f7f7f5;
+  color: var(--soft);
+  font-size: 12px;
+  font-weight: 600;
+  border-color: var(--line);
+}
+.planner-table tbody td {
+  background: #fff;
+  color: var(--text);
+  border-color: #f0f0f0;
+}
+.planner-table tbody tr:hover td { background: #fafaf8; }
+.planner-check { border-color: #d9d9d9; }
+.planner-check.checked { background: #99cc00; border-color: #99cc00; }
+.planner-item-name, .planner-empty, .week-empty, .month-empty { color: var(--text); }
+
+.assigned-proj-card, .an-proj-card, .an-idea-card {
+  border-radius: 16px;
+}
+.an-proj-card.selected, .an-idea-card.selected, .mb-chip.active {
+  background: var(--primary-bg);
+  border-color: rgba(191,255,0,.45);
+  color: var(--text);
+}
+
+.page-btn.active { background: var(--primary-bg); color: var(--text); border-color: rgba(191,255,0,.45); }
+
+.modal {
+  background: #fff;
+  color: var(--text);
+  box-shadow: var(--shadow-lg);
+}
+.modal-title, .field-label { color: var(--text); }
+.overlay { background: rgba(17,17,17,0.26); backdrop-filter: blur(10px); }
+.stoggle.on { background: var(--primary-bg); color: var(--text); border-color: rgba(191,255,0,.45); }
+
+@media (max-width: 1200px){
+  .screen-pad { padding: 0 24px 28px; }
+  .topbar { padding: 20px 24px 14px; }
+}
+
+#mywork-content { max-width: 1440px !important; }
+
 
 </style>
 </head>
@@ -1508,7 +1946,7 @@ input,textarea,select{font-family:'Plus Jakarta Sans',sans-serif;outline:none;}
       <span class="nav-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg></span><span>Calendar</span>
     </div>
     <div class="nav-item" id="nav-ideas" onclick="goScreen('ideas')">
-      <span class="nav-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M12 2v2M12 20v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M2 12h2M20 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg></span><span>Video Ideas</span>
+      <span class="nav-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M12 2v2M12 20v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M2 12h2M20 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg></span><span>Content Ideas</span>
     </div>
     
     <div class="nav-item" id="nav-team" onclick="goScreen('team')">
@@ -2880,19 +3318,19 @@ function renderTopbar() {
     leftSub = `<span class="bc-link" onclick="setFilter(null)">Workspace</span> <span style="color:var(--muted)">/</span> <span class="bc-link" onclick="setFilter('${cat?.id}')">${cat?.name||'Uncategorized'}</span> <span style="color:var(--muted)">/</span> <span style="color:var(--text)">${p.name}</span>`;
     leftTitle = p.name;
   }
-  else if(screen==='publish') { leftTitle = 'Completed Projects'; }
-  else if(screen==='calendar') { leftTitle = 'Workspace Calendar'; }
-  else if(screen==='ideas') { leftTitle = 'Video Ideas & Concepts'; }
+  else if(screen==='publish') { leftTitle = 'Completed Projects'; leftSub = 'All your finished work.'; }
+  else if(screen==='calendar') { leftTitle = 'Calendar'; leftSub = 'See deadlines and publish dates at a glance.'; }
+  else if(screen==='ideas') { leftTitle = 'Content Ideas'; leftSub = 'Capture ideas and turn them into great content.'; }
   else if(screen==='idea-doc') {
     const idea = DB.ideas.find(x => x.id === viewingIdeaId);
     leftSub = `<span class="bc-link" onclick="goScreen('ideas')">Video Ideas</span> <span style="color:var(--muted)">/</span> <span style="color:var(--text)">Document</span>`;
     leftTitle = idea ? idea.title : 'New Idea Document';
   }
-  else if(screen==='profile') { leftTitle = 'My Profile'; }
-  else if(screen==='team') { leftTitle = 'Team Directory'; }
+  else if(screen==='profile') { leftTitle = 'My Profile'; leftSub = 'Your workspace, activity and everything in one place.'; }
+  else if(screen==='team') { leftTitle = 'Team Directory'; leftSub = 'Find the right person, know their role, and see what they are working on.'; }
   else if(screen==='notifications') { leftTitle = '🔔 Notifications'; }
   else if(screen==='messages') { leftTitle = '💬 Direct Messages'; }
-  else if(screen==='mywork') { leftTitle = 'My Work'; }
+  else if(screen==='mywork') { leftTitle = 'My Work'; leftSub = 'All your tasks, projects, and deadlines in one place.'; }
   else if(screen==='public-profile') { 
     const u = DB.users.find(x => x.id === viewingProfileId);
     leftSub = `<span class="bc-link" onclick="goScreen('team')">Team</span> <span style="color:var(--muted)">/</span> <span style="color:var(--text)">Profile</span>`;
@@ -2904,7 +3342,8 @@ function renderTopbar() {
       leftSub=`<span class="bc-link" onclick="setFilter(null)">Workspace</span> <span style="color:var(--muted)">/</span> <span style="color:var(--text)">${cat?.name||''}</span>`;
       leftTitle = cat?.name||'';
     } else { 
-      leftTitle = 'Workspace'; 
+      leftTitle = 'Projects';
+      leftSub = 'A quick view of everything in motion.';
     }
   }
 
