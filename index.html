@@ -653,18 +653,20 @@ input,textarea,select{font-family:'Plus Jakarta Sans',sans-serif;outline:none;}
 /* Etiqueta flotante de "Published" corregida */
 .published-badge {
   position: absolute;
-  top: 8px;   /* La metemos hacia adentro */
-  right: 8px; /* La metemos hacia adentro */
-  background: var(--green, #00ff80);
-  color: #000; 
-  padding: 4px 10px;
-  border-radius: 20px;
-  font-size: 10px;
-  font-weight: 800;
-  text-transform: uppercase;
-  box-shadow: 0 4px 8px rgba(0,0,0,0.3);
-  z-index: 20; /* Nos aseguramos de que siempre estÃ© por encima de todo */
-}  
+  top: 14px;
+  right: 56px;
+  background: #e7f6dc;
+  color: #5b8d47;
+  border: 1px solid #d8eacb;
+  padding: 6px 12px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 600;
+  text-transform: none;
+  letter-spacing: 0;
+  box-shadow: none;
+  z-index: 20;
+}
 
 /* --- SUB-MENÃš DE ESTADOS EN EL SIDEBAR --- */
 .cat-sub-menu { padding-left: 24px; padding-right: 12px; margin-top: 4px; margin-bottom: 8px; display: flex; flex-direction: column; gap: 4px; }
@@ -1995,7 +1997,7 @@ button, .tb-btn, .sb-btn, .page-btn, .view-btn, .nav-item, .cat-item, .user-menu
   padding: 22px 76px 20px 22px;
 }
 #screen-projects .project-card.is-published .pc-body {
-  padding-right: 128px;
+  padding-right: 132px;
 }
 #screen-projects .pc-top {
   align-items: flex-start;
@@ -2128,9 +2130,17 @@ button, .tb-btn, .sb-btn, .page-btn, .view-btn, .nav-item, .cat-item, .user-menu
 }
 #screen-projects .published-badge {
   top: 16px;
-  right: 16px;
-  border: 1px solid #111;
+  right: 58px;
+  border: 1px solid #d8eacb;
   box-shadow: none;
+}
+#screen-projects .project-card.is-published .pc-drag {
+  top: 16px;
+  right: 16px;
+}
+#screen-projects #proj-grid.view-list .published-badge,
+#screen-projects #paused-grid.view-list .published-badge {
+  display: none;
 }
 
 #screen-projects #proj-grid.view-list .project-card,
@@ -4589,7 +4599,7 @@ function renderProfile() {
     ensureTodosReady();
     const todayKey = today();
     const currentWeekKey = getWeekKey(todayKey);
-    const currentWeekday = DAYS_OF_WEEK[parseDateKey(todayKey).getDay()];
+    const currentWeekday = getTodayWeekdayName();
     const todos = (DB.todos[u.id] || []).map(normalizeTodoTask);
     const dailyTodos = todos.filter(t =>
       (t.bucket === 'today' && t.dateKey === todayKey) ||
@@ -6555,7 +6565,7 @@ function renderPlannerRows(tasks, bucket) {
         <td class="planner-col-actions">
           <div class="planner-row-actions">
             <button class="planner-row-btn" onclick="toggleTaskHold('${t.id}')">${t.status === 'on-hold' ? 'Resume' : 'Hold'}</button>
-            <button class="planner-row-btn danger" onclick="deleteWorkTask('${t.id}')">Delete</button>
+            <button class="mw-ellipsis-btn" title="Delete task" onclick="deleteWorkTask('${t.id}')">${uiIcon('trash')}</button>
           </div>
         </td>
       </tr>
