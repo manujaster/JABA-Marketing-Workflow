@@ -1173,9 +1173,6 @@ input,textarea,select{font-family:'Plus Jakarta Sans',sans-serif;outline:none;}
   background: #f8fafc;
   border-top: 1px solid #e2e8f0;
 }
-.planner-addbar.simple {
-  grid-template-columns: minmax(0, 1fr) minmax(150px, 170px) auto;
-}
 .planner-addbar.composer {
   grid-template-columns: minmax(0, 1fr);
 }
@@ -1192,7 +1189,7 @@ input,textarea,select{font-family:'Plus Jakarta Sans',sans-serif;outline:none;}
   display: flex;
   align-items: center;
   gap: 10px;
-  justify-content: flex-end;
+  justify-content: flex-start;
   width: 100%;
 }
 .planner-add-input,
@@ -1206,6 +1203,10 @@ input,textarea,select{font-family:'Plus Jakarta Sans',sans-serif;outline:none;}
   font-weight: 500;
   padding: 0 14px;
   outline: none;
+}
+.planner-add-input {
+  width: 100%;
+  display: block;
 }
 .planner-mention-wrap {
   position: relative;
@@ -1288,7 +1289,6 @@ input,textarea,select{font-family:'Plus Jakarta Sans',sans-serif;outline:none;}
 @media (max-width: 980px) {
   .planner-title { font-size: 30px; }
   .planner-addbar { grid-template-columns: 1fr; }
-  .planner-addbar.simple { grid-template-columns: 1fr; }
   .planner-addbar.composer .planner-add-selects-row {
     flex-wrap: wrap;
     justify-content: stretch;
@@ -4748,17 +4748,19 @@ function renderPlannerRows(tasks, bucket) {
 function renderPlannerAddBar(bucket) {
   if (bucket === 'month') {
     return `
-      <div class="planner-addbar simple">
+      <div class="planner-addbar composer">
         <div class="planner-mention-wrap">
           <input class="planner-add-input" id="new-task-month" placeholder="Add a monthly responsibility or follow-up... Use @ to tag a project" oninput="handleTaskMentionInput(event,'month')" onkeydown="handleTaskMentionKeydown(event,'month')" onblur="deferHideTaskMention('month')">
           <div class="task-mention-dropdown" id="task-mention-month"></div>
         </div>
-        <select class="planner-add-select" id="new-task-month-pri">
-          <option value="high">High priority</option>
-          <option value="medium" selected>Medium priority</option>
-          <option value="low">Low priority</option>
-        </select>
-        <button class="planner-add-btn" onclick="addWorkTask('month')">Add item</button>
+        <div class="planner-add-selects-row">
+          <select class="planner-add-select" id="new-task-month-pri">
+            <option value="high">High priority</option>
+            <option value="medium" selected>Medium priority</option>
+            <option value="low">Low priority</option>
+          </select>
+          <button class="planner-add-btn" onclick="addWorkTask('month')">Add item</button>
+        </div>
       </div>
     `;
   }
@@ -4781,20 +4783,22 @@ function renderPlannerAddBar(bucket) {
     `;
   }
   return `
-    <div class="planner-addbar">
+    <div class="planner-addbar composer">
       <div class="planner-mention-wrap">
         <input class="planner-add-input" id="new-task-week" placeholder="Add a task into this week... Use @ to tag a project" oninput="handleTaskMentionInput(event,'week')" onkeydown="handleTaskMentionKeydown(event,'week')" onblur="deferHideTaskMention('week')">
         <div class="task-mention-dropdown" id="task-mention-week"></div>
       </div>
-      <select class="planner-add-select" id="new-task-week-day">
-        ${DAYS_OF_WEEK.map(d => `<option value="${d}">${d}</option>`).join('')}
-      </select>
-      <select class="planner-add-select" id="new-task-week-pri">
-        <option value="high">High priority</option>
-        <option value="medium" selected>Medium priority</option>
-        <option value="low">Low priority</option>
-      </select>
-      <button class="planner-add-btn" onclick="addWorkTask('week')">Add item</button>
+      <div class="planner-add-selects-row">
+        <select class="planner-add-select" id="new-task-week-day">
+          ${DAYS_OF_WEEK.map(d => `<option value="${d}">${d}</option>`).join('')}
+        </select>
+        <select class="planner-add-select" id="new-task-week-pri">
+          <option value="high">High priority</option>
+          <option value="medium" selected>Medium priority</option>
+          <option value="low">Low priority</option>
+        </select>
+        <button class="planner-add-btn" onclick="addWorkTask('week')">Add item</button>
+      </div>
     </div>
   `;
 }
