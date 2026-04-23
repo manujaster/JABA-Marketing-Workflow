@@ -877,7 +877,7 @@ input,textarea,select{font-family:'Plus Jakarta Sans',sans-serif;outline:none;}
   border: 1px solid #dbe4f0;
   border-radius: 22px;
   box-shadow: 0 20px 60px rgba(2, 6, 23, 0.18);
-  overflow: hidden;
+  overflow: visible;
 }
 .planner-topbar {
   padding: 22px 28px 18px;
@@ -980,7 +980,7 @@ input,textarea,select{font-family:'Plus Jakarta Sans',sans-serif;outline:none;}
   margin: 0 18px 18px;
   border: 1px solid #dbe4f0;
   border-radius: 18px;
-  overflow: hidden;
+  overflow: visible;
   background: #ffffff;
 }
 .planner-group-header {
@@ -1187,6 +1187,7 @@ input,textarea,select{font-family:'Plus Jakarta Sans',sans-serif;outline:none;}
 }
 .planner-mention-wrap {
   position: relative;
+  min-width: 0;
 }
 .task-mention-dropdown {
   position: absolute;
@@ -4418,6 +4419,11 @@ function renderMyWorkLegacy() {
 
     </div>
   `;
+
+  const viewButtons = host.querySelectorAll('.planner-view-btn');
+  if (viewButtons[0]) viewButtons[0].textContent = 'Month';
+  if (viewButtons[1]) viewButtons[1].textContent = 'Week';
+  if (viewButtons[2]) viewButtons[2].textContent = 'Day';
 }
 
 function renderMyWork() {
@@ -4471,8 +4477,8 @@ function renderMyWork() {
         </div>
         <div class="planner-toolbar">
           <div class="planner-view-switch">
-            <button class="planner-view-btn ${myWorkView === 'month' ? 'active' : ''}" onclick="setMyWorkView('month')">Mes</button>
-            <button class="planner-view-btn ${myWorkView === 'week' ? 'active' : ''}" onclick="setMyWorkView('week')">Semana</button>
+            <button class="planner-view-btn ${myWorkView === 'month' ? 'active' : ''}" onclick="setMyWorkView('month')">Month</button>
+            <button class="planner-view-btn ${myWorkView === 'week' ? 'active' : ''}" onclick="setMyWorkView('week')">Week</button>
             <button class="planner-view-btn ${myWorkView === 'today' ? 'active' : ''}" onclick="setMyWorkView('today')">Día</button>
           </div>
           <div class="planner-toolbar-note">Organize your monthly priorities, map the week by day, and keep today focused on the tasks you are actually executing.</div>
