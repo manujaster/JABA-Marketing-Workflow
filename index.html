@@ -1802,6 +1802,11 @@ button, .tb-btn, .sb-btn, .page-btn, .view-btn, .nav-item, .cat-item, .user-menu
   height: 72px;
   border: none;
   background: #eef8c8;
+  box-shadow: none;
+}
+.profile-header .profile-avatar {
+  border-radius: 999px;
+  object-fit: cover;
 }
 .profile-grid { gap: 20px; }
 .pcol-title {
@@ -1814,6 +1819,210 @@ button, .tb-btn, .sb-btn, .page-btn, .view-btn, .nav-item, .cat-item, .user-menu
   border-radius: 14px;
 }
 .todo-item input[type="checkbox"] { accent-color: #99cc00; }
+
+.profile-hero {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+}
+.profile-person {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  min-width: 0;
+}
+.profile-avatar-initial {
+  width: 72px;
+  height: 72px;
+  border-radius: 999px;
+  background: var(--primary);
+  color: #111;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 30px;
+  font-weight: 700;
+  flex: 0 0 auto;
+}
+.profile-role-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 999px;
+  background: #6dbf57;
+  display: inline-block;
+  margin: 0 10px;
+}
+.profile-kpi-row {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 20px;
+  margin-bottom: 20px;
+}
+.profile-kpi-card {
+  background: #fff;
+  border: 1px solid var(--line);
+  border-radius: 20px;
+  padding: 24px;
+  box-shadow: var(--shadow-sm);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 18px;
+}
+.profile-kpi-main {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+.profile-kpi-icon {
+  width: 52px;
+  height: 52px;
+  border-radius: 14px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: #111;
+  flex: 0 0 auto;
+}
+.profile-kpi-icon svg {
+  width: 22px;
+  height: 22px;
+  stroke: currentColor;
+}
+.profile-kpi-icon.projects { background: #eef8c8; }
+.profile-kpi-icon.completed { background: #dbeafe; color: #2563eb; }
+.profile-kpi-icon.tasks { background: #ede9fe; color: #7c3aed; }
+.profile-kpi-icon.deadlines { background: #ffedd5; color: #f97316; }
+.profile-kpi-value {
+  font-size: 24px;
+  line-height: 1;
+  font-weight: 700;
+  color: var(--text);
+  margin-bottom: 6px;
+}
+.profile-kpi-label {
+  font-size: 13px;
+  color: var(--soft);
+}
+.profile-kpi-arrow {
+  width: 34px;
+  height: 34px;
+  border-radius: 999px;
+  border: 1px solid var(--line);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--text);
+  flex: 0 0 auto;
+}
+.profile-kpi-arrow svg {
+  width: 16px;
+  height: 16px;
+}
+.profile-dashboard-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1.05fr) minmax(320px, .95fr);
+  gap: 20px;
+}
+.profile-col-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 18px;
+}
+.profile-col-header .pcol-title {
+  margin: 0;
+  padding: 0;
+  border: none;
+}
+.profile-view-btn {
+  min-height: 36px;
+  padding: 0 14px;
+  border-radius: 10px;
+  border: 1px solid var(--line);
+  background: #fff;
+  color: var(--text);
+  font-size: 12px;
+  font-weight: 700;
+  cursor: pointer;
+}
+.profile-project-row {
+  display: grid;
+  grid-template-columns: 52px minmax(0, 1fr) auto auto;
+  align-items: center;
+  gap: 14px;
+  padding: 12px 0;
+  border-bottom: 1px solid var(--line);
+  cursor: pointer;
+}
+.profile-project-row:last-child { border-bottom: none; }
+.profile-project-thumb {
+  width: 52px;
+  height: 52px;
+  border-radius: 10px;
+  object-fit: cover;
+  background: #f7f7f5;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  color: var(--text);
+}
+.profile-project-name {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--text);
+  margin-bottom: 4px;
+}
+.profile-project-meta {
+  font-size: 12px;
+  color: var(--soft);
+}
+.profile-published-pill {
+  border-radius: 999px;
+  background: #e7f6dc;
+  color: #4f7f3c;
+  padding: 6px 12px;
+  font-size: 12px;
+  font-weight: 700;
+}
+.profile-todo-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 18px;
+}
+.profile-todo-add-icon {
+  width: 36px;
+  height: 36px;
+  border-radius: 10px;
+  border: 1px solid var(--line);
+  background: #fff;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+.profile-tip {
+  margin-top: 40px;
+  background: #f7fbe8;
+  border-radius: 14px;
+  padding: 18px;
+  color: var(--text);
+  font-size: 13px;
+  line-height: 1.5;
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+}
+@media (max-width: 1100px) {
+  .profile-kpi-row,
+  .profile-dashboard-grid {
+    grid-template-columns: 1fr;
+  }
+}
 
 .cal-wrap { border-radius: 20px; padding: 8px; overflow: visible; }
 .cal-hd {
@@ -4584,17 +4793,24 @@ function renderProfile() {
     activeP = sortProjectsByDeadline(activeP);
     doneP = sortProjectsByDeadline(doneP);
 
-    const renderMini = (p) => {
+    const renderMini = (p, opts = {}) => {
       const cat = getCat(p.catId);
       const deadline = getProjectDeadlineMeta(p);
-      return `<div class="mini-proj" onclick="openProj('${p.id}')">
+      const thumb = p.thumbnail
+        ? `<img class="profile-project-thumb" src="${p.thumbnail}" alt="">`
+        : `<div class="profile-project-thumb">${escapeHtml(p.name.charAt(0).toUpperCase())}</div>`;
+      const format = DB.contentTypes.find(ct => ct.id === p.contentType)?.label || '';
+      return `<div class="profile-project-row" onclick="openProj('${p.id}')">
+        ${opts.thumb ? thumb : ''}
         <div>
-          <div class="mp-name">${p.name}</div>
-          <div class="mp-cat">${cat?.name||''} · ${p.currentVersion}</div>
+          <div class="profile-project-name">${escapeHtml(p.name)}</div>
+          <div class="profile-project-meta">${escapeHtml(cat?.name||'')} · ${escapeHtml(p.currentVersion)}</div>
           ${deadline
             ? `<div class="mini-deadline ${isPastDeadline(deadline.date) ? 'overdue' : ''}" style="font-size:11px; color:${isPastDeadline(deadline.date) ? 'var(--red)' : 'var(--orange)'}; font-weight:700; margin-top:4px;">${deadline.label}: ${formatPlannedDate(deadline.date)}</div>`
             : `<div style="font-size:11px; color:var(--muted); margin-top:4px;">No deadline scheduled</div>`}
         </div>
+        ${opts.published ? `<span class="profile-published-pill">Published</span>` : ''}
+        ${!opts.published && format ? `<span class="content-type-tag">${escapeHtml(format)}</span>` : ''}
         <span style="color:var(--muted)">${uiIcon('chevronRight')}</span>
       </div>`;
     };
@@ -4617,35 +4833,75 @@ function renderProfile() {
       </div>
     `).join('');
 
-    // EL PERFIL PERSONAL RESTAURADO IDÃ‰NTICO A LA IMAGEN (Botones Delete/Edit y 3 paneles)
+    const tasksCompleted = todos.filter(t => t.status === 'done').length;
+    const upcomingDeadlines = activeP.filter(p => {
+      const deadline = getProjectDeadlineMeta(p);
+      return deadline && !isPastDeadline(deadline.date);
+    }).length;
+    const initial = (u.name || u.email || 'U').charAt(0).toUpperCase();
+
     document.getElementById('profile-content').innerHTML = `
       <div class="profile-header">
-        <img src="${u.avatar}" class="profile-avatar">
-        <div class="profile-info">
-          <h2>${u.name}</h2>
-          <p>${u.email} ${u.role ? `· <strong>${u.role}</strong>` : ''}</p>
-        </div>
-        <div class="profile-actions">
-          <button class="tb-btn" onclick="openEditProfile('${u.id}')">${uiIcon('pencil')} Edit</button>
-          <button class="tb-btn danger" onclick="askDelete('${u.id}', 'user')">${uiIcon('trash')} Delete</button>
+        <div class="profile-hero">
+          <div class="profile-person">
+            ${u.avatar ? `<img src="${u.avatar}" class="profile-avatar">` : `<div class="profile-avatar-initial">${escapeHtml(initial)}</div>`}
+            <div class="profile-info">
+              <h2>${escapeHtml(u.name)}</h2>
+              <p>${escapeHtml(u.email)}<span class="profile-role-dot"></span>${escapeHtml(u.role || 'Team Member')}</p>
+            </div>
+          </div>
+          <div class="profile-actions">
+            <button class="tb-btn" onclick="openEditProfile('${u.id}')">${uiIcon('pencil')} Edit Profile</button>
+          </div>
         </div>
       </div>
-      <div class="profile-grid">
+
+      <div class="profile-kpi-row">
+        <div class="profile-kpi-card">
+          <div class="profile-kpi-main"><div class="profile-kpi-icon projects">${uiIcon('folder')}</div><div><div class="profile-kpi-value">${activeP.length}</div><div class="profile-kpi-label">Assigned Projects</div></div></div>
+          <span class="profile-kpi-arrow">${uiIcon('chevronRight')}</span>
+        </div>
+        <div class="profile-kpi-card">
+          <div class="profile-kpi-main"><div class="profile-kpi-icon completed">${uiIcon('checkCircle')}</div><div><div class="profile-kpi-value">${doneP.length}</div><div class="profile-kpi-label">Completed Projects</div></div></div>
+          <span class="profile-kpi-arrow">${uiIcon('chevronRight')}</span>
+        </div>
+        <div class="profile-kpi-card">
+          <div class="profile-kpi-main"><div class="profile-kpi-icon tasks">${uiIcon('clock')}</div><div><div class="profile-kpi-value">${tasksCompleted}</div><div class="profile-kpi-label">Tasks Completed</div></div></div>
+          <span class="profile-kpi-arrow">${uiIcon('chevronRight')}</span>
+        </div>
+        <div class="profile-kpi-card">
+          <div class="profile-kpi-main"><div class="profile-kpi-icon deadlines">${uiIcon('calendar')}</div><div><div class="profile-kpi-value">${upcomingDeadlines}</div><div class="profile-kpi-label">Upcoming Deadlines</div></div></div>
+          <span class="profile-kpi-arrow">${uiIcon('chevronRight')}</span>
+        </div>
+      </div>
+
+      <div class="profile-dashboard-grid">
         <div class="profile-col">
-          <div class="pcol-title">${uiIcon('play')} Assigned Active Projects (${activeP.length})</div>
-          <div class="mini-proj-list">${activeP.length?activeP.map(renderMini).join(''):'<div style="color:var(--muted);font-size:13px;">No active projects.</div>'}</div>
+          <div class="profile-col-header">
+            <div class="pcol-title">Assigned Active Projects (${activeP.length})</div>
+            <button class="profile-view-btn" onclick="goScreen('projects')">View all</button>
+          </div>
+          <div class="mini-proj-list">${activeP.length?activeP.slice(0,5).map(p => renderMini(p, { thumb:false })).join(''):'<div style="color:var(--muted);font-size:13px;">No active projects.</div>'}</div>
         </div>
         <div class="profile-col">
-          <div class="pcol-title">${uiIcon('checkCircle')} Completed Projects (${doneP.length})</div>
-          <div class="mini-proj-list">${doneP.length?doneP.map(renderMini).join(''):'<div style="color:var(--muted);font-size:13px;">No completed projects.</div>'}</div>
+          <div class="profile-col-header">
+            <div class="pcol-title">Completed Projects (${doneP.length})</div>
+            <button class="profile-view-btn" onclick="goScreen('publish')">View all</button>
+          </div>
+          <div class="mini-proj-list">${doneP.length?doneP.slice(0,5).map(p => renderMini(p, { thumb:true, published:true })).join(''):'<div style="color:var(--muted);font-size:13px;">No completed projects.</div>'}</div>
+          ${doneP.length > 5 ? `<button class="profile-view-btn" style="width:100%;margin-top:16px;" onclick="goScreen('publish')">View all projects</button>` : ''}
         </div>
         <div class="profile-col">
-          <div class="pcol-title">${uiIcon('checkCircle')} Daily To-Do</div>
+          <div class="profile-todo-head">
+            <div class="pcol-title">Daily To-Do</div>
+            <button class="profile-todo-add-icon" onclick="document.getElementById('new-todo')?.focus()">${uiIcon('plus')}</button>
+          </div>
           <div class="todo-input-wrap">
             <input type="text" id="new-todo" class="todo-input" placeholder="Add a new task..." onkeyup="if(event.key==='Enter') addTodo()">
             <button class="todo-add-btn" onclick="addTodo()">Add</button>
           </div>
           <div class="todo-list">${todoHTML || '<div style="color:var(--muted);font-size:13px;">All caught up!</div>'}</div>
+          <div class="profile-tip">${uiIcon('spark')} <span>Tip: Prioritize your tasks and focus on what matters most.</span></div>
         </div>
       </div>
     `;
