@@ -1174,7 +1174,26 @@ input,textarea,select{font-family:'Plus Jakarta Sans',sans-serif;outline:none;}
   border-top: 1px solid #e2e8f0;
 }
 .planner-addbar.simple {
-  grid-template-columns: minmax(420px, 1fr) minmax(170px, 190px) auto;
+  grid-template-columns: minmax(0, 1fr) minmax(150px, 170px) auto;
+}
+.planner-addbar.composer {
+  grid-template-columns: minmax(0, 1fr);
+}
+.planner-addbar.composer .planner-mention-wrap {
+  grid-column: 1 / -1;
+}
+.planner-addbar.composer .planner-add-input {
+  height: 52px;
+  font-size: 16px;
+  padding: 0 18px;
+  border-radius: 16px;
+}
+.planner-addbar.composer .planner-add-selects-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  justify-content: flex-end;
+  width: 100%;
 }
 .planner-add-input,
 .planner-add-select {
@@ -1270,6 +1289,10 @@ input,textarea,select{font-family:'Plus Jakarta Sans',sans-serif;outline:none;}
   .planner-title { font-size: 30px; }
   .planner-addbar { grid-template-columns: 1fr; }
   .planner-addbar.simple { grid-template-columns: 1fr; }
+  .planner-addbar.composer .planner-add-selects-row {
+    flex-wrap: wrap;
+    justify-content: stretch;
+  }
   .planner-view-switch { width: 100%; }
   .planner-view-btn { flex: 1; min-width: 0; }
   .planner-toolbar-note { width: 100%; }
@@ -4741,17 +4764,19 @@ function renderPlannerAddBar(bucket) {
   }
   if (bucket === 'today') {
     return `
-      <div class="planner-addbar simple">
+      <div class="planner-addbar composer">
         <div class="planner-mention-wrap">
           <input class="planner-add-input" id="new-task-today" placeholder="Add what you will work on today... Use @ to tag a project" oninput="handleTaskMentionInput(event,'today')" onkeydown="handleTaskMentionKeydown(event,'today')" onblur="deferHideTaskMention('today')">
           <div class="task-mention-dropdown" id="task-mention-today"></div>
         </div>
-        <select class="planner-add-select" id="new-task-today-pri">
-          <option value="high">High priority</option>
-          <option value="medium" selected>Medium priority</option>
-          <option value="low">Low priority</option>
-        </select>
-        <button class="planner-add-btn" onclick="addWorkTask('today')">Add item</button>
+        <div class="planner-add-selects-row">
+          <select class="planner-add-select" id="new-task-today-pri">
+            <option value="high">High priority</option>
+            <option value="medium" selected>Medium priority</option>
+            <option value="low">Low priority</option>
+          </select>
+          <button class="planner-add-btn" onclick="addWorkTask('today')">Add item</button>
+        </div>
       </div>
     `;
   }
