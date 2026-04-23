@@ -1997,14 +1997,11 @@ button, .tb-btn, .sb-btn, .page-btn, .view-btn, .nav-item, .cat-item, .user-menu
   gap: 18px;
   padding: 22px 76px 20px 22px;
 }
-#screen-projects .project-card.is-published .pc-body {
-  padding-right: 132px;
-}
 #screen-projects .pc-top {
   align-items: flex-start;
   margin-bottom: 0;
   gap: 14px;
-  padding-right: 0;
+  padding-right: 42px;
 }
 #screen-projects .pc-name {
   font-size: 18px;
@@ -2015,6 +2012,10 @@ button, .tb-btn, .sb-btn, .page-btn, .view-btn, .nav-item, .cat-item, .user-menu
 #screen-projects .avatar-group,
 #screen-projects .avatar-empty {
   flex: 0 0 auto;
+}
+#screen-projects .pc-top .avatar-group,
+#screen-projects .pc-top .avatar-empty {
+  margin-left: auto;
 }
 #screen-projects .pc-meta {
   margin-bottom: 0;
@@ -2120,7 +2121,7 @@ button, .tb-btn, .sb-btn, .page-btn, .view-btn, .nav-item, .cat-item, .user-menu
 }
 #screen-projects .pc-drag { top: 18px; right: 18px; }
 #screen-projects .pc-del { top: 56px; right: 18px; }
-#screen-projects .project-card.is-published .pc-drag { top: 58px; }
+#screen-projects .project-card.is-published .pc-drag { top: 18px; }
 #screen-projects .project-card.is-published .pc-del { top: 96px; }
 #screen-projects .project-card.is-published {
   border-color: #cfe6af !important;
@@ -2129,9 +2130,6 @@ button, .tb-btn, .sb-btn, .page-btn, .view-btn, .nav-item, .cat-item, .user-menu
 }
 #screen-projects .project-card.is-published:hover {
   box-shadow: 0 12px 28px rgba(15, 23, 42, 0.08) !important;
-}
-#screen-projects .project-card.is-published .pc-top {
-  padding-right: 132px;
 }
 #screen-projects .published-badge {
   top: 16px;
