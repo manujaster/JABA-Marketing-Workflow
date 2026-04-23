@@ -1173,6 +1173,9 @@ input,textarea,select{font-family:'Plus Jakarta Sans',sans-serif;outline:none;}
   background: #f8fafc;
   border-top: 1px solid #e2e8f0;
 }
+.planner-addbar.simple {
+  grid-template-columns: minmax(420px, 1fr) minmax(170px, 190px) auto;
+}
 .planner-add-input,
 .planner-add-select {
   height: 42px;
@@ -1188,6 +1191,7 @@ input,textarea,select{font-family:'Plus Jakarta Sans',sans-serif;outline:none;}
 .planner-mention-wrap {
   position: relative;
   min-width: 0;
+  width: 100%;
 }
 .task-mention-dropdown {
   position: absolute;
@@ -1265,6 +1269,7 @@ input,textarea,select{font-family:'Plus Jakarta Sans',sans-serif;outline:none;}
 @media (max-width: 980px) {
   .planner-title { font-size: 30px; }
   .planner-addbar { grid-template-columns: 1fr; }
+  .planner-addbar.simple { grid-template-columns: 1fr; }
   .planner-view-switch { width: 100%; }
   .planner-view-btn { flex: 1; min-width: 0; }
   .planner-toolbar-note { width: 100%; }
@@ -4479,7 +4484,7 @@ function renderMyWork() {
           <div class="planner-view-switch">
             <button class="planner-view-btn ${myWorkView === 'month' ? 'active' : ''}" onclick="setMyWorkView('month')">Month</button>
             <button class="planner-view-btn ${myWorkView === 'week' ? 'active' : ''}" onclick="setMyWorkView('week')">Week</button>
-            <button class="planner-view-btn ${myWorkView === 'today' ? 'active' : ''}" onclick="setMyWorkView('today')">Día</button>
+            <button class="planner-view-btn ${myWorkView === 'today' ? 'active' : ''}" onclick="setMyWorkView('today')">Day</button>
           </div>
           <div class="planner-toolbar-note">Organize your monthly priorities, map the week by day, and keep today focused on the tasks you are actually executing.</div>
         </div>
@@ -4720,7 +4725,7 @@ function renderPlannerRows(tasks, bucket) {
 function renderPlannerAddBar(bucket) {
   if (bucket === 'month') {
     return `
-      <div class="planner-addbar">
+      <div class="planner-addbar simple">
         <div class="planner-mention-wrap">
           <input class="planner-add-input" id="new-task-month" placeholder="Add a monthly responsibility or follow-up... Use @ to tag a project" oninput="handleTaskMentionInput(event,'month')" onkeydown="handleTaskMentionKeydown(event,'month')" onblur="deferHideTaskMention('month')">
           <div class="task-mention-dropdown" id="task-mention-month"></div>
@@ -4730,14 +4735,13 @@ function renderPlannerAddBar(bucket) {
           <option value="medium" selected>Medium priority</option>
           <option value="low">Low priority</option>
         </select>
-        <div></div>
         <button class="planner-add-btn" onclick="addWorkTask('month')">Add item</button>
       </div>
     `;
   }
   if (bucket === 'today') {
     return `
-      <div class="planner-addbar">
+      <div class="planner-addbar simple">
         <div class="planner-mention-wrap">
           <input class="planner-add-input" id="new-task-today" placeholder="Add what you will work on today... Use @ to tag a project" oninput="handleTaskMentionInput(event,'today')" onkeydown="handleTaskMentionKeydown(event,'today')" onblur="deferHideTaskMention('today')">
           <div class="task-mention-dropdown" id="task-mention-today"></div>
@@ -4747,7 +4751,6 @@ function renderPlannerAddBar(bucket) {
           <option value="medium" selected>Medium priority</option>
           <option value="low">Low priority</option>
         </select>
-        <div></div>
         <button class="planner-add-btn" onclick="addWorkTask('today')">Add item</button>
       </div>
     `;
