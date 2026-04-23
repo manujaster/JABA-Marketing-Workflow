@@ -4616,10 +4616,13 @@ function renderMyWork() {
   const selectedDateKey = myWorkRefDate;
   const monthTasks = getTodosByBucket(todos, 'month').filter(t => t.monthKey === selectedMonthKey);
   const weekTasks = getTodosByBucket(todos, 'week').filter(t => t.weekKey === selectedWeekKey);
+  const selectedWeekday = DAYS_OF_WEEK[parseDateKey(selectedDateKey).getDay() === 0 ? 6 : parseDateKey(selectedDateKey).getDay() - 1];
   const todayTasks = getTodosByBucket(todos, 'today').filter(t => t.dateKey === selectedDateKey);
+  const selectedDayWeekTasks = weekTasks.filter(t => (t.weekDay || t.day) === selectedWeekday);
+  const dayTasks = [...selectedDayWeekTasks, ...todayTasks];
   const monthPending = monthTasks.filter(t => t.status !== 'done').length;
   const weekPending = weekTasks.filter(t => t.status !== 'done').length;
-  const activeTodayCount = todayTasks.filter(t => t.status !== 'done').length;
+  const activeTodayCount = dayTasks.filter(t => t.status !== 'done').length;
 
   const badge = document.getElementById('mywork-badge');
   if (badge) {
@@ -4687,7 +4690,7 @@ function renderMyWork() {
       </div>
 
       <div class="planner-board">
-        ${renderMyWorkView(monthTasks, weekTasks, todayTasks)}
+        ${renderMyWorkView(monthTasks, weekTasks, dayTasks)}
       </div>
     </div>
 
@@ -4721,17 +4724,6 @@ function jumpMyWorkToToday() {
   myWorkRefDate = today();
   localStorage.setItem('jaba_mywork_ref_date', myWorkRefDate);
   if (screen === 'mywork') renderMyWork();
-}
-
-async function ensureDocxLib() {
-  if (window.docx) return;
-  await new Promise((res, rej) => {
-    const s = document.createElement('script');
-    s.src = 'https://unpkg.com/docx@8.5.0/build/index.js';
-    s.onload = res;
-    s.onerror = rej;
-    document.head.appendChild(s);
-  });
 }
 
 function getTaskProjectNames(task) {
@@ -4768,78 +4760,24 @@ async function generateWeeklyReport() {
 }
 
 async function buildWeeklyReportDocx(user, tasks, weekKey) {
-  await ensureDocxLib();
-  const { Document, Packer, Paragraph, TextRun, HeadingLevel, AlignmentType, LevelFormat } = window.docx;
-
-  const safe = (s) => String(s || '').replace(/[\u{10000}-\u{10FFFF}]/gu, '').replace(/[\uD800-\uDFFF]/g, '').trim();
   const doneTasks = tasks.filter(t => t.status === 'done');
   const inProgressTasks = tasks.filter(t => t.status === 'active');
   const blockedTasks = tasks.filter(t => t.status === 'on-hold');
   const weekLabel = formatWeekLabel(weekKey);
   const completionRate = Math.round((doneTasks.length / Math.max(tasks.length, 1)) * 100);
-  const children = [];
+  const sections = [
+    { type: 'title', text: 'Weekly Report' },
+    { type: 'subtitle', text: `${user.name} - Week of ${weekLabel}` },
+    { type: 'summary', text: `Completion rate: ${completionRate}% (${doneTasks.length}/${tasks.length} tasks completed)` },
+    { type: 'heading', text: 'What Was Achieved' },
+    ...buildWeeklyReportItems(doneTasks, 'No completed tasks were recorded for this week.'),
+    { type: 'heading', text: 'Still In Progress' },
+    ...buildWeeklyReportItems(inProgressTasks, 'No tasks are currently marked as in progress.'),
+    { type: 'heading', text: 'Not Achieved / On Hold' },
+    ...buildWeeklyReportItems(blockedTasks, 'No blocked or unfinished items were marked on hold.')
+  ];
 
-  const addBulletList = (items, emptyText) => {
-    if (!items.length) {
-      children.push(new Paragraph({
-        children: [new TextRun({ text: emptyText, italics: true, color: '64748B' })],
-        spacing: { after: 120 }
-      }));
-      return;
-    }
-    items.forEach(task => {
-      const projects = getTaskProjectNames(task);
-      const suffix = projects.length ? ` [Projects: ${projects.join(', ')}]` : '';
-      const scope = task.bucket === 'today' && task.dateKey ? ` (${formatDayLabel(task.dateKey)})` : task.bucket === 'week' && task.weekDay ? ` (${task.weekDay})` : '';
-      children.push(new Paragraph({
-        text: safe(`${task.text}${scope}${suffix}`),
-        numbering: { reference: 'weekly-bullets', level: 0 },
-        spacing: { after: 80 }
-      }));
-    });
-  };
-
-  children.push(new Paragraph({
-    text: 'Weekly Report',
-    heading: HeadingLevel.TITLE,
-    alignment: AlignmentType.LEFT,
-    spacing: { after: 120 }
-  }));
-  children.push(new Paragraph({
-    children: [new TextRun({ text: safe(`${user.name} • Week of ${weekLabel}`), bold: true, color: '334155', size: 24 })],
-    spacing: { after: 220 }
-  }));
-  children.push(new Paragraph({
-    children: [new TextRun({ text: safe(`Completion rate: ${completionRate}% (${doneTasks.length}/${tasks.length} tasks completed)`), bold: true, color: '2563EB' })],
-    spacing: { after: 220 }
-  }));
-
-  children.push(new Paragraph({ text: 'What Was Achieved', heading: HeadingLevel.HEADING_1, spacing: { before: 120, after: 120 } }));
-  addBulletList(doneTasks, 'No completed tasks were recorded for this week.');
-
-  children.push(new Paragraph({ text: 'Still In Progress', heading: HeadingLevel.HEADING_1, spacing: { before: 160, after: 120 } }));
-  addBulletList(inProgressTasks, 'No tasks are currently marked as in progress.');
-
-  children.push(new Paragraph({ text: 'Not Achieved / On Hold', heading: HeadingLevel.HEADING_1, spacing: { before: 160, after: 120 } }));
-  addBulletList(blockedTasks, 'No blocked or unfinished items were marked on hold.');
-
-  const doc = new Document({
-    numbering: {
-      config: [{
-        reference: 'weekly-bullets',
-        levels: [{
-          level: 0,
-          format: LevelFormat.BULLET,
-          text: '\u2022',
-          style: { paragraph: { indent: { left: 720, hanging: 360 } } }
-        }]
-      }]
-    },
-    sections: [{ children }]
-  });
-
-  const buffer = await Packer.toBuffer(doc);
-  const blob = new Blob([buffer], { type: 'application/vnd.openxmlformats-officedocument.wordprocessingml.document' });
+  const blob = createSimpleDocxBlob(sections);
   const url = URL.createObjectURL(blob);
   const a = document.createElement('a');
   a.href = url;
@@ -4848,12 +4786,194 @@ async function buildWeeklyReportDocx(user, tasks, weekKey) {
   URL.revokeObjectURL(url);
 }
 
-function renderMyWorkView(monthTasks, weekTasks, todayTasks) {
+function buildWeeklyReportItems(items, emptyText) {
+  if (!items.length) return [{ type: 'note', text: emptyText }];
+  return items.map(task => {
+    const projects = getTaskProjectNames(task);
+    const suffix = projects.length ? ` [Projects: ${projects.join(', ')}]` : '';
+    const scope = task.bucket === 'today' && task.dateKey
+      ? ` (${formatDayLabel(task.dateKey)})`
+      : task.bucket === 'week' && task.weekDay
+      ? ` (${task.weekDay})`
+      : '';
+    return { type: 'bullet', text: `${task.text}${scope}${suffix}` };
+  });
+}
+
+function escapeXml(str) {
+  return String(str || '')
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&apos;');
+}
+
+function uint16LE(value) {
+  return Uint8Array.of(value & 255, (value >> 8) & 255);
+}
+
+function uint32LE(value) {
+  return Uint8Array.of(value & 255, (value >> 8) & 255, (value >> 16) & 255, (value >> 24) & 255);
+}
+
+function concatUint8(arrays) {
+  const total = arrays.reduce((sum, arr) => sum + arr.length, 0);
+  const out = new Uint8Array(total);
+  let offset = 0;
+  arrays.forEach(arr => {
+    out.set(arr, offset);
+    offset += arr.length;
+  });
+  return out;
+}
+
+const ZIP_CRC_TABLE = (() => {
+  const table = new Uint32Array(256);
+  for (let n = 0; n < 256; n++) {
+    let c = n;
+    for (let k = 0; k < 8; k++) c = (c & 1) ? (0xedb88320 ^ (c >>> 1)) : (c >>> 1);
+    table[n] = c >>> 0;
+  }
+  return table;
+})();
+
+function crc32(bytes) {
+  let crc = 0 ^ -1;
+  for (let i = 0; i < bytes.length; i++) crc = (crc >>> 8) ^ ZIP_CRC_TABLE[(crc ^ bytes[i]) & 0xff];
+  return (crc ^ -1) >>> 0;
+}
+
+function getZipDosDateTime(date = new Date()) {
+  const year = Math.max(1980, date.getFullYear());
+  const dosTime = ((date.getHours() & 31) << 11) | ((date.getMinutes() & 63) << 5) | ((Math.floor(date.getSeconds() / 2)) & 31);
+  const dosDate = (((year - 1980) & 127) << 9) | (((date.getMonth() + 1) & 15) << 5) | (date.getDate() & 31);
+  return { dosTime, dosDate };
+}
+
+function createStoredZip(entries) {
+  const encoder = new TextEncoder();
+  const localParts = [];
+  const centralParts = [];
+  let offset = 0;
+  const { dosTime, dosDate } = getZipDosDateTime();
+
+  entries.forEach(entry => {
+    const nameBytes = encoder.encode(entry.name);
+    const dataBytes = typeof entry.data === 'string' ? encoder.encode(entry.data) : entry.data;
+    const checksum = crc32(dataBytes);
+
+    const localHeader = concatUint8([
+      uint32LE(0x04034b50),
+      uint16LE(20),
+      uint16LE(0),
+      uint16LE(0),
+      uint16LE(dosTime),
+      uint16LE(dosDate),
+      uint32LE(checksum),
+      uint32LE(dataBytes.length),
+      uint32LE(dataBytes.length),
+      uint16LE(nameBytes.length),
+      uint16LE(0),
+      nameBytes,
+      dataBytes
+    ]);
+    localParts.push(localHeader);
+
+    const centralHeader = concatUint8([
+      uint32LE(0x02014b50),
+      uint16LE(20),
+      uint16LE(20),
+      uint16LE(0),
+      uint16LE(0),
+      uint16LE(dosTime),
+      uint16LE(dosDate),
+      uint32LE(checksum),
+      uint32LE(dataBytes.length),
+      uint32LE(dataBytes.length),
+      uint16LE(nameBytes.length),
+      uint16LE(0),
+      uint16LE(0),
+      uint16LE(0),
+      uint16LE(0),
+      uint32LE(0),
+      uint32LE(offset),
+      nameBytes
+    ]);
+    centralParts.push(centralHeader);
+    offset += localHeader.length;
+  });
+
+  const centralDir = concatUint8(centralParts);
+  const localDir = concatUint8(localParts);
+  const endRecord = concatUint8([
+    uint32LE(0x06054b50),
+    uint16LE(0),
+    uint16LE(0),
+    uint16LE(entries.length),
+    uint16LE(entries.length),
+    uint32LE(centralDir.length),
+    uint32LE(localDir.length),
+    uint16LE(0)
+  ]);
+
+  return concatUint8([localDir, centralDir, endRecord]);
+}
+
+function buildSimpleDocumentXml(sections) {
+  const paragraphXml = sections.map(section => {
+    const text = escapeXml(section.text);
+    let rPr = '';
+    let pPr = '';
+    if (section.type === 'title') rPr = '<w:b/><w:sz w:val="40"/><w:color w:val="0F172A"/>';
+    else if (section.type === 'subtitle') rPr = '<w:b/><w:sz w:val="24"/><w:color w:val="334155"/>';
+    else if (section.type === 'summary') rPr = '<w:b/><w:sz w:val="22"/><w:color w:val="2563EB"/>';
+    else if (section.type === 'heading') rPr = '<w:b/><w:sz w:val="28"/><w:color w:val="0F172A"/>';
+    else if (section.type === 'note') rPr = '<w:i/><w:sz w:val="22"/><w:color w:val="64748B"/>';
+    else rPr = '<w:sz w:val="22"/><w:color w:val="1E293B"/>';
+    if (section.type === 'bullet') pPr = '<w:ind w:left="720" w:hanging="360"/>';
+    const bulletPrefix = section.type === 'bullet' ? '&#8226; ' : '';
+    return `<w:p><w:pPr>${pPr}</w:pPr><w:r><w:rPr>${rPr}</w:rPr><w:t xml:space="preserve">${bulletPrefix}${text}</w:t></w:r></w:p>`;
+  }).join('');
+
+  return `<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+  <w:document xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main">
+    <w:body>
+      ${paragraphXml}
+      <w:sectPr>
+        <w:pgSz w:w="12240" w:h="15840"/>
+        <w:pgMar w:top="1440" w:right="1440" w:bottom="1440" w:left="1440" w:header="720" w:footer="720" w:gutter="0"/>
+      </w:sectPr>
+    </w:body>
+  </w:document>`;
+}
+
+function createSimpleDocxBlob(sections) {
+  const contentTypes = `<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+  <Types xmlns="http://schemas.openxmlformats.org/package/2006/content-types">
+    <Default Extension="rels" ContentType="application/vnd.openxmlformats-package.relationships+xml"/>
+    <Default Extension="xml" ContentType="application/xml"/>
+    <Override PartName="/word/document.xml" ContentType="application/vnd.openxmlformats-officedocument.wordprocessingml.document.main+xml"/>
+  </Types>`;
+  const rels = `<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+  <Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships">
+    <Relationship Id="rId1" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/officeDocument" Target="word/document.xml"/>
+  </Relationships>`;
+  const documentXml = buildSimpleDocumentXml(sections);
+  const zipBytes = createStoredZip([
+    { name: '[Content_Types].xml', data: contentTypes },
+    { name: '_rels/.rels', data: rels },
+    { name: 'word/document.xml', data: documentXml }
+  ]);
+  return new Blob([zipBytes], { type: 'application/vnd.openxmlformats-officedocument.wordprocessingml.document' });
+}
+
+function renderMyWorkView(monthTasks, weekTasks, dayTasks) {
   if (myWorkView === 'month') {
     return renderPlannerGroup('month', 'Month Focus', 'High-level responsibilities and recurring priorities for the current month.', monthTasks, '#7c3aed');
   }
   if (myWorkView === 'today') {
-    return renderPlannerGroup('today', 'Today', 'What you are actively working on right now.', todayTasks, '#2563eb');
+    return renderPlannerGroup('today', 'Day Focus', 'This day view combines the tasks scheduled for this weekday plus the specific day items you added.', dayTasks, '#2563eb');
   }
   return renderWeekPlanner(weekTasks);
 }
