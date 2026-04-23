@@ -640,13 +640,14 @@ input,textarea,select{font-family:'Plus Jakarta Sans',sans-serif;outline:none;}
 
 /* --- ESTILO ESPECIAL PARA PROYECTOS PUBLICADOS (Glow Verde) --- */
 .project-card.is-published {
-  border-color: var(--green, #00ff80) !important; 
-  box-shadow: 0 0 15px rgba(0, 255, 128, 0.5) !important; 
+  border-color: #cfe6af !important;
+  background: linear-gradient(180deg, #fbfdea 0%, #f6fbe8 100%) !important;
+  box-shadow: 0 0 15px rgba(191, 255, 0, 0.12) !important; 
   transition: box-shadow 0.3s ease;
 }
 
 .project-card.is-published:hover {
-  box-shadow: 0 0 25px rgba(0, 255, 128, 0.8) !important; 
+  box-shadow: 0 10px 26px rgba(191, 255, 0, 0.16) !important; 
 }
 
 /* Etiqueta flotante de "Published" */
@@ -2122,11 +2123,15 @@ button, .tb-btn, .sb-btn, .page-btn, .view-btn, .nav-item, .cat-item, .user-menu
 #screen-projects .project-card.is-published .pc-drag { top: 58px; }
 #screen-projects .project-card.is-published .pc-del { top: 96px; }
 #screen-projects .project-card.is-published {
-  border-color: var(--project-stroke, var(--green)) !important;
+  border-color: #cfe6af !important;
+  background: linear-gradient(180deg, #fbfdea 0%, #f6fbe8 100%) !important;
   box-shadow: 0 6px 18px rgba(15, 23, 42, 0.05) !important;
 }
 #screen-projects .project-card.is-published:hover {
   box-shadow: 0 12px 28px rgba(15, 23, 42, 0.08) !important;
+}
+#screen-projects .project-card.is-published .pc-top {
+  padding-right: 132px;
 }
 #screen-projects .published-badge {
   top: 16px;
@@ -4082,7 +4087,7 @@ function renderProjects() {
     const statusMarkup = `<span class="pc-status-icon">${projectCardIcon(statusIcon)}</span><span class="pc-status-text">${statusText}</span>`;
     // Aplicamos el glow verde y el cartelito a los publicados
     const isPubClass = (p.isPublished || p.state === 'published') ? 'is-published' : '';
-    const pubBadge = (p.isPublished || p.state === 'published') ? `<div class="published-badge">Published</div>` : '';
+    const pubBadge = '';
 
     return `<div class="project-card ${isPubClass}" style="--project-stroke:${cat?.color||formatColor}; --hover-color:${cat?.color||formatColor}; position:relative;" draggable="true" ondragstart="dragStart(event,'${p.id}')" ondragover="dragOver(event)" ondragleave="dragLeave(event)" ondrop="drop(event,'${p.id}')" ondragend="dragEnd(event)">      
       ${pubBadge}
