@@ -3867,6 +3867,7 @@ function projectCardIcon(kind) {
 
 function uiIconSvg(name) {
   const icons = {
+    search: `<svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>`,
     bell: `<svg viewBox="0 0 24 24"><path d="M6 8a6 6 0 1 1 12 0c0 7 3 8 3 8H3s3-1 3-8"/><path d="M10 20a2 2 0 0 0 4 0"/></svg>`,
     message: `<svg viewBox="0 0 24 24"><path d="M21 12a8.5 8.5 0 0 1-8.5 8.5H6l-3 3V12A8.5 8.5 0 0 1 11.5 3.5h1A8.5 8.5 0 0 1 21 12Z"/></svg>`,
     user: `<svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>`,
@@ -3898,9 +3899,11 @@ function uiIconSvg(name) {
     hand: `<svg viewBox="0 0 24 24"><path d="M8 13V5a1 1 0 0 1 2 0v5"/><path d="M12 13V4a1 1 0 0 1 2 0v9"/><path d="M16 13V6a1 1 0 0 1 2 0v8"/><path d="M4 14h.01"/><path d="M6 10a1 1 0 0 0-1 1v4.5A5.5 5.5 0 0 0 10.5 21H15a5 5 0 0 0 5-5v-3a2 2 0 0 0-2-2h-8l-2-1Z"/></svg>`,
     chevronLeft: `<svg viewBox="0 0 24 24"><path d="m15 18-6-6 6-6"/></svg>`,
     chevronRight: `<svg viewBox="0 0 24 24"><path d="m9 18 6-6-6-6"/></svg>`,
+    chevronDown: `<svg viewBox="0 0 24 24"><path d="m6 9 6 6 6-6"/></svg>`,
     x: `<svg viewBox="0 0 24 24"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>`,
     target: `<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5"/><circle cx="12" cy="12" r="1"/></svg>`,
-    star: `<svg viewBox="0 0 24 24"><path d="m12 3 2.8 5.7 6.2.9-4.5 4.4 1.1 6.2L12 17.3 6.4 20.2l1.1-6.2L3 9.6l6.2-.9L12 3Z"/></svg>`
+    star: `<svg viewBox="0 0 24 24"><path d="m12 3 2.8 5.7 6.2.9-4.5 4.4 1.1 6.2L12 17.3 6.4 20.2l1.1-6.2L3 9.6l6.2-.9L12 3Z"/></svg>`,
+    drag: `<svg viewBox="0 0 24 24"><circle cx="9" cy="6" r="1.2"/><circle cx="15" cy="6" r="1.2"/><circle cx="9" cy="12" r="1.2"/><circle cx="15" cy="12" r="1.2"/><circle cx="9" cy="18" r="1.2"/><circle cx="15" cy="18" r="1.2"/></svg>`
   };
   return icons[name] || icons.file;
 }
@@ -3910,6 +3913,7 @@ function uiIcon(name, cls = '') {
 }
 
 const UI_EMOJI_ICON_MAP = [
+  ['Ã°Å¸â€Â', 'search'], ['ðŸ”', 'search'],
   ['Ã°Å¸â€â€', 'bell'], ['Ã°Å¸â€™Â¬', 'message'], ['Ã°Å¸â€˜Â¤', 'user'], ['Ã°Å¸Å¡Âª', 'logout'],
   ['Ã°Å¸â€”â€˜Ã¯Â¸Â', 'trash'], ['Ã°Å¸â€”â€˜', 'trash'], ['Ã¢Å“ÂÃ¯Â¸Â', 'pencil'], ['Ã°Å¸â€œÂ', 'folder'],
   ['Ã°Å¸â€œâ€š', 'folderOpen'], ['Ã°Å¸â€˜Â¥', 'users'], ['Ã°Å¸â€œâ€¦', 'calendar'], ['Ã¢Å¡â„¢Ã¯Â¸Â', 'settings'],
@@ -3919,19 +3923,26 @@ const UI_EMOJI_ICON_MAP = [
   ['Ã°Å¸â€â€”', 'link'], ['Ã°Å¸â€“Â¼Ã¯Â¸Â', 'image'], ['Ã°Å¸â€“Â¼', 'image'], ['Ã°Å¸â€œÂ', 'note'],
   ['Ã°Å¸â€Â', 'refresh'], ['Ã°Å¸â€™Â¡', 'idea'], ['Ã°Å¸Å½Â¬', 'video'], ['Ã°Å¸â€˜â€¹', 'hand'],
   ['Ã°Å¸â€œâ€ž', 'file'], ['Ã¢Å¡Â Ã¯Â¸Â', 'warning'], ['Ã¢Å¡Â ', 'warning'], ['Ã¢â€”Å½', 'target'],
-  ['Ã¢â€ â€™', 'chevronRight'],
+  ['Ã¢â€ â€™', 'chevronRight'], ['â€¹', 'chevronLeft'], ['â€º', 'chevronRight'], ['‹', 'chevronLeft'], ['›', 'chevronRight'],
   ['ðŸ—‘ï¸', 'trash'], ['ðŸ—‘', 'trash'], ['ðŸ””', 'bell'], ['ðŸ’¬', 'message'], ['ðŸ‘¤', 'user'], ['ðŸšª', 'logout'],
   ['âœï¸', 'pencil'], ['âœ', 'pencil'], ['ðŸ“', 'folder'], ['ðŸ“‚', 'folderOpen'], ['ðŸ‘¥', 'users'],
   ['ðŸ“…', 'calendar'], ['âš¡', 'spark'], ['ðŸ“Ž', 'paperclip'], ['âš™ï¸', 'settings'], ['âš™', 'settings'],
-  ['âž•', 'plus'], ['â–¶', 'play'], ['â—€', 'chevronLeft'], ['âœ•', 'x'], ['âœ…', 'checkCircle'],
+  ['âž•', 'plus'], ['â–¶', 'play'], ['â—€', 'chevronLeft'], ['â–¾', 'chevronDown'], ['▾', 'chevronDown'], ['▼', 'chevronDown'], ['âœ•', 'x'], ['âœ…', 'checkCircle'],
   ['âœ”ï¸', 'checkCircle'], ['âœ“', 'check'], ['â¸', 'pause'], ['â³', 'clock'], ['ðŸš€', 'rocket'],
   ['ðŸŽ‰', 'spark'], ['ðŸ”™', 'chevronLeft'], ['â­', 'star'], ['â˜†', 'star'], ['ðŸ”—', 'link'], ['ðŸ–¼ï¸', 'image'], ['ðŸ–¼', 'image'], ['ðŸ“', 'note'],
   ['ðŸ”„', 'refresh'], ['ðŸ’¡', 'idea'], ['ðŸŽ¬', 'video'], ['ðŸ‘‹', 'hand'], ['ðŸ“„', 'file'],
-  ['âš ï¸', 'warning'], ['âš ', 'warning'], ['â—Ž', 'target'], ['â†’', 'chevronRight']
+  ['âš ï¸', 'warning'], ['âš ', 'warning'], ['â—Ž', 'target'], ['â†’', 'chevronRight'], ['→', 'chevronRight'], ['â ¿', 'drag']
 ];
 
 function iconifyUiHtml(html) {
-  let out = html;
+  let out = String(html)
+    .split('Â·').join('·')
+    .split('â€”').join('—')
+    .split('â€“').join('–')
+    .split('â€˜').join('‘')
+    .split('â€™').join('’')
+    .split('â€œ').join('“')
+    .split('â€ ').join('”');
   UI_EMOJI_ICON_MAP.forEach(([token, iconName]) => {
     out = out.split(token).join(uiIcon(iconName));
   });
@@ -3947,7 +3958,8 @@ function applyUiIcons(root = document) {
     '.planner-add-btn', '.planner-secondary-btn', '.page-btn', '.field-label span[onclick]', '.cc-del',
     '.todo-add-btn', '.task-add-btn', '.user-menu-name', '#tb-title', '.pub-card button', '.apj-thumb',
     '.an-proj-thumb', '.idea-meta-row span', '.mini-proj span[style*="color:var(--muted)"]', '.v-date',
-    '.step-circle', '.week-day-chev', '.priority-star', '.badge-priority', '.badge-publish'
+    '.step-circle', '.week-day-chev', '.priority-star', '.badge-priority', '.badge-publish',
+    'button', 'label', 'a', 'span', '.empty-text', '.empty-sub', '.ap-sub', '.planner-context-value', '.planner-context-label'
   ].join(', ');
   root.querySelectorAll(selectors).forEach(el => {
     const next = iconifyUiHtml(el.innerHTML);
@@ -5123,8 +5135,8 @@ function goScreen(name) {
   render(); 
 }
 
-function toast(msg,icon='âœ“') {
-  const iconMarkup = iconifyUiHtml(icon);
+function toast(msg,icon='checkCircle') {
+  const iconMarkup = /^[a-z][a-zA-Z]+$/.test(icon) ? uiIcon(icon) : iconifyUiHtml(icon);
   const el=document.createElement('div');
   el.className='toast';
   el.innerHTML=`<span>${iconMarkup}</span> ${msg}`;
