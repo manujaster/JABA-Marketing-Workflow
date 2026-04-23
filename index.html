@@ -3480,13 +3480,19 @@ function renderProfile() {
       </div>`;
     };
 
-    if(!DB.todos) DB.todos = {};
-    if(!DB.todos[u.id]) DB.todos[u.id] = [];
-    const todos = DB.todos[u.id];
+    ensureTodosReady();
+    const todayKey = today();
+    const currentWeekKey = getWeekKey(todayKey);
+    const currentWeekday = DAYS_OF_WEEK[parseDateKey(todayKey).getDay()];
+    const todos = (DB.todos[u.id] || []).map(normalizeTodoTask);
+    const dailyTodos = todos.filter(t =>
+      (t.bucket === 'today' && t.dateKey === todayKey) ||
+      (t.bucket === 'week' && t.weekKey === currentWeekKey && (t.weekDay || t.day) === currentWeekday)
+    );
 
-    const todoHTML = todos.map(t => `
-      <div class="todo-item ${t.done?'done':''}">
-        <input type="checkbox" ${t.done?'checked':''} onchange="toggleTodo('${t.id}')">
+    const todoHTML = dailyTodos.map(t => `
+      <div class="todo-item ${t.status==='done'?'done':''}">
+        <input type="checkbox" ${t.status==='done'?'checked':''} onchange="toggleTodo('${t.id}')">
         <span class="todo-text">${t.text}</span>
         <button class="todo-del" onclick="delTodo('${t.id}')">✕</button>
       </div>
@@ -3531,15 +3537,48 @@ function renderProfile() {
 }
 
 function addTodo() {
-  const text = document.getElementById('new-todo').value.trim(); if(!text) return;
-  DB.todos[currentUser].push({id:uid(), text, done:false});
-  save(); renderProfile();
+  const u = getAuthUser();
+  const input = document.getElementById('new-todo');
+  const text = input.value.trim();
+  if(!u || !text) return;
+  ensureTodosReady();
+  const dateKey = today();
+  DB.todos[u.id].unshift(normalizeTodoTask({
+    id: uid(),
+    text,
+    done: false,
+    status: 'active',
+    priority: 'medium',
+    linkedProjectIds: [],
+    bucket: 'today',
+    monthKey: getMonthKey(dateKey),
+    weekKey: getWeekKey(dateKey),
+    dateKey,
+    createdAt: dateKey
+  }));
+  input.value = '';
+  save();
+  renderProfile();
 }
 function toggleTodo(id) {
-  const t = DB.todos[currentUser].find(x=>x.id===id); if(t){ t.done = !t.done; save(); renderProfile(); }
+  const u = getAuthUser();
+  if(!u) return;
+  ensureTodosReady();
+  const t = (DB.todos[u.id] || []).find(x=>x.id===id);
+  if(t){
+    t.status = t.status === 'done' ? 'active' : 'done';
+    t.done = t.status === 'done';
+    save();
+    renderProfile();
+  }
 }
 function delTodo(id) {
-  DB.todos[currentUser] = DB.todos[currentUser].filter(x=>x.id!==id); save(); renderProfile();
+  const u = getAuthUser();
+  if(!u) return;
+  ensureTodosReady();
+  DB.todos[u.id] = (DB.todos[u.id] || []).filter(x=>x.id!==id);
+  save();
+  renderProfile();
 }
 
 /* ═══════════════════════════════════════
