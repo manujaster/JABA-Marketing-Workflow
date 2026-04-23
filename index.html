@@ -1101,6 +1101,24 @@ input,textarea,select{font-family:'Plus Jakarta Sans',sans-serif;outline:none;}
   font-size: 12px;
   color: #64748b;
 }
+.task-project-mention {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  border: none;
+  background: rgba(37, 99, 235, 0.1);
+  color: #2563eb;
+  border-radius: 8px;
+  padding: 1px 7px;
+  margin: 0 2px;
+  font: inherit;
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+}
+.task-project-mention:hover {
+  background: rgba(37, 99, 235, 0.16);
+}
 .planner-pill {
   display: inline-flex;
   align-items: center;
@@ -1166,6 +1184,51 @@ input,textarea,select{font-family:'Plus Jakarta Sans',sans-serif;outline:none;}
   font-weight: 500;
   padding: 0 14px;
   outline: none;
+}
+.planner-mention-wrap {
+  position: relative;
+}
+.task-mention-dropdown {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: calc(100% + 8px);
+  background: #ffffff;
+  border: 1px solid #d7e0ec;
+  border-radius: 14px;
+  box-shadow: 0 20px 40px rgba(15, 23, 42, 0.12);
+  overflow: hidden;
+  z-index: 40;
+  display: none;
+}
+.task-mention-dropdown.show {
+  display: block;
+}
+.task-mention-item {
+  width: 100%;
+  border: none;
+  background: #ffffff;
+  padding: 12px 14px;
+  text-align: left;
+  cursor: pointer;
+  border-bottom: 1px solid #edf2f7;
+}
+.task-mention-item:last-child {
+  border-bottom: none;
+}
+.task-mention-item:hover,
+.task-mention-item.active {
+  background: #f8fbff;
+}
+.task-mention-name {
+  font-size: 14px;
+  font-weight: 700;
+  color: #0f172a;
+}
+.task-mention-meta {
+  font-size: 12px;
+  color: #64748b;
+  margin-top: 4px;
 }
 .planner-add-input::placeholder { color: #94a3b8; }
 .planner-add-input:focus,
@@ -4176,6 +4239,11 @@ const DAYS_OF_WEEK = ['Monday','Tuesday','Wednesday','Thursday','Friday','Saturd
 const PRIORITY_LABELS = { high:'High', medium:'Medium', low:'Low' };
 const WORK_BUCKET_LABELS = { month:'Month', week:'Week', today:'Today' };
 let myWorkView = localStorage.getItem('jaba_mywork_view') || 'week';
+const taskMentionState = {
+  month: { activeIndex: 0, matches: [], triggerIndex: -1 },
+  week: { activeIndex: 0, matches: [], triggerIndex: -1 },
+  today: { activeIndex: 0, matches: [], triggerIndex: -1 }
+};
 
 function getTodayWeekdayName() {
   const dayIndex = new Date().getDay();
@@ -4192,6 +4260,7 @@ function normalizeTodoTask(t) {
     done: t.done || false,
     status: t.status || (t.done ? 'done' : 'active'),
     priority: t.priority || 'medium',
+    linkedProjectIds: Array.isArray(t.linkedProjectIds) ? t.linkedProjectIds : [],
     bucket,
     weekDay,
     day: bucket === 'today' ? 'today' : bucket === 'month' ? 'month' : weekDay,
@@ -4443,6 +4512,174 @@ function renderMyWorkView(monthTasks, weekTasks, todayTasks) {
   return renderWeekPlanner(weekTasks);
 }
 
+function escapeRegExp(str) {
+  return String(str).replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+}
+
+function findMentionProjects(text) {
+  if (!text) return [];
+  const projects = DB.projects || [];
+  return projects
+    .filter(p => {
+      const pattern = new RegExp(`(^|\\s)@${escapeRegExp(p.name)}(?=\\s|$)`, 'i');
+      return pattern.test(text);
+    })
+    .map(p => p.id);
+}
+
+function renderTaskTextWithMentions(text, linkedProjectIds = []) {
+  const safeText = String(text || '');
+  const linkedProjects = linkedProjectIds
+    .map(id => DB.projects.find(p => p.id === id))
+    .filter(Boolean);
+
+  if (!linkedProjects.length) return escapeHtml(safeText);
+
+  const matches = [];
+  linkedProjects
+    .sort((a, b) => b.name.length - a.name.length)
+    .forEach(project => {
+      const regex = new RegExp(`(^|\\s)@${escapeRegExp(project.name)}(?=\\s|$)`, 'ig');
+      let match;
+      while ((match = regex.exec(safeText)) !== null) {
+        const leading = match[1] || '';
+        const start = match.index + leading.length;
+        const end = start + project.name.length + 1;
+        matches.push({ start, end, project, token: safeText.slice(start, end) });
+      }
+    });
+
+  matches.sort((a, b) => a.start - b.start || b.end - a.end);
+  const merged = [];
+  matches.forEach(match => {
+    const prev = merged[merged.length - 1];
+    if (!prev || match.start >= prev.end) merged.push(match);
+  });
+
+  if (!merged.length) return escapeHtml(safeText);
+
+  let html = '';
+  let cursor = 0;
+  merged.forEach(match => {
+    html += escapeHtml(safeText.slice(cursor, match.start));
+    html += `<button class="task-project-mention" onclick="event.stopPropagation(); openProj('${match.project.id}')">${escapeHtml(match.token)}</button>`;
+    cursor = match.end;
+  });
+  html += escapeHtml(safeText.slice(cursor));
+  return html;
+}
+
+function getTaskMentionInputId(mode) {
+  return mode === 'month' ? 'new-task-month' : mode === 'today' ? 'new-task-today' : 'new-task-week';
+}
+
+function getTaskMentionDropdownId(mode) {
+  return `task-mention-${mode}`;
+}
+
+function updateTaskMentionDropdown(mode) {
+  const state = taskMentionState[mode];
+  const dropdown = document.getElementById(getTaskMentionDropdownId(mode));
+  if (!dropdown) return;
+  if (!state.matches.length) {
+    dropdown.classList.remove('show');
+    dropdown.innerHTML = '';
+    return;
+  }
+  dropdown.innerHTML = state.matches.map((project, index) => {
+    const cat = getCat(project.catId);
+    return `
+      <button class="task-mention-item ${index === state.activeIndex ? 'active' : ''}" onmousedown="selectTaskMention('${mode}', '${project.id}')">
+        <div class="task-mention-name">@${escapeHtml(project.name)}</div>
+        <div class="task-mention-meta">${escapeHtml(cat?.name || 'Project')}</div>
+      </button>
+    `;
+  }).join('');
+  dropdown.classList.add('show');
+}
+
+function closeTaskMentionDropdown(mode) {
+  const state = taskMentionState[mode];
+  state.matches = [];
+  state.activeIndex = 0;
+  state.triggerIndex = -1;
+  updateTaskMentionDropdown(mode);
+}
+
+function deferHideTaskMention(mode) {
+  setTimeout(() => closeTaskMentionDropdown(mode), 120);
+}
+
+function updateTaskMentionState(mode) {
+  const input = document.getElementById(getTaskMentionInputId(mode));
+  if (!input) return;
+  const state = taskMentionState[mode];
+  const caret = input.selectionStart ?? input.value.length;
+  const beforeCaret = input.value.slice(0, caret);
+  const atIndex = beforeCaret.lastIndexOf('@');
+  if (atIndex === -1) return closeTaskMentionDropdown(mode);
+  const charBefore = atIndex === 0 ? ' ' : beforeCaret[atIndex - 1];
+  if (!/\s/.test(charBefore) && atIndex !== 0) return closeTaskMentionDropdown(mode);
+  const query = beforeCaret.slice(atIndex + 1);
+  if (query.includes('\n')) return closeTaskMentionDropdown(mode);
+  const normalizedQuery = query.trim().toLowerCase();
+  state.triggerIndex = atIndex;
+  state.activeIndex = 0;
+  state.matches = (DB.projects || [])
+    .filter(project => !normalizedQuery || project.name.toLowerCase().includes(normalizedQuery))
+    .slice(0, 7);
+  updateTaskMentionDropdown(mode);
+}
+
+function handleTaskMentionInput(event, mode) {
+  updateTaskMentionState(mode);
+}
+
+function handleTaskMentionKeydown(event, mode) {
+  const state = taskMentionState[mode];
+  if (!state.matches.length) {
+    if (event.key === 'Enter') addWorkTask(mode);
+    return;
+  }
+  if (event.key === 'ArrowDown') {
+    event.preventDefault();
+    state.activeIndex = (state.activeIndex + 1) % state.matches.length;
+    updateTaskMentionDropdown(mode);
+    return;
+  }
+  if (event.key === 'ArrowUp') {
+    event.preventDefault();
+    state.activeIndex = (state.activeIndex - 1 + state.matches.length) % state.matches.length;
+    updateTaskMentionDropdown(mode);
+    return;
+  }
+  if (event.key === 'Enter') {
+    event.preventDefault();
+    const selected = state.matches[state.activeIndex];
+    if (selected) selectTaskMention(mode, selected.id);
+    return;
+  }
+  if (event.key === 'Escape') {
+    event.preventDefault();
+    closeTaskMentionDropdown(mode);
+  }
+}
+
+function selectTaskMention(mode, projectId) {
+  const input = document.getElementById(getTaskMentionInputId(mode));
+  const project = DB.projects.find(p => p.id === projectId);
+  const state = taskMentionState[mode];
+  if (!input || !project || state.triggerIndex === -1) return;
+  const caret = input.selectionStart ?? input.value.length;
+  const before = input.value.slice(0, state.triggerIndex);
+  const after = input.value.slice(caret);
+  input.value = `${before}@${project.name} ${after.replace(/^\s*/, '')}`;
+  const newCaret = before.length + project.name.length + 2;
+  input.focus();
+  input.setSelectionRange(newCaret, newCaret);
+  closeTaskMentionDropdown(mode);
+}
+
 function renderPlannerRows(tasks, bucket) {
   const order = { active: 0, 'on-hold': 1, done: 2 };
   const priOrder = { high: 0, medium: 1, low: 2 };
@@ -4457,7 +4694,7 @@ function renderPlannerRows(tasks, bucket) {
       <tr>
         <td class="planner-col-check"><button class="planner-check ${t.status === 'done' ? 'checked' : ''}" onclick="toggleWorkTask('${t.id}')"></button></td>
         <td class="planner-col-item">
-          <div class="planner-item-name ${t.status === 'done' ? 'done' : ''}">${escapeHtml(t.text)}</div>
+          <div class="planner-item-name ${t.status === 'done' ? 'done' : ''}">${renderTaskTextWithMentions(t.text, t.linkedProjectIds || [])}</div>
           <div class="planner-item-note">${bucket === 'month' ? 'Monthly visibility item' : bucket === 'today' ? 'Current execution list' : weekLabel ? 'Scheduled for ' + weekLabel : 'Scheduled this week'}</div>
         </td>
         <td class="planner-col-priority"><span class="planner-pill priority-${t.priority}">${PRIORITY_LABELS[t.priority] || t.priority}</span></td>
@@ -4478,7 +4715,10 @@ function renderPlannerAddBar(bucket) {
   if (bucket === 'month') {
     return `
       <div class="planner-addbar">
-        <input class="planner-add-input" id="new-task-month" placeholder="Add a monthly responsibility or follow-up..." onkeyup="if(event.key==='Enter') addWorkTask('month')">
+        <div class="planner-mention-wrap">
+          <input class="planner-add-input" id="new-task-month" placeholder="Add a monthly responsibility or follow-up... Use @ to tag a project" oninput="handleTaskMentionInput(event,'month')" onkeydown="handleTaskMentionKeydown(event,'month')" onblur="deferHideTaskMention('month')">
+          <div class="task-mention-dropdown" id="task-mention-month"></div>
+        </div>
         <select class="planner-add-select" id="new-task-month-pri">
           <option value="high">High priority</option>
           <option value="medium" selected>Medium priority</option>
@@ -4492,7 +4732,10 @@ function renderPlannerAddBar(bucket) {
   if (bucket === 'today') {
     return `
       <div class="planner-addbar">
-        <input class="planner-add-input" id="new-task-today" placeholder="Add what you will work on today..." onkeyup="if(event.key==='Enter') addWorkTask('today')">
+        <div class="planner-mention-wrap">
+          <input class="planner-add-input" id="new-task-today" placeholder="Add what you will work on today... Use @ to tag a project" oninput="handleTaskMentionInput(event,'today')" onkeydown="handleTaskMentionKeydown(event,'today')" onblur="deferHideTaskMention('today')">
+          <div class="task-mention-dropdown" id="task-mention-today"></div>
+        </div>
         <select class="planner-add-select" id="new-task-today-pri">
           <option value="high">High priority</option>
           <option value="medium" selected>Medium priority</option>
@@ -4505,7 +4748,10 @@ function renderPlannerAddBar(bucket) {
   }
   return `
     <div class="planner-addbar">
-      <input class="planner-add-input" id="new-task-week" placeholder="Add a task into this week..." onkeyup="if(event.key==='Enter') addWorkTask('week')">
+      <div class="planner-mention-wrap">
+        <input class="planner-add-input" id="new-task-week" placeholder="Add a task into this week... Use @ to tag a project" oninput="handleTaskMentionInput(event,'week')" onkeydown="handleTaskMentionKeydown(event,'week')" onblur="deferHideTaskMention('week')">
+        <div class="task-mention-dropdown" id="task-mention-week"></div>
+      </div>
       <select class="planner-add-select" id="new-task-week-day">
         ${DAYS_OF_WEEK.map(d => `<option value="${d}">${d}</option>`).join('')}
       </select>
@@ -4760,14 +5006,17 @@ function addWorkTask(mode) {
     inputId = 'new-task-week'; priId = 'new-task-week-pri'; dayId = 'new-task-week-day'; bucket = 'week';
   }
 
-  const text = document.getElementById(inputId)?.value.trim();
+  const inputEl = document.getElementById(inputId);
+  const text = inputEl?.value.trim();
   if (!text) return;
   const priority = document.getElementById(priId)?.value || 'medium';
   const weekDay = bucket === 'week' ? (document.getElementById(dayId)?.value || 'Monday') : getTodayWeekdayName();
   const day = bucket === 'today' ? 'today' : bucket === 'month' ? 'month' : weekDay;
+  const linkedProjectIds = findMentionProjects(text);
 
-  DB.todos[u.id].push({ id: uid(), text, done: false, status: 'active', priority, bucket, weekDay, day, monthKey: today().slice(0,7), createdAt: today() });
-  document.getElementById(inputId).value = '';
+  DB.todos[u.id].push({ id: uid(), text, done: false, status: 'active', priority, linkedProjectIds, bucket, weekDay, day, monthKey: today().slice(0,7), createdAt: today() });
+  inputEl.value = '';
+  closeTaskMentionDropdown(mode);
   save();
   renderMyWork();
 }
