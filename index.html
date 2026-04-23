@@ -937,6 +937,78 @@ input,textarea,select{font-family:'Plus Jakarta Sans',sans-serif;outline:none;}
   flex-wrap: wrap;
   margin-top: 2px;
 }
+.planner-context-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+  flex-wrap: wrap;
+  margin-top: 16px;
+}
+.planner-context-nav {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+.planner-nav-btn {
+  width: 40px;
+  height: 40px;
+  border-radius: 12px;
+  border: 1px solid #cfd9e6;
+  background: #ffffff;
+  color: #334155;
+  font-size: 18px;
+  font-weight: 800;
+  cursor: pointer;
+}
+.planner-context-pills {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+.planner-context-pill {
+  background: #ffffff;
+  border: 1px solid #d7e0ec;
+  border-radius: 14px;
+  padding: 10px 14px;
+  min-width: 140px;
+}
+.planner-context-label {
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: .45px;
+  color: #64748b;
+  font-weight: 700;
+  margin-bottom: 4px;
+}
+.planner-context-value {
+  font-size: 15px;
+  color: #0f172a;
+  font-weight: 800;
+}
+.planner-context-actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+.planner-secondary-btn {
+  height: 42px;
+  border-radius: 12px;
+  border: 1px solid #cfd9e6;
+  background: #ffffff;
+  color: #1e293b;
+  padding: 0 16px;
+  font-size: 14px;
+  font-weight: 800;
+  cursor: pointer;
+}
+.planner-secondary-btn:hover,
+.planner-nav-btn:hover {
+  background: #f8fafc;
+}
 .planner-view-switch {
   display: inline-flex;
   align-items: center;
@@ -1296,6 +1368,7 @@ input,textarea,select{font-family:'Plus Jakarta Sans',sans-serif;outline:none;}
   .planner-view-switch { width: 100%; }
   .planner-view-btn { flex: 1; min-width: 0; }
   .planner-toolbar-note { width: 100%; }
+  .planner-context-bar { align-items: stretch; }
 }
 
 /* Meeting upload panel */
@@ -4268,6 +4341,7 @@ const DAYS_OF_WEEK = ['Monday','Tuesday','Wednesday','Thursday','Friday','Saturd
 const PRIORITY_LABELS = { high:'High', medium:'Medium', low:'Low' };
 const WORK_BUCKET_LABELS = { month:'Month', week:'Week', today:'Today' };
 let myWorkView = localStorage.getItem('jaba_mywork_view') || 'week';
+let myWorkRefDate = localStorage.getItem('jaba_mywork_ref_date') || today();
 const taskMentionState = {
   month: { activeIndex: 0, matches: [], triggerIndex: -1 },
   week: { activeIndex: 0, matches: [], triggerIndex: -1 },
@@ -4277,6 +4351,76 @@ const taskMentionState = {
 function getTodayWeekdayName() {
   const dayIndex = new Date().getDay();
   return DAYS_OF_WEEK[dayIndex === 0 ? 6 : dayIndex - 1];
+}
+
+function parseDateKey(dateStr) {
+  const [y, m, d] = String(dateStr || today()).split('-').map(Number);
+  return new Date(y, (m || 1) - 1, d || 1);
+}
+
+function formatDateKey(date) {
+  const y = date.getFullYear();
+  const m = String(date.getMonth() + 1).padStart(2, '0');
+  const d = String(date.getDate()).padStart(2, '0');
+  return `${y}-${m}-${d}`;
+}
+
+function addDaysToKey(dateStr, days) {
+  const date = parseDateKey(dateStr);
+  date.setDate(date.getDate() + days);
+  return formatDateKey(date);
+}
+
+function addMonthsToKey(dateStr, months) {
+  const date = parseDateKey(dateStr);
+  date.setMonth(date.getMonth() + months);
+  return formatDateKey(date);
+}
+
+function getWeekStartDate(dateStr) {
+  const date = parseDateKey(dateStr);
+  const jsDay = date.getDay();
+  const mondayOffset = jsDay === 0 ? -6 : 1 - jsDay;
+  date.setDate(date.getDate() + mondayOffset);
+  return date;
+}
+
+function getWeekKey(dateStr) {
+  return formatDateKey(getWeekStartDate(dateStr));
+}
+
+function getMonthKey(dateStr) {
+  return String(dateStr || today()).slice(0, 7);
+}
+
+function getWeekRangeFromKey(weekKey) {
+  const start = parseDateKey(weekKey);
+  const end = parseDateKey(weekKey);
+  end.setDate(end.getDate() + 6);
+  return { start: formatDateKey(start), end: formatDateKey(end) };
+}
+
+function isDateWithinRange(dateKey, startKey, endKey) {
+  return !!dateKey && dateKey >= startKey && dateKey <= endKey;
+}
+
+function formatMonthLabel(dateStr) {
+  return parseDateKey(dateStr).toLocaleDateString('en-US', { month: 'long', year: 'numeric' });
+}
+
+function formatWeekLabel(weekKey) {
+  const range = getWeekRangeFromKey(weekKey);
+  const start = parseDateKey(range.start);
+  const end = parseDateKey(range.end);
+  const sameMonth = start.getMonth() === end.getMonth();
+  const sameYear = start.getFullYear() === end.getFullYear();
+  const startLabel = start.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+  const endLabel = end.toLocaleDateString('en-US', { month: sameMonth ? undefined : 'short', day: 'numeric', year: sameYear ? undefined : 'numeric' });
+  return `${startLabel} - ${endLabel}`;
+}
+
+function formatDayLabel(dateStr) {
+  return parseDateKey(dateStr).toLocaleDateString('en-US', { weekday: 'long', month: 'short', day: 'numeric', year: 'numeric' });
 }
 
 function normalizeTodoTask(t) {
@@ -4294,7 +4438,9 @@ function normalizeTodoTask(t) {
     weekDay,
     day: bucket === 'today' ? 'today' : bucket === 'month' ? 'month' : weekDay,
     createdAt: t.createdAt || today(),
-    monthKey: t.monthKey || today().slice(0,7)
+    monthKey: t.monthKey || getMonthKey(t.createdAt || today()),
+    weekKey: t.weekKey || getWeekKey(t.createdAt || today()),
+    dateKey: t.dateKey || (bucket === 'today' ? (t.createdAt || today()) : null)
   };
 }
 
@@ -4465,9 +4611,12 @@ function renderMyWork() {
   }
 
   const todos = DB.todos[u.id] || [];
-  const monthTasks = getTodosByBucket(todos, 'month');
-  const weekTasks = getTodosByBucket(todos, 'week');
-  const todayTasks = getTodosByBucket(todos, 'today');
+  const selectedMonthKey = getMonthKey(myWorkRefDate);
+  const selectedWeekKey = getWeekKey(myWorkRefDate);
+  const selectedDateKey = myWorkRefDate;
+  const monthTasks = getTodosByBucket(todos, 'month').filter(t => t.monthKey === selectedMonthKey);
+  const weekTasks = getTodosByBucket(todos, 'week').filter(t => t.weekKey === selectedWeekKey);
+  const todayTasks = getTodosByBucket(todos, 'today').filter(t => t.dateKey === selectedDateKey);
   const monthPending = monthTasks.filter(t => t.status !== 'done').length;
   const weekPending = weekTasks.filter(t => t.status !== 'done').length;
   const activeTodayCount = todayTasks.filter(t => t.status !== 'done').length;
@@ -4511,6 +4660,30 @@ function renderMyWork() {
           </div>
           <div class="planner-toolbar-note">Organize your monthly priorities, map the week by day, and keep today focused on the tasks you are actually executing.</div>
         </div>
+        <div class="planner-context-bar">
+          <div class="planner-context-nav">
+            <button class="planner-nav-btn" onclick="shiftMyWorkPeriod(-1)">‹</button>
+            <div class="planner-context-pills">
+              <div class="planner-context-pill">
+                <div class="planner-context-label">Month</div>
+                <div class="planner-context-value">${formatMonthLabel(selectedDateKey)}</div>
+              </div>
+              <div class="planner-context-pill">
+                <div class="planner-context-label">Week</div>
+                <div class="planner-context-value">${formatWeekLabel(selectedWeekKey)}</div>
+              </div>
+              <div class="planner-context-pill">
+                <div class="planner-context-label">Day</div>
+                <div class="planner-context-value">${formatDayLabel(selectedDateKey)}</div>
+              </div>
+            </div>
+            <button class="planner-nav-btn" onclick="shiftMyWorkPeriod(1)">›</button>
+          </div>
+          <div class="planner-context-actions">
+            <button class="planner-secondary-btn" onclick="jumpMyWorkToToday()">Today</button>
+            <button class="planner-secondary-btn" onclick="generateWeeklyReport()">Generate Weekly Report</button>
+          </div>
+        </div>
       </div>
 
       <div class="planner-board">
@@ -4534,6 +4707,145 @@ function setMyWorkView(view) {
   myWorkView = view;
   localStorage.setItem('jaba_mywork_view', view);
   if (screen === 'mywork') renderMyWork();
+}
+
+function shiftMyWorkPeriod(direction) {
+  if (myWorkView === 'month') myWorkRefDate = addMonthsToKey(myWorkRefDate, direction);
+  else if (myWorkView === 'today') myWorkRefDate = addDaysToKey(myWorkRefDate, direction);
+  else myWorkRefDate = addDaysToKey(myWorkRefDate, direction * 7);
+  localStorage.setItem('jaba_mywork_ref_date', myWorkRefDate);
+  if (screen === 'mywork') renderMyWork();
+}
+
+function jumpMyWorkToToday() {
+  myWorkRefDate = today();
+  localStorage.setItem('jaba_mywork_ref_date', myWorkRefDate);
+  if (screen === 'mywork') renderMyWork();
+}
+
+async function ensureDocxLib() {
+  if (window.docx) return;
+  await new Promise((res, rej) => {
+    const s = document.createElement('script');
+    s.src = 'https://unpkg.com/docx@8.5.0/build/index.js';
+    s.onload = res;
+    s.onerror = rej;
+    document.head.appendChild(s);
+  });
+}
+
+function getTaskProjectNames(task) {
+  return (task.linkedProjectIds || [])
+    .map(id => DB.projects.find(p => p.id === id)?.name)
+    .filter(Boolean);
+}
+
+async function generateWeeklyReport() {
+  const u = getAuthUser();
+  if (!u) return;
+  ensureTodosReady();
+
+  const selectedWeekKey = getWeekKey(myWorkRefDate);
+  const weekRange = getWeekRangeFromKey(selectedWeekKey);
+  const todos = (DB.todos[u.id] || []).map(normalizeTodoTask);
+  const weeklyTasks = todos.filter(t =>
+    (t.bucket === 'week' && t.weekKey === selectedWeekKey) ||
+    (t.bucket === 'today' && isDateWithinRange(t.dateKey, weekRange.start, weekRange.end))
+  );
+
+  if (!weeklyTasks.length) {
+    toast('No tasks found for the selected week.', '⚠');
+    return;
+  }
+
+  try {
+    await buildWeeklyReportDocx(u, weeklyTasks, selectedWeekKey);
+    toast('Weekly Report downloaded!', '📄');
+  } catch (err) {
+    console.error(err);
+    toast('Error generating weekly report: ' + err.message, '⚠');
+  }
+}
+
+async function buildWeeklyReportDocx(user, tasks, weekKey) {
+  await ensureDocxLib();
+  const { Document, Packer, Paragraph, TextRun, HeadingLevel, AlignmentType, LevelFormat } = window.docx;
+
+  const safe = (s) => String(s || '').replace(/[\u{10000}-\u{10FFFF}]/gu, '').replace(/[\uD800-\uDFFF]/g, '').trim();
+  const doneTasks = tasks.filter(t => t.status === 'done');
+  const inProgressTasks = tasks.filter(t => t.status === 'active');
+  const blockedTasks = tasks.filter(t => t.status === 'on-hold');
+  const weekLabel = formatWeekLabel(weekKey);
+  const completionRate = Math.round((doneTasks.length / Math.max(tasks.length, 1)) * 100);
+  const children = [];
+
+  const addBulletList = (items, emptyText) => {
+    if (!items.length) {
+      children.push(new Paragraph({
+        children: [new TextRun({ text: emptyText, italics: true, color: '64748B' })],
+        spacing: { after: 120 }
+      }));
+      return;
+    }
+    items.forEach(task => {
+      const projects = getTaskProjectNames(task);
+      const suffix = projects.length ? ` [Projects: ${projects.join(', ')}]` : '';
+      const scope = task.bucket === 'today' && task.dateKey ? ` (${formatDayLabel(task.dateKey)})` : task.bucket === 'week' && task.weekDay ? ` (${task.weekDay})` : '';
+      children.push(new Paragraph({
+        text: safe(`${task.text}${scope}${suffix}`),
+        numbering: { reference: 'weekly-bullets', level: 0 },
+        spacing: { after: 80 }
+      }));
+    });
+  };
+
+  children.push(new Paragraph({
+    text: 'Weekly Report',
+    heading: HeadingLevel.TITLE,
+    alignment: AlignmentType.LEFT,
+    spacing: { after: 120 }
+  }));
+  children.push(new Paragraph({
+    children: [new TextRun({ text: safe(`${user.name} • Week of ${weekLabel}`), bold: true, color: '334155', size: 24 })],
+    spacing: { after: 220 }
+  }));
+  children.push(new Paragraph({
+    children: [new TextRun({ text: safe(`Completion rate: ${completionRate}% (${doneTasks.length}/${tasks.length} tasks completed)`), bold: true, color: '2563EB' })],
+    spacing: { after: 220 }
+  }));
+
+  children.push(new Paragraph({ text: 'What Was Achieved', heading: HeadingLevel.HEADING_1, spacing: { before: 120, after: 120 } }));
+  addBulletList(doneTasks, 'No completed tasks were recorded for this week.');
+
+  children.push(new Paragraph({ text: 'Still In Progress', heading: HeadingLevel.HEADING_1, spacing: { before: 160, after: 120 } }));
+  addBulletList(inProgressTasks, 'No tasks are currently marked as in progress.');
+
+  children.push(new Paragraph({ text: 'Not Achieved / On Hold', heading: HeadingLevel.HEADING_1, spacing: { before: 160, after: 120 } }));
+  addBulletList(blockedTasks, 'No blocked or unfinished items were marked on hold.');
+
+  const doc = new Document({
+    numbering: {
+      config: [{
+        reference: 'weekly-bullets',
+        levels: [{
+          level: 0,
+          format: LevelFormat.BULLET,
+          text: '\u2022',
+          style: { paragraph: { indent: { left: 720, hanging: 360 } } }
+        }]
+      }]
+    },
+    sections: [{ children }]
+  });
+
+  const buffer = await Packer.toBuffer(doc);
+  const blob = new Blob([buffer], { type: 'application/vnd.openxmlformats-officedocument.wordprocessingml.document' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = `Weekly_Report_${user.name.replace(/\s+/g, '_')}_${weekKey}.docx`;
+  a.click();
+  URL.revokeObjectURL(url);
 }
 
 function renderMyWorkView(monthTasks, weekTasks, todayTasks) {
@@ -5048,11 +5360,15 @@ function addWorkTask(mode) {
   const text = inputEl?.value.trim();
   if (!text) return;
   const priority = document.getElementById(priId)?.value || 'medium';
-  const weekDay = bucket === 'week' ? (document.getElementById(dayId)?.value || 'Monday') : getTodayWeekdayName();
+  const weekDay = bucket === 'week' ? (document.getElementById(dayId)?.value || 'Monday') : DAYS_OF_WEEK[parseDateKey(myWorkRefDate).getDay() === 0 ? 6 : parseDateKey(myWorkRefDate).getDay() - 1];
   const day = bucket === 'today' ? 'today' : bucket === 'month' ? 'month' : weekDay;
   const linkedProjectIds = findMentionProjects(text);
+  const createdAt = myWorkRefDate;
+  const monthKey = getMonthKey(myWorkRefDate);
+  const weekKey = getWeekKey(myWorkRefDate);
+  const dateKey = bucket === 'today' ? myWorkRefDate : null;
 
-  DB.todos[u.id].push({ id: uid(), text, done: false, status: 'active', priority, linkedProjectIds, bucket, weekDay, day, monthKey: today().slice(0,7), createdAt: today() });
+  DB.todos[u.id].push({ id: uid(), text, done: false, status: 'active', priority, linkedProjectIds, bucket, weekDay, day, monthKey, weekKey, dateKey, createdAt });
   inputEl.value = '';
   closeTaskMentionDropdown(mode);
   save();
