@@ -1427,6 +1427,60 @@ input,textarea,select{font-family:'Plus Jakarta Sans',sans-serif;outline:none;}
 .an-generate-btn:disabled { background: var(--card3); color: var(--muted); cursor: not-allowed; transform: none; box-shadow: none; }
 .an-generate-btn svg { width: 18px; height: 18px; stroke: #fff; fill: none; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
 
+.mb-panel-body { padding: 20px; display: flex; flex-direction: column; gap: 18px; }
+.mb-meta {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 10px;
+}
+.mb-meta-card {
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 12px;
+  padding: 12px 14px;
+}
+.mb-meta-label { font-size: 11px; font-weight: 800; letter-spacing: .06em; text-transform: uppercase; color: #64748b; margin-bottom: 6px; }
+.mb-meta-value { font-size: 14px; font-weight: 700; color: #0f172a; }
+.mb-section-title { font-size: 12px; font-weight: 800; letter-spacing: .05em; text-transform: uppercase; color: #475569; margin-bottom: 10px; }
+.mb-chip-row { display: flex; flex-wrap: wrap; gap: 10px; }
+.mb-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 14px;
+  border-radius: 999px;
+  border: 1px solid #dbe5f1;
+  background: #fff;
+  color: #334155;
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all .2s;
+}
+.mb-chip:hover { border-color: #93c5fd; background: #eff6ff; }
+.mb-chip.active { background: #2563eb; border-color: #2563eb; color: #fff; box-shadow: 0 10px 20px rgba(37,99,235,.18); }
+.mb-chip-avatar { width: 26px; height: 26px; border-radius: 50%; object-fit: cover; flex-shrink: 0; }
+.mb-chip-actions { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 10px; }
+.mb-mini-btn {
+  padding: 8px 12px;
+  border-radius: 999px;
+  border: 1px solid #dbe5f1;
+  background: #fff;
+  color: #475569;
+  font-size: 12px;
+  font-weight: 700;
+  cursor: pointer;
+}
+.mb-mini-btn:hover { background: #f8fafc; border-color: #cbd5e1; }
+.mb-summary-box {
+  background: linear-gradient(180deg, #ffffff 0%, #f8fbff 100%);
+  border: 1px solid #dbe7f4;
+  border-radius: 14px;
+  padding: 14px 16px;
+}
+.mb-summary-line { font-size: 13px; color: #475569; line-height: 1.5; }
+.mb-summary-line strong { color: #0f172a; }
+
 
 </style>
 </head>
@@ -2031,7 +2085,7 @@ function resizeImage(file, callback) {
 }
 
 function uid() { return Math.random().toString(36).substr(2,9); }
-function today() { return new Date().toISOString().split('T')[0]; }
+function today() { return formatDateKey(new Date()); }
 function getP(id) { return DB.projects.find(p=>p.id===id); }
 function getCat(id) { return DB.categories.find(c=>c.id===id); }
 function getYr(id) { return DB.years.find(y=>y.id===id); }
@@ -4735,6 +4789,7 @@ function renderMyWork() {
 
     <div class="planner-secondary">
       ${assignedHTML}
+      ${renderMeetingBriefPanel()}
     </div>
   `;
 }
@@ -4968,6 +5023,8 @@ function buildSimpleDocumentXml(sections) {
     else if (section.type === 'subtitle') rPr = '<w:b/><w:sz w:val="24"/><w:color w:val="334155"/>';
     else if (section.type === 'summary') rPr = '<w:b/><w:sz w:val="22"/><w:color w:val="2563EB"/>';
     else if (section.type === 'heading') rPr = '<w:b/><w:sz w:val="28"/><w:color w:val="0F172A"/>';
+    else if (section.type === 'subheading') rPr = '<w:b/><w:sz w:val="24"/><w:color w:val="1E293B"/>';
+    else if (section.type === 'label') rPr = '<w:b/><w:sz w:val="20"/><w:color w:val="475569"/>';
     else if (section.type === 'note') rPr = '<w:i/><w:sz w:val="22"/><w:color w:val="64748B"/>';
     else rPr = '<w:sz w:val="22"/><w:color w:val="1E293B"/>';
     if (section.type === 'bullet') pPr = '<w:ind w:left="720" w:hanging="360"/>';
@@ -5409,6 +5466,356 @@ function buildAssignedStrip(u) {
         ${cards.join('')}
       </div>
     </div>`;
+}
+
+let mbSelectedUserIds = new Set();
+let mbSelectedIdeaIds = new Set();
+
+function ensureMeetingBriefDefaults() {
+  const u = getAuthUser();
+  if (!u) return;
+  const validUserIds = new Set((DB.users || []).map(x => x.id));
+  const validIdeaIds = new Set((DB.ideas || []).map(x => x.id));
+  mbSelectedUserIds = new Set([...mbSelectedUserIds].filter(id => validUserIds.has(id)));
+  mbSelectedIdeaIds = new Set([...mbSelectedIdeaIds].filter(id => validIdeaIds.has(id)));
+  if (!mbSelectedUserIds.size) {
+    if (isMaster) (DB.users || []).forEach(user => mbSelectedUserIds.add(user.id));
+    else mbSelectedUserIds.add(u.id);
+  }
+}
+
+function getMeetingPlannerSnapshot(userId) {
+  ensureTodosReady();
+  const todos = (DB.todos[userId] || []).map(normalizeTodoTask);
+  const selectedMonthKey = getMonthKey(myWorkRefDate);
+  const selectedWeekKey = getWeekKey(myWorkRefDate);
+  const selectedDateKey = myWorkRefDate;
+  const selectedWeekday = DAYS_OF_WEEK[parseDateKey(selectedDateKey).getDay() === 0 ? 6 : parseDateKey(selectedDateKey).getDay() - 1];
+  const monthTasks = getTodosByBucket(todos, 'month').filter(t => t.monthKey === selectedMonthKey);
+  const weekTasks = getTodosByBucket(todos, 'week').filter(t => t.weekKey === selectedWeekKey);
+  const todayTasks = getTodosByBucket(todos, 'today').filter(t => t.dateKey === selectedDateKey);
+  const dayWeekTasks = weekTasks.filter(t => (t.weekDay || t.day) === selectedWeekday);
+  return {
+    monthTasks,
+    weekTasks,
+    dayTasks: [...dayWeekTasks, ...todayTasks]
+  };
+}
+
+function getTaskScopeLabel(task) {
+  if (task.bucket === 'month') return `Month · ${formatMonthLabel(task.monthKey || myWorkRefDate)}`;
+  if (task.bucket === 'week') return `Week · ${task.weekDay || task.day || formatWeekLabel(task.weekKey || getWeekKey(myWorkRefDate))}`;
+  return `Day · ${formatDayLabel(task.dateKey || myWorkRefDate)}`;
+}
+
+function buildMeetingBriefData() {
+  ensureMeetingBriefDefaults();
+  const selectedUsers = (DB.users || []).filter(user => mbSelectedUserIds.has(user.id));
+  const selectedIdeas = (DB.ideas || []).filter(idea => mbSelectedIdeaIds.has(idea.id));
+  const snapshots = selectedUsers.map(user => {
+    const snapshot = getMeetingPlannerSnapshot(user.id);
+    return { user, ...snapshot };
+  });
+
+  const projectMap = new Map();
+  snapshots.forEach(entry => {
+    ['monthTasks', 'weekTasks', 'dayTasks'].forEach(key => {
+      (entry[key] || []).forEach(task => {
+        (task.linkedProjectIds || []).forEach(pid => {
+          const project = DB.projects.find(p => p.id === pid);
+          if (!project) return;
+          if (!projectMap.has(pid)) projectMap.set(pid, { project, mentions: [] });
+          projectMap.get(pid).mentions.push({
+            userName: entry.user.name,
+            status: task.status,
+            scope: getTaskScopeLabel(task),
+            text: task.text
+          });
+        });
+      });
+    });
+  });
+
+  const deadlineEntries = [];
+  (DB.projects || []).forEach(project => {
+    const deadline = getProjectDeadlineMeta(project);
+    if (!deadline) return;
+    deadlineEntries.push({
+      project,
+      label: deadline.label,
+      date: deadline.date,
+      kind: isPastDeadline(deadline.date) ? 'overdue' : 'deadline'
+    });
+  });
+  (DB.publish || []).forEach(item => {
+    const project = DB.projects.find(p => p.id === item.projectId);
+    if (!project || !item.date) return;
+    deadlineEntries.push({ project, label: 'Publish Queue', date: item.date, kind: isPastDeadline(item.date) ? 'overdue' : 'queue' });
+  });
+  const spotlight = deadlineEntries
+    .filter(entry => entry.project && entry.date)
+    .sort((a, b) => {
+      const aOverdue = isPastDeadline(a.date) ? 0 : 1;
+      const bOverdue = isPastDeadline(b.date) ? 0 : 1;
+      if (aOverdue !== bOverdue) return aOverdue - bOverdue;
+      return String(a.date).localeCompare(String(b.date));
+    })
+    .filter((entry, index, arr) => arr.findIndex(x => x.project.id === entry.project.id && x.label === entry.label) === index)
+    .slice(0, 8);
+
+  const nearFinishProjects = (DB.projects || [])
+    .filter(project => {
+      if (project.isPaused) return false;
+      const steps = getCurVer(project).steps || [];
+      const doneCount = steps.filter(step => step.status === 'done').length;
+      return steps.length > 0 && doneCount >= steps.length - 1 && doneCount < steps.length;
+    })
+    .slice(0, 6);
+
+  return {
+    selectedUsers,
+    selectedIdeas,
+    snapshots,
+    linkedProjects: [...projectMap.values()],
+    spotlight,
+    nearFinishProjects
+  };
+}
+
+function renderMeetingBriefPanel() {
+  ensureMeetingBriefDefaults();
+  const data = buildMeetingBriefData();
+  const canGenerate = data.selectedUsers.length || data.selectedIdeas.length;
+  const currentUser = getAuthUser();
+  const userChips = (DB.users || []).map(user => `
+    <button class="mb-chip ${mbSelectedUserIds.has(user.id) ? 'active' : ''}" onclick="toggleMeetingBriefUser('${user.id}')">
+      <img class="mb-chip-avatar" src="${user.avatar}">
+      <span>${user.name}</span>
+    </button>
+  `).join('');
+  const ideasHTML = (DB.ideas || []).length
+    ? `<div class="an-idea-grid">
+        ${(DB.ideas || []).slice().reverse().map(idea => `
+          <div class="an-idea-card ${mbSelectedIdeaIds.has(idea.id) ? 'selected' : ''}" onclick="toggleMeetingBriefIdea('${idea.id}')">
+            <div class="an-idea-title">${idea.title}</div>
+            <div class="an-idea-preview">${idea.body ? idea.body.slice(0, 100) + (idea.body.length > 100 ? '…' : '') : 'No description.'}</div>
+          </div>
+        `).join('')}
+      </div>`
+    : `<div style="color:var(--muted); font-size:13px;">No ideas saved yet in Video Ideas.</div>`;
+
+  return `
+    <div class="work-section" style="margin-bottom:0;">
+      <div class="work-section-header">
+        <div>
+          <div class="work-section-title">
+            <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5V4.5A1.5 1.5 0 0 1 5.5 3h8.879a1.5 1.5 0 0 1 1.06.44l3.12 3.12c.281.281.44.663.44 1.06V19.5A1.5 1.5 0 0 1 17.5 21h-12A1.5 1.5 0 0 1 4 19.5z"/><path d="M15 3v4h4"/><path d="M8 12h8"/><path d="M8 16h6"/><path d="M8 8h3"/></svg>
+            Meeting Brief Builder
+          </div>
+          <div class="work-section-subtitle">Create a meeting-ready .docx with team planning, selected video ideas, linked project progress, and publishing deadline visibility.</div>
+        </div>
+        <span class="work-count">${data.linkedProjects.length} linked project${data.linkedProjects.length !== 1 ? 's' : ''}</span>
+      </div>
+      <div class="mb-panel-body">
+        <div class="mb-meta">
+          <div class="mb-meta-card">
+            <div class="mb-meta-label">Month</div>
+            <div class="mb-meta-value">${formatMonthLabel(myWorkRefDate)}</div>
+          </div>
+          <div class="mb-meta-card">
+            <div class="mb-meta-label">Week</div>
+            <div class="mb-meta-value">${formatWeekLabel(getWeekKey(myWorkRefDate))}</div>
+          </div>
+          <div class="mb-meta-card">
+            <div class="mb-meta-label">Day</div>
+            <div class="mb-meta-value">${formatDayLabel(myWorkRefDate)}</div>
+          </div>
+        </div>
+
+        <div>
+          <div class="mb-section-title">Participants</div>
+          <div class="mb-chip-row">${userChips}</div>
+          <div class="mb-chip-actions">
+            ${isMaster ? `<button class="mb-mini-btn" onclick="selectAllMeetingBriefUsers()">Select all team</button>` : ''}
+            ${currentUser ? `<button class="mb-mini-btn" onclick="selectCurrentMeetingBriefUser()">Only me</button>` : ''}
+          </div>
+        </div>
+
+        <div>
+          <div class="mb-section-title">Ideas from Video Ideas</div>
+          ${ideasHTML}
+        </div>
+
+        <div class="mb-summary-box">
+          <div class="mb-summary-line"><strong>${data.selectedUsers.length}</strong> participant${data.selectedUsers.length !== 1 ? 's' : ''} selected, <strong>${data.selectedIdeas.length}</strong> idea${data.selectedIdeas.length !== 1 ? 's' : ''} selected.</div>
+          <div class="mb-summary-line">The document will include the active <strong>Month / Week / Day</strong> planning for those participants, every project mentioned with <strong>@</strong> in those tasks, and a spotlight of <strong>publish, overdue, and deadline-risk items</strong>.</div>
+        </div>
+
+        <button class="an-generate-btn" onclick="generateMeetingBrief()" ${canGenerate ? '' : 'disabled'}>
+          <svg viewBox="0 0 24 24"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
+          Generate Meeting Brief .docx
+        </button>
+      </div>
+    </div>`;
+}
+
+function toggleMeetingBriefUser(userId) {
+  if (mbSelectedUserIds.has(userId)) mbSelectedUserIds.delete(userId);
+  else mbSelectedUserIds.add(userId);
+  if (screen === 'mywork') renderMyWork();
+}
+
+function selectAllMeetingBriefUsers() {
+  mbSelectedUserIds = new Set((DB.users || []).map(user => user.id));
+  if (screen === 'mywork') renderMyWork();
+}
+
+function selectCurrentMeetingBriefUser() {
+  const u = getAuthUser();
+  if (!u) return;
+  mbSelectedUserIds = new Set([u.id]);
+  if (screen === 'mywork') renderMyWork();
+}
+
+function toggleMeetingBriefIdea(ideaId) {
+  if (mbSelectedIdeaIds.has(ideaId)) mbSelectedIdeaIds.delete(ideaId);
+  else mbSelectedIdeaIds.add(ideaId);
+  if (screen === 'mywork') renderMyWork();
+}
+
+function buildMeetingTaskItems(tasks, emptyText) {
+  if (!tasks.length) return [{ type: 'note', text: emptyText }];
+  return tasks.map(task => {
+    const status = getStatusLabel(task.status);
+    const projects = getTaskProjectNames(task);
+    const projectText = projects.length ? ` [Projects: ${projects.join(', ')}]` : '';
+    return { type: 'bullet', text: `[${status}] ${task.text}${projectText}` };
+  });
+}
+
+async function generateMeetingBrief() {
+  const u = getAuthUser();
+  if (!u) return;
+  const data = buildMeetingBriefData();
+  if (!data.selectedUsers.length && !data.selectedIdeas.length) {
+    toast('Select at least one participant or idea first.', '⚠');
+    return;
+  }
+
+  try {
+    await buildMeetingBriefDocx(data);
+    toast('Meeting Brief downloaded!', '📄');
+  } catch (err) {
+    console.error(err);
+    toast('Error generating document: ' + err.message, '⚠');
+  }
+}
+
+async function buildMeetingBriefDocx(data) {
+  const monthLabel = formatMonthLabel(myWorkRefDate);
+  const weekLabel = formatWeekLabel(getWeekKey(myWorkRefDate));
+  const dayLabel = formatDayLabel(myWorkRefDate);
+  const totalTasks = data.snapshots.reduce((sum, entry) => sum + entry.monthTasks.length + entry.weekTasks.length + entry.dayTasks.length, 0);
+  const sections = [
+    { type: 'title', text: 'Marketing Meeting Brief' },
+    { type: 'subtitle', text: `${monthLabel} | ${weekLabel} | ${dayLabel}` },
+    { type: 'summary', text: `${data.selectedUsers.length} participants · ${totalTasks} planning items · ${data.selectedIdeas.length} selected ideas · ${data.linkedProjects.length} linked projects` },
+    { type: 'heading', text: 'Team Planning Snapshot' }
+  ];
+
+  if (!data.selectedUsers.length) {
+    sections.push({ type: 'note', text: 'No participants selected for this brief.' });
+  } else {
+    data.snapshots.forEach(entry => {
+      sections.push({ type: 'subheading', text: `${entry.user.name}${entry.user.role ? ' — ' + entry.user.role : ''}` });
+      sections.push({ type: 'label', text: `Month · ${monthLabel}` });
+      sections.push(...buildMeetingTaskItems(entry.monthTasks, 'No month-level items for this period.'));
+      sections.push({ type: 'label', text: `Week · ${weekLabel}` });
+      sections.push(...buildMeetingTaskItems(entry.weekTasks, 'No week tasks for this period.'));
+      sections.push({ type: 'label', text: `Day · ${dayLabel}` });
+      sections.push(...buildMeetingTaskItems(entry.dayTasks, 'No day tasks for this date.'));
+    });
+  }
+
+  sections.push({ type: 'heading', text: 'Project Progress From Mentioned Tasks' });
+  if (!data.linkedProjects.length) {
+    sections.push({ type: 'note', text: 'No projects were linked with @ mentions inside the selected planning items.' });
+  } else {
+    data.linkedProjects.forEach(entry => {
+      const project = entry.project;
+      const version = getCurVer(project);
+      const steps = version.steps || [];
+      const doneCount = steps.filter(step => step.status === 'done').length;
+      const category = getCat(project.catId)?.name || 'Uncategorized';
+      const format = DB.contentTypes.find(c => c.id === project.contentType)?.label || 'Format';
+      const deadline = getProjectDeadlineMeta(project);
+      sections.push({ type: 'subheading', text: project.name });
+      sections.push({ type: 'label', text: `${category} · ${format} · ${project.currentVersion} · ${doneCount}/${steps.length || 0} steps done` });
+      if (deadline) sections.push({ type: 'note', text: `${deadline.label}: ${formatPlannedDate(deadline.date)}${isPastDeadline(deadline.date) ? ' · OVERDUE' : ''}` });
+      sections.push({ type: 'label', text: 'Referenced in tasks' });
+      entry.mentions.forEach(mention => {
+        sections.push({ type: 'bullet', text: `${mention.userName} · ${mention.scope} · ${getStatusLabel(mention.status)} · ${mention.text}` });
+      });
+      sections.push({ type: 'label', text: 'Workflow steps' });
+      if (!steps.length) {
+        sections.push({ type: 'note', text: 'This project has no workflow steps configured yet.' });
+      } else {
+        steps.forEach(step => {
+          const stepStatus = step.status === 'done'
+            ? 'Done'
+            : step.status === 'active'
+            ? 'In Progress'
+            : step.status === 'waiting'
+            ? 'Waiting'
+            : 'Pending';
+          const noteSuffix = step.note ? ` · Note: ${step.note}` : '';
+          sections.push({ type: 'bullet', text: `${step.name} · ${stepStatus}${noteSuffix}` });
+        });
+      }
+    });
+  }
+
+  sections.push({ type: 'heading', text: 'Video Ideas Selected For Discussion' });
+  if (!data.selectedIdeas.length) {
+    sections.push({ type: 'note', text: 'No video ideas were selected for this meeting.' });
+  } else {
+    data.selectedIdeas.forEach(idea => {
+      sections.push({ type: 'subheading', text: idea.title });
+      sections.push({ type: 'note', text: `Captured on ${idea.date || 'No date'}` });
+      if (idea.body) sections.push({ type: 'bullet', text: idea.body });
+      if (idea.link) sections.push({ type: 'bullet', text: `Reference: ${idea.link}` });
+    });
+  }
+
+  sections.push({ type: 'heading', text: 'Publishing & Deadline Spotlight' });
+  if (!data.spotlight.length && !data.nearFinishProjects.length) {
+    sections.push({ type: 'note', text: 'No publish queue, overdue, or near-finish projects were found.' });
+  } else {
+    if (data.spotlight.length) {
+      sections.push({ type: 'label', text: 'Upcoming / overdue schedule items' });
+      data.spotlight.forEach(entry => {
+        const format = DB.contentTypes.find(c => c.id === entry.project.contentType)?.label || 'Format';
+        const statusPrefix = isPastDeadline(entry.date) ? 'OVERDUE' : entry.kind === 'queue' ? 'QUEUE' : 'UPCOMING';
+        sections.push({ type: 'bullet', text: `${statusPrefix} · ${entry.project.name} · ${entry.label} · ${formatPlannedDate(entry.date)} · ${format}` });
+      });
+    }
+    if (data.nearFinishProjects.length) {
+      sections.push({ type: 'label', text: 'Projects close to finishing workflow' });
+      data.nearFinishProjects.forEach(project => {
+        const steps = getCurVer(project).steps || [];
+        const doneCount = steps.filter(step => step.status === 'done').length;
+        sections.push({ type: 'bullet', text: `${project.name} · ${doneCount}/${steps.length} steps completed` });
+      });
+    }
+  }
+
+  const blob = createSimpleDocxBlob(sections);
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = `Marketing_Meeting_Brief_${getWeekKey(myWorkRefDate)}.docx`;
+  a.click();
+  URL.revokeObjectURL(url);
 }
 
 function renderTaskItems(tasks, options = {}) {
