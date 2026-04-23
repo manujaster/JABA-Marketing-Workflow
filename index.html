@@ -42,10 +42,10 @@ body { background:var(--bg); color:var(--text); font-family:'Plus Jakarta Sans',
 button{font-family:'Plus Jakarta Sans',sans-serif;cursor:pointer;border:none;outline:none;}
 input,textarea,select{font-family:'Plus Jakarta Sans',sans-serif;outline:none;}
 
-/* ── APP SHELL ── */
+/* â”€â”€ APP SHELL â”€â”€ */
 .app{display:flex;min-height:100vh;}
 
-/* ── SIDEBAR ── */
+/* â”€â”€ SIDEBAR â”€â”€ */
 .sidebar{width:260px;min-width:260px;background:var(--card);border-right:1px solid var(--line);display:flex;flex-direction:column;height:100vh;position:sticky;top:0;overflow:hidden;}
 .sidebar-logo{padding:28px 20px 24px;border-bottom:1px solid var(--line);display:flex;align-items:center;gap:14px;}
 .logo-face{width:56px;height:56px;object-fit:contain;filter:drop-shadow(0 4px 6px rgba(0,0,0,0.3));}
@@ -96,7 +96,7 @@ input,textarea,select{font-family:'Plus Jakarta Sans',sans-serif;outline:none;}
 .sb-btn.primary:hover{background:var(--primary-hover);}
 .sb-btn.secondary:hover{border-color:var(--primary-light); color:var(--text);}
 
-/* ── MAIN ── */
+/* â”€â”€ MAIN â”€â”€ */
 .main{flex:1;display:flex;flex-direction:column;min-height:100vh;overflow:hidden;background:var(--bg);}
 
 /* TOPBAR */
@@ -161,14 +161,14 @@ input,textarea,select{font-family:'Plus Jakarta Sans',sans-serif;outline:none;}
 .avatar-extra{width:28px;height:28px;border-radius:50%;border:2px solid var(--card);margin-left:-8px;background:var(--card3);color:var(--text);font-size:10px;font-weight:700;display:flex;align-items:center;justify-content:center;}
 .avatar-empty{width:28px;height:28px;border-radius:50%;border:2px dashed var(--line2);display:flex;align-items:center;justify-content:center;font-size:12px;color:var(--muted);background:var(--bg);}
 
-/* ── FILTERS & SEARCH ── */
+/* â”€â”€ FILTERS & SEARCH â”€â”€ */
 .filter-bar{display:flex;align-items:center;gap:12px;margin-bottom:24px;background:var(--card);padding:12px 16px;border-radius:12px;border:1px solid var(--line);}
 .search-input{flex:1;background:var(--bg);border:1px solid var(--line2);padding:8px 12px;border-radius:8px;color:var(--text);font-size:13px;}
 .search-input:focus{border-color:var(--primary-light);}
 .filter-select{background:var(--bg);border:1px solid var(--line2);padding:8px 12px;border-radius:8px;color:var(--text);font-size:13px;cursor:pointer;}
 .filter-select:focus{border-color:var(--primary-light);}
 
-/* ── PROJECT LIST ── */
+/* â”€â”€ PROJECT LIST â”€â”€ */
 .proj-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:16px;margin-bottom:32px;}
 .project-card{background:var(--card);border:1px solid var(--line);border-radius:12px;overflow:hidden;transition:all .2s;cursor:pointer;display:flex;flex-direction:column;position:relative;}
 .project-card:hover{border-color:var(--hover-color, var(--primary-light));transform:translateY(-4px);box-shadow:0 12px 24px -8px rgba(0,0,0,0.5);}
@@ -180,7 +180,7 @@ input,textarea,select{font-family:'Plus Jakarta Sans',sans-serif;outline:none;}
 .project-card:hover .pc-drag{opacity:1;}
 .pc-drag:active{cursor:grabbing;}
 
-/* Botón de eliminar para el master */
+/* BotÃ³n de eliminar para el master */
 .pc-del{right:48px;cursor:pointer;color:var(--red); background:var(--card2); border:1px solid var(--red); opacity:0.9;}
 .pc-del:hover{background:var(--red);color:#fff;}
 
@@ -238,7 +238,7 @@ input,textarea,select{font-family:'Plus Jakarta Sans',sans-serif;outline:none;}
 .empty-text{font-size:18px;font-weight:700;color:var(--text);margin-bottom:8px;}
 .empty-sub{font-size:14px;color:var(--muted);}
 
-/* ── DETAIL ── */
+/* â”€â”€ DETAIL â”€â”€ */
 .detail-layout{display:flex;min-height:calc(100vh - 81px);}
 .detail-left{flex:1;padding:32px;overflow-y:auto;}
 .detail-right{width:340px;min-width:340px;background:var(--card);border-left:1px solid var(--line);display:flex;flex-direction:column;overflow:hidden;}
@@ -361,7 +361,7 @@ input,textarea,select{font-family:'Plus Jakarta Sans',sans-serif;outline:none;}
 .cp-send:hover{background:var(--primary-hover);transform:translateY(-1px);box-shadow:0 4px 12px rgba(99,102,241,0.3);}
 .no-comments{text-align:center;padding:40px 20px;color:var(--muted);font-size:13px;background:var(--bg);border-radius:12px;border:1px dashed var(--line2);}
 
-/* ── PROFILE SCREEN ── */
+/* â”€â”€ PROFILE SCREEN â”€â”€ */
 .profile-header{display:flex;align-items:center;gap:24px;background:var(--card);border:1px solid var(--line);border-radius:16px;padding:32px;margin-bottom:32px;position:relative;}
 .profile-avatar{width:80px;height:80px;border-radius:50%;object-fit:cover;border:4px solid var(--card2);}
 .profile-info h2{font-size:24px;font-weight:800;color:var(--text);margin-bottom:4px;}
@@ -392,7 +392,7 @@ input,textarea,select{font-family:'Plus Jakarta Sans',sans-serif;outline:none;}
 .todo-del{background:none;color:var(--muted);border:none;cursor:pointer;}
 .todo-del:hover{color:var(--red);}
 
-/* ── PUBLISH SCREEN ── */
+/* â”€â”€ PUBLISH SCREEN â”€â”€ */
 .publish-list{display:flex;flex-direction:column;gap:12px;margin-bottom:32px;}
 .pub-card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:20px;display:flex;gap:20px;align-items:center;transition:all .2s;}
 .pub-card:hover {border-color:var(--accent-light);transform:translateY(-2px);box-shadow:0 8px 24px rgba(0,0,0,0.3);}
@@ -463,7 +463,7 @@ input,textarea,select{font-family:'Plus Jakarta Sans',sans-serif;outline:none;}
 .cal-day.has-target{box-shadow:inset 0 0 0 1px rgba(245,158,11,0.35);}
 .cal-day.has-overdue{border-color:rgba(239,68,68,0.7);background:rgba(239,68,68,0.12);}
 
-/* ── IDEAS SCREEN ── */
+/* â”€â”€ IDEAS SCREEN â”€â”€ */
 .ideas-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:16px;}
 .idea-card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:20px;cursor:pointer;transition:all .2s;position:relative;display:flex;flex-direction:column;}
 .idea-card:hover{border-color:var(--primary-light);transform:translateY(-4px);box-shadow:0 12px 24px -8px rgba(0,0,0,0.5);}
@@ -507,7 +507,7 @@ input,textarea,select{font-family:'Plus Jakarta Sans',sans-serif;outline:none;}
 /* Content type tags generic */
 .content-type-tag { padding: 3px 8px; border-radius: 6px; font-weight: 600; font-size: 10px; }
 
-/* ── MODALS ── */
+/* â”€â”€ MODALS â”€â”€ */
 .overlay{display:none;position:fixed;inset:0;background:rgba(2,6,23,0.85);backdrop-filter:blur(8px);z-index:100;align-items:center;justify-content:center;padding:20px;}
 .overlay.open{display:flex;}
 .modal{background:var(--card);border:1px solid var(--line);border-radius:20px;padding:32px;width:100%;max-width:500px;animation:mi .2s cubic-bezier(0.16, 1, 0.3, 1);max-height:90vh;overflow-y:auto;box-shadow:0 24px 48px rgba(0,0,0,0.5);}
@@ -567,7 +567,7 @@ input,textarea,select{font-family:'Plus Jakarta Sans',sans-serif;outline:none;}
 .msg-bubble{background:var(--card2);padding:12px 16px;border-radius:12px;margin-bottom:8px;font-size:13px;color:var(--text);border:1px solid var(--line2);}
 .msg-bubble.unread{border-color:var(--primary-light);background:var(--primary-bg);}
 .msg-meta{font-size:10px;color:var(--muted);margin-bottom:4px;display:flex;justify-content:space-between;}
-/* ── CHAT LAYOUT ── */
+/* â”€â”€ CHAT LAYOUT â”€â”€ */
 .chat-layout { display: flex; height: calc(100vh - 150px); border: 1px solid var(--line); border-radius: 12px; background: var(--card); overflow: hidden; }
 .chat-sidebar { width: 280px; border-right: 1px solid var(--line); display: flex; flex-direction: column; background: var(--bg); }
 .chat-sidebar-header { padding: 16px; border-bottom: 1px solid var(--line); font-size: 14px; font-weight: 700; color: var(--text); }
@@ -601,15 +601,15 @@ input,textarea,select{font-family:'Plus Jakarta Sans',sans-serif;outline:none;}
 .chat-send-btn { background: var(--primary); color: #fff; width: 44px; height: 44px; border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; border: none; transition: all .2s; font-size: 16px; }
 .chat-send-btn:hover { background: var(--primary-hover); transform: scale(1.05) translateY(-2px); box-shadow: 0 4px 12px rgba(99,102,241,0.3); }
 
-/* ── TOPBAR BADGE ── */
+/* â”€â”€ TOPBAR BADGE â”€â”€ */
 .topbar-badge { background: var(--red); color: white; font-size: 10px; font-weight: 800; border-radius: 12px; padding: 2px 6px; margin-left: 6px; vertical-align: text-bottom; display: inline-block; box-shadow: 0 2px 4px rgba(0,0,0,0.2); }
 
-/* Corrección para que la ventana de formatos salga al frente */
+/* CorrecciÃ³n para que la ventana de formatos salga al frente */
 #m-formats { z-index: 110; }  
   
 /* --- OPCIONES DE VISTA PARA PROYECTOS --- */
 .view-btn { background: transparent; border: 1px solid transparent; color: var(--muted); padding: 6px; border-radius: 6px; cursor: pointer; transition: 0.2s; display: flex; align-items: center; justify-content: center; }
-.view-btn svg { width: 18px; height: 18px; stroke-width: 1.5; } /* Controla el tamaño y grosor de los nuevos íconos */
+.view-btn svg { width: 18px; height: 18px; stroke-width: 1.5; } /* Controla el tamaÃ±o y grosor de los nuevos Ã­conos */
 .view-btn:hover { color: var(--text); background: var(--card2); }
 .view-btn.active { background: var(--card2); color: var(--text); border-color: var(--line2); }
 
@@ -634,7 +634,7 @@ input,textarea,select{font-family:'Plus Jakarta Sans',sans-serif;outline:none;}
 .view-list .pc-bottom { margin: 0; padding: 0; border: none; flex: 1; justify-content: flex-end; }
 .view-list .pc-drag { position: static; opacity: 1; margin-right: 12px; }
 
-/* Estilos para las tarjetas de la cola de publicación */
+/* Estilos para las tarjetas de la cola de publicaciÃ³n */
 .pub-card { transition: all 0.2s ease; border: 1px solid var(--line2); }
 .pub-card:hover { border-color: var(--hover-color, var(--primary-light)) !important; transform: translateY(-2px); box-shadow: 0 8px 24px rgba(0,0,0,0.2); }  
 
@@ -663,10 +663,10 @@ input,textarea,select{font-family:'Plus Jakarta Sans',sans-serif;outline:none;}
   font-weight: 800;
   text-transform: uppercase;
   box-shadow: 0 4px 8px rgba(0,0,0,0.3);
-  z-index: 20; /* Nos aseguramos de que siempre esté por encima de todo */
+  z-index: 20; /* Nos aseguramos de que siempre estÃ© por encima de todo */
 }  
 
-/* --- SUB-MENÚ DE ESTADOS EN EL SIDEBAR --- */
+/* --- SUB-MENÃš DE ESTADOS EN EL SIDEBAR --- */
 .cat-sub-menu { padding-left: 24px; padding-right: 12px; margin-top: 4px; margin-bottom: 8px; display: flex; flex-direction: column; gap: 4px; }
 .cat-sub-item { 
   display: flex; justify-content: space-between; align-items: center;
@@ -679,19 +679,19 @@ input,textarea,select{font-family:'Plus Jakarta Sans',sans-serif;outline:none;}
 
 /* --- ESTILOS MEJORADOS PARA EL CALENDARIO --- */
 .cal-day { 
-  min-height: 80px !important; /* Más altos para que quepa el texto */
+  min-height: 80px !important; /* MÃ¡s altos para que quepa el texto */
   display: flex !important; 
   flex-direction: column !important; 
-  align-items: flex-end !important; /* Número arriba a la derecha */
+  align-items: flex-end !important; /* NÃºmero arriba a la derecha */
   justify-content: flex-start !important; 
   padding: 6px !important; 
   gap: 4px;
 }
 .cal-day-num { font-weight: 800; margin-bottom: 2px; }
 .cal-proj-label { 
-  font-size: 11px; /* Subimos el tamaño de la letra */
+  font-size: 11px; /* Subimos el tamaÃ±o de la letra */
   font-weight: 700; 
-  padding: 4px 6px; /* Un poquito más de aire arriba y abajo */
+  padding: 4px 6px; /* Un poquito mÃ¡s de aire arriba y abajo */
   border-radius: 4px; 
   white-space: nowrap; 
   overflow: hidden; 
@@ -705,28 +705,28 @@ input,textarea,select{font-family:'Plus Jakarta Sans',sans-serif;outline:none;}
 .cal-body {
   width: 100%;
   box-sizing: border-box;
-  padding-right: 8px; /* Un pequeño margen para respirar */
+  padding-right: 8px; /* Un pequeÃ±o margen para respirar */
 }
 
 .cal-days, .cal-dnames {
   display: grid !important;
   grid-template-columns: repeat(7, 1fr) !important; /* Fuerza 7 columnas exactas */
-  gap: 8px !important; /* Espacio uniforme entre días */
+  gap: 8px !important; /* Espacio uniforme entre dÃ­as */
   width: 100% !important;
   box-sizing: border-box !important;
 }
 
 .cal-day {
-  width: auto !important; /* Deja que el grid decida el tamaño */
+  width: auto !important; /* Deja que el grid decida el tamaÃ±o */
   min-width: 0 !important; /* Evita que un texto largo rompa la caja */
   box-sizing: border-box !important;
   overflow: hidden; /* Mantiene todo dentro de su caja */
 }
   
 
-/* ══════════════════════════════════════
+/* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
    MY WORK SCREEN
-══════════════════════════════════════ */
+â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
 .mywork-layout { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
 .mywork-col { display: flex; flex-direction: column; gap: 16px; }
 .mywork-col-full { grid-column: 1 / -1; }
@@ -1395,9 +1395,9 @@ input,textarea,select{font-family:'Plus Jakarta Sans',sans-serif;outline:none;}
 /* Meeting upload panel */
 
 
-/* ══════════════════════════════════════
+/* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
    ACTION NOTES GENERATOR
-══════════════════════════════════════ */
+â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
 .action-notes-panel { background: var(--card); border: 1px solid var(--line); border-radius: 16px; overflow: hidden; }
 .an-body { padding: 20px; display: flex; flex-direction: column; gap: 20px; }
 
@@ -2458,7 +2458,7 @@ button, .tb-btn, .sb-btn, .page-btn, .view-btn, .nav-item, .cat-item, .user-menu
   <div class="screen active" id="screen-projects">
     <div class="screen-pad">
      <div class="filter-bar projects-toolbar" style="display:flex; align-items:center; gap:12px; flex-wrap:wrap;">
-        <span style="font-size:18px; color:var(--muted)">🔍</span>
+        <span style="font-size:18px; color:var(--muted)">ðŸ”</span>
         <input type="text" id="search-proj" class="search-input projects-search" style="flex:1; min-width:260px;" placeholder="Search projects..." onkeyup="renderProjects()">
        <select id="filter-state" class="filter-select" onchange="renderProjects()">
           <option value="all">All Statuses</option>
@@ -2489,7 +2489,7 @@ button, .tb-btn, .sb-btn, .page-btn, .view-btn, .nav-item, .cat-item, .user-menu
 
       <div id="paused-wrapper" style="display:none; margin-top:24px;">
         <div class="paused-header" onclick="togglePausedGrid()">
-          <span class="paused-icon" id="paused-chev">▶</span>
+          <span class="paused-icon" id="paused-chev">â–¶</span>
           <span>Paused Projects (<span id="paused-count">0</span>)</span>
         </div>
         <div class="paused-grid" id="paused-grid"></div>
@@ -2511,7 +2511,7 @@ button, .tb-btn, .sb-btn, .page-btn, .view-btn, .nav-item, .cat-item, .user-menu
           <img id="cp-img-preview" class="img-preview" />
           <div class="cp-ta-wrap">
             <textarea class="cp-ta" id="cp-ta" placeholder="Drop a note or feedback here..."></textarea>
-            <label for="cp-file" class="cp-file-lbl" title="Attach Image">📎</label>
+            <label for="cp-file" class="cp-file-lbl" title="Attach Image">ðŸ“Ž</label>
             <input type="file" id="cp-file" accept="image/*" style="display:none" onchange="previewCommentImage(event)">
           </div>
           <div style="display:flex; gap:10px; align-items:center;">
@@ -2662,7 +2662,7 @@ button, .tb-btn, .sb-btn, .page-btn, .view-btn, .nav-item, .cat-item, .user-menu
   <div class="modal-title">Create New Project</div>
   <div class="field">
     <label class="field-label">Video Name</label>
-    <input class="field-input" id="inp-pname" placeholder="E.g.: Episode 48 — The Tour">
+    <input class="field-input" id="inp-pname" placeholder="E.g.: Episode 48 â€” The Tour">
   </div>
   <div class="field">
     <label class="field-label">Season / Year</label>
@@ -2673,7 +2673,7 @@ button, .tb-btn, .sb-btn, .page-btn, .view-btn, .nav-item, .cat-item, .user-menu
     <select class="field-select" id="inp-pcat"></select>
   </div>
   <div class="field">
-    <label class="field-label" style="display:flex; justify-content:space-between; align-items:center;">Format Type <span style="color:var(--primary-light); cursor:pointer; text-transform:none; font-weight:600; font-size:12px;" onclick="openFormatsModal()">⚙️ Manage</span></label>
+    <label class="field-label" style="display:flex; justify-content:space-between; align-items:center;">Format Type <span style="color:var(--primary-light); cursor:pointer; text-transform:none; font-weight:600; font-size:12px;" onclick="openFormatsModal()">âš™ï¸ Manage</span></label>
     <div class="ct-radios" id="ct-radios"></div>
   </div>
   <div class="field">
@@ -2757,7 +2757,7 @@ button, .tb-btn, .sb-btn, .page-btn, .view-btn, .nav-item, .cat-item, .user-menu
 
 <div class="overlay" id="m-feedback" onclick="ovClose(event,'m-feedback')">
 <div class="modal">
-  <div class="modal-title">⚡ Log Client Feedback</div>
+  <div class="modal-title">âš¡ Log Client Feedback</div>
   <div style="font-size:13px;color:var(--soft);margin-bottom:20px">Describe the requested changes. A new version iteration will be created automatically.</div>
   <div class="field">
     <label class="field-label">Revision Details</label>
@@ -2819,16 +2819,16 @@ button, .tb-btn, .sb-btn, .page-btn, .view-btn, .nav-item, .cat-item, .user-menu
 <input type="file" id="upload-thumb-input" accept="image/*" style="display:none" onchange="handleThumbnailUpload(event)">
 
 <script>
-/* ═══════════════════════════════════════
-   CONFIGURACIÓN DE CUENTA MAESTRA
-═══════════════════════════════════════ */
-// PON AQUÍ TU CORREO DE GOOGLE. 
+/* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+   CONFIGURACIÃ“N DE CUENTA MAESTRA
+â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
+// PON AQUÃ TU CORREO DE GOOGLE. 
 const MASTER_EMAILS = ["manuelrate19@gmail.com"]; 
 
 
-/* ═══════════════════════════════════════
+/* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
    DATA & CONSTANTS
-═══════════════════════════════════════ */
+â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
 const LINK_TYPES = [
   { id:'final', label: 'Final Render' },
   { id:'wip', label: 'Work in Progress' },
@@ -2839,9 +2839,9 @@ const CAT_COLORS = ['#6366f1','#a855f7','#ec4899','#f43f5e','#f59e0b','#10b981',
 const DEFAULT_STEPS = ['Assets','Assembly','VFX','Sound','Color','Delivery'];
 
 
-/* ═══════════════════════════════════════
+/* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
    FIREBASE CLOUD DATABASE (REAL-TIME)
-═══════════════════════════════════════ */
+â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
 const firebaseConfig = {
   apiKey: "AIzaSyACZ-h66XwTlk01ZM6Ap1mwQ8GnkuDABGg",
   authDomain: "jaba-workflow.firebaseapp.com",
@@ -2901,7 +2901,7 @@ function initApp() {
     if (!DB.notifications) DB.notifications = {};
     if (!DB.messages) DB.messages = {};
     
-    // Migración e inicialización de Formatos de Video editables
+    // MigraciÃ³n e inicializaciÃ³n de Formatos de Video editables
     if (!DB.contentTypes || DB.contentTypes.length === 0) {
       DB.contentTypes = [
         { id:'longform', label: 'Long-form Video', color:'#818cf8' },
@@ -2914,7 +2914,7 @@ function initApp() {
     }
 
     DB.projects.forEach((p,i) => {
-      // MIGRACIÓN DE LINKS: Forzamos Array libre y rescatamos viejos formatos si existían
+      // MIGRACIÃ“N DE LINKS: Forzamos Array libre y rescatamos viejos formatos si existÃ­an
       if (p.links && !Array.isArray(p.links)) {
         const arr = [];
         if(typeof p.links === 'object') {
@@ -2935,7 +2935,7 @@ function initApp() {
       if (p.order === undefined) p.order = i;
     });
 
-    // NUNCA guardar si el doc no existe — podría sobreescribir con datos vacíos
+    // NUNCA guardar si el doc no existe â€” podrÃ­a sobreescribir con datos vacÃ­os
     // Solo inicializar en Firebase si hay proyectos reales cargados desde localStorage
     if(!doc.exists && localDB && localDB.projects && localDB.projects.length > 0) {
       CloudDB.save(DB);
@@ -2971,9 +2971,9 @@ function save() {
   _saveToastTimer = setTimeout(() => { if(el.parentNode) el.remove(); }, 2000);
 }
 
-/* ═══════════════════════════════════════
+/* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
    HELPERS & UTILS
-═══════════════════════════════════════ */
+â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
 function resizeImage(file, callback) {
   const reader = new FileReader();
   reader.onload = (e) => {
@@ -2981,12 +2981,12 @@ function resizeImage(file, callback) {
     img.onload = () => {
       const canvas = document.createElement('canvas');
       let w = img.width, h = img.height;
-      // Reducimos el tamaño drásticamente para miniatura (de 800 a 320)
+      // Reducimos el tamaÃ±o drÃ¡sticamente para miniatura (de 800 a 320)
       const max = 320;
       if(w > max || h > max) { if(w > h) { h = Math.round((h *= max / w)); w = max; } else { w = Math.round((w *= max / h)); h = max; } }
       canvas.width = w; canvas.height = h;
       canvas.getContext('2d').drawImage(img, 0, 0, w, h);
-      // Bajamos la compresión JPEG de 0.8 a 0.6 para ahorrar muchísimo espacio
+      // Bajamos la compresiÃ³n JPEG de 0.8 a 0.6 para ahorrar muchÃ­simo espacio
       callback(canvas.toDataURL('image/jpeg', 0.6));
     };
     img.src = e.target.result;
@@ -3093,23 +3093,23 @@ function renderPagination(containerId, page, totalPages, callbackName) {
     pages.push(`<button class="page-btn ${i===page?'active':''}" onclick="${callbackName}(${i})">${i}</button>`);
   }
   el.innerHTML = `<div class="pagination">
-    <button class="page-btn" ${page===1?'disabled':''} onclick="${callbackName}(${page-1})">‹</button>
+    <button class="page-btn" ${page===1?'disabled':''} onclick="${callbackName}(${page-1})">â€¹</button>
     ${pages.join('')}
-    <button class="page-btn" ${page===totalPages?'disabled':''} onclick="${callbackName}(${page+1})">›</button>
+    <button class="page-btn" ${page===totalPages?'disabled':''} onclick="${callbackName}(${page+1})">â€º</button>
     <span class="page-info">Page ${page} of ${totalPages}</span>
   </div>`;
 }
 
-// Renderizador Dinámico de Etiquetas de Formato
+// Renderizador DinÃ¡mico de Etiquetas de Formato
 function renderCTTag(ctId) {
   const ct = DB.contentTypes.find(c => c.id === ctId) || DB.contentTypes[0] || { label:'Unknown', color:'#ffffff' };
   // Usamos hexadecimal con '26' al final para darle transparencia al fondo (~15%)
   return `<span class="content-type-tag" style="color:${ct.color}; background:${ct.color}26; border: 1px solid ${ct.color}40;">${ct.label}</span>`;
 }
 
-/* ═══════════════════════════════════════
+/* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
    STATE & GOOGLE AUTHENTICATION
-═══════════════════════════════════════ */
+â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
 let screen = 'projects';
 let filterCat = null;
 let curPid = null;
@@ -3145,7 +3145,7 @@ function signInWithGoogle() {
   const provider = new firebase.auth.GoogleAuthProvider();
   firebase.auth().signInWithPopup(provider).catch(err => {
     console.error(err);
-    alert("Error al iniciar sesión: " + err.message);
+    alert("Error al iniciar sesiÃ³n: " + err.message);
   });
 }
 
@@ -3153,7 +3153,7 @@ function signOut() {
   firebase.auth().signOut();
 }
 
-// Escuchar inicio de sesión de Google
+// Escuchar inicio de sesiÃ³n de Google
 signInWithGoogle = function() {
   const provider = new firebase.auth.GoogleAuthProvider();
   firebase.auth().signInWithPopup(provider).catch(err => {
@@ -3238,7 +3238,7 @@ function renderTopbarAuth() {
   const u = getAuthUser();
   if(!u) return '';
   
-  // Calcular no leídos (ignorando los mensajes enviados por nosotros mismos)
+  // Calcular no leÃ­dos (ignorando los mensajes enviados por nosotros mismos)
   const unreadNotifs = (DB.notifications?.[u.id] || []).filter(n => !n.read).length;
   const unreadMsgs = (DB.messages?.[u.id] || []).filter(m => m.from !== u.id && !m.read).length;
   
@@ -3250,17 +3250,17 @@ function renderTopbarAuth() {
   const mainBadge = totalUnread > 0 ? `<span class="topbar-badge">${totalUnread}</span>` : '';
 
   return `
-    <button class="tb-btn primary" onclick="openModal('m-project')">➕ New Project</button>
+    <button class="tb-btn primary" onclick="openModal('m-project')">âž• New Project</button>
     <div class="user-menu-wrap" id="user-dropdown-wrap">
       <div class="user-menu-btn" onclick="toggleDropdown()">
         <img src="${u.avatar}" class="user-menu-avatar">
-        <span class="user-menu-name">${u.name}${mainBadge} ▾</span>
+        <span class="user-menu-name">${u.name}${mainBadge} â–¾</span>
       </div>
       <div class="dropdown-content" id="user-dropdown">
-        <div class="dropdown-item" onclick="goScreen('profile'); toggleDropdown();">👤 My Profile</div>
-        <div class="dropdown-item" onclick="goScreen('notifications'); toggleDropdown();">🔔 Notifications ${notifBadge}</div>
-        <div class="dropdown-item" onclick="goScreen('messages'); toggleDropdown();">💬 Messages ${msgBadge}</div>
-        <div class="dropdown-item" style="color:var(--red)" onclick="signOut()">🚪 Logout</div>
+        <div class="dropdown-item" onclick="goScreen('profile'); toggleDropdown();">ðŸ‘¤ My Profile</div>
+        <div class="dropdown-item" onclick="goScreen('notifications'); toggleDropdown();">ðŸ”” Notifications ${notifBadge}</div>
+        <div class="dropdown-item" onclick="goScreen('messages'); toggleDropdown();">ðŸ’¬ Messages ${msgBadge}</div>
+        <div class="dropdown-item" style="color:var(--red)" onclick="signOut()">ðŸšª Logout</div>
       </div>
     </div>
   `;
@@ -3276,14 +3276,14 @@ window.onclick = function(e) {
   }
 }  
 
-// ── PANTALLAS DE NOTIFICACIONES Y MENSAJES ──
+// â”€â”€ PANTALLAS DE NOTIFICACIONES Y MENSAJES â”€â”€
 function renderNotifications() {
   const u = getAuthUser(); if(!u) return;
   const notifs = DB.notifications[u.id] || [];
   
-  // Se agregó el botón de "Clear All" al título
+  // Se agregÃ³ el botÃ³n de "Clear All" al tÃ­tulo
   let html = `<div class="sec-title" style="display:flex; justify-content:space-between; align-items:center;">
-                <span>🔔 YOUR NOTIFICATIONS</span>
+                <span>ðŸ”” YOUR NOTIFICATIONS</span>
                 ${notifs.length > 0 ? `<button class="tb-btn" style="padding:4px 10px; font-size:11px;" onclick="clearAllNotifications()">Clear All</button>` : ''}
               </div>`;
               
@@ -3297,7 +3297,7 @@ function renderNotifications() {
           <div class="msg-meta"><span>System</span><span>${n.date}</span></div>
           <div style="font-size:14px; margin-top:4px;">${n.text}</div>
         </div>
-        <button class="link-del-btn" style="margin-left: 12px; flex-shrink: 0;" onclick="deleteNotification('${n.id}', event)" title="Delete">✕</button>
+        <button class="link-del-btn" style="margin-left: 12px; flex-shrink: 0;" onclick="deleteNotification('${n.id}', event)" title="Delete">âœ•</button>
       </div>
     `).join('');
     html += `</div>`;
@@ -3310,20 +3310,20 @@ function renderNotifications() {
   if(changed) { save(); renderTopbarAuth(); }
 }
 
-// NUEVA FUNCIÓN: Borrar una notificación individual
+// NUEVA FUNCIÃ“N: Borrar una notificaciÃ³n individual
 function deleteNotification(id, event) {
   if(event) event.stopPropagation(); // Evita que al hacer clic en la X, te lleve al proyecto
   const u = getAuthUser();
   if(!u || !DB.notifications[u.id]) return;
   
-  // Filtramos la base de datos para quitar la notificación seleccionada
+  // Filtramos la base de datos para quitar la notificaciÃ³n seleccionada
   DB.notifications[u.id] = DB.notifications[u.id].filter(n => n.id !== id);
   save();
   renderNotifications();
   renderTopbarAuth(); // Actualiza el contador rojo del perfil
 }
 
-// NUEVA FUNCIÓN: Borrar todas de golpe
+// NUEVA FUNCIÃ“N: Borrar todas de golpe
 function clearAllNotifications() {
   deleteCtx = '__notifs__';
   deleteType = 'notifications';
@@ -3332,16 +3332,16 @@ function clearAllNotifications() {
   openModal('m-delete');
 }
 
-let activeChatUser = null; // Guarda con quién estamos chateando actualmente
+let activeChatUser = null; // Guarda con quiÃ©n estamos chateando actualmente
 
 function renderMessages() {
   const u = getAuthUser(); if(!u) return;
   const myMsgs = DB.messages[u.id] || [];
 
-  // Obtener a todos los compañeros de equipo para poder chatear con ellos
+  // Obtener a todos los compaÃ±eros de equipo para poder chatear con ellos
   const contacts = DB.users.filter(x => x.id !== u.id);
 
-  let html = `<div class="sec-title" style="margin-bottom:16px;">💬 DIRECT MESSAGES</div>`;
+  let html = `<div class="sec-title" style="margin-bottom:16px;">ðŸ’¬ DIRECT MESSAGES</div>`;
   html += `<div class="chat-layout">`;
 
   // PANEL IZQUIERDO: LISTA DE CONTACTOS
@@ -3386,7 +3386,7 @@ function renderMessages() {
                 <div class="chat-history" id="chat-history">`;
 
      if(thread.length === 0) {
-        html += `<div class="empty-state" style="border:none; background:transparent; padding-top:60px;"><div class="empty-text">Say hello to ${contact.name}! 👋</div><div class="empty-sub">Send a message to start the conversation.</div></div>`;
+        html += `<div class="empty-state" style="border:none; background:transparent; padding-top:60px;"><div class="empty-text">Say hello to ${contact.name}! ðŸ‘‹</div><div class="empty-sub">Send a message to start the conversation.</div></div>`;
      } else {
         html += thread.map(m => {
            const isMe = m.from === u.id;
@@ -3407,12 +3407,12 @@ function renderMessages() {
      html += `  </div>
                 <div class="chat-input-area">
                   <input type="text" id="chat-reply-input" class="chat-input" placeholder="Type a message to ${contact.name}..." onkeyup="if(event.key==='Enter') sendChatReply()">
-                  <button class="chat-send-btn" onclick="sendChatReply()">➤</button>
+                  <button class="chat-send-btn" onclick="sendChatReply()">âž¤</button>
                 </div>
               </div>`;
   } else {
      html += `<div class="chat-main" style="align-items:center; justify-content:center; color:var(--muted); font-size:14px; background:var(--bg);">
-                <div style="font-size:48px; margin-bottom:16px; opacity:0.3;">💬</div>
+                <div style="font-size:48px; margin-bottom:16px; opacity:0.3;">ðŸ’¬</div>
                 Select a team member to start chatting
               </div>`;
   }
@@ -3477,14 +3477,14 @@ function submitMessage() {
 
   save();
   closeModal('m-send-msg');
-  toast('Message sent', '💬');
+  toast('Message sent', 'ðŸ’¬');
   if(screen === 'messages') renderMessages();
 }
 
-// ── PANTALLA DE DIRECTORIO DE EQUIPO ──
+// â”€â”€ PANTALLA DE DIRECTORIO DE EQUIPO â”€â”€
 function renderTeam() {
   const content = document.getElementById('team-content');
-  let html = `<div class="sec-title" style="margin-bottom:24px;">👥 TEAM DIRECTORY</div>`;
+  let html = `<div class="sec-title" style="margin-bottom:24px;">ðŸ‘¥ TEAM DIRECTORY</div>`;
   html += `<div class="proj-grid">`;
   (DB.users || []).forEach(u => {
     html += `
@@ -3496,7 +3496,7 @@ function renderTeam() {
           <div style="font-size:11px; color:var(--muted); margin-top:4px;">${u.email}</div>
         </div>
         ${isMaster && u.id !== currentUser ? `
-          <button class="tb-btn danger" style="padding:6px 12px; font-size:11px;" onclick="event.stopPropagation(); askDelete('${u.id}', 'user')">🗑</button>
+          <button class="tb-btn danger" style="padding:6px 12px; font-size:11px;" onclick="event.stopPropagation(); askDelete('${u.id}', 'user')">ðŸ—‘</button>
         ` : ''}
       </div>
     `;
@@ -3506,7 +3506,7 @@ function renderTeam() {
   queueUiIcons();
 }
 
-// ── PERFIL PÚBLICO EN PANTALLA ──
+// â”€â”€ PERFIL PÃšBLICO EN PANTALLA â”€â”€
 let viewingProfileId = null;
 function viewPublicProfile(uid) {
   if(uid === currentUser) { goScreen('profile'); return; }
@@ -3539,12 +3539,12 @@ function renderPublicProfile() {
     return `<div class="mini-proj" onclick="openProj('${p.id}')">
       <div>
         <div class="mp-name">${p.name}</div>
-        <div class="mp-cat">${cat?.name||''} · ${p.currentVersion}</div>
+        <div class="mp-cat">${cat?.name||''} Â· ${p.currentVersion}</div>
         ${deadline
           ? `<div class="mini-deadline ${isPastDeadline(deadline.date) ? 'overdue' : ''}" style="font-size:11px; color:${isPastDeadline(deadline.date) ? 'var(--red)' : 'var(--orange)'}; font-weight:700; margin-top:4px;">${deadline.label}: ${formatPlannedDate(deadline.date)}</div>`
           : `<div style="font-size:11px; color:var(--muted); margin-top:4px;">No deadline scheduled</div>`}
       </div>
-      <span style="color:var(--muted)">→</span>
+      <span style="color:var(--muted)">â†’</span>
     </div>`;
   };
 
@@ -3560,17 +3560,17 @@ function renderPublicProfile() {
     <div class="profile-grid">
       <div style="display:flex; flex-direction:column; gap:24px;">
           <div class="profile-col">
-            <div class="pcol-title">▶ Assigned Active Projects (${activeP.length})</div>
+            <div class="pcol-title">â–¶ Assigned Active Projects (${activeP.length})</div>
             <div class="mini-proj-list">${activeP.length?activeP.map(renderMini).join(''):'<div style="color:var(--muted);font-size:13px;">No active projects.</div>'}</div>
           </div>
           <div class="profile-col">
-            <div class="pcol-title">✅ Completed Projects (${doneP.length})</div>
+            <div class="pcol-title">âœ… Completed Projects (${doneP.length})</div>
             <div class="mini-proj-list">${doneP.length?doneP.map(renderMini).join(''):'<div style="color:var(--muted);font-size:13px;">No completed projects.</div>'}</div>
           </div>
       </div>
 
       <div class="profile-col" style="align-self:start;">
-        <div class="pcol-title">💬 Send Private Message</div>
+        <div class="pcol-title">ðŸ’¬ Send Private Message</div>
         <div style="display:flex; flex-direction:column;">
           <textarea id="inline-msg-text" class="field-textarea" placeholder="Write a message to ${u.name}..."></textarea>
           <button class="tb-btn primary" style="align-self:flex-end; margin-top:12px;" onclick="sendInlineMessage('${u.id}')">Send Message</button>
@@ -3600,7 +3600,7 @@ function sendInlineMessage(targetUid) {
 
     save();
     inputEl.value = '';
-    toast('Message sent', '💬');
+    toast('Message sent', 'ðŸ’¬');
     if(screen === 'messages') renderMessages();
   } catch (err) {
     console.error("Messaging error:", err);
@@ -3630,12 +3630,12 @@ function saveUserProfile() {
   } 
   save(); closeModal('m-new-user'); 
   renderTopbarAuth(); render();
-  toast('Profile updated', '👤');
+  toast('Profile updated', 'ðŸ‘¤');
 }
 
-/* ═══════════════════════════════════════
+/* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
    SIDEBAR
-═══════════════════════════════════════ */
+â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
 function renderSidebar() {
   const tree = document.getElementById('sidebar-tree');
   
@@ -3643,7 +3643,7 @@ function renderSidebar() {
   const cnts = {};
   const stateCnts = {}; // Nuevo contador para los sub-estados
 
-  // Leemos en qué estado está el filtro superior para iluminar el botón correcto
+  // Leemos en quÃ© estado estÃ¡ el filtro superior para iluminar el botÃ³n correcto
   const curState = document.getElementById('filter-state') ? document.getElementById('filter-state').value : 'all';
 
   DB.projects.forEach(p => { 
@@ -3681,7 +3681,7 @@ function renderSidebar() {
       const sc = stateCnts[c.id] || { not_started:0, in_progress:0, finished:0, published:0 };
       const isCatActive = (filterCat === c.id);
       
-      // Construimos el sub-menú SOLO si esta categoría está seleccionada
+      // Construimos el sub-menÃº SOLO si esta categorÃ­a estÃ¡ seleccionada
       let subMenuHTML = '';
       if (isCatActive) {
         subMenuHTML = `
@@ -3709,8 +3709,8 @@ function renderSidebar() {
           <span style="flex:1">${c.name}</span>
           <span class="cat-count">${cnts[c.id]||0}</span>
           ${isMaster ? `
-            <span class="sb-action" title="Edit Category" onclick="event.stopPropagation(); editCategory('${c.id}')">✏️</span>
-            <span class="sb-action" title="Delete Category" onclick="event.stopPropagation(); askDelete('${c.id}', 'category')">🗑️</span>
+            <span class="sb-action" title="Edit Category" onclick="event.stopPropagation(); editCategory('${c.id}')">âœï¸</span>
+            <span class="sb-action" title="Delete Category" onclick="event.stopPropagation(); askDelete('${c.id}', 'category')">ðŸ—‘ï¸</span>
           ` : ''}
         </div>
         ${subMenuHTML}
@@ -3719,12 +3719,12 @@ function renderSidebar() {
 
     blk.innerHTML = `
       <div class="yr-header" onclick="this.parentElement.classList.toggle('open')">
-        <span class="yr-label">📁 ${yr.label}</span>
+        <span class="yr-label">ðŸ“ ${yr.label}</span>
         ${isMaster ? `
-          <span class="sb-action" title="Edit Season" onclick="event.stopPropagation(); editSeason('${yr.id}')">✏️</span>
-          <span class="sb-action" title="Delete Season" onclick="event.stopPropagation(); askDelete('${yr.id}', 'season')">🗑️</span>
+          <span class="sb-action" title="Edit Season" onclick="event.stopPropagation(); editSeason('${yr.id}')">âœï¸</span>
+          <span class="sb-action" title="Delete Season" onclick="event.stopPropagation(); askDelete('${yr.id}', 'season')">ðŸ—‘ï¸</span>
         ` : ''}
-        <span class="yr-chev">▶</span>
+        <span class="yr-chev">â–¶</span>
       </div>
       <div class="yr-cats">
         ${catsHTML}
@@ -3745,7 +3745,7 @@ function renderSidebar() {
   queueUiIcons();
 }
 
-// NUEVO setFilter: Ahora recibe la categoría y también el estado
+// NUEVO setFilter: Ahora recibe la categorÃ­a y tambiÃ©n el estado
 function setFilter(catId, stateId = 'all') { 
   filterCat = catId; 
   
@@ -3780,9 +3780,9 @@ function editCategory(id) {
   }
 }
 
-/* ═══════════════════════════════════════
+/* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
    TOPBAR
-═══════════════════════════════════════ */
+â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
 function renderTopbar() {
   const bc = document.getElementById('tb-bc');
   const title = document.getElementById('tb-title');
@@ -3806,13 +3806,13 @@ function renderTopbar() {
   }
   else if(screen==='profile') { leftTitle = 'My Profile'; leftSub = 'Your workspace, activity and everything in one place.'; }
   else if(screen==='team') { leftTitle = 'Team Directory'; leftSub = 'Find the right person, know their role, and see what they are working on.'; }
-  else if(screen==='notifications') { leftTitle = '🔔 Notifications'; }
-  else if(screen==='messages') { leftTitle = '💬 Direct Messages'; }
+  else if(screen==='notifications') { leftTitle = 'ðŸ”” Notifications'; }
+  else if(screen==='messages') { leftTitle = 'ðŸ’¬ Direct Messages'; }
   else if(screen==='mywork') { leftTitle = 'My Work'; leftSub = 'All your tasks, projects, and deadlines in one place.'; }
   else if(screen==='public-profile') { 
     const u = DB.users.find(x => x.id === viewingProfileId);
     leftSub = `<span class="bc-link" onclick="goScreen('team')">Team</span> <span style="color:var(--muted)">/</span> <span style="color:var(--text)">Profile</span>`;
-    leftTitle = u ? `👤 ${u.name}'s Profile` : 'User Profile'; 
+    leftTitle = u ? `ðŸ‘¤ ${u.name}'s Profile` : 'User Profile'; 
   }
   else {
     if(filterCat) {
@@ -3831,9 +3831,9 @@ function renderTopbar() {
   queueUiIcons();
 }
 
-/* ═══════════════════════════════════════
+/* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
    AVATAR HELPER
-═══════════════════════════════════════ */
+â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
 function renderAvatars(assignees) {
   const arr = assignees || [];
   if(!arr.length) return '<div class="avatar-empty">+</div>';
@@ -3910,24 +3910,24 @@ function uiIcon(name, cls = '') {
 }
 
 const UI_EMOJI_ICON_MAP = [
-  ['ðŸ””', 'bell'], ['ðŸ’¬', 'message'], ['ðŸ‘¤', 'user'], ['ðŸšª', 'logout'],
-  ['ðŸ—‘ï¸', 'trash'], ['ðŸ—‘', 'trash'], ['âœï¸', 'pencil'], ['ðŸ“', 'folder'],
-  ['ðŸ“‚', 'folderOpen'], ['ðŸ‘¥', 'users'], ['ðŸ“…', 'calendar'], ['âš™ï¸', 'settings'],
-  ['âž•', 'plus'], ['â–¶', 'play'], ['âœ•', 'x'], ['âœ…', 'checkCircle'],
-  ['â¸', 'pause'], ['â³', 'clock'], ['ðŸš€', 'rocket'], ['ðŸŽ‰', 'spark'],
-  ['ðŸ”™', 'chevronLeft'], ['â­', 'star'], ['â˜†', 'star'],
-  ['ðŸ”—', 'link'], ['ðŸ–¼ï¸', 'image'], ['ðŸ–¼', 'image'], ['ðŸ“', 'note'],
-  ['ðŸ”', 'refresh'], ['ðŸ’¡', 'idea'], ['ðŸŽ¬', 'video'], ['ðŸ‘‹', 'hand'],
-  ['ðŸ“„', 'file'], ['âš ï¸', 'warning'], ['âš ', 'warning'], ['â—Ž', 'target'],
-  ['â†’', 'chevronRight'],
-  ['🗑️', 'trash'], ['🗑', 'trash'], ['🔔', 'bell'], ['💬', 'message'], ['👤', 'user'], ['🚪', 'logout'],
-  ['✏️', 'pencil'], ['✏', 'pencil'], ['📁', 'folder'], ['📂', 'folderOpen'], ['👥', 'users'],
-  ['📅', 'calendar'], ['⚡', 'spark'], ['📎', 'paperclip'], ['⚙️', 'settings'], ['⚙', 'settings'],
-  ['➕', 'plus'], ['▶', 'play'], ['◀', 'chevronLeft'], ['✕', 'x'], ['✅', 'checkCircle'],
-  ['✔️', 'checkCircle'], ['✓', 'check'], ['⏸', 'pause'], ['⏳', 'clock'], ['🚀', 'rocket'],
-  ['🎉', 'spark'], ['🔙', 'chevronLeft'], ['⭐', 'star'], ['☆', 'star'], ['🔗', 'link'], ['🖼️', 'image'], ['🖼', 'image'], ['📝', 'note'],
-  ['🔄', 'refresh'], ['💡', 'idea'], ['🎬', 'video'], ['👋', 'hand'], ['📄', 'file'],
-  ['⚠️', 'warning'], ['⚠', 'warning'], ['◎', 'target'], ['→', 'chevronRight']
+  ['Ã°Å¸â€â€', 'bell'], ['Ã°Å¸â€™Â¬', 'message'], ['Ã°Å¸â€˜Â¤', 'user'], ['Ã°Å¸Å¡Âª', 'logout'],
+  ['Ã°Å¸â€”â€˜Ã¯Â¸Â', 'trash'], ['Ã°Å¸â€”â€˜', 'trash'], ['Ã¢Å“ÂÃ¯Â¸Â', 'pencil'], ['Ã°Å¸â€œÂ', 'folder'],
+  ['Ã°Å¸â€œâ€š', 'folderOpen'], ['Ã°Å¸â€˜Â¥', 'users'], ['Ã°Å¸â€œâ€¦', 'calendar'], ['Ã¢Å¡â„¢Ã¯Â¸Â', 'settings'],
+  ['Ã¢Å¾â€¢', 'plus'], ['Ã¢â€“Â¶', 'play'], ['Ã¢Å“â€¢', 'x'], ['Ã¢Å“â€¦', 'checkCircle'],
+  ['Ã¢ÂÂ¸', 'pause'], ['Ã¢ÂÂ³', 'clock'], ['Ã°Å¸Å¡â‚¬', 'rocket'], ['Ã°Å¸Å½â€°', 'spark'],
+  ['Ã°Å¸â€â„¢', 'chevronLeft'], ['Ã¢Â­Â', 'star'], ['Ã¢Ëœâ€ ', 'star'],
+  ['Ã°Å¸â€â€”', 'link'], ['Ã°Å¸â€“Â¼Ã¯Â¸Â', 'image'], ['Ã°Å¸â€“Â¼', 'image'], ['Ã°Å¸â€œÂ', 'note'],
+  ['Ã°Å¸â€Â', 'refresh'], ['Ã°Å¸â€™Â¡', 'idea'], ['Ã°Å¸Å½Â¬', 'video'], ['Ã°Å¸â€˜â€¹', 'hand'],
+  ['Ã°Å¸â€œâ€ž', 'file'], ['Ã¢Å¡Â Ã¯Â¸Â', 'warning'], ['Ã¢Å¡Â ', 'warning'], ['Ã¢â€”Å½', 'target'],
+  ['Ã¢â€ â€™', 'chevronRight'],
+  ['ðŸ—‘ï¸', 'trash'], ['ðŸ—‘', 'trash'], ['ðŸ””', 'bell'], ['ðŸ’¬', 'message'], ['ðŸ‘¤', 'user'], ['ðŸšª', 'logout'],
+  ['âœï¸', 'pencil'], ['âœ', 'pencil'], ['ðŸ“', 'folder'], ['ðŸ“‚', 'folderOpen'], ['ðŸ‘¥', 'users'],
+  ['ðŸ“…', 'calendar'], ['âš¡', 'spark'], ['ðŸ“Ž', 'paperclip'], ['âš™ï¸', 'settings'], ['âš™', 'settings'],
+  ['âž•', 'plus'], ['â–¶', 'play'], ['â—€', 'chevronLeft'], ['âœ•', 'x'], ['âœ…', 'checkCircle'],
+  ['âœ”ï¸', 'checkCircle'], ['âœ“', 'check'], ['â¸', 'pause'], ['â³', 'clock'], ['ðŸš€', 'rocket'],
+  ['ðŸŽ‰', 'spark'], ['ðŸ”™', 'chevronLeft'], ['â­', 'star'], ['â˜†', 'star'], ['ðŸ”—', 'link'], ['ðŸ–¼ï¸', 'image'], ['ðŸ–¼', 'image'], ['ðŸ“', 'note'],
+  ['ðŸ”„', 'refresh'], ['ðŸ’¡', 'idea'], ['ðŸŽ¬', 'video'], ['ðŸ‘‹', 'hand'], ['ðŸ“„', 'file'],
+  ['âš ï¸', 'warning'], ['âš ', 'warning'], ['â—Ž', 'target'], ['â†’', 'chevronRight']
 ];
 
 function iconifyUiHtml(html) {
@@ -3959,9 +3959,9 @@ function queueUiIcons() {
   setTimeout(() => applyUiIcons(document), 0);
 }
 
-/* ═══════════════════════════════════════
+/* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
    PROJECTS LIST
-═══════════════════════════════════════ */
+â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
 function togglePausedGrid() {
   isPausedGridOpen = !isPausedGridOpen;
   document.getElementById('paused-grid').classList.toggle('open', isPausedGridOpen);
@@ -4013,7 +4013,7 @@ function renderProjects() {
     if(filterFormat !== 'all' && p.contentType !== filterFormat) return;
     if(filterClient !== 'all' && p.catId !== filterClient) return;
 
-    // Detectamos el estado para filtros futuros del menú lateral
+    // Detectamos el estado para filtros futuros del menÃº lateral
     const ver = getCurVer(p);
     const steps = ver.steps || [];
     const doneN = steps.filter(s=>s.status==='done').length;
@@ -4077,7 +4077,7 @@ function renderProjects() {
           <div>${doneN}/${steps.length} Steps</div>
         </div>
         <div class="pc-badges" style="margin-bottom:14px;">
-          <span class="priority-star" onclick="togglePriority(event,'${p.id}')" title="Priority">${p.priority?'⭐':'☆'}</span>
+          <span class="priority-star" onclick="togglePriority(event,'${p.id}')" title="Priority">${p.priority?'â­':'â˜†'}</span>
           ${renderCTTag(p.contentType)}
           <span class="pc-version">${p.currentVersion}</span>
         </div>
@@ -4089,8 +4089,8 @@ function renderProjects() {
             <input class="pc-date-input" type="date" value="${p.publishDate||''}" onchange="updateProjectPublishDate('${p.id}', this.value)" onclick="event.stopPropagation()">
           </div>
           <div class="pc-right-badges">
-            ${p.priority?`<span class="badge badge-priority">⭐</span>`:''}
-            ${inPub?`<span class="badge badge-publish">🚀</span>`:''}
+            ${p.priority?`<span class="badge badge-priority">â­</span>`:''}
+            ${inPub?`<span class="badge badge-publish">ðŸš€</span>`:''}
           </div>
         </div>
       </div>
@@ -4098,7 +4098,7 @@ function renderProjects() {
   };
 
   if(!activeProjs.length && !pausedProjs.length) {
-    grid.innerHTML=`<div class="empty-state"><div class="empty-icon">📂</div><div class="empty-text">No projects found</div><div class="empty-sub">Adjust your search or filters.</div></div>`;
+    grid.innerHTML=`<div class="empty-state"><div class="empty-icon">ðŸ“‚</div><div class="empty-text">No projects found</div><div class="empty-sub">Adjust your search or filters.</div></div>`;
     if(projPagination) projPagination.innerHTML = '';
     if(pausedPagination) pausedPagination.innerHTML = '';
     wrapper.style.display = 'none';
@@ -4141,11 +4141,11 @@ function dragLeave(e) { e.currentTarget.classList.remove('drag-over'); }
 function drop(e, targetId) { e.preventDefault(); e.currentTarget.classList.remove('drag-over'); if(!dragId||dragId===targetId) return;
   const drag=getP(dragId), target=getP(targetId), dOrder=drag.order??0, tOrder=target.order??0;
   drag.order=tOrder; target.order=dOrder; save(); renderProjects(); }
-function togglePriority(e, id) { e.stopPropagation(); const p=getP(id); p.priority=!p.priority; save(); renderProjects(); toast(p.priority?'Priority marked':'Priority removed','⭐'); }
+function togglePriority(e, id) { e.stopPropagation(); const p=getP(id); p.priority=!p.priority; save(); renderProjects(); toast(p.priority?'Priority marked':'Priority removed','â­'); }
 
-/* ═══════════════════════════════════════
+/* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
    PROJECT DETAIL
-═══════════════════════════════════════ */
+â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
 function openProj(id) { curPid=id; goScreen('detail'); }
 
 function renderDetail() {
@@ -4153,36 +4153,36 @@ function renderDetail() {
   const ver = getCurVer(p), steps = ver.steps || [], allDone = steps.length > 0 && steps.every(s=>s.status==='done');
   const inPub = DB.publish.find(x=>x.projectId===p.id);
   
-  // Nueva variable para saber si está publicado
+  // Nueva variable para saber si estÃ¡ publicado
   const isPub = p.isPublished || p.state === 'published';
 
   let panel = '';
-  // Si está publicado, mostramos el banner de victoria y quitamos todos los botones
-  if(isPub) panel=`<div class="action-panel panel-green" style="border: 1px solid var(--green); box-shadow: 0 0 20px rgba(0, 255, 128, 0.15);"><div class="ap-title" style="color:var(--green)">✨ Project Published</div><div class="ap-sub">This project is fully completed, approved, and published.</div></div>`;
-  else if(p.isPaused) panel=`<div class="action-panel panel-gray"><div class="ap-title" style="color:var(--text)">⏸ Project Paused</div><div class="ap-sub">This project is currently on hold.</div><div class="ap-buttons"><button class="ap-btn resume" onclick="togglePause('${p.id}')">▶ Resume Project</button></div></div>`;
-  else if(inPub) panel=`<div class="action-panel panel-purple"><div class="ap-title" style="color:var(--accent-light)">🚀 In Publish Queue</div><div class="ap-sub">You can view/edit the release date in the Publish Queue tab.</div><div class="ap-buttons"><button class="ap-btn publish" onclick="goScreen('publish')">View Queue →</button><button class="ap-btn feedback" onclick="openFbModal()">Needs Revisions</button><button class="ap-btn resume" onclick="unqueueProject('${p.id}')" style="background:var(--card2); border: 1px solid var(--line2); color:var(--text);">🔙 Unqueue</button><button class="ap-btn resume" onclick="togglePause('${p.id}')">⏸ Pause</button></div></div>`; 
-  else if(ver.waitingFeedback) panel=`<div class="action-panel panel-orange"><div class="ap-title" style="color:var(--orange)">⏳ Awaiting Client Feedback</div><div class="ap-sub">Timeline is exported. Log new revision requests when received.</div><div class="ap-buttons"><button class="ap-btn feedback" onclick="openFbModal()">Log Feedback</button><button class="ap-btn publish" onclick="sendToPublish('${p.id}')">Approve & Queue</button><button class="ap-btn resume" onclick="togglePause('${p.id}')">⏸ Pause</button></div></div>`;
-  else if(allDone) panel=`<div class="action-panel panel-green"><div class="ap-title" style="color:var(--green)">✅ All Stages Complete!</div><div class="ap-sub">Ready for final export or pending client review.</div><div class="ap-buttons"><button class="ap-btn publish" onclick="sendToPublish('${p.id}')">Queue to Publish</button><button class="ap-btn feedback" onclick="openFbModal()">Needs Revisions</button><button class="ap-btn resume" onclick="togglePause('${p.id}')">⏸ Pause</button></div></div>`;
-  else panel=`<div class="action-panel panel-gray"><div class="ap-title" style="color:var(--text)">▶ Project Active</div><div class="ap-sub">Working on current stages.</div><div class="ap-buttons"><button class="ap-btn resume" onclick="togglePause('${p.id}')" style="background:var(--card3);color:var(--text)">⏸ Pause Project</button></div></div>`;
+  // Si estÃ¡ publicado, mostramos el banner de victoria y quitamos todos los botones
+  if(isPub) panel=`<div class="action-panel panel-green" style="border: 1px solid var(--green); box-shadow: 0 0 20px rgba(0, 255, 128, 0.15);"><div class="ap-title" style="color:var(--green)">âœ¨ Project Published</div><div class="ap-sub">This project is fully completed, approved, and published.</div></div>`;
+  else if(p.isPaused) panel=`<div class="action-panel panel-gray"><div class="ap-title" style="color:var(--text)">â¸ Project Paused</div><div class="ap-sub">This project is currently on hold.</div><div class="ap-buttons"><button class="ap-btn resume" onclick="togglePause('${p.id}')">â–¶ Resume Project</button></div></div>`;
+  else if(inPub) panel=`<div class="action-panel panel-purple"><div class="ap-title" style="color:var(--accent-light)">ðŸš€ In Publish Queue</div><div class="ap-sub">You can view/edit the release date in the Publish Queue tab.</div><div class="ap-buttons"><button class="ap-btn publish" onclick="goScreen('publish')">View Queue â†’</button><button class="ap-btn feedback" onclick="openFbModal()">Needs Revisions</button><button class="ap-btn resume" onclick="unqueueProject('${p.id}')" style="background:var(--card2); border: 1px solid var(--line2); color:var(--text);">ðŸ”™ Unqueue</button><button class="ap-btn resume" onclick="togglePause('${p.id}')">â¸ Pause</button></div></div>`; 
+  else if(ver.waitingFeedback) panel=`<div class="action-panel panel-orange"><div class="ap-title" style="color:var(--orange)">â³ Awaiting Client Feedback</div><div class="ap-sub">Timeline is exported. Log new revision requests when received.</div><div class="ap-buttons"><button class="ap-btn feedback" onclick="openFbModal()">Log Feedback</button><button class="ap-btn publish" onclick="sendToPublish('${p.id}')">Approve & Queue</button><button class="ap-btn resume" onclick="togglePause('${p.id}')">â¸ Pause</button></div></div>`;
+  else if(allDone) panel=`<div class="action-panel panel-green"><div class="ap-title" style="color:var(--green)">âœ… All Stages Complete!</div><div class="ap-sub">Ready for final export or pending client review.</div><div class="ap-buttons"><button class="ap-btn publish" onclick="sendToPublish('${p.id}')">Queue to Publish</button><button class="ap-btn feedback" onclick="openFbModal()">Needs Revisions</button><button class="ap-btn resume" onclick="togglePause('${p.id}')">â¸ Pause</button></div></div>`;
+  else panel=`<div class="action-panel panel-gray"><div class="ap-title" style="color:var(--text)">â–¶ Project Active</div><div class="ap-sub">Working on current stages.</div><div class="ap-buttons"><button class="ap-btn resume" onclick="togglePause('${p.id}')" style="background:var(--card3);color:var(--text)">â¸ Pause Project</button></div></div>`;
 
   const stepsHTML = steps.map((s,i)=>{
     const rowCls = s.status==='active'?'step-active':s.status==='done'?'step-done':'';
-    const icon = s.status==='done'?'✓':s.status==='active'?'▶':'';
+    const icon = s.status==='done'?'âœ“':s.status==='active'?'â–¶':'';
     const tag = s.status==='done'?'Done':s.status==='active'?'In Progress':'Pending';
     let btns='';
     
-    // Bloqueamos la edición de etapas si está publicado
+    // Bloqueamos la ediciÃ³n de etapas si estÃ¡ publicado
     if(!ver.waitingFeedback && !inPub && !p.isPaused && !isPub){
       if(s.status==='pending') btns+=`<button class="step-btn start" onclick="stepAct('${p.id}',${i},'start')">Start Stage</button>`;
       if(s.status==='active')  btns+=`<button class="step-btn complete" onclick="stepAct('${p.id}',${i},'complete')">Mark Complete</button>`;
-      if(s.status==='done')    btns+=`<button class="step-btn reopen" onclick="stepAct('${p.id}',${i},'reopen')">↺ Reopen</button>`;
+      if(s.status==='done')    btns+=`<button class="step-btn reopen" onclick="stepAct('${p.id}',${i},'reopen')">â†º Reopen</button>`;
     }
-    btns+=`<button class="step-btn" onclick="openNoteModal('${p.id}',${i})">📝 Note</button>`;
+    btns+=`<button class="step-btn" onclick="openNoteModal('${p.id}',${i})">ðŸ“ Note</button>`;
     
-    // Bloqueamos poder borrar etapas si está publicado
-    if(!ver.waitingFeedback && !inPub && !p.isPaused && !isPub) btns+=`<button class="step-btn danger" onclick="delStep('${p.id}',${i})">✕</button>`;
+    // Bloqueamos poder borrar etapas si estÃ¡ publicado
+    if(!ver.waitingFeedback && !inPub && !p.isPaused && !isPub) btns+=`<button class="step-btn danger" onclick="delStep('${p.id}',${i})">âœ•</button>`;
     
-    return `<div class="step-row ${rowCls}" draggable="true" ondragstart="stepDragStart(event, ${i})" ondragover="stepDragOver(event)" ondragleave="stepDragLeave(event)" ondrop="stepDrop(event, ${i})" ondragend="stepDragEnd(event)"><div class="step-main"><div style="cursor:grab; color:var(--muted); font-size:18px; padding-right:12px; user-select:none; transition:color 0.2s;" onmouseover="this.style.color='var(--text)'" onmouseout="this.style.color='var(--muted)'" title="Drag to reorder">⠿</div><div class="step-circle">${icon}</div><div class="step-info"><div class="step-name">${s.name}</div>${s.note?`<div class="step-note">${s.note}</div>`:''}</div><div class="step-tag">${tag}</div></div><div class="step-actions">${btns}</div></div>`;
+    return `<div class="step-row ${rowCls}" draggable="true" ondragstart="stepDragStart(event, ${i})" ondragover="stepDragOver(event)" ondragleave="stepDragLeave(event)" ondrop="stepDrop(event, ${i})" ondragend="stepDragEnd(event)"><div class="step-main"><div style="cursor:grab; color:var(--muted); font-size:18px; padding-right:12px; user-select:none; transition:color 0.2s;" onmouseover="this.style.color='var(--text)'" onmouseout="this.style.color='var(--muted)'" title="Drag to reorder">â ¿</div><div class="step-circle">${icon}</div><div class="step-info"><div class="step-name">${s.name}</div>${s.note?`<div class="step-note">${s.note}</div>`:''}</div><div class="step-tag">${tag}</div></div><div class="step-actions">${btns}</div></div>`;
   }).join('');
 
   const linkOpts = LINK_TYPES.map(t=>`<option value="${t.id}">${t.label}</option>`).join('');
@@ -4191,12 +4191,12 @@ function renderDetail() {
     return `<div class="link-row">
               <span class="link-label">${lbl}</span>
               <a class="link-value" href="${lnk.url}" target="_blank" rel="noopener">${lnk.url}</a>
-              <button class="link-del-btn" onclick="removeLink('${p.id}',${idx})">✕</button>
+              <button class="link-del-btn" onclick="removeLink('${p.id}',${idx})">âœ•</button>
             </div>`;
   }).join('');
 
-  const versHTML = (p.versions||[]).slice().reverse().map(v=>`<div class="version-row ${v.v===p.currentVersion?'vcurrent':''}"><div class="v-tag">${v.v}</div><div class="v-body"><div class="v-desc">${v.feedbackDesc}</div><div class="v-date">📅 ${v.date}</div>${v.v===p.currentVersion?`<div class="v-cur">ACTIVE WORKSPACE</div>`:`<button class="v-switch-btn" onclick="switchVer('${p.id}','${v.v}')">Revert to this</button>`}</div></div>`).join('');
-  const thumbHtml = p.thumbnail ? `<img src="${p.thumbnail}" class="detail-thumb">` : `<div class="detail-thumb-label"><span>🖼️</span><span>Set Project Thumbnail</span></div>`;
+  const versHTML = (p.versions||[]).slice().reverse().map(v=>`<div class="version-row ${v.v===p.currentVersion?'vcurrent':''}"><div class="v-tag">${v.v}</div><div class="v-body"><div class="v-desc">${v.feedbackDesc}</div><div class="v-date">ðŸ“… ${v.date}</div>${v.v===p.currentVersion?`<div class="v-cur">ACTIVE WORKSPACE</div>`:`<button class="v-switch-btn" onclick="switchVer('${p.id}','${v.v}')">Revert to this</button>`}</div></div>`).join('');
+  const thumbHtml = p.thumbnail ? `<img src="${p.thumbnail}" class="detail-thumb">` : `<div class="detail-thumb-label"><span>ðŸ–¼ï¸</span><span>Set Project Thumbnail</span></div>`;
   
   const cat = getCat(p.catId);
   const formatColor = DB.contentTypes.find(c => c.id === p.contentType)?.color || 'var(--line2)';
@@ -4212,13 +4212,13 @@ function renderDetail() {
 
     <div style="display:flex; gap:16px; margin-bottom: 24px; background: var(--bg); padding: 16px; border-radius: 12px; border-left: 4px solid ${formatColor}; border-top: 1px solid var(--line2); border-right: 1px solid var(--line2); border-bottom: 1px solid var(--line2);">
        <div style="flex:1;">
-         <div style="font-size:11px; font-weight:700; color:var(--muted); margin-bottom:6px; text-transform:uppercase; letter-spacing:0.5px;">📁 Group / Category</div>
+         <div style="font-size:11px; font-weight:700; color:var(--muted); margin-bottom:6px; text-transform:uppercase; letter-spacing:0.5px;">ðŸ“ Group / Category</div>
          <select class="field-select" style="padding:8px 12px; font-size:13px;" onchange="changeProjectCategory('${p.id}', this.value)">
            ${DB.categories.map(c => `<option value="${c.id}" ${c.id === p.catId ? 'selected' : ''}>${c.name}</option>`).join('')}
          </select>
        </div>
        <div style="flex:1;">
-         <div style="font-size:11px; font-weight:700; color:var(--muted); margin-bottom:6px; text-transform:uppercase; letter-spacing:0.5px;">⚙️ Format Type</div>
+         <div style="font-size:11px; font-weight:700; color:var(--muted); margin-bottom:6px; text-transform:uppercase; letter-spacing:0.5px;">âš™ï¸ Format Type</div>
          <select class="field-select" style="padding:8px 12px; font-size:13px;" onchange="changeProjectFormat('${p.id}', this.value)">
            ${DB.contentTypes.map(ct => `<option value="${ct.id}" ${ct.id === p.contentType ? 'selected' : ''}>${ct.label}</option>`).join('')}
          </select>
@@ -4240,7 +4240,7 @@ function renderDetail() {
       <button class="assignees-manage-btn" onclick="openAssignModal('${p.id}')">Manage Team</button>
     </div>
     ${panel}
-    <div class="sec-title"><span>📂 PROJECT ASSETS & LINKS</span></div>
+    <div class="sec-title"><span>ðŸ“‚ PROJECT ASSETS & LINKS</span></div>
     <div class="links-section">
       <div id="links-list-container">${linksHTML}</div>
       <div class="link-inline-add">
@@ -4249,10 +4249,10 @@ function renderDetail() {
         <button onclick="addInlineLink('${p.id}')">Add Link</button>
       </div>
     </div>
-    <div class="sec-title"><span>✂️ EDITING WORKFLOW</span></div>
+    <div class="sec-title"><span>âœ‚ï¸ EDITING WORKFLOW</span></div>
     <div class="steps-list">${stepsHTML}</div>
     ${!isPub ? `<button class="tb-btn" style="margin-bottom:32px" onclick="openModal('m-step')">+ Add Custom Stage</button>` : ''}
-    <div class="sec-title"><span>🕒 ITERATION HISTORY</span></div>
+    <div class="sec-title"><span>ðŸ•’ ITERATION HISTORY</span></div>
     <div class="versions-list">${versHTML}</div>`);
     
   const cpTag = document.getElementById('cp-tag');
@@ -4268,15 +4268,15 @@ function togglePause(pid) { const p=getP(pid); p.isPaused = !p.isPaused; save();
   
   function changeProjectCategory(pid, newCatId) {
   const p = getP(pid);
-  if(p) { p.catId = newCatId; save(); renderDetail(); renderSidebar(); renderTopbar(); toast('Category updated', '📁'); }
+  if(p) { p.catId = newCatId; save(); renderDetail(); renderSidebar(); renderTopbar(); toast('Category updated', 'ðŸ“'); }
 }
 
 function changeProjectFormat(pid, newFormatId) {
   const p = getP(pid);
-  if(p) { p.contentType = newFormatId; save(); renderDetail(); renderProjects(); toast('Format updated', '⚙️'); }
+  if(p) { p.contentType = newFormatId; save(); renderDetail(); renderProjects(); toast('Format updated', 'âš™ï¸'); }
 }
 
-/* ── Inline Links Add / Remove ── */
+/* â”€â”€ Inline Links Add / Remove â”€â”€ */
 function updateProjectPublishDate(pid, newDate) {
   const p = getP(pid);
   if(!p) return;
@@ -4284,7 +4284,7 @@ function updateProjectPublishDate(pid, newDate) {
   save();
   if(screen === 'detail' && curPid === pid) renderDetail();
   renderProjects();
-  toast(newDate ? 'Target publish date saved' : 'Target publish date cleared','📅');
+  toast(newDate ? 'Target publish date saved' : 'Target publish date cleared','ðŸ“…');
 }
 
 function addInlineLink(pid) { 
@@ -4296,14 +4296,14 @@ function addInlineLink(pid) {
   proj.links.push({type:t, url:u}); 
   save(); 
   renderDetail(); 
-  toast('Link attached','🔗'); 
+  toast('Link attached','ðŸ”—'); 
 }
 function removeLink(pid, idx) { getP(pid).links.splice(idx,1); save(); renderDetail(); }
 
-function handleThumbnailUpload(e) { if(!e.target.files[0] || !curPid) return; resizeImage(e.target.files[0], (base64) => { getP(curPid).thumbnail = base64; save(); renderDetail(); toast('Thumbnail updated','🖼️'); }); e.target.value = ''; }
+function handleThumbnailUpload(e) { if(!e.target.files[0] || !curPid) return; resizeImage(e.target.files[0], (base64) => { getP(curPid).thumbnail = base64; save(); renderDetail(); toast('Thumbnail updated','ðŸ–¼ï¸'); }); e.target.value = ''; }
 function stepAct(pid,i,action) { const p=getP(pid), ver=getCurVer(p), s=ver.steps[i]; if(action==='start') s.status='active'; else if(action==='complete'){ s.status='done'; if(ver.steps.every(x=>x.status==='done')) ver.waitingFeedback=true; } else if(action==='reopen'){ s.status='active'; ver.waitingFeedback=false; } save(); renderDetail(); renderSidebar(); }
 function openNoteModal(pid,i) { editStepCtx={pid,i}; document.getElementById('inp-note').value=getP(pid)?getCurVer(getP(pid)).steps[i].note||'':''; openModal('m-note'); }
-function saveStepNote() { if(!editStepCtx) return; getCurVer(getP(editStepCtx.pid)).steps[editStepCtx.i].note=document.getElementById('inp-note').value.trim(); save(); closeModal('m-note'); renderDetail(); toast('Status note saved','📝'); }
+function saveStepNote() { if(!editStepCtx) return; getCurVer(getP(editStepCtx.pid)).steps[editStepCtx.i].note=document.getElementById('inp-note').value.trim(); save(); closeModal('m-note'); renderDetail(); toast('Status note saved','ðŸ“'); }
 function delStep(pid,i) {
   deleteCtx = JSON.stringify({pid, i});
   deleteType = 'step';
@@ -4345,17 +4345,17 @@ function stepDrop(e, targetIdx) {
   const p = getP(curPid);
   const steps = getCurVer(p).steps;
   
-  // Saca el paso de su posición original y lo mete en la nueva
+  // Saca el paso de su posiciÃ³n original y lo mete en la nueva
   const [movedStep] = steps.splice(dragStepIdx, 1);
   steps.splice(targetIdx, 0, movedStep);
   
   save(); 
   renderDetail(); 
-  toast('Pipeline reordered', '🔄');
+  toast('Pipeline reordered', 'ðŸ”„');
 }  
-function switchVer(pid,v) { getP(pid).currentVersion=v; save(); renderDetail(); toast(`Workspace reverted to: ${v}`,'🔄'); }
+function switchVer(pid,v) { getP(pid).currentVersion=v; save(); renderDetail(); toast(`Workspace reverted to: ${v}`,'ðŸ”„'); }
 
-/* ── Assignees Modal ── */
+/* â”€â”€ Assignees Modal â”€â”€ */
 let tempAssignees = [];
 function openAssignModal(pid) {
   curPid = pid;
@@ -4382,11 +4382,11 @@ function toggleUserSelection(uid, containerId) {
 function saveAssignees() {
   if(curPid && screen === 'detail') {
     getP(curPid).assignees = [...tempAssignees];
-    save(); closeModal('m-assign'); renderDetail(); toast('Team updated', '👥');
+    save(); closeModal('m-assign'); renderDetail(); toast('Team updated', 'ðŸ‘¥');
   }
 }
 
-/* ── Comments ── */
+/* â”€â”€ Comments â”€â”€ */
 function previewCommentImage(e) { if(!e.target.files[0]) return; resizeImage(e.target.files[0], (b) => { currentCommentImgB64 = b; const img = document.getElementById('cp-img-preview'); img.src = b; img.style.display = 'block'; }); }
 function submitComment() {
   let text=document.getElementById('cp-ta').value.trim(); 
@@ -4409,7 +4409,7 @@ function submitComment() {
   }
 
   document.getElementById('cp-ta').value=''; currentCommentImgB64=null; document.getElementById('cp-img-preview').style.display = 'none'; document.getElementById('cp-file').value=''; document.getElementById('cp-tag').value='';
-  save(); renderComments(); toast('Note logged','✔️');
+  save(); renderComments(); toast('Note logged','âœ”ï¸');
 }
 function deleteComment(pid,cid) { const p=getP(pid); p.comments=p.comments.filter(c=>c.id!==cid); save(); renderComments(); }
 function renderComments() {
@@ -4428,12 +4428,12 @@ function renderComments() {
       ${c.text?`<div class="cc-text">${c.text}</div>`:''}
       ${c.img?`<img src="${c.img}" class="cc-img">`:''}
       <div class="cc-date">${c.date}</div>
-      ${c.authorId===currentUser || isMaster ? `<button class="cc-del" onclick="deleteComment('${p.id}','${c.id}')">✕</button>`:''}
+      ${c.authorId===currentUser || isMaster ? `<button class="cc-del" onclick="deleteComment('${p.id}','${c.id}')">âœ•</button>`:''}
     </div>`;
   }).join('');
 }
 
-/* ── Feedback & Delete ── */
+/* â”€â”€ Feedback & Delete â”€â”€ */
 function openFbModal() { document.getElementById('fb-step-toggles').innerHTML=DEFAULT_STEPS.map(s=>`<div class="stoggle on" data-s="${s}" onclick="this.classList.toggle('on')">${s}</div>`).join(''); document.getElementById('inp-fb').value=''; document.getElementById('inp-fb-file').value=''; openModal('m-feedback'); }
 function applyFeedback() {
   const desc=document.getElementById('inp-fb').value.trim(), file=document.getElementById('inp-fb-file').files[0];
@@ -4445,13 +4445,13 @@ function applyFeedback() {
     const major=parseInt(lastV.replace('v','').split('.')[0])+1, newV=`v${major}.0`;
     p.versions.push({v:newV,date:today(),feedbackDesc:desc||'Visual feedback revision',waitingFeedback:false,steps:selSteps.map((n,i)=>({name:n,status:'pending',note:''}))});
     p.currentVersion=newV; DB.publish=DB.publish.filter(x=>x.projectId!==p.id);
-    p.comments.push({id:uid(),text:`🔁 Auto-log: Version bumped to ${newV} | ${desc}`,img:imgData,date:today(),version:newV, authorId:currentUser});
-    save(); closeModal('m-feedback'); renderDetail(); renderSidebar(); toast('Revision tracked successfully','🔁');
+    p.comments.push({id:uid(),text:`ðŸ” Auto-log: Version bumped to ${newV} | ${desc}`,img:imgData,date:today(),version:newV, authorId:currentUser});
+    save(); closeModal('m-feedback'); renderDetail(); renderSidebar(); toast('Revision tracked successfully','ðŸ”');
   };
   if(file) resizeImage(file, finishFb); else finishFb(null);
 }
 
-// Ventana centralizada para Eliminar Proyectos, Usuarios, Categorías, Formatos o Seasons
+// Ventana centralizada para Eliminar Proyectos, Usuarios, CategorÃ­as, Formatos o Seasons
 function askDelete(id, type) { 
   deleteCtx = id; 
   deleteType = type;
@@ -4473,7 +4473,7 @@ function confirmDelete() {
     save(); 
     if(curPid === deleteCtx) { curPid = null; goScreen('projects'); }
     else { renderProjects(); }
-    toast('Project wiped','🗑');
+    toast('Project wiped','ðŸ—‘');
   } else if (deleteType === 'user') {
     DB.users = DB.users.filter(u=>u.id!==deleteCtx);
     DB.projects.forEach(p => { 
@@ -4482,14 +4482,14 @@ function confirmDelete() {
     save();
     if (screen === 'team') renderTeam(); 
     if (screen === 'projects') renderProjects();
-    toast('Profile deleted','🗑');
+    toast('Profile deleted','ðŸ—‘');
   } else if (deleteType === 'season') {
     DB.years = DB.years.filter(y => y.id !== deleteCtx);
     DB.categories = DB.categories.filter(c => c.yearId !== deleteCtx); // Borrado en cascada
-    save(); renderSidebar(); toast('Season deleted','🗑');
+    save(); renderSidebar(); toast('Season deleted','ðŸ—‘');
   } else if (deleteType === 'category') {
     DB.categories = DB.categories.filter(c => c.id !== deleteCtx);
-    save(); renderSidebar(); toast('Category deleted','🗑');
+    save(); renderSidebar(); toast('Category deleted','ðŸ—‘');
   } else if (deleteType === 'format') {
     if(DB.contentTypes.length <= 1) {
       alert("You must have at least one format type.");
@@ -4497,18 +4497,18 @@ function confirmDelete() {
       return;
     }
     DB.contentTypes = DB.contentTypes.filter(c => c.id !== deleteCtx);
-    // Cambiamos los proyectos huérfanos al primer formato disponible
+    // Cambiamos los proyectos huÃ©rfanos al primer formato disponible
     const fallbackId = DB.contentTypes[0].id;
     DB.projects.forEach(p => { if(p.contentType === deleteCtx) p.contentType = fallbackId; });
     save(); renderFormatsList(); buildCTRadios(selContentType); renderProjects();
-    toast('Format deleted','🗑');
+    toast('Format deleted','ðŸ—‘');
   }
   else if (deleteType === 'step') {
     try {
       const ctx = JSON.parse(deleteCtx);
       getCurVer(getP(ctx.pid)).steps.splice(ctx.i, 1);
       save(); renderDetail();
-      toast('Stage removed','🗑');
+      toast('Stage removed','ðŸ—‘');
     } catch(e) { console.error(e); }
   } else if (deleteType === 'idea') {
     DB.ideas = DB.ideas.filter(i=>i.id!==deleteCtx);
@@ -4517,7 +4517,7 @@ function confirmDelete() {
     viewingIdeaId = null;
     currentIdeaImgB64 = null;
     goScreen('ideas');
-    toast('Idea deleted','🗑');
+    toast('Idea deleted','ðŸ—‘');
   } else if (deleteType === 'notifications') {
     const u = getAuthUser();
     if(u) {
@@ -4531,16 +4531,16 @@ function confirmDelete() {
   deleteCtx=null; deleteType=null; 
 }
 
-/* ═══════════════════════════════════════
+/* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
    PROFILE SCREEN (MY PROFILE)
-═══════════════════════════════════════ */
+â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
 function renderProfile() {
   try {
     const u = getAuthUser(); 
     if(!u) {
       document.getElementById('profile-content').innerHTML = `
         <div class="empty-state" style="margin-top:40px;">
-          <div class="empty-icon">👤</div>
+          <div class="empty-icon">ðŸ‘¤</div>
           <div class="empty-text">Loading profile data...</div>
         </div>`;
       return;
@@ -4565,12 +4565,12 @@ function renderProfile() {
       return `<div class="mini-proj" onclick="openProj('${p.id}')">
         <div>
           <div class="mp-name">${p.name}</div>
-          <div class="mp-cat">${cat?.name||''} · ${p.currentVersion}</div>
+          <div class="mp-cat">${cat?.name||''} Â· ${p.currentVersion}</div>
           ${deadline
             ? `<div class="mini-deadline ${isPastDeadline(deadline.date) ? 'overdue' : ''}" style="font-size:11px; color:${isPastDeadline(deadline.date) ? 'var(--red)' : 'var(--orange)'}; font-weight:700; margin-top:4px;">${deadline.label}: ${formatPlannedDate(deadline.date)}</div>`
             : `<div style="font-size:11px; color:var(--muted); margin-top:4px;">No deadline scheduled</div>`}
         </div>
-        <span style="color:var(--muted)">→</span>
+        <span style="color:var(--muted)">â†’</span>
       </div>`;
     };
 
@@ -4588,34 +4588,34 @@ function renderProfile() {
       <div class="todo-item ${t.status==='done'?'done':''}">
         <input type="checkbox" ${t.status==='done'?'checked':''} onchange="toggleTodo('${t.id}')">
         <span class="todo-text">${t.text}</span>
-        <button class="todo-del" onclick="delTodo('${t.id}')">✕</button>
+        <button class="todo-del" onclick="delTodo('${t.id}')">âœ•</button>
       </div>
     `).join('');
 
-    // EL PERFIL PERSONAL RESTAURADO IDÉNTICO A LA IMAGEN (Botones Delete/Edit y 3 paneles)
+    // EL PERFIL PERSONAL RESTAURADO IDÃ‰NTICO A LA IMAGEN (Botones Delete/Edit y 3 paneles)
     document.getElementById('profile-content').innerHTML = `
       <div class="profile-header">
         <img src="${u.avatar}" class="profile-avatar">
         <div class="profile-info">
           <h2>${u.name}</h2>
-          <p>${u.email} ${u.role ? `· <strong>${u.role}</strong>` : ''}</p>
+          <p>${u.email} ${u.role ? `Â· <strong>${u.role}</strong>` : ''}</p>
         </div>
         <div class="profile-actions">
-          <button class="tb-btn" onclick="openEditProfile('${u.id}')">✏️ Edit</button>
-          <button class="tb-btn danger" onclick="askDelete('${u.id}', 'user')">🗑 Delete</button>
+          <button class="tb-btn" onclick="openEditProfile('${u.id}')">âœï¸ Edit</button>
+          <button class="tb-btn danger" onclick="askDelete('${u.id}', 'user')">ðŸ—‘ Delete</button>
         </div>
       </div>
       <div class="profile-grid">
         <div class="profile-col">
-          <div class="pcol-title">▶ Assigned Active Projects (${activeP.length})</div>
+          <div class="pcol-title">â–¶ Assigned Active Projects (${activeP.length})</div>
           <div class="mini-proj-list">${activeP.length?activeP.map(renderMini).join(''):'<div style="color:var(--muted);font-size:13px;">No active projects.</div>'}</div>
         </div>
         <div class="profile-col">
-          <div class="pcol-title">✅ Completed Projects (${doneP.length})</div>
+          <div class="pcol-title">âœ… Completed Projects (${doneP.length})</div>
           <div class="mini-proj-list">${doneP.length?doneP.map(renderMini).join(''):'<div style="color:var(--muted);font-size:13px;">No completed projects.</div>'}</div>
         </div>
         <div class="profile-col">
-          <div class="pcol-title">📋 Daily To-Do</div>
+          <div class="pcol-title">ðŸ“‹ Daily To-Do</div>
           <div class="todo-input-wrap">
             <input type="text" id="new-todo" class="todo-input" placeholder="Add a new task..." onkeyup="if(event.key==='Enter') addTodo()">
             <button class="todo-add-btn" onclick="addTodo()">Add</button>
@@ -4677,12 +4677,12 @@ function delTodo(id) {
   renderProfile();
 }
 
-/* ═══════════════════════════════════════
+/* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
    PUBLISH SCREEN
-═══════════════════════════════════════ */
-function sendToPublish(pid) { if(!DB.publish.find(x=>x.projectId===pid)) DB.publish.push({projectId:pid,date:null}); save(); goScreen('publish'); toast('Added to Queue','🚀'); }
-function removeFromPublish(pid, e) { if(e) e.stopPropagation(); DB.publish=DB.publish.filter(x=>x.projectId!==pid); save(); renderPublish(); toast('Removed from Queue','✕'); }
-function setPublishDate(pid,date) { const e=DB.publish.find(x=>x.projectId===pid); if(e){ e.date=date; save(); renderPublish(); toast('Date scheduled','📅'); } }
+â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
+function sendToPublish(pid) { if(!DB.publish.find(x=>x.projectId===pid)) DB.publish.push({projectId:pid,date:null}); save(); goScreen('publish'); toast('Added to Queue','ðŸš€'); }
+function removeFromPublish(pid, e) { if(e) e.stopPropagation(); DB.publish=DB.publish.filter(x=>x.projectId!==pid); save(); renderPublish(); toast('Removed from Queue','âœ•'); }
+function setPublishDate(pid,date) { const e=DB.publish.find(x=>x.projectId===pid); if(e){ e.date=date; save(); renderPublish(); toast('Date scheduled','ðŸ“…'); } }
 
 function renderPublish() {
   const el = document.getElementById('pub-content');
@@ -4718,7 +4718,7 @@ function renderPublish() {
         return `<div class="deadline-card ${isPastDeadline(entry.date) ? 'overdue' : ''}" onclick="openProj('${entry.project.id}')">
           <div class="deadline-kicker ${entry.type}">${entry.label}</div>
           <div class="deadline-title">${entry.project.name}</div>
-          <div class="deadline-meta">${cat?.name||'Uncategorized'} · ${DB.contentTypes.find(c => c.id === entry.project.contentType)?.label || 'Format'}</div>
+          <div class="deadline-meta">${cat?.name||'Uncategorized'} Â· ${DB.contentTypes.find(c => c.id === entry.project.contentType)?.label || 'Format'}</div>
           <div class="deadline-date ${isPastDeadline(entry.date) ? 'overdue' : ''}">${formatPlannedDate(entry.date)}</div>
         </div>`;
       }).join('')}</div>`
@@ -4746,18 +4746,18 @@ function renderPublish() {
     if(!p) return;
     const cat = getCat(p.catId);
     
-    // Obtenemos el color dinámico del formato
+    // Obtenemos el color dinÃ¡mico del formato
     const formatColor = DB.contentTypes.find(c => c.id === p.contentType)?.color || 'var(--primary)';
 
     // Construimos la imagen clicable
     const thumbHTML = p.thumbnail 
       ? `<img src="${p.thumbnail}" style="width:180px; height:100px; object-fit:cover; border-radius:8px; cursor:pointer;" onclick="openProj('${p.id}')">` 
-      : `<div style="width:180px; height:100px; background:var(--card2); border-radius:8px; display:flex; align-items:center; justify-content:center; cursor:pointer; font-size:32px;" onclick="openProj('${p.id}')">🎬</div>`;
+      : `<div style="width:180px; height:100px; background:var(--card2); border-radius:8px; display:flex; align-items:center; justify-content:center; cursor:pointer; font-size:32px;" onclick="openProj('${p.id}')">ðŸŽ¬</div>`;
 
-    // Si tiene un link cargado en los assets, el botón lo abre. Si no, no hace nada.
+    // Si tiene un link cargado en los assets, el botÃ³n lo abre. Si no, no hace nada.
     const renderBtn = (p.links && p.links.length > 0) 
-      ? `<button onclick="window.open('${p.links[0].url}', '_blank')" style="background:var(--primary); border:none; color:white; padding:8px 16px; border-radius:6px; cursor:pointer; font-weight:600; transition:0.2s;" onmouseover="this.style.opacity='0.8'" onmouseout="this.style.opacity='1'">▶ View Final Render</button>` 
-      : `<button style="background:var(--card2); border:none; color:var(--muted); padding:8px 16px; border-radius:6px; font-weight:600; cursor:not-allowed;">▶ No Link Available</button>`;
+      ? `<button onclick="window.open('${p.links[0].url}', '_blank')" style="background:var(--primary); border:none; color:white; padding:8px 16px; border-radius:6px; cursor:pointer; font-weight:600; transition:0.2s;" onmouseover="this.style.opacity='0.8'" onmouseout="this.style.opacity='1'">â–¶ View Final Render</button>` 
+      : `<button style="background:var(--card2); border:none; color:var(--muted); padding:8px 16px; border-radius:6px; font-weight:600; cursor:not-allowed;">â–¶ No Link Available</button>`;
 
     html += `
     <div class="pub-card" style="display:flex; justify-content:space-between; align-items:center; background:var(--bg); padding:16px; border-radius:12px; --hover-color:${formatColor};">
@@ -4770,7 +4770,7 @@ function renderPublish() {
             ${renderCTTag(p.contentType)}
           </div>
           <div style="display:flex; align-items:center; gap:8px; margin-top:4px;">
-            <span style="font-size:14px; color:var(--text);">📅 Release:</span>
+            <span style="font-size:14px; color:var(--text);">ðŸ“… Release:</span>
             <input type="date" value="${pub.date||''}" onchange="updatePubDate('${p.id}', this.value)" style="background:transparent; border:1px solid var(--line2); color:var(--text); padding:4px 8px; border-radius:6px; font-family:inherit; font-size:14px; cursor:pointer;">
           </div>
         </div>
@@ -4778,12 +4778,12 @@ function renderPublish() {
       
       <div style="display:flex; flex-direction:column; gap:12px; align-items:flex-end;">
         <div style="display:flex; gap:8px;">
-          <button onclick="openProj('${p.id}')" style="background:transparent; border:1px solid var(--line2); color:var(--text); padding:6px 12px; border-radius:6px; cursor:pointer; font-weight:600; transition:0.2s;" onmouseover="this.style.background='var(--card2)'" onmouseout="this.style.background='transparent'">📂 Open</button>
-          <button onclick="removeFromPublish('${p.id}')" style="background:transparent; border:1px solid var(--line2); color:var(--text); padding:6px 12px; border-radius:6px; cursor:pointer; font-weight:600; transition:0.2s;" onmouseover="this.style.background='var(--card2)'" onmouseout="this.style.background='transparent'">✕ Remove</button>
+          <button onclick="openProj('${p.id}')" style="background:transparent; border:1px solid var(--line2); color:var(--text); padding:6px 12px; border-radius:6px; cursor:pointer; font-weight:600; transition:0.2s;" onmouseover="this.style.background='var(--card2)'" onmouseout="this.style.background='transparent'">ðŸ“‚ Open</button>
+          <button onclick="removeFromPublish('${p.id}')" style="background:transparent; border:1px solid var(--line2); color:var(--text); padding:6px 12px; border-radius:6px; cursor:pointer; font-weight:600; transition:0.2s;" onmouseover="this.style.background='var(--card2)'" onmouseout="this.style.background='transparent'">âœ• Remove</button>
         </div>
         <div style="display:flex; gap:8px;">
           ${renderBtn}
-          <button onclick="markAsPublished('${p.id}')" style="background:var(--green); border:none; color:white; padding:8px 16px; border-radius:6px; cursor:pointer; font-weight:600; transition:0.2s;" onmouseover="this.style.opacity='0.8'" onmouseout="this.style.opacity='1'">✅ Published</button>
+          <button onclick="markAsPublished('${p.id}')" style="background:var(--green); border:none; color:white; padding:8px 16px; border-radius:6px; cursor:pointer; font-weight:600; transition:0.2s;" onmouseover="this.style.opacity='0.8'" onmouseout="this.style.opacity='1'">âœ… Published</button>
         </div>
       </div>
     </div>
@@ -4826,11 +4826,11 @@ function buildCalendarHTML(entries = getFilteredCalendarEntries()) {
       projsHTML = scheduled[ds].slice(0, 3).map(entry => {
          const formatColor = DB.contentTypes?.find(c => c.id === entry.project.contentType)?.color || 'var(--primary)';
          const shortLabel = entry.type === 'queue' ? 'Queue' : 'Target';
-         return `<div class="cal-proj-label" style="background:${formatColor}33; color:${formatColor}; border: 1px solid ${formatColor}66;" title="${entry.project.name} • ${entry.label}">${entry.project.name} · ${shortLabel}</div>`;
+         return `<div class="cal-proj-label" style="background:${formatColor}33; color:${formatColor}; border: 1px solid ${formatColor}66;" title="${entry.project.name} â€¢ ${entry.label}">${entry.project.name} Â· ${shortLabel}</div>`;
       }).join('');
       
       if(dayEntries.length > 3) {
-        projsHTML += `<div class="cal-proj-label" style="background:var(--card2); color:var(--text); text-align:center;">+${dayEntries.length - 3} más</div>`;
+        projsHTML += `<div class="cal-proj-label" style="background:var(--card2); color:var(--text); text-align:center;">+${dayEntries.length - 3} mÃ¡s</div>`;
       }
     }
 
@@ -4845,15 +4845,15 @@ function buildCalendarHTML(entries = getFilteredCalendarEntries()) {
               </div>`;
   }
 
-  // --- Lógica de la Ventana Emergente ---
+  // --- LÃ³gica de la Ventana Emergente ---
   let det=''; 
   if(calSelectedDay && scheduled[calSelectedDay]){ 
     det = `
     <div class="cal-modal-overlay" onclick="calSelectedDay=null; renderCalendarScreen();" style="position:fixed; top:0; left:0; width:100vw; height:100vh; background:rgba(0,0,0,0.6); z-index:9999; display:flex; align-items:center; justify-content:center; backdrop-filter:blur(4px);">
       <div class="cal-modal-content" onclick="event.stopPropagation()" style="background:var(--bg); border:1px solid var(--line2); border-radius:16px; padding:24px; width:450px; max-width:90%; box-shadow: 0 20px 40px rgba(0,0,0,0.4);">
         <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px;">
-          <div style="font-size:20px; font-weight:800; color:var(--text);">📅 Schedule for ${formatPlannedDate(calSelectedDay)}</div>
-          <button onclick="calSelectedDay=null; renderCalendarScreen();" style="background:var(--card2); border:none; color:var(--text); width:32px; height:32px; border-radius:50%; cursor:pointer; font-weight:bold; transition:0.2s;" onmouseover="this.style.background='var(--red)'; this.style.color='#fff';" onmouseout="this.style.background='var(--card2)'; this.style.color='var(--text)';">✕</button>
+          <div style="font-size:20px; font-weight:800; color:var(--text);">ðŸ“… Schedule for ${formatPlannedDate(calSelectedDay)}</div>
+          <button onclick="calSelectedDay=null; renderCalendarScreen();" style="background:var(--card2); border:none; color:var(--text); width:32px; height:32px; border-radius:50%; cursor:pointer; font-weight:bold; transition:0.2s;" onmouseover="this.style.background='var(--red)'; this.style.color='#fff';" onmouseout="this.style.background='var(--card2)'; this.style.color='var(--text)';">âœ•</button>
         </div>
         
         <div style="display:flex; flex-direction:column; gap:12px; max-height: 60vh; overflow-y:auto; padding-right:8px;">
@@ -4868,13 +4868,13 @@ function buildCalendarHTML(entries = getFilteredCalendarEntries()) {
               finalUrl = finalLink.url;
             }
             
-            // Preparamos la acción del clic dependiendo de si encontró un link o no
+            // Preparamos la acciÃ³n del clic dependiendo de si encontrÃ³ un link o no
             const clickAction = finalUrl 
               ? "window.open('" + finalUrl + "', '_blank'); calSelectedDay=null; renderCalendarScreen();" 
               : "calSelectedDay=null; renderCalendarScreen(); openProj('" + p.id + "');";
             
-            // Cambiamos el texto para que quede claro qué va a pasar
-            const actionText = finalUrl ? '▶ Click to open Final Render' : '⚠️ No link attached (Click to open project)';
+            // Cambiamos el texto para que quede claro quÃ© va a pasar
+            const actionText = finalUrl ? 'â–¶ Click to open Final Render' : 'âš ï¸ No link attached (Click to open project)';
             const eventTag = entry.type === 'queue' ? 'Publish Queue' : 'Target Deadline';
 
             return `
@@ -4884,7 +4884,7 @@ function buildCalendarHTML(entries = getFilteredCalendarEntries()) {
                 <div style="font-size:11px; color:${entry.type === 'queue' ? 'var(--accent-light)' : 'var(--orange)'}; font-weight:800; text-transform:uppercase; letter-spacing:0.5px; margin-bottom:4px;">${eventTag}</div>
                 <div style="font-size:12px; color:var(--muted); font-weight:600;">${actionText}</div>
               </div>
-              ${p.thumbnail ? `<img src="${p.thumbnail}" style="width:60px; height:40px; border-radius:6px; object-fit:cover;">` : `<div style="font-size:24px;">🎬</div>`}
+              ${p.thumbnail ? `<img src="${p.thumbnail}" style="width:60px; height:40px; border-radius:6px; object-fit:cover;">` : `<div style="font-size:24px;">ðŸŽ¬</div>`}
             </div>
             `;
           }).join('')}
@@ -4896,9 +4896,9 @@ function buildCalendarHTML(entries = getFilteredCalendarEntries()) {
 
   return `<div class="cal-wrap">
             <div class="cal-hd">
-              <button class="cal-nav" onclick="calDate.setMonth(calDate.getMonth()-1); calSelectedDay=null; renderCalendarScreen()">◀</button>
+              <button class="cal-nav" onclick="calDate.setMonth(calDate.getMonth()-1); calSelectedDay=null; renderCalendarScreen()">â—€</button>
               <div class="cal-month">${['January','February','March','April','May','June','July','August','September','October','November','December'][m]} ${y}</div>
-              <button class="cal-nav" onclick="calDate.setMonth(calDate.getMonth()+1); calSelectedDay=null; renderCalendarScreen()">▶</button>
+              <button class="cal-nav" onclick="calDate.setMonth(calDate.getMonth()+1); calSelectedDay=null; renderCalendarScreen()">â–¶</button>
             </div>
             <div class="cal-body">
               <div class="cal-dnames">${['Su','Mo','Tu','We','Th','Fr','Sa'].map(d=>`<div class="cal-dname">${d}</div>`).join('')}</div>
@@ -4908,14 +4908,14 @@ function buildCalendarHTML(entries = getFilteredCalendarEntries()) {
           ${det}`;
 }
 
-/* ═══════════════════════════════════════
+/* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
    IDEAS SCREEN
-═══════════════════════════════════════ */
+â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
 function renderIdeas() {
   const grid=document.getElementById('ideas-grid');
-  let html=`<div class="idea-add-card" onclick="openIdeaModal()"><div class="idea-add-icon">💡</div><div class="idea-add-text">Add New Concept</div></div>`;
+  let html=`<div class="idea-add-card" onclick="openIdeaModal()"><div class="idea-add-icon">ðŸ’¡</div><div class="idea-add-text">Add New Concept</div></div>`;
   if(DB.ideas.length) {
-    html+=DB.ideas.slice().reverse().map(idea=>`<div class="idea-card" onclick="openIdeaModal('${idea.id}')"><div class="idea-top"><div class="idea-emoji">📝</div><div class="idea-title">${idea.title}</div></div>${idea.img?`<img src="${idea.img}" class="idea-img">`:''}<div class="idea-body">${idea.body}</div>${idea.link?`<a class="idea-link" href="${idea.link}" target="_blank" rel="noopener" onclick="event.stopPropagation()">🔗 Reference Link</a>`:''}<div class="idea-date">${idea.date}</div><button class="idea-del" onclick="event.stopPropagation(); deleteIdea('${idea.id}')">✕</button></div>`).join('');
+    html+=DB.ideas.slice().reverse().map(idea=>`<div class="idea-card" onclick="openIdeaModal('${idea.id}')"><div class="idea-top"><div class="idea-emoji">ðŸ“</div><div class="idea-title">${idea.title}</div></div>${idea.img?`<img src="${idea.img}" class="idea-img">`:''}<div class="idea-body">${idea.body}</div>${idea.link?`<a class="idea-link" href="${idea.link}" target="_blank" rel="noopener" onclick="event.stopPropagation()">ðŸ”— Reference Link</a>`:''}<div class="idea-date">${idea.date}</div><button class="idea-del" onclick="event.stopPropagation(); deleteIdea('${idea.id}')">âœ•</button></div>`).join('');
   }
   grid.innerHTML=html;
 }
@@ -4938,13 +4938,13 @@ function saveIdea() {
   if(!title){ alert('Title required.'); return; }
   if(editingIdeaId) { const idea = DB.ideas.find(i=>i.id===editingIdeaId); idea.title = title; idea.body = body; idea.link = link; idea.img = currentIdeaImgB64; }
   else { DB.ideas.push({id:uid(),title,body,link,img:currentIdeaImgB64,date:today()}); }
-  save(); closeModal('m-idea'); renderIdeas(); toast('Concept saved','💡');
+  save(); closeModal('m-idea'); renderIdeas(); toast('Concept saved','ðŸ’¡');
 }
 function deleteIdea(id) { if(confirm('Wipe this idea?')) { DB.ideas=DB.ideas.filter(i=>i.id!==id); save(); renderIdeas(); } }
 
-/* ═══════════════════════════════════════
+/* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
    CREATE PROJECT / CATEGORY / SEASON
-═══════════════════════════════════════ */
+â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
 function createProject() {
   const name=document.getElementById('inp-pname').value.trim(), catId=document.getElementById('inp-pcat').value;
   if(!name){ alert('Video name is required.'); return; } if(!catId){ alert('Please select a category.'); return; }
@@ -4955,7 +4955,7 @@ function createProject() {
     versions:[{v:'v1.0',date:today(),feedbackDesc:'Initial workspace created',waitingFeedback:false,steps:selSteps.map((s,i)=>({name:s,status:'pending',note:''}))}],
     comments:[], publishDate:null
   });
-  save(); closeModal('m-project'); render(); toast('Project deployed','🎬');
+  save(); closeModal('m-project'); render(); toast('Project deployed','ðŸŽ¬');
 }
 
 function createSeason() {
@@ -4965,10 +4965,10 @@ function createSeason() {
   if (editingSeasonId) {
     const yr = DB.years.find(y => y.id === editingSeasonId);
     if(yr) yr.label = name;
-    toast('Season updated','📁');
+    toast('Season updated','ðŸ“');
   } else {
     DB.years.push({id:'y'+Date.now(), label:name});
-    toast('Season created','📁');
+    toast('Season created','ðŸ“');
   }
   
   save(); closeModal('m-season'); render();
@@ -4988,18 +4988,18 @@ function createCategory() {
       cat.yearId = yearId;
       cat.color = selCatColor;
     }
-    toast('Category updated','📁');
+    toast('Category updated','ðŸ“');
   } else {
     DB.categories.push({id:uid(), yearId, name, color:selCatColor}); 
-    toast('Category created','📁');
+    toast('Category created','ðŸ“');
   }
   
   save(); closeModal('m-category'); render(); 
 }
 
-function createStep() { const name=document.getElementById('inp-sname').value.trim(); if(!name) return; getCurVer(getP(curPid)).steps.push({name,status:'pending',note:''}); save(); closeModal('m-step'); renderDetail(); toast('Step added','➕'); }
+function createStep() { const name=document.getElementById('inp-sname').value.trim(); if(!name) return; getCurVer(getP(curPid)).steps.push({name,status:'pending',note:''}); save(); closeModal('m-step'); renderDetail(); toast('Step added','âž•'); }
 
-/* Funciones dinámicas para Format Types */
+/* Funciones dinÃ¡micas para Format Types */
 let editingFormatId = null;
 
 function openFormatsModal() {
@@ -5036,8 +5036,8 @@ function renderFormatsList() {
       </div>
       ${isMaster ? `
       <div style="display:flex; gap:6px;">
-        <button class="tb-btn" style="padding:4px 8px; font-size:11px;" onclick="editFormat('${ct.id}')">✏️</button>
-        <button class="tb-btn danger" style="padding:4px 8px; font-size:11px;" onclick="askDelete('${ct.id}', 'format')">🗑</button>
+        <button class="tb-btn" style="padding:4px 8px; font-size:11px;" onclick="editFormat('${ct.id}')">âœï¸</button>
+        <button class="tb-btn danger" style="padding:4px 8px; font-size:11px;" onclick="askDelete('${ct.id}', 'format')">ðŸ—‘</button>
       </div>` : ''}
     </div>
   `).join('');
@@ -5067,11 +5067,11 @@ function addFormat() {
       ct.label = label;
       ct.color = color;
     }
-    toast('Format updated', '✅');
+    toast('Format updated', 'âœ…');
   } else {
     // Si es nuevo, lo creamos
     DB.contentTypes.push({ id: 'ct_'+Date.now(), label, color });
-    toast('Format added', '✅');
+    toast('Format added', 'âœ…');
   }
   
   save();
@@ -5101,9 +5101,9 @@ function buildCTRadios(selType) {
 function buildCatSwatches() { document.getElementById('cat-swatches').innerHTML=CAT_COLORS.map((c,i)=>`<div class="swatch ${c===selCatColor?'sel':''}" style="background:${c}" onclick="selCatColor='${c}'; buildCatSwatches()"></div>`).join(''); }
 function loadProjCats() { const yr=document.getElementById('inp-pyear').value, cats=DB.categories.filter(c=>c.yearId===yr); document.getElementById('inp-pcat').innerHTML=cats.length?cats.map(c=>`<option value="${c.id}">${c.name}</option>`).join(''):`<option value="">No categories available</option>`; }
 
-/* ═══════════════════════════════════════
+/* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
    UI HANDLERS
-═══════════════════════════════════════ */
+â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
 function openModal(id) {
   if(id==='m-project'){ document.getElementById('inp-pyear').innerHTML=DB.years.map(y=>`<option value="${y.id}">${y.label}</option>`).join(''); loadProjCats(); buildCTRadios(selContentType); document.getElementById('step-toggles').innerHTML=DEFAULT_STEPS.map(s=>`<div class="stoggle on" data-s="${s}" onclick="this.classList.toggle('on')">${s}</div>`).join(''); tempAssignees = [currentUser]; renderAssignUserList('create-proj-assignees', tempAssignees); document.getElementById('inp-pname').value=''; }
   if(id==='m-category'){ editingCategoryId = null; document.getElementById('m-category-title').textContent = 'New Group or Category'; document.getElementById('inp-cyear').innerHTML=DB.years.map(y=>`<option value="${y.id}">${y.label}</option>`).join(''); selCatColor=CAT_COLORS[0]; buildCatSwatches(); document.getElementById('inp-cname').value=''; }
@@ -5123,7 +5123,7 @@ function goScreen(name) {
   render(); 
 }
 
-function toast(msg,icon='✓') {
+function toast(msg,icon='âœ“') {
   const iconMarkup = iconifyUiHtml(icon);
   const el=document.createElement('div');
   el.className='toast';
@@ -5137,7 +5137,7 @@ function render() {
   renderTopbar();
   renderFormatFilter(); 
   renderClientFilter();
-  applyViewMode(); // ¡Aquí encendemos el cambio de vista!
+  applyViewMode(); // Â¡AquÃ­ encendemos el cambio de vista!
   if(screen==='projects') renderProjects();
   else if(screen==='detail') renderDetail();
   else if(screen==='publish') renderPublish();
@@ -5157,12 +5157,12 @@ function render() {
 
 function changeProjectCategory(pid, newCatId) {
   const p = getP(pid);
-  if(p) { p.catId = newCatId; save(); renderDetail(); renderSidebar(); renderTopbar(); toast('Category updated', '📁'); }
+  if(p) { p.catId = newCatId; save(); renderDetail(); renderSidebar(); renderTopbar(); toast('Category updated', 'ðŸ“'); }
 }
 
 function changeProjectFormat(pid, newFormatId) {
   const p = getP(pid);
-  if(p) { p.contentType = newFormatId; save(); renderDetail(); renderProjects(); toast('Format updated', '⚙️'); }
+  if(p) { p.contentType = newFormatId; save(); renderDetail(); renderProjects(); toast('Format updated', 'âš™ï¸'); }
 }
 
 function unqueueProject(pid) {
@@ -5173,7 +5173,7 @@ function unqueueProject(pid) {
   // Refresca la pantalla para mostrar el panel verde de completado
   renderDetail();
   renderSidebar(); // Para actualizar la burbujita roja de notificaciones de la izquierda
-  toast('Removed from Queue', '🔙');
+  toast('Removed from Queue', 'ðŸ”™');
 }
 
 let currentView = localStorage.getItem('jaba_view') || 'grid-large';
@@ -5198,7 +5198,7 @@ function applyViewMode() {
   grid.classList.add('view-' + currentView);
   if(pausedGrid) pausedGrid.classList.add('view-' + currentView);
   
-  // Pintamos el botón seleccionado
+  // Pintamos el botÃ³n seleccionado
   document.querySelectorAll('.view-btn').forEach(b => b.classList.remove('active'));
   const activeBtn = document.getElementById('btn-view-' + currentView.replace('grid-', ''));
   if(activeBtn) activeBtn.classList.add('active');
@@ -5208,7 +5208,7 @@ function markAsPublished(pid) {
   const p = getP(pid);
   if(!p) return;
   
-  // 1. Lo sacamos de la cola de publicación (desaparece de esta pantalla)
+  // 1. Lo sacamos de la cola de publicaciÃ³n (desaparece de esta pantalla)
   DB.publish = DB.publish.filter(x => x.projectId !== pid);
   
   // 2. Le cambiamos el estado oficial a "publicado" y activamos su etiqueta
@@ -5221,12 +5221,12 @@ function markAsPublished(pid) {
   // 4. Recargamos la pantalla actual
   renderPublish(); 
   
-  // Aviso de éxito
-  toast('Project marked as Published!', '🎉');
+  // Aviso de Ã©xito
+  toast('Project marked as Published!', 'ðŸŽ‰');
 }
 
 function updatePubDate(pid, newDate) {
-  // 1. Buscamos el proyecto dentro de la cola de publicación
+  // 1. Buscamos el proyecto dentro de la cola de publicaciÃ³n
   const pubEntry = DB.publish.find(x => x.projectId === pid);
   
   if (pubEntry) {
@@ -5239,8 +5239,8 @@ function updatePubDate(pid, newDate) {
     // 4. Recargamos la pantalla para que el calendario se pinte inmediatamente
     renderPublish(); 
     
-    // Opcional: mostramos un mensajito de éxito (si tienes la función toast)
-    if(typeof toast === 'function') toast('Release date updated!', '📅');
+    // Opcional: mostramos un mensajito de Ã©xito (si tienes la funciÃ³n toast)
+    if(typeof toast === 'function') toast('Release date updated!', 'ðŸ“…');
   }
 }  
   
@@ -5254,7 +5254,7 @@ function renderPublish() {
   if(!el) return;
   const queue = (DB.publish || []).filter(pub => getP(pub.projectId));
   if(!queue.length) {
-    el.innerHTML = `<div class="empty-state"><div class="empty-icon">🚀</div><div class="empty-text">No completed projects queued</div><div class="empty-sub">Projects approved for release will appear here.</div></div>`;
+    el.innerHTML = `<div class="empty-state"><div class="empty-icon">ðŸš€</div><div class="empty-text">No completed projects queued</div><div class="empty-sub">Projects approved for release will appear here.</div></div>`;
     queueUiIcons();
     return;
   }
@@ -5271,10 +5271,10 @@ function renderPublish() {
     const formatColor = DB.contentTypes.find(c => c.id === p.contentType)?.color || 'var(--primary)';
     const thumbHTML = p.thumbnail
       ? `<img src="${p.thumbnail}" style="width:180px; height:100px; object-fit:cover; border-radius:8px; cursor:pointer;" onclick="openProj('${p.id}')">`
-      : `<div style="width:180px; height:100px; background:var(--card2); border-radius:8px; display:flex; align-items:center; justify-content:center; cursor:pointer; font-size:32px;" onclick="openProj('${p.id}')">🎬</div>`;
+      : `<div style="width:180px; height:100px; background:var(--card2); border-radius:8px; display:flex; align-items:center; justify-content:center; cursor:pointer; font-size:32px;" onclick="openProj('${p.id}')">ðŸŽ¬</div>`;
     const renderBtn = (p.links && p.links.length > 0)
-      ? `<button onclick="window.open('${p.links[0].url}', '_blank')" style="background:var(--primary); border:none; color:white; padding:8px 16px; border-radius:6px; cursor:pointer; font-weight:600; transition:0.2s;" onmouseover="this.style.opacity='0.8'" onmouseout="this.style.opacity='1'">▶ View Final Render</button>`
-      : `<button style="background:var(--card2); border:none; color:var(--muted); padding:8px 16px; border-radius:6px; font-weight:600; cursor:not-allowed;">▶ No Link Available</button>`;
+      ? `<button onclick="window.open('${p.links[0].url}', '_blank')" style="background:var(--primary); border:none; color:white; padding:8px 16px; border-radius:6px; cursor:pointer; font-weight:600; transition:0.2s;" onmouseover="this.style.opacity='0.8'" onmouseout="this.style.opacity='1'">â–¶ View Final Render</button>`
+      : `<button style="background:var(--card2); border:none; color:var(--muted); padding:8px 16px; border-radius:6px; font-weight:600; cursor:not-allowed;">â–¶ No Link Available</button>`;
 
     html += `
     <div class="pub-card" style="display:flex; justify-content:space-between; align-items:center; background:var(--bg); padding:16px; border-radius:12px; --hover-color:${formatColor};">
@@ -5287,19 +5287,19 @@ function renderPublish() {
             ${renderCTTag(p.contentType)}
           </div>
           <div style="display:flex; align-items:center; gap:8px; margin-top:4px;">
-            <span style="font-size:14px; color:var(--text);">📅 Release:</span>
+            <span style="font-size:14px; color:var(--text);">ðŸ“… Release:</span>
             <input type="date" value="${pub.date||''}" onchange="updatePubDate('${p.id}', this.value)" style="background:transparent; border:1px solid var(--line2); color:var(--text); padding:4px 8px; border-radius:6px; font-family:inherit; font-size:14px; cursor:pointer;">
           </div>
         </div>
       </div>
       <div style="display:flex; flex-direction:column; gap:12px; align-items:flex-end;">
         <div style="display:flex; gap:8px;">
-          <button onclick="openProj('${p.id}')" style="background:transparent; border:1px solid var(--line2); color:var(--text); padding:6px 12px; border-radius:6px; cursor:pointer; font-weight:600; transition:0.2s;" onmouseover="this.style.background='var(--card2)'" onmouseout="this.style.background='transparent'">📂 Open</button>
-          <button onclick="removeFromPublish('${p.id}')" style="background:transparent; border:1px solid var(--line2); color:var(--text); padding:6px 12px; border-radius:6px; cursor:pointer; font-weight:600; transition:0.2s;" onmouseover="this.style.background='var(--card2)'" onmouseout="this.style.background='transparent'">✕ Remove</button>
+          <button onclick="openProj('${p.id}')" style="background:transparent; border:1px solid var(--line2); color:var(--text); padding:6px 12px; border-radius:6px; cursor:pointer; font-weight:600; transition:0.2s;" onmouseover="this.style.background='var(--card2)'" onmouseout="this.style.background='transparent'">ðŸ“‚ Open</button>
+          <button onclick="removeFromPublish('${p.id}')" style="background:transparent; border:1px solid var(--line2); color:var(--text); padding:6px 12px; border-radius:6px; cursor:pointer; font-weight:600; transition:0.2s;" onmouseover="this.style.background='var(--card2)'" onmouseout="this.style.background='transparent'">âœ• Remove</button>
         </div>
         <div style="display:flex; gap:8px;">
           ${renderBtn}
-          <button onclick="markAsPublished('${p.id}')" style="background:var(--green); border:none; color:white; padding:8px 16px; border-radius:6px; cursor:pointer; font-weight:600; transition:0.2s;" onmouseover="this.style.opacity='0.8'" onmouseout="this.style.opacity='1'">✅ Published</button>
+          <button onclick="markAsPublished('${p.id}')" style="background:var(--green); border:none; color:white; padding:8px 16px; border-radius:6px; cursor:pointer; font-weight:600; transition:0.2s;" onmouseover="this.style.opacity='0.8'" onmouseout="this.style.opacity='1'">âœ… Published</button>
         </div>
       </div>
     </div>`;
@@ -5324,7 +5324,7 @@ function renderCalendarScreen() {
         return `<div class="deadline-card ${isPastDeadline(entry.date) ? 'overdue' : ''}" onclick="openProj('${entry.project.id}')">
           <div class="deadline-kicker ${entry.type}">${entry.label}</div>
           <div class="deadline-title">${entry.project.name}</div>
-          <div class="deadline-meta">${cat?.name||'Uncategorized'} · ${DB.contentTypes.find(c => c.id === entry.project.contentType)?.label || 'Format'}</div>
+          <div class="deadline-meta">${cat?.name||'Uncategorized'} Â· ${DB.contentTypes.find(c => c.id === entry.project.contentType)?.label || 'Format'}</div>
           <div class="deadline-date ${isPastDeadline(entry.date) ? 'overdue' : ''}">${formatPlannedDate(entry.date)}</div>
         </div>`;
       }).join('')}</div>`
@@ -5380,18 +5380,18 @@ function escapeIdeaDocValue(value='') {
 function renderIdeas() {
   const grid=document.getElementById('ideas-grid');
   if(!grid) return;
-  let html=`<div class="idea-add-card" onclick="openIdeaDoc()"><div class="idea-add-icon">💡</div><div class="idea-add-text">Create New Idea Document</div></div>`;
+  let html=`<div class="idea-add-card" onclick="openIdeaDoc()"><div class="idea-add-icon">ðŸ’¡</div><div class="idea-add-text">Create New Idea Document</div></div>`;
   if(DB.ideas.length) {
     html+=DB.ideas.slice().reverse().map(idea=>`
       <div class="idea-card compact" onclick="openIdeaDoc('${idea.id}')">
         <div class="idea-top">
-          <div class="idea-emoji">📝</div>
+          <div class="idea-emoji">ðŸ“</div>
           <div class="idea-title">${idea.title}</div>
         </div>
-        <div class="idea-open-hint">Open full document →</div>
+        <div class="idea-open-hint">Open full document â†’</div>
         <div class="idea-meta-row">
           <span>${idea.updatedAt || idea.date || ''}</span>
-          <span>${idea.link ? '🔗 Ref' : 'Draft'}</span>
+          <span>${idea.link ? 'ðŸ”— Ref' : 'Draft'}</span>
         </div>
       </div>`).join('');
   }
@@ -5411,7 +5411,7 @@ function renderIdeaDoc() {
   const title = idea?.title || '';
   const body = idea?.body || '';
   const link = idea?.link || '';
-  const meta = idea ? `Created ${idea.date || today()}${idea.updatedAt ? ` · Updated ${idea.updatedAt}` : ''}` : 'New document';
+  const meta = idea ? `Created ${idea.date || today()}${idea.updatedAt ? ` Â· Updated ${idea.updatedAt}` : ''}` : 'New document';
   const preview = currentIdeaImgB64 || idea?.img || null;
   host.innerHTML = `
     <div class="idea-doc-shell">
@@ -5471,7 +5471,7 @@ function saveIdeaDoc() {
   }
   save();
   renderIdeaDoc();
-  toast('Idea document saved','💡');
+  toast('Idea document saved','ðŸ’¡');
 }
 
 function deleteIdeaDoc(id) {
@@ -5482,12 +5482,12 @@ function deleteIdeaDoc(id) {
   openModal('m-delete');
 }
 
-/* ═══════════════════════════════════════════════════════════
+/* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
    MY WORK SCREEN
    - Today tasks + Weekly tasks (by day + by priority)
    - On-hold status per task
-   - Meeting notes upload → AI task extraction
-═══════════════════════════════════════════════════════════ */
+   - Meeting notes upload â†’ AI task extraction
+â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
 
 const DAYS_OF_WEEK = ['Monday','Tuesday','Wednesday','Thursday','Friday','Saturday','Sunday'];
 const PRIORITY_LABELS = { high:'High', medium:'Medium', low:'Low' };
@@ -5601,7 +5601,7 @@ function normalizeTodoTask(t) {
   };
 }
 
-// ── Migrate / ensure DB.todos structure ──
+// â”€â”€ Migrate / ensure DB.todos structure â”€â”€
 function ensureTodosReady() {
   if (!DB.todos) DB.todos = {};
   const u = getAuthUser();
@@ -5614,7 +5614,7 @@ function getTodosByBucket(todos, bucket) {
   return todos.filter(t => (t.bucket || (t.day === 'today' ? 'today' : 'week')) === bucket);
 }
 
-// ── Render the full My Work screen ──
+// â”€â”€ Render the full My Work screen â”€â”€
 function renderMyWorkLegacy() {
   const host = document.getElementById('mywork-content');
   if (!host) return;
@@ -5689,9 +5689,9 @@ function renderMyWorkLegacy() {
             <input class="task-add-input" id="new-task-today" placeholder="Add a task for today..." onkeyup="if(event.key==='Enter') addWorkTask('today')">
             <div class="task-add-selects">
               <select class="task-mini-select" id="new-task-today-pri">
-                <option value="high">🔴 High</option>
-                <option value="medium" selected>🟡 Medium</option>
-                <option value="low">⚪ Low</option>
+                <option value="high">ðŸ”´ High</option>
+                <option value="medium" selected>ðŸŸ¡ Medium</option>
+                <option value="low">âšª Low</option>
               </select>
             </div>
             <button class="task-add-btn" onclick="addWorkTask('today')">+ Add</button>
@@ -5722,9 +5722,9 @@ function renderMyWorkLegacy() {
                 ${DAYS_OF_WEEK.map(d=>`<option value="${d}">${d.slice(0,3)}</option>`).join('')}
               </select>
               <select class="task-mini-select" id="new-task-week-pri">
-                <option value="high">🔴 High</option>
-                <option value="medium" selected>🟡 Medium</option>
-                <option value="low">⚪ Low</option>
+                <option value="high">ðŸ”´ High</option>
+                <option value="medium" selected>ðŸŸ¡ Medium</option>
+                <option value="low">âšª Low</option>
               </select>
             </div>
             <button class="task-add-btn" onclick="addWorkTask('week')">+ Add</button>
@@ -5796,8 +5796,6 @@ function renderMyWork() {
     const project = DB.projects.find(p => p.id === id);
     return project ? [id, project] : null;
   })).filter(Boolean)).values()];
-  const topFocusTask = filteredTasks.find(task => task.priority === 'high' && task.status !== 'done') || filteredTasks.find(task => task.status !== 'done') || null;
-
   const badge = document.getElementById('mywork-badge');
   if (badge) {
     badge.textContent = activeTodayCount;
@@ -5839,7 +5837,7 @@ function renderMyWork() {
         </div>
         <div class="planner-context-bar">
           <div class="planner-context-nav">
-            <button class="planner-nav-btn" onclick="shiftMyWorkPeriod(-1)">‹</button>
+            <button class="planner-nav-btn" onclick="shiftMyWorkPeriod(-1)">â€¹</button>
             <div class="planner-context-pills">
               <div class="planner-context-pill">
                 <div class="planner-context-label">Month</div>
@@ -5854,7 +5852,7 @@ function renderMyWork() {
                 <div class="planner-context-value">${formatDayLabel(selectedDateKey)}</div>
               </div>
             </div>
-            <button class="planner-nav-btn" onclick="shiftMyWorkPeriod(1)">›</button>
+            <button class="planner-nav-btn" onclick="shiftMyWorkPeriod(1)">â€º</button>
           </div>
           <div class="planner-context-actions">
             <button class="planner-secondary-btn" onclick="jumpMyWorkToToday()">Today</button>
@@ -5872,6 +5870,7 @@ function renderMyWork() {
                 <button class="mw-tab ${myWorkView === 'week' ? 'active' : ''}" onclick="setMyWorkView('week')">Week</button>
                 <button class="mw-tab ${myWorkView === 'today' ? 'active' : ''}" onclick="setMyWorkView('today')">Day</button>
               </div>
+              ${myWorkView === 'week' ? renderWeekPlanner(weekTasks) : `
               <div class="mw-toolbar">
                 <input class="search-input" placeholder="Search tasks..." value="${escapeHtml(myWorkSearch)}" oninput="setMyWorkFilter('search', this.value)">
                 <select class="filter-select" onchange="setMyWorkFilter('status', this.value)">
@@ -5901,13 +5900,13 @@ function renderMyWork() {
               <div class="mw-footer">
                 <div class="mw-footnote">Showing ${filteredTasks.length ? 1 : 0} to ${filteredTasks.length} of ${currentTasks.length} tasks</div>
                 <div class="mw-pager">
-                  <button class="page-btn">‹</button>
+                  <button class="page-btn">â€¹</button>
                   <button class="page-btn active">1</button>
                   <button class="page-btn">2</button>
                   <button class="page-btn">3</button>
-                  <button class="page-btn">›</button>
+                  <button class="page-btn">â€º</button>
                 </div>
-              </div>
+              </div>`}
             </div>
           </div>
           <div class="mw-rail">
@@ -5933,17 +5932,6 @@ function renderMyWork() {
                     <div class="mw-legend-row"><span class="mw-legend-dot" style="background:#ef476f;"></span><span>Overdue</span><strong>${workload.overdue}</strong></div>
                   </div>
                 </div>
-              </div>
-              <div class="mw-side-card">
-                <div class="mw-side-title" style="margin-bottom:16px;">Focus</div>
-                <div class="mw-focus-box">
-                  <div class="mw-focus-icon">◎</div>
-                  <div>
-                    <div class="mw-focus-title">${topFocusTask ? 'Top priority in view' : 'You are on track'}</div>
-                    <div class="mw-focus-text">${topFocusTask ? escapeHtml(topFocusTask.text) : 'Keep focusing on your high priority tasks and linked deliverables.'}</div>
-                  </div>
-                </div>
-                <button class="mw-primary-btn" onclick="${topFocusTask ? `setMyWorkView('${topFocusTask.bucket === 'today' ? 'today' : topFocusTask.bucket}')` : `jumpMyWorkToToday()`}">${topFocusTask ? 'Open Focus Mode' : 'Go to Today'}</button>
               </div>
             </div>
           </div>
@@ -6081,7 +6069,7 @@ function renderMyWorkTable(tasks, selectedWeekKey) {
             const format = project ? DB.contentTypes.find(c => c.id === project.contentType)?.label || WORK_BUCKET_LABELS[task.bucket] : WORK_BUCKET_LABELS[task.bucket];
             const thumb = project?.thumbnail
               ? `<img class="mw-project-thumb" src="${project.thumbnail}">`
-              : `<div class="mw-project-thumb">${project ? escapeHtml(project.name.charAt(0).toUpperCase()) : '•'}</div>`;
+              : `<div class="mw-project-thumb">${project ? escapeHtml(project.name.charAt(0).toUpperCase()) : 'â€¢'}</div>`;
             return `
               <tr>
                 <td class="mw-check-cell"><button class="planner-check ${task.status === 'done' ? 'checked' : ''}" onclick="toggleWorkTask('${task.id}')"></button></td>
@@ -6104,7 +6092,7 @@ function renderMyWorkTable(tasks, selectedWeekKey) {
                 <td>
                   <div class="planner-row-actions">
                     <button class="planner-row-btn" onclick="toggleTaskHold('${task.id}')">${task.status === 'on-hold' ? 'Resume' : 'Hold'}</button>
-                    <button class="mw-ellipsis-btn" onclick="deleteWorkTask('${task.id}')">…</button>
+                    <button class="mw-ellipsis-btn" onclick="deleteWorkTask('${task.id}')">â€¦</button>
                   </div>
                 </td>
               </tr>
@@ -6130,16 +6118,16 @@ async function generateWeeklyReport() {
   );
 
   if (!weeklyTasks.length) {
-    toast('No tasks found for the selected week.', '⚠');
+    toast('No tasks found for the selected week.', 'âš ');
     return;
   }
 
   try {
     await buildWeeklyReportDocx(u, weeklyTasks, selectedWeekKey);
-    toast('Weekly Report downloaded!', '📄');
+    toast('Weekly Report downloaded!', 'ðŸ“„');
   } catch (err) {
     console.error(err);
-    toast('Error generating weekly report: ' + err.message, '⚠');
+    toast('Error generating weekly report: ' + err.message, 'âš ');
   }
 }
 
@@ -6723,19 +6711,19 @@ function buildAssignedStrip(u) {
     const cat = getCat(p.catId);
     const thumb = p.thumbnail
       ? `<div class="apj-thumb"><img src="${p.thumbnail}"></div>`
-      : `<div class="apj-thumb" style="background:${cat?.color||'var(--primary)'}26; color:${cat?.color||'var(--primary)'}">🎬</div>`;
+      : `<div class="apj-thumb" style="background:${cat?.color||'var(--primary)'}26; color:${cat?.color||'var(--primary)'}">ðŸŽ¬</div>`;
     const stepLabel = activeStep
       ? `<span class="apj-step ${isOverdue?'overdue':''}">${activeStep.name}</span>`
       : '';
     const deadlineStr = deadline
-      ? `<span style="color:${isOverdue?'var(--red)':'var(--orange)'}; font-weight:700;">${isOverdue?'⚠ Overdue':'Due'} ${formatPlannedDate(deadline.date)}</span>`
+      ? `<span style="color:${isOverdue?'var(--red)':'var(--orange)'}; font-weight:700;">${isOverdue?'âš  Overdue':'Due'} ${formatPlannedDate(deadline.date)}</span>`
       : '';
     return `
       <div class="assigned-proj-card ${isOverdue?'overdue':''} ${isFinishing?'finishing':''}" onclick="openProj('${p.id}')">
         ${thumb}
         <div class="apj-info">
           <div class="apj-name">${p.name}</div>
-          <div class="apj-meta">${cat?.name||''} · ${p.currentVersion} ${deadlineStr ? '· ' + deadlineStr : ''}</div>
+          <div class="apj-meta">${cat?.name||''} Â· ${p.currentVersion} ${deadlineStr ? 'Â· ' + deadlineStr : ''}</div>
         </div>
         ${stepLabel}
         <svg style="width:14px;height:14px;stroke:var(--muted);fill:none;stroke-width:2;flex-shrink:0;" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
@@ -6793,9 +6781,9 @@ function getMeetingPlannerSnapshot(userId) {
 }
 
 function getTaskScopeLabel(task) {
-  if (task.bucket === 'month') return `Month · ${formatMonthLabel(task.monthKey || myWorkRefDate)}`;
-  if (task.bucket === 'week') return `Week · ${task.weekDay || task.day || formatWeekLabel(task.weekKey || getWeekKey(myWorkRefDate))}`;
-  return `Day · ${formatDayLabel(task.dateKey || myWorkRefDate)}`;
+  if (task.bucket === 'month') return `Month Â· ${formatMonthLabel(task.monthKey || myWorkRefDate)}`;
+  if (task.bucket === 'week') return `Week Â· ${task.weekDay || task.day || formatWeekLabel(task.weekKey || getWeekKey(myWorkRefDate))}`;
+  return `Day Â· ${formatDayLabel(task.dateKey || myWorkRefDate)}`;
 }
 
 function buildMeetingBriefData() {
@@ -6888,7 +6876,7 @@ function renderMeetingBriefPanel() {
         ${(DB.ideas || []).slice().reverse().map(idea => `
           <div class="an-idea-card ${mbSelectedIdeaIds.has(idea.id) ? 'selected' : ''}" onclick="toggleMeetingBriefIdea('${idea.id}')">
             <div class="an-idea-title">${idea.title}</div>
-            <div class="an-idea-preview">${idea.body ? idea.body.slice(0, 100) + (idea.body.length > 100 ? '…' : '') : 'No description.'}</div>
+            <div class="an-idea-preview">${idea.body ? idea.body.slice(0, 100) + (idea.body.length > 100 ? 'â€¦' : '') : 'No description.'}</div>
           </div>
         `).join('')}
       </div>`
@@ -6988,16 +6976,16 @@ async function generateMeetingBrief() {
   if (!u) return;
   const data = buildMeetingBriefData();
   if (!data.selectedUsers.length && !data.selectedIdeas.length) {
-    toast('Select at least one participant or idea first.', '⚠');
+    toast('Select at least one participant or idea first.', 'âš ');
     return;
   }
 
   try {
     await buildMeetingBriefDocx(data);
-    toast('Meeting Brief downloaded!', '📄');
+    toast('Meeting Brief downloaded!', 'ðŸ“„');
   } catch (err) {
     console.error(err);
-    toast('Error generating document: ' + err.message, '⚠');
+    toast('Error generating document: ' + err.message, 'âš ');
   }
 }
 
@@ -7009,7 +6997,7 @@ async function buildMeetingBriefDocx(data) {
   const sections = [
     { type: 'title', text: 'Marketing Meeting Brief' },
     { type: 'subtitle', text: `${monthLabel} | ${weekLabel} | ${dayLabel}` },
-    { type: 'summary', text: `${data.selectedUsers.length} participants · ${totalTasks} planning items · ${data.selectedIdeas.length} selected ideas · ${data.linkedProjects.length} linked projects` },
+    { type: 'summary', text: `${data.selectedUsers.length} participants Â· ${totalTasks} planning items Â· ${data.selectedIdeas.length} selected ideas Â· ${data.linkedProjects.length} linked projects` },
     { type: 'heading', text: 'Team Planning Snapshot' }
   ];
 
@@ -7017,12 +7005,12 @@ async function buildMeetingBriefDocx(data) {
     sections.push({ type: 'note', text: 'No participants selected for this brief.' });
   } else {
     data.snapshots.forEach(entry => {
-      sections.push({ type: 'subheading', text: `${entry.user.name}${entry.user.role ? ' — ' + entry.user.role : ''}` });
-      sections.push({ type: 'label', text: `Month · ${monthLabel}` });
+      sections.push({ type: 'subheading', text: `${entry.user.name}${entry.user.role ? ' â€” ' + entry.user.role : ''}` });
+      sections.push({ type: 'label', text: `Month Â· ${monthLabel}` });
       sections.push(...buildMeetingTaskItems(entry.monthTasks, 'No month-level items for this period.'));
-      sections.push({ type: 'label', text: `Week · ${weekLabel}` });
+      sections.push({ type: 'label', text: `Week Â· ${weekLabel}` });
       sections.push(...buildMeetingTaskItems(entry.weekTasks, 'No week tasks for this period.'));
-      sections.push({ type: 'label', text: `Day · ${dayLabel}` });
+      sections.push({ type: 'label', text: `Day Â· ${dayLabel}` });
       sections.push(...buildMeetingTaskItems(entry.dayTasks, 'No day tasks for this date.'));
     });
   }
@@ -7040,11 +7028,11 @@ async function buildMeetingBriefDocx(data) {
       const format = DB.contentTypes.find(c => c.id === project.contentType)?.label || 'Format';
       const deadline = getProjectDeadlineMeta(project);
       sections.push({ type: 'subheading', text: project.name });
-      sections.push({ type: 'label', text: `${category} · ${format} · ${project.currentVersion} · ${doneCount}/${steps.length || 0} steps done` });
-      if (deadline) sections.push({ type: 'note', text: `${deadline.label}: ${formatPlannedDate(deadline.date)}${isPastDeadline(deadline.date) ? ' · OVERDUE' : ''}` });
+      sections.push({ type: 'label', text: `${category} Â· ${format} Â· ${project.currentVersion} Â· ${doneCount}/${steps.length || 0} steps done` });
+      if (deadline) sections.push({ type: 'note', text: `${deadline.label}: ${formatPlannedDate(deadline.date)}${isPastDeadline(deadline.date) ? ' Â· OVERDUE' : ''}` });
       sections.push({ type: 'label', text: 'Referenced in tasks' });
       entry.mentions.forEach(mention => {
-        sections.push({ type: 'bullet', text: `${mention.userName} · ${mention.scope} · ${getStatusLabel(mention.status)} · ${mention.text}` });
+        sections.push({ type: 'bullet', text: `${mention.userName} Â· ${mention.scope} Â· ${getStatusLabel(mention.status)} Â· ${mention.text}` });
       });
       sections.push({ type: 'label', text: 'Workflow steps' });
       if (!steps.length) {
@@ -7058,8 +7046,8 @@ async function buildMeetingBriefDocx(data) {
             : step.status === 'waiting'
             ? 'Waiting'
             : 'Pending';
-          const noteSuffix = step.note ? ` · Note: ${step.note}` : '';
-          sections.push({ type: 'bullet', text: `${step.name} · ${stepStatus}${noteSuffix}` });
+          const noteSuffix = step.note ? ` Â· Note: ${step.note}` : '';
+          sections.push({ type: 'bullet', text: `${step.name} Â· ${stepStatus}${noteSuffix}` });
         });
       }
     });
@@ -7086,7 +7074,7 @@ async function buildMeetingBriefDocx(data) {
       data.spotlight.forEach(entry => {
         const format = DB.contentTypes.find(c => c.id === entry.project.contentType)?.label || 'Format';
         const statusPrefix = isPastDeadline(entry.date) ? 'OVERDUE' : entry.kind === 'queue' ? 'QUEUE' : 'UPCOMING';
-        sections.push({ type: 'bullet', text: `${statusPrefix} · ${entry.project.name} · ${entry.label} · ${formatPlannedDate(entry.date)} · ${format}` });
+        sections.push({ type: 'bullet', text: `${statusPrefix} Â· ${entry.project.name} Â· ${entry.label} Â· ${formatPlannedDate(entry.date)} Â· ${format}` });
       });
     }
     if (data.nearFinishProjects.length) {
@@ -7094,7 +7082,7 @@ async function buildMeetingBriefDocx(data) {
       data.nearFinishProjects.forEach(project => {
         const steps = getCurVer(project).steps || [];
         const doneCount = steps.filter(step => step.status === 'done').length;
-        sections.push({ type: 'bullet', text: `${project.name} · ${doneCount}/${steps.length} steps completed` });
+        sections.push({ type: 'bullet', text: `${project.name} Â· ${doneCount}/${steps.length} steps completed` });
       });
     }
   }
@@ -7183,8 +7171,8 @@ function renderWeekDays(weekTasks) {
             ${day} ${isToday ? '<span style="font-size:10px; color:var(--primary-light); font-weight:600; margin-left:4px;">TODAY</span>' : ''}
           </div>
           <div style="display:flex; align-items:center; gap:8px;">
-            ${pending > 0 ? `<span class="work-count">${pending}</span>` : '<span style="font-size:11px; color:var(--muted);">—</span>'}
-            <span class="week-day-chev" style="transform:${isOpen?'rotate(90deg)':'none'}">▶</span>
+            ${pending > 0 ? `<span class="work-count">${pending}</span>` : '<span style="font-size:11px; color:var(--muted);">â€”</span>'}
+            <span class="week-day-chev" style="transform:${isOpen?'rotate(90deg)':'none'}">â–¶</span>
           </div>
         </div>
         <div class="week-day-tasks">
@@ -7198,7 +7186,7 @@ function escapeHtml(str) {
   return String(str).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
 }
 
-// ── Task CRUD ──
+// â”€â”€ Task CRUD â”€â”€
 function addWorkTask(mode) {
   const u = getAuthUser(); if (!u) return;
   ensureTodosReady();
@@ -7263,25 +7251,25 @@ function deleteWorkTask(taskId) {
 
 
 
-/* ═══════════════════════════════════════════════════════════
+/* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
    ACTION NOTES GENERATOR
    - Select member (master can pick anyone)
-   - Select active projects → Claude writes narrative per project
+   - Select active projects â†’ Claude writes narrative per project
    - Select ideas from Video Ideas
    - Generates a polished .docx with tasks + projects + ideas
-═══════════════════════════════════════════════════════════ */
+â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
 
 let anSelectedProjects = new Set();
 let anSelectedIdeas    = new Set();
 let anTargetUserId     = null;  // null = current user
 
-// ── Initial render of the panel body ──
+// â”€â”€ Initial render of the panel body â”€â”€
 function renderActionNotesBody() {
   const u = getAuthUser(); if (!u) return '';
   anTargetUserId = anTargetUserId || u.id;
   const targetUser = DB.users.find(x => x.id === anTargetUserId) || u;
 
-  // Projects assigned to target user (not paused, not fully done → no re-render needed)
+  // Projects assigned to target user (not paused, not fully done â†’ no re-render needed)
   ensureTodosReady();
   // Show ALL projects (user can pick any)
   const assignedProjs = (DB.projects || []).filter(p => !p.isPaused);
@@ -7295,7 +7283,7 @@ function renderActionNotesBody() {
       <img class="an-member-avatar" src="${targetUser.avatar}" id="an-avatar-img">
       <select class="an-member-select" id="an-member-select" onchange="changeActionNotesMember(this.value)">
         ${(DB.users || []).map(usr =>
-          `<option value="${usr.id}" ${usr.id === anTargetUserId ? 'selected' : ''}>${usr.name} — ${usr.role || 'Team Member'}</option>`
+          `<option value="${usr.id}" ${usr.id === anTargetUserId ? 'selected' : ''}>${usr.name} â€” ${usr.role || 'Team Member'}</option>`
         ).join('')}
       </select>
     </div>` : '';
@@ -7311,13 +7299,13 @@ function renderActionNotesBody() {
           const sel = anSelectedProjects.has(p.id);
           const thumb = p.thumbnail
             ? `<div class="an-proj-thumb"><img src="${p.thumbnail}"></div>`
-            : `<div class="an-proj-thumb" style="background:${cat?.color||'var(--primary)'}26;color:${cat?.color||'var(--primary)'}">🎬</div>`;
+            : `<div class="an-proj-thumb" style="background:${cat?.color||'var(--primary)'}26;color:${cat?.color||'var(--primary)'}">ðŸŽ¬</div>`;
           return `
             <div class="an-proj-card ${sel?'selected':''}" onclick="toggleANProject('${p.id}')">
               ${thumb}
               <div class="an-proj-info">
                 <div class="an-proj-name">${p.name}</div>
-                <div class="an-proj-meta">${cat?.name||''} · ${p.currentVersion}${activeStep ? ' · ' + activeStep.name : ''}</div>
+                <div class="an-proj-meta">${cat?.name||''} Â· ${p.currentVersion}${activeStep ? ' Â· ' + activeStep.name : ''}</div>
               </div>
               <div class="an-proj-check"></div>
             </div>`;
@@ -7333,7 +7321,7 @@ function renderActionNotesBody() {
           return `
             <div class="an-idea-card ${sel?'selected':''}" onclick="toggleANIdea('${idea.id}')">
               <div class="an-idea-title">${idea.title}</div>
-              <div class="an-idea-preview">${idea.body ? idea.body.slice(0,80) + (idea.body.length>80?'…':'') : 'No description.'}</div>
+              <div class="an-idea-preview">${idea.body ? idea.body.slice(0,80) + (idea.body.length>80?'â€¦':'') : 'No description.'}</div>
             </div>`;
         }).join('')}
       </div>`
@@ -7381,7 +7369,7 @@ function toggleANIdea(iid) {
   document.getElementById('action-notes-body').innerHTML = renderActionNotesBody();
 }
 
-// ── Main generator ──
+// â”€â”€ Main generator â”€â”€
 async function generateActionNotes() {
   const u = getAuthUser(); if (!u) return;
   const targetUser = DB.users.find(x => x.id === (anTargetUserId || u.id)) || u;
@@ -7391,7 +7379,7 @@ async function generateActionNotes() {
   const selectedIdeas = [...anSelectedIdeas].map(iid => (DB.ideas||[]).find(i => i.id === iid)).filter(Boolean);
 
   if (!selectedProjs.length && !selectedIdeas.length) {
-    toast('Select at least one project or idea first', '⚠');
+    toast('Select at least one project or idea first', 'âš ');
     return;
   }
 
@@ -7410,15 +7398,15 @@ async function generateActionNotes() {
     await buildAndDownloadDocx(targetUser, todayTasks, weekTasks, selectedProjs, selectedIdeas);
 
     document.getElementById('action-notes-body').innerHTML = renderActionNotesBody();
-    toast('Action Notes downloaded!', '📄');
+    toast('Action Notes downloaded!', 'ðŸ“„');
   } catch(err) {
     console.error(err);
     host.innerHTML = renderActionNotesBody();
-    toast('Error generating document: ' + err.message, '⚠');
+    toast('Error generating document: ' + err.message, 'âš ');
   }
 }
 
-// ── Build and trigger download of the .docx ──
+// â”€â”€ Build and trigger download of the .docx â”€â”€
 async function buildAndDownloadDocx(user, todayTasks, weekTasks, projects, ideas) {
   // Load docx library from CDN if not present
   if (!window.docx) {
@@ -7460,21 +7448,21 @@ async function buildAndDownloadDocx(user, todayTasks, weekTasks, projects, ideas
 
   const children = [];
 
-  // ── HEADER ──
+  // â”€â”€ HEADER â”€â”€
   children.push(new Paragraph({
     children: [new TextRun({ text: 'Action Notes', bold: true, size: 52, font: 'Arial', color: '0F172A' })],
     spacing: { before: 0, after: 120 }
   }));
   children.push(new Paragraph({
     children: [
-      new TextRun({ text: safe(`${user.name}  ·  `), size: 24, font: 'Arial', color: '64748B' }),
+      new TextRun({ text: safe(`${user.name}  Â·  `), size: 24, font: 'Arial', color: '64748B' }),
       new TextRun({ text: safe(user.role || 'Team Member'), size: 24, font: 'Arial', color: '64748B', italics: true }),
-      new TextRun({ text: safe(`  ·  ${dateStr}`), size: 24, font: 'Arial', color: '64748B' })
+      new TextRun({ text: safe(`  Â·  ${dateStr}`), size: 24, font: 'Arial', color: '64748B' })
     ],
     spacing: { before: 0, after: 400 }
   }));
 
-  // ── TODAY TASKS ──
+  // â”€â”€ TODAY TASKS â”€â”€
   if (todayTasks.length) {
     children.push(sectionHead('Today Tasks'));
     const activeTasks = todayTasks.filter(t => t.status !== 'on-hold');
@@ -7490,7 +7478,7 @@ async function buildAndDownloadDocx(user, todayTasks, weekTasks, projects, ideas
     children.push(spacer());
   }
 
-  // ── WEEK TASKS ──
+  // â”€â”€ WEEK TASKS â”€â”€
   const weekWithTasks = DAYS_OF_WEEK.filter(day => weekTasks.some(t => t.day === day));
   if (weekWithTasks.length) {
     children.push(sectionHead('This Week'));
@@ -7507,7 +7495,7 @@ async function buildAndDownloadDocx(user, todayTasks, weekTasks, projects, ideas
     children.push(spacer());
   }
 
-  // ── PROJECTS ──
+  // â”€â”€ PROJECTS â”€â”€
   if (projects.length) {
     children.push(sectionHead('Projects in Progress'));
     projects.forEach(p => {
@@ -7531,7 +7519,7 @@ async function buildAndDownloadDocx(user, todayTasks, weekTasks, projects, ideas
         format,
         p.currentVersion,
         steps.length ? `${doneCount}/${steps.length} steps done` : ''
-      ].filter(Boolean).join('  ·  ');
+      ].filter(Boolean).join('  Â·  ');
       children.push(bodyText(safe(metaParts), { color: '64748B', size: 20 }));
 
       // Deadline
@@ -7544,7 +7532,7 @@ async function buildAndDownloadDocx(user, todayTasks, weekTasks, projects, ideas
       }
 
       // Project description (from step notes)
-      const stepNotes = (ver.steps || []).filter(s => s.note).map(s => `${s.name}: ${s.note}`).join(' · ');
+      const stepNotes = (ver.steps || []).filter(s => s.note).map(s => `${s.name}: ${s.note}`).join(' Â· ');
       if (stepNotes) {
         children.push(bodyText(safe(stepNotes), { italics: true, color: '64748B', size: 20 }));
       }
@@ -7574,7 +7562,7 @@ async function buildAndDownloadDocx(user, todayTasks, weekTasks, projects, ideas
     children.push(spacer());
   }
 
-  // ── IDEAS ──
+  // â”€â”€ IDEAS â”€â”€
   if (ideas.length) {
     children.push(sectionHead('Video Ideas'));
     ideas.forEach(idea => {
@@ -7588,7 +7576,7 @@ async function buildAndDownloadDocx(user, todayTasks, weekTasks, projects, ideas
     });
   }
 
-  // ── BUILD DOC ──
+  // â”€â”€ BUILD DOC â”€â”€
   const doc = new Document({
     numbering: {
       config: [{
