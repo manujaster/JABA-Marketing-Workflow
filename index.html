@@ -131,6 +131,27 @@ input,textarea,select{font-family:'Plus Jakarta Sans',sans-serif;outline:none;}
 .screen::-webkit-scrollbar{width:6px;}
 .screen::-webkit-scrollbar-thumb{background:var(--card3);border-radius:3px;}
 .screen-pad{padding:32px;max-width:1100px;margin:0 auto;width:100%;}
+.ui-inline-icon{
+  display:inline-flex;
+  width:16px;
+  height:16px;
+  align-items:center;
+  justify-content:center;
+  vertical-align:middle;
+  color:currentColor;
+  flex:0 0 auto;
+}
+.ui-inline-icon svg{
+  width:100%;
+  height:100%;
+  stroke:currentColor;
+  fill:none;
+  stroke-width:1.9;
+  stroke-linecap:round;
+  stroke-linejoin:round;
+}
+.ui-inline-icon.lg{width:18px;height:18px;}
+.ui-inline-icon.xl{width:20px;height:20px;}
 
 /* AVATARS */
 .avatar-group{display:flex;align-items:center;}
@@ -1958,6 +1979,8 @@ button, .tb-btn, .sb-btn, .page-btn, .view-btn, .nav-item, .cat-item, .user-menu
 #screen-projects .project-card {
   min-height: 232px;
   border-top: none !important;
+  border: 1.5px solid var(--project-stroke, var(--line)) !important;
+  box-shadow: 0 4px 14px rgba(15, 23, 42, 0.04);
 }
 #screen-projects .pc-thumb-wrap,
 #screen-projects .pc-version,
@@ -1969,14 +1992,26 @@ button, .tb-btn, .sb-btn, .page-btn, .view-btn, .nav-item, .cat-item, .user-menu
 }
 #screen-projects .pc-body {
   gap: 18px;
+  padding: 22px 76px 20px 22px;
+}
+#screen-projects .project-card.is-published .pc-body {
+  padding-right: 128px;
 }
 #screen-projects .pc-top {
-  align-items: center;
+  align-items: flex-start;
   margin-bottom: 0;
+  gap: 14px;
+  padding-right: 0;
 }
 #screen-projects .pc-name {
   font-size: 18px;
   line-height: 1.25;
+  flex: 1 1 auto;
+  min-width: 0;
+}
+#screen-projects .avatar-group,
+#screen-projects .avatar-empty {
+  flex: 0 0 auto;
 }
 #screen-projects .pc-meta {
   margin-bottom: 0;
@@ -2033,6 +2068,8 @@ button, .tb-btn, .sb-btn, .page-btn, .view-btn, .nav-item, .cat-item, .user-menu
   padding-top: 0;
   border-top: none;
   gap: 12px;
+  align-items: center;
+  flex-wrap: wrap;
 }
 #screen-projects .pc-status {
   padding: 10px 14px;
@@ -2041,6 +2078,23 @@ button, .tb-btn, .sb-btn, .page-btn, .view-btn, .nav-item, .cat-item, .user-menu
   font-weight: 600;
   background: #f3f4f6;
   flex: 0 0 auto;
+}
+#screen-projects .pc-status-icon,
+#screen-projects .pc-action-btn svg {
+  width: 16px;
+  height: 16px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+#screen-projects .pc-status-icon svg,
+#screen-projects .pc-action-btn svg {
+  width: 16px;
+  height: 16px;
+  stroke: currentColor;
+}
+#screen-projects .pc-status-text {
+  line-height: 1;
 }
 #screen-projects .pc-right-badges {
   margin-left: auto;
@@ -2052,7 +2106,6 @@ button, .tb-btn, .sb-btn, .page-btn, .view-btn, .nav-item, .cat-item, .user-menu
 #screen-projects .s-paused { background: #f3f4f6; color: #64748b; }
 #screen-projects .pc-drag,
 #screen-projects .pc-del {
-  top: 18px;
   width: 32px;
   height: 32px;
   border-radius: 12px;
@@ -2060,9 +2113,84 @@ button, .tb-btn, .sb-btn, .page-btn, .view-btn, .nav-item, .cat-item, .user-menu
   border: 1px solid var(--line);
   color: var(--soft);
   opacity: 1;
+  z-index: 4;
 }
-#screen-projects .pc-drag { right: 18px; }
-#screen-projects .pc-del { right: 56px; }
+#screen-projects .pc-drag { top: 18px; right: 18px; }
+#screen-projects .pc-del { top: 56px; right: 18px; }
+#screen-projects .project-card.is-published .pc-drag { top: 58px; }
+#screen-projects .project-card.is-published .pc-del { top: 96px; }
+#screen-projects .project-card.is-published {
+  border-color: var(--project-stroke, var(--green)) !important;
+  box-shadow: 0 6px 18px rgba(15, 23, 42, 0.05) !important;
+}
+#screen-projects .project-card.is-published:hover {
+  box-shadow: 0 12px 28px rgba(15, 23, 42, 0.08) !important;
+}
+#screen-projects .published-badge {
+  top: 16px;
+  right: 16px;
+  border: 1px solid #111;
+  box-shadow: none;
+}
+
+#screen-projects #proj-grid.view-list .project-card,
+#screen-projects #paused-grid.view-list .project-card {
+  min-height: 0;
+  display: block;
+  padding: 0;
+  border-left: 1.5px solid var(--project-stroke, var(--line)) !important;
+}
+#screen-projects #proj-grid.view-list .pc-body,
+#screen-projects #paused-grid.view-list .pc-body {
+  display: grid;
+  grid-template-columns: minmax(220px, 1.5fr) minmax(120px, 0.8fr) minmax(120px, 0.9fr) minmax(180px, 1.1fr) auto;
+  align-items: center;
+  gap: 18px;
+  padding: 20px 76px 20px 22px;
+}
+#screen-projects #proj-grid.view-list .pc-top,
+#screen-projects #paused-grid.view-list .pc-top {
+  margin: 0;
+  min-width: 0;
+  align-items: center;
+}
+#screen-projects #proj-grid.view-list .pc-name,
+#screen-projects #paused-grid.view-list .pc-name {
+  font-size: 16px;
+}
+#screen-projects #proj-grid.view-list .pc-meta,
+#screen-projects #paused-grid.view-list .pc-meta {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 6px;
+  margin: 0;
+}
+#screen-projects #proj-grid.view-list .pc-badges,
+#screen-projects #paused-grid.view-list .pc-badges {
+  margin: 0;
+}
+#screen-projects #proj-grid.view-list .steps-bar-wrap,
+#screen-projects #paused-grid.view-list .steps-bar-wrap {
+  margin: 0;
+}
+#screen-projects #proj-grid.view-list .pc-bottom,
+#screen-projects #paused-grid.view-list .pc-bottom {
+  justify-content: flex-start;
+  gap: 14px;
+  flex-wrap: nowrap;
+}
+#screen-projects #proj-grid.view-list .pc-drag,
+#screen-projects #proj-grid.view-list .pc-del,
+#screen-projects #paused-grid.view-list .pc-drag,
+#screen-projects #paused-grid.view-list .pc-del {
+  position: absolute;
+  margin-right: 0;
+}
+#screen-projects #proj-grid.view-list .pc-right-badges,
+#screen-projects #paused-grid.view-list .pc-right-badges {
+  display: none;
+}
 
 /* My Work screen refinements */
 .mw-shell-grid {
@@ -3040,6 +3168,7 @@ signInWithGoogle = function() {
         "Agrega exactamente este dominio: " + host + "\n\n" +
         "Luego recarga la app e intenta iniciar sesion otra vez."
       );
+      queueUiIcons();
       return;
     }
     alert("Error al iniciar sesion: " + err.message);
@@ -3173,7 +3302,8 @@ function renderNotifications() {
     `).join('');
     html += `</div>`;
   }
-  document.getElementById('notifications-content').innerHTML = html;
+  document.getElementById('notifications-content').innerHTML = iconifyUiHtml(html);
+  queueUiIcons();
   
   let changed = false;
   notifs.forEach(n => { if(!n.read){ n.read = true; changed = true; }});
@@ -3288,7 +3418,8 @@ function renderMessages() {
   }
 
   html += `</div>`;
-  document.getElementById('messages-content').innerHTML = html;
+  document.getElementById('messages-content').innerHTML = iconifyUiHtml(html);
+  queueUiIcons();
 
   if(activeChatUser) {
      const hist = document.getElementById('chat-history');
@@ -3371,7 +3502,8 @@ function renderTeam() {
     `;
   });
   html += `</div>`;
-  content.innerHTML = html;
+  content.innerHTML = iconifyUiHtml(html);
+  queueUiIcons();
 }
 
 // ── PERFIL PÚBLICO EN PANTALLA ──
@@ -3446,6 +3578,7 @@ function renderPublicProfile() {
       </div>
     </div>
   `;
+  queueUiIcons();
 }
 
 function sendInlineMessage(targetUid) {
@@ -3609,6 +3742,7 @@ function renderSidebar() {
   else if(screen==='team') document.getElementById('nav-team').classList.add('active');
   else if(screen==='projects') document.getElementById('nav-projects').classList.add('active');
   else if(screen==='mywork') document.getElementById('nav-mywork').classList.add('active');
+  queueUiIcons();
 }
 
 // NUEVO setFilter: Ahora recibe la categoría y también el estado
@@ -3694,6 +3828,7 @@ function renderTopbar() {
   bc.innerHTML = leftSub;
   title.textContent = leftTitle;
   right.innerHTML = renderTopbarAuth();
+  queueUiIcons();
 }
 
 /* ═══════════════════════════════════════
@@ -3713,6 +3848,115 @@ function renderAvatars(assignees) {
   if(extra > 0) html += `<div class="avatar-extra">+${extra}</div>`;
   html += '</div>';
   return html;
+}
+
+function projectCardIcon(kind) {
+  const icons = {
+    drag: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="6" r="1.2"/><circle cx="9" cy="12" r="1.2"/><circle cx="9" cy="18" r="1.2"/><circle cx="15" cy="6" r="1.2"/><circle cx="15" cy="12" r="1.2"/><circle cx="15" cy="18" r="1.2"/></svg>`,
+    trash: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18"/><path d="M8 6V4h8v2"/><path d="M19 6l-1 14H6L5 6"/><path d="M10 11v6"/><path d="M14 11v6"/></svg>`,
+    published: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>`,
+    paused: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M8 5v14"/><path d="M16 5v14"/></svg>`,
+    queued: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12h12"/><path d="m13 7 5 5-5 5"/><path d="M4 6h7"/><path d="M4 18h7"/></svg>`,
+    waiting: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>`,
+    active: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="m8 5 11 7-11 7V5z"/></svg>`,
+    done: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>`,
+    pending: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/></svg>`
+  };
+  return icons[kind] || icons.pending;
+}
+
+function uiIconSvg(name) {
+  const icons = {
+    bell: `<svg viewBox="0 0 24 24"><path d="M6 8a6 6 0 1 1 12 0c0 7 3 8 3 8H3s3-1 3-8"/><path d="M10 20a2 2 0 0 0 4 0"/></svg>`,
+    message: `<svg viewBox="0 0 24 24"><path d="M21 12a8.5 8.5 0 0 1-8.5 8.5H6l-3 3V12A8.5 8.5 0 0 1 11.5 3.5h1A8.5 8.5 0 0 1 21 12Z"/></svg>`,
+    user: `<svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>`,
+    logout: `<svg viewBox="0 0 24 24"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><path d="M16 17l5-5-5-5"/><path d="M21 12H9"/></svg>`,
+    trash: `<svg viewBox="0 0 24 24"><path d="M3 6h18"/><path d="M8 6V4h8v2"/><path d="M19 6l-1 14H6L5 6"/><path d="M10 11v6"/><path d="M14 11v6"/></svg>`,
+    pencil: `<svg viewBox="0 0 24 24"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4 12.5-12.5Z"/></svg>`,
+    folder: `<svg viewBox="0 0 24 24"><path d="M3 7a2 2 0 0 1 2-2h4l2 2h8a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2Z"/></svg>`,
+    folderOpen: `<svg viewBox="0 0 24 24"><path d="M3 8a2 2 0 0 1 2-2h4l2 2h8a2 2 0 0 1 2 2"/><path d="M3 10h18l-2 8a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2Z"/></svg>`,
+    users: `<svg viewBox="0 0 24 24"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>`,
+    calendar: `<svg viewBox="0 0 24 24"><path d="M8 2v4"/><path d="M16 2v4"/><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M3 10h18"/></svg>`,
+    spark: `<svg viewBox="0 0 24 24"><path d="m12 3 1.9 5.1L19 10l-5.1 1.9L12 17l-1.9-5.1L5 10l5.1-1.9L12 3Z"/></svg>`,
+    paperclip: `<svg viewBox="0 0 24 24"><path d="m21.44 11.05-8.49 8.49a6 6 0 0 1-8.49-8.49l8.49-8.48a4 4 0 0 1 5.66 5.65L9.4 17.43a2 2 0 1 1-2.83-2.83l8.48-8.48"/></svg>`,
+    settings: `<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.7 1.7 0 0 0-1.82-.33 1.7 1.7 0 0 0-1.08 1.55V21a2 2 0 1 1-4 0v-.09a1.7 1.7 0 0 0-1.08-1.55 1.7 1.7 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06A1.7 1.7 0 0 0 4.6 15a1.7 1.7 0 0 0-1.55-1.08H3a2 2 0 1 1 0-4h.09A1.7 1.7 0 0 0 4.64 8.4a1.7 1.7 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06A1.7 1.7 0 0 0 8.96 4.6a1.7 1.7 0 0 0 1.08-1.55V3a2 2 0 1 1 4 0v.09a1.7 1.7 0 0 0 1.08 1.55 1.7 1.7 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.7 1.7 0 0 0-.33 1.82 1.7 1.7 0 0 0 1.55 1.08H21a2 2 0 1 1 0 4h-.09A1.7 1.7 0 0 0 19.4 15Z"/></svg>`,
+    plus: `<svg viewBox="0 0 24 24"><path d="M12 5v14"/><path d="M5 12h14"/></svg>`,
+    play: `<svg viewBox="0 0 24 24"><path d="m8 5 11 7-11 7V5z"/></svg>`,
+    pause: `<svg viewBox="0 0 24 24"><path d="M8 5v14"/><path d="M16 5v14"/></svg>`,
+    clock: `<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>`,
+    rocket: `<svg viewBox="0 0 24 24"><path d="M4.5 16.5c-1.5 1.5-1.5 3 0 3s3 0 4.5-1.5L18 9c1-4-2-7-6-6L4.5 10.5C3 12 3 13.5 4.5 15"/><path d="M14 10l.01.01"/></svg>`,
+    checkCircle: `<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="m9 12 2 2 4-4"/></svg>`,
+    check: `<svg viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"/></svg>`,
+    warning: `<svg viewBox="0 0 24 24"><path d="M10.29 3.86 1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0Z"/><path d="M12 9v4"/><path d="M12 17h.01"/></svg>`,
+    file: `<svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/></svg>`,
+    link: `<svg viewBox="0 0 24 24"><path d="M10 13a5 5 0 0 0 7.07 0l3.54-3.54a5 5 0 0 0-7.07-7.07L11 4"/><path d="M14 11a5 5 0 0 0-7.07 0L3.39 14.54a5 5 0 1 0 7.07 7.07L13 20"/></svg>`,
+    image: `<svg viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="2"/><circle cx="8.5" cy="10.5" r="1.5"/><path d="m21 15-5-5L5 21"/></svg>`,
+    note: `<svg viewBox="0 0 24 24"><path d="M13 2H6a2 2 0 0 0-2 2v16l6-3 6 3V9z"/><path d="M13 2v7h7"/></svg>`,
+    refresh: `<svg viewBox="0 0 24 24"><path d="M21 2v6h-6"/><path d="M3 12a9 9 0 0 1 15.55-6.36L21 8"/><path d="M3 22v-6h6"/><path d="M21 12a9 9 0 0 1-15.55 6.36L3 16"/></svg>`,
+    idea: `<svg viewBox="0 0 24 24"><path d="M9 18h6"/><path d="M10 22h4"/><path d="M12 2a7 7 0 0 0-4 12.74c.58.4 1 1.02 1 1.74V18h6v-1.52c0-.72.42-1.34 1-1.74A7 7 0 0 0 12 2Z"/></svg>`,
+    video: `<svg viewBox="0 0 24 24"><rect x="3" y="6" width="14" height="12" rx="2"/><path d="m17 10 4-2v8l-4-2"/></svg>`,
+    hand: `<svg viewBox="0 0 24 24"><path d="M8 13V5a1 1 0 0 1 2 0v5"/><path d="M12 13V4a1 1 0 0 1 2 0v9"/><path d="M16 13V6a1 1 0 0 1 2 0v8"/><path d="M4 14h.01"/><path d="M6 10a1 1 0 0 0-1 1v4.5A5.5 5.5 0 0 0 10.5 21H15a5 5 0 0 0 5-5v-3a2 2 0 0 0-2-2h-8l-2-1Z"/></svg>`,
+    chevronLeft: `<svg viewBox="0 0 24 24"><path d="m15 18-6-6 6-6"/></svg>`,
+    chevronRight: `<svg viewBox="0 0 24 24"><path d="m9 18 6-6-6-6"/></svg>`,
+    x: `<svg viewBox="0 0 24 24"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>`,
+    target: `<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5"/><circle cx="12" cy="12" r="1"/></svg>`,
+    star: `<svg viewBox="0 0 24 24"><path d="m12 3 2.8 5.7 6.2.9-4.5 4.4 1.1 6.2L12 17.3 6.4 20.2l1.1-6.2L3 9.6l6.2-.9L12 3Z"/></svg>`
+  };
+  return icons[name] || icons.file;
+}
+
+function uiIcon(name, cls = '') {
+  return `<span class="${`ui-inline-icon ${cls}`.trim()}" aria-hidden="true">${uiIconSvg(name)}</span>`;
+}
+
+const UI_EMOJI_ICON_MAP = [
+  ['ðŸ””', 'bell'], ['ðŸ’¬', 'message'], ['ðŸ‘¤', 'user'], ['ðŸšª', 'logout'],
+  ['ðŸ—‘ï¸', 'trash'], ['ðŸ—‘', 'trash'], ['âœï¸', 'pencil'], ['ðŸ“', 'folder'],
+  ['ðŸ“‚', 'folderOpen'], ['ðŸ‘¥', 'users'], ['ðŸ“…', 'calendar'], ['âš™ï¸', 'settings'],
+  ['âž•', 'plus'], ['â–¶', 'play'], ['âœ•', 'x'], ['âœ…', 'checkCircle'],
+  ['â¸', 'pause'], ['â³', 'clock'], ['ðŸš€', 'rocket'], ['ðŸŽ‰', 'spark'],
+  ['ðŸ”™', 'chevronLeft'], ['â­', 'star'], ['â˜†', 'star'],
+  ['ðŸ”—', 'link'], ['ðŸ–¼ï¸', 'image'], ['ðŸ–¼', 'image'], ['ðŸ“', 'note'],
+  ['ðŸ”', 'refresh'], ['ðŸ’¡', 'idea'], ['ðŸŽ¬', 'video'], ['ðŸ‘‹', 'hand'],
+  ['ðŸ“„', 'file'], ['âš ï¸', 'warning'], ['âš ', 'warning'], ['â—Ž', 'target'],
+  ['â†’', 'chevronRight'],
+  ['🗑️', 'trash'], ['🗑', 'trash'], ['🔔', 'bell'], ['💬', 'message'], ['👤', 'user'], ['🚪', 'logout'],
+  ['✏️', 'pencil'], ['✏', 'pencil'], ['📁', 'folder'], ['📂', 'folderOpen'], ['👥', 'users'],
+  ['📅', 'calendar'], ['⚡', 'spark'], ['📎', 'paperclip'], ['⚙️', 'settings'], ['⚙', 'settings'],
+  ['➕', 'plus'], ['▶', 'play'], ['◀', 'chevronLeft'], ['✕', 'x'], ['✅', 'checkCircle'],
+  ['✔️', 'checkCircle'], ['✓', 'check'], ['⏸', 'pause'], ['⏳', 'clock'], ['🚀', 'rocket'],
+  ['🎉', 'spark'], ['🔙', 'chevronLeft'], ['⭐', 'star'], ['☆', 'star'], ['🔗', 'link'], ['🖼️', 'image'], ['🖼', 'image'], ['📝', 'note'],
+  ['🔄', 'refresh'], ['💡', 'idea'], ['🎬', 'video'], ['👋', 'hand'], ['📄', 'file'],
+  ['⚠️', 'warning'], ['⚠', 'warning'], ['◎', 'target'], ['→', 'chevronRight']
+];
+
+function iconifyUiHtml(html) {
+  let out = html;
+  UI_EMOJI_ICON_MAP.forEach(([token, iconName]) => {
+    out = out.split(token).join(uiIcon(iconName));
+  });
+  return out;
+}
+
+function applyUiIcons(root = document) {
+  const selectors = [
+    '.sec-title', '.modal-title', '.dropdown-item', '.empty-icon', '.idea-add-icon', '.idea-emoji',
+    '.pcol-title', '.ap-title', '.sb-action', '.yr-label', '.yr-chev', '.paused-icon', '.cp-file-lbl',
+    '.link-del-btn', '.chat-send-btn', '.todo-del', '.idea-del', '.tb-btn', '.btn-ok', '.cal-nav',
+    '.ap-btn', '.step-btn', '.detail-thumb-label', '.mw-focus-icon', '.planner-nav-btn', '.planner-row-btn',
+    '.planner-add-btn', '.planner-secondary-btn', '.page-btn', '.field-label span[onclick]', '.cc-del',
+    '.todo-add-btn', '.task-add-btn', '.user-menu-name', '#tb-title', '.pub-card button', '.apj-thumb',
+    '.an-proj-thumb', '.idea-meta-row span', '.mini-proj span[style*="color:var(--muted)"]', '.v-date',
+    '.step-circle', '.week-day-chev', '.priority-star', '.badge-priority', '.badge-publish'
+  ].join(', ');
+  root.querySelectorAll(selectors).forEach(el => {
+    const next = iconifyUiHtml(el.innerHTML);
+    if (next !== el.innerHTML) el.innerHTML = next;
+  });
+}
+
+function queueUiIcons() {
+  setTimeout(() => applyUiIcons(document), 0);
 }
 
 /* ═══════════════════════════════════════
@@ -3800,27 +4044,28 @@ function renderProjects() {
     const steps = ver.steps || [], doneN = steps.filter(s=>s.status==='done').length, allDone = steps.length > 0 && doneN===steps.length;
     const actStep = steps.find(s=>s.status==='active'), inPub = DB.publish.find(x=>x.projectId===p.id);
 
-    let statusLbl='', statusCls='';
-    if(p.isPublished || p.state === 'published') { statusLbl=`✅ Published`; statusCls='s-done'; }
-    else if(p.isPaused){ statusLbl=`⏸ Paused`; statusCls='s-paused'; }
-    else if(inPub){ statusLbl=`🚀 Queued`; statusCls='s-publish'; }
-    else if(ver.waitingFeedback){ statusLbl=`⏳ Awaiting Feedback`; statusCls='s-waiting'; }
-    else if(allDone){ statusLbl=`🎉 Finished`; statusCls='s-done'; }
-    else if(actStep){ statusLbl=`▶ Editing: ${actStep.name}`; statusCls='s-active'; }
-    else { statusLbl='Pending'; statusCls=''; }
+    let statusText='', statusCls='', statusIcon='pending';
+    if(p.isPublished || p.state === 'published') { statusText='Published'; statusCls='s-done'; statusIcon='published'; }
+    else if(p.isPaused){ statusText='Paused'; statusCls='s-paused'; statusIcon='paused'; }
+    else if(inPub){ statusText='Queued'; statusCls='s-publish'; statusIcon='queued'; }
+    else if(ver.waitingFeedback){ statusText='Awaiting Feedback'; statusCls='s-waiting'; statusIcon='waiting'; }
+    else if(allDone){ statusText='Finished'; statusCls='s-done'; statusIcon='done'; }
+    else if(actStep){ statusText='In Progress'; statusCls='s-active'; statusIcon='active'; }
+    else { statusText='Pending'; statusCls=''; statusIcon='pending'; }
 
     const pips = steps.map(s=>`<div class="step-pip ${ver.waitingFeedback&&s.status==='done'?'waiting':s.status}" title="${s.name}"></div>`).join('');
     const formatColor = DB.contentTypes.find(c => c.id === p.contentType)?.color || 'var(--line)';
     const plannedDateText = p.publishDate ? formatPlannedDate(p.publishDate) : 'No date scheduled';
 
+    const statusMarkup = `<span class="pc-status-icon">${projectCardIcon(statusIcon)}</span><span class="pc-status-text">${statusText}</span>`;
     // Aplicamos el glow verde y el cartelito a los publicados
     const isPubClass = (p.isPublished || p.state === 'published') ? 'is-published' : '';
     const pubBadge = (p.isPublished || p.state === 'published') ? `<div class="published-badge">Published</div>` : '';
 
-    return `<div class="project-card ${isPubClass}" style="border-top: 4px solid ${formatColor}; --hover-color: ${formatColor}; position:relative;" draggable="true" ondragstart="dragStart(event,'${p.id}')" ondragover="dragOver(event)" ondragleave="dragLeave(event)" ondrop="drop(event,'${p.id}')" ondragend="dragEnd(event)">      
+    return `<div class="project-card ${isPubClass}" style="--project-stroke:${cat?.color||formatColor}; --hover-color:${cat?.color||formatColor}; position:relative;" draggable="true" ondragstart="dragStart(event,'${p.id}')" ondragover="dragOver(event)" ondragleave="dragLeave(event)" ondrop="drop(event,'${p.id}')" ondragend="dragEnd(event)">      
       ${pubBadge}
-      ${isMaster ? `<div class="pc-action-btn pc-del" title="Delete Project" onclick="event.stopPropagation(); askDelete('${p.id}', 'project')">🗑</div>` : ''}
-      <div class="pc-action-btn pc-drag" title="Drag to reorder">⠿</div>
+      ${isMaster ? `<div class="pc-action-btn pc-del" title="Delete Project" onclick="event.stopPropagation(); askDelete('${p.id}', 'project')">${projectCardIcon('trash')}</div>` : ''}
+      <div class="pc-action-btn pc-drag" title="Drag to reorder">${projectCardIcon('drag')}</div>
       ${p.thumbnail ? `<div class="pc-thumb-wrap"><img src="${p.thumbnail}" class="pc-thumb"></div>` : ''}
       <div class="pc-body" onclick="openProj('${p.id}')">
         <div class="pc-top">
@@ -3838,7 +4083,7 @@ function renderProjects() {
         </div>
         <div class="steps-bar-wrap"><div class="steps-bar">${pips}</div></div>
         <div class="pc-bottom">
-          <div class="pc-status ${statusCls}">${statusLbl}</div>
+          <div class="pc-status ${statusCls}">${statusMarkup}</div>
           <div class="pc-schedule" onclick="event.stopPropagation()">
             <div class="pc-schedule-date ${p.publishDate ? '' : 'pc-schedule-empty'}">${plannedDateText}</div>
             <input class="pc-date-input" type="date" value="${p.publishDate||''}" onchange="updateProjectPublishDate('${p.id}', this.value)" onclick="event.stopPropagation()">
@@ -3956,7 +4201,7 @@ function renderDetail() {
   const cat = getCat(p.catId);
   const formatColor = DB.contentTypes.find(c => c.id === p.contentType)?.color || 'var(--line2)';
 
-  document.getElementById('detail-left').innerHTML=`
+  document.getElementById('detail-left').innerHTML=iconifyUiHtml(`
     <div class="detail-thumb-wrap" onclick="document.getElementById('upload-thumb-input').click()">
       ${thumbHtml}
     </div>
@@ -4008,13 +4253,14 @@ function renderDetail() {
     <div class="steps-list">${stepsHTML}</div>
     ${!isPub ? `<button class="tb-btn" style="margin-bottom:32px" onclick="openModal('m-step')">+ Add Custom Stage</button>` : ''}
     <div class="sec-title"><span>🕒 ITERATION HISTORY</span></div>
-    <div class="versions-list">${versHTML}</div>`;
+    <div class="versions-list">${versHTML}</div>`);
     
   const cpTag = document.getElementById('cp-tag');
   if(cpTag) {
     cpTag.innerHTML = `<option value="">No tag...</option>` + DB.users.filter(u=>u.id !== currentUser).map(u => `<option value="${u.id}">@${u.name}</option>`).join('');
   }
 
+  queueUiIcons();
   renderComments();
 }
 
@@ -4378,9 +4624,11 @@ function renderProfile() {
         </div>
       </div>
     `;
+    queueUiIcons();
   } catch(e) {
     console.error("Error in renderProfile:", e);
     document.getElementById('profile-content').innerHTML = `<div class="empty-state">Error loading profile data. Check console.</div>`;
+    queueUiIcons();
   }
 }
 
@@ -4549,7 +4797,7 @@ function renderPublish() {
            <div style="margin-bottom:14px; color:var(--muted); font-size:13px;">Shows publish queue dates and target deadlines for all projects.</div>
            ${toolbarHTML}
            ${buildCalendarHTML(calendarEntries)}`;
-  el.innerHTML = html;
+  el.innerHTML = iconifyUiHtml(html);
 }
 function buildCalendarHTML(entries = getFilteredCalendarEntries()) {
   const y=calDate.getFullYear(), m=calDate.getMonth(), todayStr=today();
@@ -4793,6 +5041,7 @@ function renderFormatsList() {
       </div>` : ''}
     </div>
   `).join('');
+  queueUiIcons();
 }
 
 function editFormat(id) {
@@ -4874,7 +5123,14 @@ function goScreen(name) {
   render(); 
 }
 
-function toast(msg,icon='✓') { const el=document.createElement('div'); el.className='toast'; el.innerHTML=`<span>${icon}</span> ${msg}`; document.body.appendChild(el); setTimeout(()=>el.remove(),2800); }
+function toast(msg,icon='✓') {
+  const iconMarkup = iconifyUiHtml(icon);
+  const el=document.createElement('div');
+  el.className='toast';
+  el.innerHTML=`<span>${iconMarkup}</span> ${msg}`;
+  document.body.appendChild(el);
+  setTimeout(()=>el.remove(),2800);
+}
 
 function render() {
   renderSidebar(); 
@@ -4894,6 +5150,7 @@ function render() {
   else if(screen==='messages') renderMessages();
   else if(screen==='public-profile') renderPublicProfile();
   else if(screen==='mywork') renderMyWork();
+  queueUiIcons();
 }
 
 // initApp() se llama dentro de onAuthStateChanged, solo cuando hay un usuario autenticado
@@ -4998,6 +5255,7 @@ function renderPublish() {
   const queue = (DB.publish || []).filter(pub => getP(pub.projectId));
   if(!queue.length) {
     el.innerHTML = `<div class="empty-state"><div class="empty-icon">🚀</div><div class="empty-text">No completed projects queued</div><div class="empty-sub">Projects approved for release will appear here.</div></div>`;
+    queueUiIcons();
     return;
   }
 
@@ -5048,8 +5306,9 @@ function renderPublish() {
   });
 
   html += `</div><div id="publish-pagination"></div>`;
-  el.innerHTML = html;
+  el.innerHTML = iconifyUiHtml(html);
   renderPagination('publish-pagination', pageData.page, pageData.totalPages, 'setPublishPage');
+  queueUiIcons();
 }
 
 function renderCalendarScreen() {
@@ -5071,7 +5330,7 @@ function renderCalendarScreen() {
       }).join('')}</div>`
     : `<div style="text-align:center; padding:24px 20px; color:var(--muted); font-size:13px; background:var(--card); border:1px solid var(--line); border-radius:14px; margin-bottom:20px;">No deadlines match the current filters.</div>`;
 
-  el.innerHTML = `
+  el.innerHTML = iconifyUiHtml(`
     <div class="sec-title" style="margin-bottom:14px">DEADLINE SPOTLIGHT</div>
     ${spotlightHTML}
     <div class="sec-title" style="margin-bottom:14px">GENERAL WORKSPACE CALENDAR</div>
@@ -5098,7 +5357,8 @@ function renderCalendarScreen() {
       <div class="cal-legend-item"><span class="cal-legend-swatch overdue"></span>Overdue</div>
     </div>
     ${buildCalendarHTML(calendarEntries)}
-  `;
+  `);
+  queueUiIcons();
 }
 
 function openIdeaDoc(id=null) {
@@ -5135,7 +5395,8 @@ function renderIdeas() {
         </div>
       </div>`).join('');
   }
-  grid.innerHTML=html;
+  grid.innerHTML=iconifyUiHtml(html);
+  queueUiIcons();
 }
 
 function renderIdeaDoc() {
@@ -5144,6 +5405,7 @@ function renderIdeaDoc() {
   const idea = editingIdeaId ? DB.ideas.find(i=>i.id===editingIdeaId) : null;
   if(editingIdeaId && !idea) {
     host.innerHTML = `<div class="empty-state"><div class="empty-text">Idea not found</div></div>`;
+    queueUiIcons();
     return;
   }
   const title = idea?.title || '';
@@ -5176,6 +5438,7 @@ function renderIdeaDoc() {
         </div>
       </div>
     </div>`;
+  queueUiIcons();
 }
 
 function previewIdeaDocImage(e) {
@@ -5357,7 +5620,7 @@ function renderMyWorkLegacy() {
   if (!host) return;
   ensureTodosReady();
   const u = getAuthUser();
-  if (!u) { host.innerHTML = '<div class="empty-state"><div class="empty-text">Please log in.</div></div>'; return; }
+  if (!u) { host.innerHTML = '<div class="empty-state"><div class="empty-text">Please log in.</div></div>'; queueUiIcons(); return; }
 
   const todos = DB.todos[u.id] || [];
   const monthTasks = getTodosByBucket(todos, 'month');
@@ -5492,6 +5755,7 @@ function renderMyWorkLegacy() {
   if (viewButtons[0]) viewButtons[0].textContent = 'Month';
   if (viewButtons[1]) viewButtons[1].textContent = 'Week';
   if (viewButtons[2]) viewButtons[2].textContent = 'Day';
+  queueUiIcons();
 }
 
 function renderMyWork() {
@@ -5501,6 +5765,7 @@ function renderMyWork() {
   const u = getAuthUser();
   if (!u) {
     host.innerHTML = '<div class="empty-state"><div class="empty-text">Please log in.</div></div>';
+    queueUiIcons();
     return;
   }
 
@@ -5691,6 +5956,7 @@ function renderMyWork() {
       ${renderMeetingBriefPanel()}
     </div>
   `;
+  queueUiIcons();
 }
 
 function getStatusLabel(status) {
