@@ -3539,12 +3539,12 @@ function renderPublicProfile() {
     return `<div class="mini-proj" onclick="openProj('${p.id}')">
       <div>
         <div class="mp-name">${p.name}</div>
-        <div class="mp-cat">${cat?.name||''} Â· ${p.currentVersion}</div>
+        <div class="mp-cat">${cat?.name||''} · ${p.currentVersion}</div>
         ${deadline
           ? `<div class="mini-deadline ${isPastDeadline(deadline.date) ? 'overdue' : ''}" style="font-size:11px; color:${isPastDeadline(deadline.date) ? 'var(--red)' : 'var(--orange)'}; font-weight:700; margin-top:4px;">${deadline.label}: ${formatPlannedDate(deadline.date)}</div>`
           : `<div style="font-size:11px; color:var(--muted); margin-top:4px;">No deadline scheduled</div>`}
       </div>
-      <span style="color:var(--muted)">â†’</span>
+      <span style="color:var(--muted)">${uiIcon('chevronRight')}</span>
     </div>`;
   };
 
@@ -3560,17 +3560,17 @@ function renderPublicProfile() {
     <div class="profile-grid">
       <div style="display:flex; flex-direction:column; gap:24px;">
           <div class="profile-col">
-            <div class="pcol-title">â–¶ Assigned Active Projects (${activeP.length})</div>
+            <div class="pcol-title">${uiIcon('play')} Assigned Active Projects (${activeP.length})</div>
             <div class="mini-proj-list">${activeP.length?activeP.map(renderMini).join(''):'<div style="color:var(--muted);font-size:13px;">No active projects.</div>'}</div>
           </div>
           <div class="profile-col">
-            <div class="pcol-title">âœ… Completed Projects (${doneP.length})</div>
+            <div class="pcol-title">${uiIcon('checkCircle')} Completed Projects (${doneP.length})</div>
             <div class="mini-proj-list">${doneP.length?doneP.map(renderMini).join(''):'<div style="color:var(--muted);font-size:13px;">No completed projects.</div>'}</div>
           </div>
       </div>
 
       <div class="profile-col" style="align-self:start;">
-        <div class="pcol-title">ðŸ’¬ Send Private Message</div>
+        <div class="pcol-title">${uiIcon('message')} Send Private Message</div>
         <div style="display:flex; flex-direction:column;">
           <textarea id="inline-msg-text" class="field-textarea" placeholder="Write a message to ${u.name}..."></textarea>
           <button class="tb-btn primary" style="align-self:flex-end; margin-top:12px;" onclick="sendInlineMessage('${u.id}')">Send Message</button>
@@ -4170,16 +4170,16 @@ function renderDetail() {
 
   let panel = '';
   // Si estÃ¡ publicado, mostramos el banner de victoria y quitamos todos los botones
-  if(isPub) panel=`<div class="action-panel panel-green" style="border: 1px solid var(--green); box-shadow: 0 0 20px rgba(0, 255, 128, 0.15);"><div class="ap-title" style="color:var(--green)">âœ¨ Project Published</div><div class="ap-sub">This project is fully completed, approved, and published.</div></div>`;
-  else if(p.isPaused) panel=`<div class="action-panel panel-gray"><div class="ap-title" style="color:var(--text)">â¸ Project Paused</div><div class="ap-sub">This project is currently on hold.</div><div class="ap-buttons"><button class="ap-btn resume" onclick="togglePause('${p.id}')">â–¶ Resume Project</button></div></div>`;
-  else if(inPub) panel=`<div class="action-panel panel-purple"><div class="ap-title" style="color:var(--accent-light)">ðŸš€ In Publish Queue</div><div class="ap-sub">You can view/edit the release date in the Publish Queue tab.</div><div class="ap-buttons"><button class="ap-btn publish" onclick="goScreen('publish')">View Queue â†’</button><button class="ap-btn feedback" onclick="openFbModal()">Needs Revisions</button><button class="ap-btn resume" onclick="unqueueProject('${p.id}')" style="background:var(--card2); border: 1px solid var(--line2); color:var(--text);">ðŸ”™ Unqueue</button><button class="ap-btn resume" onclick="togglePause('${p.id}')">â¸ Pause</button></div></div>`; 
-  else if(ver.waitingFeedback) panel=`<div class="action-panel panel-orange"><div class="ap-title" style="color:var(--orange)">â³ Awaiting Client Feedback</div><div class="ap-sub">Timeline is exported. Log new revision requests when received.</div><div class="ap-buttons"><button class="ap-btn feedback" onclick="openFbModal()">Log Feedback</button><button class="ap-btn publish" onclick="sendToPublish('${p.id}')">Approve & Queue</button><button class="ap-btn resume" onclick="togglePause('${p.id}')">â¸ Pause</button></div></div>`;
-  else if(allDone) panel=`<div class="action-panel panel-green"><div class="ap-title" style="color:var(--green)">âœ… All Stages Complete!</div><div class="ap-sub">Ready for final export or pending client review.</div><div class="ap-buttons"><button class="ap-btn publish" onclick="sendToPublish('${p.id}')">Queue to Publish</button><button class="ap-btn feedback" onclick="openFbModal()">Needs Revisions</button><button class="ap-btn resume" onclick="togglePause('${p.id}')">â¸ Pause</button></div></div>`;
-  else panel=`<div class="action-panel panel-gray"><div class="ap-title" style="color:var(--text)">â–¶ Project Active</div><div class="ap-sub">Working on current stages.</div><div class="ap-buttons"><button class="ap-btn resume" onclick="togglePause('${p.id}')" style="background:var(--card3);color:var(--text)">â¸ Pause Project</button></div></div>`;
+  if(isPub) panel=`<div class="action-panel panel-green" style="border: 1px solid var(--green); box-shadow: 0 0 20px rgba(0, 255, 128, 0.15);"><div class="ap-title" style="color:var(--green)">${uiIcon('spark')} Project Published</div><div class="ap-sub">This project is fully completed, approved, and published.</div></div>`;
+  else if(p.isPaused) panel=`<div class="action-panel panel-gray"><div class="ap-title" style="color:var(--text)">${uiIcon('pause')} Project Paused</div><div class="ap-sub">This project is currently on hold.</div><div class="ap-buttons"><button class="ap-btn resume" onclick="togglePause('${p.id}')">${uiIcon('play')} Resume Project</button></div></div>`;
+  else if(inPub) panel=`<div class="action-panel panel-purple"><div class="ap-title" style="color:var(--accent-light)">${uiIcon('rocket')} In Publish Queue</div><div class="ap-sub">You can view/edit the release date in the Publish Queue tab.</div><div class="ap-buttons"><button class="ap-btn publish" onclick="goScreen('publish')">View Queue ${uiIcon('chevronRight')}</button><button class="ap-btn feedback" onclick="openFbModal()">Needs Revisions</button><button class="ap-btn resume" onclick="unqueueProject('${p.id}')" style="background:var(--card2); border: 1px solid var(--line2); color:var(--text);">${uiIcon('chevronLeft')} Unqueue</button><button class="ap-btn resume" onclick="togglePause('${p.id}')">${uiIcon('pause')} Pause</button></div></div>`; 
+  else if(ver.waitingFeedback) panel=`<div class="action-panel panel-orange"><div class="ap-title" style="color:var(--orange)">${uiIcon('clock')} Awaiting Client Feedback</div><div class="ap-sub">Timeline is exported. Log new revision requests when received.</div><div class="ap-buttons"><button class="ap-btn feedback" onclick="openFbModal()">Log Feedback</button><button class="ap-btn publish" onclick="sendToPublish('${p.id}')">Approve & Queue</button><button class="ap-btn resume" onclick="togglePause('${p.id}')">${uiIcon('pause')} Pause</button></div></div>`;
+  else if(allDone) panel=`<div class="action-panel panel-green"><div class="ap-title" style="color:var(--green)">${uiIcon('checkCircle')} All Stages Complete!</div><div class="ap-sub">Ready for final export or pending client review.</div><div class="ap-buttons"><button class="ap-btn publish" onclick="sendToPublish('${p.id}')">Queue to Publish</button><button class="ap-btn feedback" onclick="openFbModal()">Needs Revisions</button><button class="ap-btn resume" onclick="togglePause('${p.id}')">${uiIcon('pause')} Pause</button></div></div>`;
+  else panel=`<div class="action-panel panel-gray"><div class="ap-title" style="color:var(--text)">${uiIcon('play')} Project Active</div><div class="ap-sub">Working on current stages.</div><div class="ap-buttons"><button class="ap-btn resume" onclick="togglePause('${p.id}')" style="background:var(--card3);color:var(--text)">${uiIcon('pause')} Pause Project</button></div></div>`;
 
   const stepsHTML = steps.map((s,i)=>{
     const rowCls = s.status==='active'?'step-active':s.status==='done'?'step-done':'';
-    const icon = s.status==='done'?'âœ“':s.status==='active'?'â–¶':'';
+    const icon = s.status==='done'?uiIcon('check'):s.status==='active'?uiIcon('play'):'';
     const tag = s.status==='done'?'Done':s.status==='active'?'In Progress':'Pending';
     let btns='';
     
@@ -4187,14 +4187,14 @@ function renderDetail() {
     if(!ver.waitingFeedback && !inPub && !p.isPaused && !isPub){
       if(s.status==='pending') btns+=`<button class="step-btn start" onclick="stepAct('${p.id}',${i},'start')">Start Stage</button>`;
       if(s.status==='active')  btns+=`<button class="step-btn complete" onclick="stepAct('${p.id}',${i},'complete')">Mark Complete</button>`;
-      if(s.status==='done')    btns+=`<button class="step-btn reopen" onclick="stepAct('${p.id}',${i},'reopen')">â†º Reopen</button>`;
+      if(s.status==='done')    btns+=`<button class="step-btn reopen" onclick="stepAct('${p.id}',${i},'reopen')">${uiIcon('refresh')} Reopen</button>`;
     }
-    btns+=`<button class="step-btn" onclick="openNoteModal('${p.id}',${i})">ðŸ“ Note</button>`;
+    btns+=`<button class="step-btn" onclick="openNoteModal('${p.id}',${i})">${uiIcon('note')} Note</button>`;
     
     // Bloqueamos poder borrar etapas si estÃ¡ publicado
-    if(!ver.waitingFeedback && !inPub && !p.isPaused && !isPub) btns+=`<button class="step-btn danger" onclick="delStep('${p.id}',${i})">âœ•</button>`;
+    if(!ver.waitingFeedback && !inPub && !p.isPaused && !isPub) btns+=`<button class="step-btn danger" onclick="delStep('${p.id}',${i})">${uiIcon('x')}</button>`;
     
-    return `<div class="step-row ${rowCls}" draggable="true" ondragstart="stepDragStart(event, ${i})" ondragover="stepDragOver(event)" ondragleave="stepDragLeave(event)" ondrop="stepDrop(event, ${i})" ondragend="stepDragEnd(event)"><div class="step-main"><div style="cursor:grab; color:var(--muted); font-size:18px; padding-right:12px; user-select:none; transition:color 0.2s;" onmouseover="this.style.color='var(--text)'" onmouseout="this.style.color='var(--muted)'" title="Drag to reorder">â ¿</div><div class="step-circle">${icon}</div><div class="step-info"><div class="step-name">${s.name}</div>${s.note?`<div class="step-note">${s.note}</div>`:''}</div><div class="step-tag">${tag}</div></div><div class="step-actions">${btns}</div></div>`;
+    return `<div class="step-row ${rowCls}" draggable="true" ondragstart="stepDragStart(event, ${i})" ondragover="stepDragOver(event)" ondragleave="stepDragLeave(event)" ondrop="stepDrop(event, ${i})" ondragend="stepDragEnd(event)"><div class="step-main"><div style="cursor:grab; color:var(--muted); font-size:18px; padding-right:12px; user-select:none; transition:color 0.2s;" onmouseover="this.style.color='var(--text)'" onmouseout="this.style.color='var(--muted)'" title="Drag to reorder">${uiIcon('drag')}</div><div class="step-circle">${icon}</div><div class="step-info"><div class="step-name">${s.name}</div>${s.note?`<div class="step-note">${s.note}</div>`:''}</div><div class="step-tag">${tag}</div></div><div class="step-actions">${btns}</div></div>`;
   }).join('');
 
   const linkOpts = LINK_TYPES.map(t=>`<option value="${t.id}">${t.label}</option>`).join('');
@@ -4203,12 +4203,12 @@ function renderDetail() {
     return `<div class="link-row">
               <span class="link-label">${lbl}</span>
               <a class="link-value" href="${lnk.url}" target="_blank" rel="noopener">${lnk.url}</a>
-              <button class="link-del-btn" onclick="removeLink('${p.id}',${idx})">âœ•</button>
+              <button class="link-del-btn" onclick="removeLink('${p.id}',${idx})">${uiIcon('x')}</button>
             </div>`;
   }).join('');
 
-  const versHTML = (p.versions||[]).slice().reverse().map(v=>`<div class="version-row ${v.v===p.currentVersion?'vcurrent':''}"><div class="v-tag">${v.v}</div><div class="v-body"><div class="v-desc">${v.feedbackDesc}</div><div class="v-date">ðŸ“… ${v.date}</div>${v.v===p.currentVersion?`<div class="v-cur">ACTIVE WORKSPACE</div>`:`<button class="v-switch-btn" onclick="switchVer('${p.id}','${v.v}')">Revert to this</button>`}</div></div>`).join('');
-  const thumbHtml = p.thumbnail ? `<img src="${p.thumbnail}" class="detail-thumb">` : `<div class="detail-thumb-label"><span>ðŸ–¼ï¸</span><span>Set Project Thumbnail</span></div>`;
+  const versHTML = (p.versions||[]).slice().reverse().map(v=>`<div class="version-row ${v.v===p.currentVersion?'vcurrent':''}"><div class="v-tag">${v.v}</div><div class="v-body"><div class="v-desc">${v.feedbackDesc}</div><div class="v-date">${uiIcon('calendar')} ${v.date}</div>${v.v===p.currentVersion?`<div class="v-cur">ACTIVE WORKSPACE</div>`:`<button class="v-switch-btn" onclick="switchVer('${p.id}','${v.v}')">Revert to this</button>`}</div></div>`).join('');
+  const thumbHtml = p.thumbnail ? `<img src="${p.thumbnail}" class="detail-thumb">` : `<div class="detail-thumb-label"><span>Set Project Thumbnail</span></div>`;
   
   const cat = getCat(p.catId);
   const formatColor = DB.contentTypes.find(c => c.id === p.contentType)?.color || 'var(--line2)';
@@ -4224,13 +4224,13 @@ function renderDetail() {
 
     <div style="display:flex; gap:16px; margin-bottom: 24px; background: var(--bg); padding: 16px; border-radius: 12px; border-left: 4px solid ${formatColor}; border-top: 1px solid var(--line2); border-right: 1px solid var(--line2); border-bottom: 1px solid var(--line2);">
        <div style="flex:1;">
-         <div style="font-size:11px; font-weight:700; color:var(--muted); margin-bottom:6px; text-transform:uppercase; letter-spacing:0.5px;">ðŸ“ Group / Category</div>
+         <div style="font-size:11px; font-weight:700; color:var(--muted); margin-bottom:6px; text-transform:uppercase; letter-spacing:0.5px;">${uiIcon('folder')} Group / Category</div>
          <select class="field-select" style="padding:8px 12px; font-size:13px;" onchange="changeProjectCategory('${p.id}', this.value)">
            ${DB.categories.map(c => `<option value="${c.id}" ${c.id === p.catId ? 'selected' : ''}>${c.name}</option>`).join('')}
          </select>
        </div>
        <div style="flex:1;">
-         <div style="font-size:11px; font-weight:700; color:var(--muted); margin-bottom:6px; text-transform:uppercase; letter-spacing:0.5px;">âš™ï¸ Format Type</div>
+          <div style="font-size:11px; font-weight:700; color:var(--muted); margin-bottom:6px; text-transform:uppercase; letter-spacing:0.5px;">${uiIcon('settings')} Format Type</div>
          <select class="field-select" style="padding:8px 12px; font-size:13px;" onchange="changeProjectFormat('${p.id}', this.value)">
            ${DB.contentTypes.map(ct => `<option value="${ct.id}" ${ct.id === p.contentType ? 'selected' : ''}>${ct.label}</option>`).join('')}
          </select>
@@ -4252,7 +4252,7 @@ function renderDetail() {
       <button class="assignees-manage-btn" onclick="openAssignModal('${p.id}')">Manage Team</button>
     </div>
     ${panel}
-    <div class="sec-title"><span>ðŸ“‚ PROJECT ASSETS & LINKS</span></div>
+    <div class="sec-title"><span>${uiIcon('folderOpen')} PROJECT ASSETS & LINKS</span></div>
     <div class="links-section">
       <div id="links-list-container">${linksHTML}</div>
       <div class="link-inline-add">
@@ -4261,10 +4261,10 @@ function renderDetail() {
         <button onclick="addInlineLink('${p.id}')">Add Link</button>
       </div>
     </div>
-    <div class="sec-title"><span>âœ‚ï¸ EDITING WORKFLOW</span></div>
+    <div class="sec-title"><span>${uiIcon('settings')} EDITING WORKFLOW</span></div>
     <div class="steps-list">${stepsHTML}</div>
-    ${!isPub ? `<button class="tb-btn" style="margin-bottom:32px" onclick="openModal('m-step')">+ Add Custom Stage</button>` : ''}
-    <div class="sec-title"><span>ðŸ•’ ITERATION HISTORY</span></div>
+    ${!isPub ? `<button class="tb-btn" style="margin-bottom:32px" onclick="openModal('m-step')">${uiIcon('plus')} Add Custom Stage</button>` : ''}
+    <div class="sec-title"><span>${uiIcon('clock')} ITERATION HISTORY</span></div>
     <div class="versions-list">${versHTML}</div>`);
     
   const cpTag = document.getElementById('cp-tag');
@@ -4577,12 +4577,12 @@ function renderProfile() {
       return `<div class="mini-proj" onclick="openProj('${p.id}')">
         <div>
           <div class="mp-name">${p.name}</div>
-          <div class="mp-cat">${cat?.name||''} Â· ${p.currentVersion}</div>
+          <div class="mp-cat">${cat?.name||''} · ${p.currentVersion}</div>
           ${deadline
             ? `<div class="mini-deadline ${isPastDeadline(deadline.date) ? 'overdue' : ''}" style="font-size:11px; color:${isPastDeadline(deadline.date) ? 'var(--red)' : 'var(--orange)'}; font-weight:700; margin-top:4px;">${deadline.label}: ${formatPlannedDate(deadline.date)}</div>`
             : `<div style="font-size:11px; color:var(--muted); margin-top:4px;">No deadline scheduled</div>`}
         </div>
-        <span style="color:var(--muted)">â†’</span>
+        <span style="color:var(--muted)">${uiIcon('chevronRight')}</span>
       </div>`;
     };
 
@@ -4600,7 +4600,7 @@ function renderProfile() {
       <div class="todo-item ${t.status==='done'?'done':''}">
         <input type="checkbox" ${t.status==='done'?'checked':''} onchange="toggleTodo('${t.id}')">
         <span class="todo-text">${t.text}</span>
-        <button class="todo-del" onclick="delTodo('${t.id}')">âœ•</button>
+        <button class="todo-del" onclick="delTodo('${t.id}')">${uiIcon('x')}</button>
       </div>
     `).join('');
 
@@ -4610,24 +4610,24 @@ function renderProfile() {
         <img src="${u.avatar}" class="profile-avatar">
         <div class="profile-info">
           <h2>${u.name}</h2>
-          <p>${u.email} ${u.role ? `Â· <strong>${u.role}</strong>` : ''}</p>
+          <p>${u.email} ${u.role ? `· <strong>${u.role}</strong>` : ''}</p>
         </div>
         <div class="profile-actions">
-          <button class="tb-btn" onclick="openEditProfile('${u.id}')">âœï¸ Edit</button>
-          <button class="tb-btn danger" onclick="askDelete('${u.id}', 'user')">ðŸ—‘ Delete</button>
+          <button class="tb-btn" onclick="openEditProfile('${u.id}')">${uiIcon('pencil')} Edit</button>
+          <button class="tb-btn danger" onclick="askDelete('${u.id}', 'user')">${uiIcon('trash')} Delete</button>
         </div>
       </div>
       <div class="profile-grid">
         <div class="profile-col">
-          <div class="pcol-title">â–¶ Assigned Active Projects (${activeP.length})</div>
+          <div class="pcol-title">${uiIcon('play')} Assigned Active Projects (${activeP.length})</div>
           <div class="mini-proj-list">${activeP.length?activeP.map(renderMini).join(''):'<div style="color:var(--muted);font-size:13px;">No active projects.</div>'}</div>
         </div>
         <div class="profile-col">
-          <div class="pcol-title">âœ… Completed Projects (${doneP.length})</div>
+          <div class="pcol-title">${uiIcon('checkCircle')} Completed Projects (${doneP.length})</div>
           <div class="mini-proj-list">${doneP.length?doneP.map(renderMini).join(''):'<div style="color:var(--muted);font-size:13px;">No completed projects.</div>'}</div>
         </div>
         <div class="profile-col">
-          <div class="pcol-title">ðŸ“‹ Daily To-Do</div>
+          <div class="pcol-title">${uiIcon('checkCircle')} Daily To-Do</div>
           <div class="todo-input-wrap">
             <input type="text" id="new-todo" class="todo-input" placeholder="Add a new task..." onkeyup="if(event.key==='Enter') addTodo()">
             <button class="todo-add-btn" onclick="addTodo()">Add</button>
@@ -6081,7 +6081,7 @@ function renderMyWorkTable(tasks, selectedWeekKey) {
             const format = project ? DB.contentTypes.find(c => c.id === project.contentType)?.label || WORK_BUCKET_LABELS[task.bucket] : WORK_BUCKET_LABELS[task.bucket];
             const thumb = project?.thumbnail
               ? `<img class="mw-project-thumb" src="${project.thumbnail}">`
-              : `<div class="mw-project-thumb">${project ? escapeHtml(project.name.charAt(0).toUpperCase()) : 'â€¢'}</div>`;
+              : '';
             return `
               <tr>
                 <td class="mw-check-cell"><button class="planner-check ${task.status === 'done' ? 'checked' : ''}" onclick="toggleWorkTask('${task.id}')"></button></td>
@@ -6104,7 +6104,7 @@ function renderMyWorkTable(tasks, selectedWeekKey) {
                 <td>
                   <div class="planner-row-actions">
                     <button class="planner-row-btn" onclick="toggleTaskHold('${task.id}')">${task.status === 'on-hold' ? 'Resume' : 'Hold'}</button>
-                    <button class="mw-ellipsis-btn" onclick="deleteWorkTask('${task.id}')">â€¦</button>
+                    <button class="mw-ellipsis-btn" title="Delete task" onclick="deleteWorkTask('${task.id}')">${uiIcon('trash')}</button>
                   </div>
                 </td>
               </tr>
@@ -6723,19 +6723,19 @@ function buildAssignedStrip(u) {
     const cat = getCat(p.catId);
     const thumb = p.thumbnail
       ? `<div class="apj-thumb"><img src="${p.thumbnail}"></div>`
-      : `<div class="apj-thumb" style="background:${cat?.color||'var(--primary)'}26; color:${cat?.color||'var(--primary)'}">ðŸŽ¬</div>`;
+      : '';
     const stepLabel = activeStep
       ? `<span class="apj-step ${isOverdue?'overdue':''}">${activeStep.name}</span>`
       : '';
     const deadlineStr = deadline
-      ? `<span style="color:${isOverdue?'var(--red)':'var(--orange)'}; font-weight:700;">${isOverdue?'âš  Overdue':'Due'} ${formatPlannedDate(deadline.date)}</span>`
+      ? `<span style="color:${isOverdue?'var(--red)':'var(--orange)'}; font-weight:700;">${isOverdue ? `${uiIcon('warning')} Overdue` : 'Due'} ${formatPlannedDate(deadline.date)}</span>`
       : '';
     return `
       <div class="assigned-proj-card ${isOverdue?'overdue':''} ${isFinishing?'finishing':''}" onclick="openProj('${p.id}')">
         ${thumb}
         <div class="apj-info">
           <div class="apj-name">${p.name}</div>
-          <div class="apj-meta">${cat?.name||''} Â· ${p.currentVersion} ${deadlineStr ? 'Â· ' + deadlineStr : ''}</div>
+          <div class="apj-meta">${cat?.name||''} · ${p.currentVersion} ${deadlineStr ? '· ' + deadlineStr : ''}</div>
         </div>
         ${stepLabel}
         <svg style="width:14px;height:14px;stroke:var(--muted);fill:none;stroke-width:2;flex-shrink:0;" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
