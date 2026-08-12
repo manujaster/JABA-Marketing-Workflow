@@ -3077,6 +3077,8 @@ if (!firebase.apps.length) {
     firebase.initializeApp(firebaseConfig);
 }
 const db = firebase.firestore();
+const IS_VISUAL_PREVIEW = ['localhost', '127.0.0.1'].includes(window.location.hostname)
+  && new URLSearchParams(window.location.search).has('preview');
 
 const CloudDB = {
   async save(data) {
@@ -3088,9 +3090,206 @@ const CloudDB = {
   }
 };
 
+function exportWorkspaceBackup() {
+  if (!isDbLoaded) {
+    toast('Wait for the workspace to finish loading before exporting.', 'warning');
+    return;
+  }
+
+  if (!isMaster) {
+    toast('Only workspace admins can export backups.', 'warning');
+    return;
+  }
+
+  const u = getAuthUser();
+  const backup = {
+    schema: 'jaba-workflow-backup-v1',
+    exportedAt: new Date().toISOString(),
+    source: {
+      app: 'JABA Marketing Workflow',
+      firebaseProjectId: firebaseConfig.projectId,
+      firestorePath: 'workspace/main_data',
+      userId: u?.id || null,
+      userEmail: u?.email || currentUserObj?.email || null
+    },
+    counts: {
+      years: DB.years?.length || 0,
+      categories: DB.categories?.length || 0,
+      projects: DB.projects?.length || 0,
+      publishQueue: DB.publish?.length || 0,
+      ideas: DB.ideas?.length || 0,
+      users: DB.users?.length || 0,
+      contentTypes: DB.contentTypes?.length || 0,
+      todoOwners: DB.todos ? Object.keys(DB.todos).length : 0,
+      notificationOwners: DB.notifications ? Object.keys(DB.notifications).length : 0,
+      messageOwners: DB.messages ? Object.keys(DB.messages).length : 0
+    },
+    db_state: DB
+  };
+
+  const stamp = new Date().toISOString().replace(/[:.]/g, '-');
+  const blob = new Blob([JSON.stringify(backup, null, 2)], { type: 'application/json' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = `jaba-workflow-backup-${stamp}.json`;
+  document.body.appendChild(a);
+  a.click();
+  a.remove();
+  setTimeout(() => URL.revokeObjectURL(url), 500);
+  toast('Backup exported', 'file');
+}
+
 let DB = { years:[], categories:[], projects:[], publish:[], ideas:[], todos:{}, users:[], notifications:{}, messages:{}, contentTypes:[] };
 let isDbLoaded = false;
 let linkCtx = null;
+
+function buildVisualPreviewDB() {
+  const todayKey = today();
+  const users = [
+    { id:'preview-admin', name:'Manu Jaster', email:'manuelrate19@gmail.com', role:'Creative Director', avatar:'https://ui-avatars.com/api/?name=Manu+Jaster&background=6366f1&color=fff' },
+    { id:'preview-editor', name:'JABA Editor', email:'editor@example.com', role:'Video Editor', avatar:'https://ui-avatars.com/api/?name=JABA+Editor&background=10b981&color=fff' },
+    { id:'preview-producer', name:'JABA Producer', email:'producer@example.com', role:'Producer', avatar:'https://ui-avatars.com/api/?name=JABA+Producer&background=f59e0b&color=111' }
+  ];
+
+  return {
+    years: [{ id:'y2026', label:'2026' }],
+    categories: [
+      { id:'cjaba', yearId:'y2026', name:'JABA', color:'#6366f1' },
+      { id:'cjpb', yearId:'y2026', name:'JPB', color:'#06b6d4' }
+    ],
+    contentTypes: [
+      { id:'longform', label:'Long-form Video', color:'#818cf8' },
+      { id:'short', label:'Short / Reel', color:'#c084fc' },
+      { id:'podcast', label:'Podcast', color:'#10b981' },
+      { id:'social', label:'Social', color:'#f472b6' }
+    ],
+    users,
+    projects: [
+      {
+        id:'preview-project-1', catId:'cjaba', name:'JABA Brand Story Reel', contentType:'short', priority:true, currentVersion:'v1.1', order:0,
+        thumbnail:null, links:[{type:'wip', url:'https://example.com/work-in-progress'}], assignees:['preview-admin','preview-editor'], isPaused:false,
+        versions:[{v:'v1.1', date:todayKey, feedbackDesc:'Cut refined for opening hook', waitingFeedback:false, steps:[
+          {name:'Assets', status:'done', note:'Logo and references collected'},
+          {name:'Assembly', status:'done', note:'Main structure approved'},
+          {name:'VFX', status:'active', note:'Polish lower thirds'},
+          {name:'Sound', status:'pending', note:''},
+          {name:'Delivery', status:'pending', note:''}
+        ]}],
+        comments:[{id:'preview-comment-1', text:'Tighten the first three seconds and keep the logo reveal cleaner.', img:null, date:todayKey, version:'v1.1', authorId:'preview-admin'}],
+        publishDate: todayKey
+      },
+      {
+        id:'preview-project-2', catId:'cjaba', name:'Weekly Content Batch', contentType:'social', priority:false, currentVersion:'v1.0', order:1,
+        thumbnail:null, links:[], assignees:['preview-producer'], isPaused:false,
+        versions:[{v:'v1.0', date:todayKey, feedbackDesc:'Initial workspace created', waitingFeedback:true, steps:[
+          {name:'Assets', status:'done', note:''},
+          {name:'Assembly', status:'done', note:''},
+          {name:'Review', status:'done', note:'Waiting on notes'}
+        ]}],
+        comments:[], publishDate:null
+      },
+      {
+        id:'preview-project-3', catId:'cjpb', name:'Podcast Launch Clips', contentType:'podcast', priority:false, currentVersion:'v1.0', order:2,
+        thumbnail:null, links:[], assignees:['preview-editor','preview-producer'], isPaused:true,
+        versions:[{v:'v1.0', date:todayKey, feedbackDesc:'Initial workspace created', waitingFeedback:false, steps:[
+          {name:'Assets', status:'done', note:''},
+          {name:'Assembly', status:'active', note:'Paused until guest approvals arrive'},
+          {name:'Captions', status:'pending', note:''}
+        ]}],
+        comments:[], publishDate:null
+      }
+    ],
+    publish: [{ projectId:'preview-project-2', date:todayKey }],
+    ideas: [
+      { id:'preview-idea-1', title:'Behind the Workflow', body:'Show how a rough idea turns into a finished JABA video.', link:'', img:null, date:todayKey },
+      { id:'preview-idea-2', title:'Editor POV', body:'Fast breakdown of decisions inside a timeline: pacing, sound, graphics and delivery.', link:'', img:null, date:todayKey }
+    ],
+    todos: {
+      'preview-admin': [
+        { id:'preview-task-1', text:'Review JABA Brand Story Reel', done:false, status:'active', priority:'high', linkedProjectIds:['preview-project-1'], bucket:'today', day:'today', dateKey:todayKey, createdAt:todayKey },
+        { id:'preview-task-2', text:'Prepare notes for weekly batch', done:false, status:'on-hold', priority:'medium', linkedProjectIds:['preview-project-2'], bucket:'week', weekDay:'Friday', day:'Friday', weekKey:getWeekKey(todayKey), createdAt:todayKey }
+      ]
+    },
+    notifications: { 'preview-admin': [{ id:'preview-notif-1', text:'Preview mode is using sample data only.', date:todayKey, read:false, pid:null }] },
+    messages: { 'preview-admin': [] }
+  };
+}
+
+function startVisualPreview() {
+  DB = buildVisualPreviewDB();
+  isDbLoaded = true;
+  currentUserObj = { uid:'preview-admin', displayName:'Manu Jaster', email:'manuelrate19@gmail.com', photoURL:DB.users[0].avatar };
+  currentUser = 'preview-admin';
+  isMaster = true;
+  document.getElementById('m-login').classList.remove('open');
+  render();
+  toast('Visual preview mode: sample data only', 'warning');
+}
+
+function loadVisualBackup() {
+  if (!IS_VISUAL_PREVIEW) {
+    toast('Backup previews are only available in local preview mode.', 'warning');
+    return;
+  }
+
+  const input = document.createElement('input');
+  input.type = 'file';
+  input.accept = 'application/json,.json';
+  input.onchange = () => {
+    const file = input.files && input.files[0];
+    if (!file) return;
+
+    const reader = new FileReader();
+    reader.onload = () => {
+      try {
+        const parsed = JSON.parse(reader.result);
+        const snapshot = parsed.db_state || parsed;
+        if (!snapshot || typeof snapshot !== 'object' || !Array.isArray(snapshot.projects)) {
+          throw new Error('This file does not look like a JABA backup.');
+        }
+
+        DB = snapshot;
+        if (!DB.users) DB.users = [];
+        if (!DB.years) DB.years = [];
+        if (!DB.categories) DB.categories = [];
+        if (!DB.projects) DB.projects = [];
+        if (!DB.publish) DB.publish = [];
+        if (!DB.ideas) DB.ideas = [];
+        if (!DB.todos) DB.todos = {};
+        if (!DB.notifications) DB.notifications = {};
+        if (!DB.messages) DB.messages = {};
+        if (!DB.contentTypes) DB.contentTypes = [];
+
+        const adminUser = DB.users.find(u => MASTER_EMAILS.includes(u.email)) || DB.users[0] || {
+          id:'preview-admin',
+          name:'Preview Admin',
+          email:MASTER_EMAILS[0],
+          role:'Admin',
+          avatar:'https://ui-avatars.com/api/?name=Preview+Admin&background=6366f1&color=fff'
+        };
+
+        currentUserObj = {
+          uid: adminUser.id,
+          displayName: adminUser.name,
+          email: adminUser.email,
+          photoURL: adminUser.avatar
+        };
+        currentUser = adminUser.id;
+        isMaster = true;
+        isDbLoaded = true;
+        document.getElementById('m-login').classList.remove('open');
+        render();
+        toast('Backup loaded as local visual copy', 'file');
+      } catch (err) {
+        console.error(err);
+        alert('Could not load backup: ' + err.message);
+      }
+    };
+    reader.readAsText(file);
+  };
+  input.click();
+}
 
 function initApp() {
   const localStr = localStorage.getItem('jm-db');
@@ -3180,6 +3379,10 @@ function initApp() {
 
 let _saveToastTimer = null;
 function save() {
+  if (IS_VISUAL_PREVIEW) {
+    toast('Preview only. Real Firebase data was not changed.', 'warning');
+    return;
+  }
   CloudDB.save(DB);
   // Indicador visual de guardado (aparece brevemente, no interrumpe)
   const existing = document.getElementById('save-indicator');
@@ -3362,10 +3565,11 @@ let currentUser = null;
 let currentUserObj = null; 
 let isMaster = false; 
 let msgTargetUid = null;
+let authRedirectSettled = sessionStorage.getItem('jaba_auth_redirect_pending') !== '1';
 
 function signInWithGoogle() {
   const provider = new firebase.auth.GoogleAuthProvider();
-  firebase.auth().signInWithPopup(provider).catch(err => {
+  firebase.auth().signInWithRedirect(provider).catch(err => {
     console.error(err);
     alert("Error al iniciar sesiÃ³n: " + err.message);
   });
@@ -3378,7 +3582,13 @@ function signOut() {
 // Escuchar inicio de sesiÃ³n de Google
 signInWithGoogle = function() {
   const provider = new firebase.auth.GoogleAuthProvider();
-  firebase.auth().signInWithPopup(provider).catch(err => {
+  const isLocalPreview = ['localhost', '127.0.0.1'].includes(window.location.hostname);
+  if (isLocalPreview) sessionStorage.setItem('jaba_auth_redirect_pending', '1');
+  const signIn = isLocalPreview
+    ? firebase.auth().signInWithRedirect(provider)
+    : firebase.auth().signInWithPopup(provider);
+
+  signIn.catch(err => {
     console.error(err);
     if(err && err.code === 'auth/unauthorized-domain') {
       const host = window.location.hostname;
@@ -3397,10 +3607,29 @@ signInWithGoogle = function() {
   });
 };
 
+firebase.auth().getRedirectResult().then((result) => {
+  if (IS_VISUAL_PREVIEW) return;
+  sessionStorage.removeItem('jaba_auth_redirect_pending');
+  authRedirectSettled = true;
+  if (result.user || firebase.auth().currentUser || currentUserObj) {
+    document.getElementById('m-login').classList.remove('open');
+  }
+}).catch(err => {
+  sessionStorage.removeItem('jaba_auth_redirect_pending');
+  authRedirectSettled = true;
+  console.error(err);
+  alert("Error al completar inicio de sesion: " + err.message);
+  document.getElementById('m-login').classList.add('open');
+});
+
 firebase.auth().onAuthStateChanged((user) => {
+  if (IS_VISUAL_PREVIEW) return;
   if (user) {
+    authRedirectSettled = true;
+    sessionStorage.removeItem('jaba_auth_redirect_pending');
     currentUserObj = user;
     isMaster = MASTER_EMAILS.includes(user.email);
+    document.getElementById('m-login').classList.remove('open');
     if (!isDbLoaded) {
       initApp(); // Solo inicializar cuando hay usuario autenticado
     } else {
@@ -3410,12 +3639,12 @@ firebase.auth().onAuthStateChanged((user) => {
     currentUserObj = null;
     currentUser = null;
     isMaster = false;
-    document.getElementById('m-login').classList.add('open');
+    if (authRedirectSettled) document.getElementById('m-login').classList.add('open');
   }
 });
 
 function checkAuth() {
-  if(!currentUserObj) {
+  if(!currentUserObj && authRedirectSettled) {
     document.getElementById('m-login').classList.add('open');
   } else {
     document.getElementById('m-login').classList.remove('open');
@@ -3466,6 +3695,12 @@ function renderTopbarAuth() {
   
   const notifBadge = unreadNotifs ? `<span class="dd-badge">${unreadNotifs}</span>` : '';
   const msgBadge = unreadMsgs ? `<span class="dd-badge">${unreadMsgs}</span>` : '';
+  const backupItem = isMaster
+    ? `<div class="dropdown-item" onclick="exportWorkspaceBackup(); toggleDropdown();">${uiIcon('download')} Export Backup</div>`
+    : '';
+  const previewBackupItem = IS_VISUAL_PREVIEW
+    ? `<div class="dropdown-item" onclick="loadVisualBackup(); toggleDropdown();">${uiIcon('upload')} Load Backup</div>`
+    : '';
   
   // El nuevo puntito rojo al lado del nombre
   const totalUnread = unreadNotifs + unreadMsgs;
@@ -3482,6 +3717,8 @@ function renderTopbarAuth() {
         <div class="dropdown-item" onclick="goScreen('profile'); toggleDropdown();">ðŸ‘¤ My Profile</div>
         <div class="dropdown-item" onclick="goScreen('notifications'); toggleDropdown();">ðŸ”” Notifications ${notifBadge}</div>
         <div class="dropdown-item" onclick="goScreen('messages'); toggleDropdown();">ðŸ’¬ Messages ${msgBadge}</div>
+        ${previewBackupItem}
+        ${backupItem}
         <div class="dropdown-item" style="color:var(--red)" onclick="signOut()">ðŸšª Logout</div>
       </div>
     </div>
@@ -4094,6 +4331,8 @@ function uiIconSvg(name) {
     message: `<svg viewBox="0 0 24 24"><path d="M21 12a8.5 8.5 0 0 1-8.5 8.5H6l-3 3V12A8.5 8.5 0 0 1 11.5 3.5h1A8.5 8.5 0 0 1 21 12Z"/></svg>`,
     user: `<svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>`,
     logout: `<svg viewBox="0 0 24 24"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><path d="M16 17l5-5-5-5"/><path d="M21 12H9"/></svg>`,
+    download: `<svg viewBox="0 0 24 24"><path d="M12 3v12"/><path d="m7 10 5 5 5-5"/><path d="M5 21h14"/></svg>`,
+    upload: `<svg viewBox="0 0 24 24"><path d="M12 21V9"/><path d="m7 14 5-5 5 5"/><path d="M5 3h14"/></svg>`,
     trash: `<svg viewBox="0 0 24 24"><path d="M3 6h18"/><path d="M8 6V4h8v2"/><path d="M19 6l-1 14H6L5 6"/><path d="M10 11v6"/><path d="M14 11v6"/></svg>`,
     pencil: `<svg viewBox="0 0 24 24"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4 12.5-12.5Z"/></svg>`,
     folder: `<svg viewBox="0 0 24 24"><path d="M3 7a2 2 0 0 1 2-2h4l2 2h8a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2Z"/></svg>`,
@@ -5433,6 +5672,8 @@ function render() {
   else if(screen==='mywork') renderMyWork();
   queueUiIcons();
 }
+
+if (IS_VISUAL_PREVIEW) setTimeout(startVisualPreview, 0);
 
 // initApp() se llama dentro de onAuthStateChanged, solo cuando hay un usuario autenticado
 
