@@ -118,12 +118,12 @@ input,textarea,select{font-family:'Plus Jakarta Sans',sans-serif;outline:none;}
 .user-menu-btn{display:flex;align-items:center;gap:8px;padding:6px 12px;background:var(--card);border:1px solid var(--line2);border-radius:20px;cursor:pointer;transition:all .2s;}
 .user-menu-btn:hover{border-color:var(--primary-light);background:var(--card2);}
 .user-menu-avatar{width:26px;height:26px;border-radius:50%;object-fit:cover;}
-.user-menu-name{font-size:13px;font-weight:600;color:var(--text);}
+.user-menu-name{font-size:13px;font-weight:600;color:var(--text);display:inline-flex;align-items:center;gap:6px;}
 .dropdown-content { display:none; position:absolute; right:0; top:48px; background:var(--card); border:1px solid var(--line); border-radius:12px; min-width:200px; box-shadow:0 12px 24px rgba(0,0,0,0.5); z-index:999; padding:8px; flex-direction:column; gap:4px; }
 .dropdown-content.show { display:flex; }
-.dropdown-item { padding:10px 12px; border-radius:8px; font-size:13px; font-weight:600; color:var(--text); cursor:pointer; transition:all .2s; display:flex; align-items:center; justify-content:space-between; }
+.dropdown-item { padding:10px 12px; border-radius:8px; font-size:13px; font-weight:600; color:var(--text); cursor:pointer; transition:all .2s; display:flex; align-items:center; justify-content:flex-start; gap:10px; }
 .dropdown-item:hover { background:var(--card2); color:var(--primary-light); }
-.dd-badge { background:var(--red); color:#fff; font-size:10px; padding:2px 8px; border-radius:12px; font-weight:700; }
+.dd-badge { background:var(--red); color:#fff; font-size:10px; padding:2px 8px; border-radius:12px; font-weight:700; margin-left:auto; }
 
 /* SCREENS */
 .screen{display:none;flex:1;overflow-y:auto;}
@@ -376,7 +376,8 @@ input,textarea,select{font-family:'Plus Jakarta Sans',sans-serif;outline:none;}
 .mp-name{font-size:13px;font-weight:600;color:var(--text);}
 .mp-cat{font-size:11px;color:var(--muted);}
 .pagination{display:flex;justify-content:center;align-items:center;gap:8px;flex-wrap:wrap;margin-top:20px;}
-.page-btn{min-width:38px;height:38px;padding:0 12px;border-radius:10px;border:1px solid var(--line2);background:var(--card);color:var(--text);font-size:13px;font-weight:700;transition:all .2s;}
+.page-btn{min-width:38px;height:38px;padding:0 12px;border-radius:10px;border:1px solid var(--line2);background:var(--card);color:var(--text);font-size:13px;font-weight:700;transition:all .2s;display:inline-flex;align-items:center;justify-content:center;}
+.page-btn svg{width:16px;height:16px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;}
 .page-btn:hover{background:var(--card2);border-color:var(--primary-light);}
 .page-btn.active{background:var(--primary);border-color:transparent;color:#fff;}
 .page-btn:disabled{opacity:.45;cursor:not-allowed;}
@@ -484,6 +485,7 @@ input,textarea,select{font-family:'Plus Jakarta Sans',sans-serif;outline:none;}
 .idea-add-text{font-size:14px;font-weight:700;}
 .idea-card.compact{padding:18px;}
 .idea-card.compact .idea-title{margin-bottom:8px;}
+.idea-card.compact .idea-body{display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden;white-space:normal;margin-bottom:14px;}
 .idea-meta-row{display:flex;align-items:center;justify-content:space-between;gap:10px;font-size:11px;color:var(--muted);margin-top:auto;padding-top:10px;border-top:1px dashed var(--line2);}
 .idea-open-hint{font-size:11px;color:var(--primary-light);font-weight:700;}
 .idea-doc-shell{display:grid;grid-template-columns:minmax(0,1fr) 320px;gap:24px;}
@@ -492,8 +494,23 @@ input,textarea,select{font-family:'Plus Jakarta Sans',sans-serif;outline:none;}
 .idea-doc-side{padding:22px;align-self:start;position:sticky;top:104px;}
 .idea-doc-title-input{width:100%;background:transparent;border:none;border-bottom:1px solid var(--line2);padding:0 0 16px;font-size:32px;font-weight:800;color:var(--text);margin-bottom:20px;}
 .idea-doc-title-input:focus{outline:none;border-color:var(--primary-light);}
-.idea-doc-editor{width:100%;min-height:440px;background:var(--bg);border:1px solid var(--line2);border-radius:16px;padding:22px;font-size:15px;line-height:1.7;color:var(--text);resize:vertical;}
+.idea-rich-editor{border:1px solid var(--line2);border-radius:16px;background:var(--bg);overflow:hidden;}
+.idea-editor-toolbar{display:flex;align-items:center;gap:6px;flex-wrap:wrap;padding:10px;border-top:1px solid var(--line2);background:var(--card);}
+.idea-editor-toolbar select,.idea-editor-tool{height:34px;border:1px solid var(--line2);background:var(--bg);color:var(--text);border-radius:9px;font-size:12px;font-weight:750;}
+.idea-editor-toolbar select{padding:0 10px;}
+.idea-editor-tool{min-width:34px;padding:0 10px;display:inline-flex;align-items:center;justify-content:center;cursor:pointer;}
+.idea-editor-tool svg{width:16px;height:16px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;}
+.idea-editor-tool:hover{border-color:var(--primary-light);color:var(--primary-light);background:var(--primary-bg);}
+.idea-editor-sep{width:1px;height:22px;background:var(--line2);margin:0 3px;}
+.idea-doc-editor{width:100%;min-height:440px;background:var(--bg);border:0;border-radius:0;padding:22px;font-size:15px;line-height:1.7;color:var(--text);overflow:auto;}
 .idea-doc-editor:focus{outline:none;border-color:var(--primary-light);box-shadow:0 0 0 1px var(--primary-light);}
+.idea-doc-editor:empty:before{content:attr(data-placeholder);color:var(--muted);}
+.idea-doc-editor h2{font-size:24px;line-height:1.25;margin:18px 0 10px;color:var(--text);}
+.idea-doc-editor h3{font-size:18px;line-height:1.35;margin:16px 0 8px;color:var(--text);}
+.idea-doc-editor p{margin:0 0 12px;}
+.idea-doc-editor ul,.idea-doc-editor ol{padding-left:24px;margin:0 0 14px;}
+.idea-doc-editor blockquote{margin:14px 0;padding:10px 14px;border-left:3px solid var(--primary-light);background:var(--card);border-radius:10px;color:var(--soft);}
+.idea-doc-editor a{color:var(--primary-light);font-weight:700;}
 .idea-doc-preview{width:100%;border-radius:14px;border:1px solid var(--line2);margin-top:14px;background:var(--bg);}
 .idea-doc-actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:22px;}
 .idea-doc-meta{font-size:12px;color:var(--muted);margin-bottom:16px;}
@@ -599,6 +616,7 @@ input,textarea,select{font-family:'Plus Jakarta Sans',sans-serif;outline:none;}
 .chat-input { flex: 1; background: var(--card); border: 1px solid var(--line2); padding: 14px 20px; border-radius: 24px; color: var(--text); font-size: 14px; transition: all .2s; }
 .chat-input:focus { border-color: var(--primary-light); box-shadow: 0 0 0 2px var(--primary-bg); }
 .chat-send-btn { background: var(--primary); color: #fff; width: 44px; height: 44px; border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; border: none; transition: all .2s; font-size: 16px; }
+.chat-send-btn svg { width: 18px; height: 18px; stroke: currentColor; }
 .chat-send-btn:hover { background: var(--primary-hover); transform: scale(1.05) translateY(-2px); box-shadow: 0 4px 12px rgba(99,102,241,0.3); }
 
 /* â”€â”€ TOPBAR BADGE â”€â”€ */
@@ -637,6 +655,48 @@ input,textarea,select{font-family:'Plus Jakarta Sans',sans-serif;outline:none;}
 /* Estilos para las tarjetas de la cola de publicaciÃ³n */
 .pub-card { transition: all 0.2s ease; border: 1px solid var(--line2); }
 .pub-card:hover { border-color: var(--hover-color, var(--primary-light)) !important; transform: translateY(-2px); box-shadow: 0 8px 24px rgba(0,0,0,0.2); }  
+.publish-action-btn {
+  min-height:34px;
+  padding:0 14px;
+  border-radius:10px;
+  border:1px solid var(--line);
+  background:#fff;
+  color:var(--text);
+  font-size:12px;
+  font-weight:750;
+  cursor:pointer;
+  transition:all .18s ease;
+}
+.publish-action-btn:hover {
+  background:#f7f7f5;
+  border-color:#cfcfcf;
+  box-shadow:var(--shadow-sm);
+}
+.publish-action-btn.primary {
+  background:var(--primary);
+  border-color:#111;
+  color:#111;
+}
+.publish-action-btn.primary:hover {
+  background:var(--primary-hover);
+  border-color:#111;
+}
+.publish-action-btn.success {
+  background:var(--green);
+  border-color:var(--green);
+  color:#fff;
+}
+.publish-action-btn.success:hover {
+  background:#0f5f2a;
+  border-color:#0f5f2a;
+}
+.publish-action-btn.disabled {
+  background:#f1f1ee;
+  border-color:var(--line);
+  color:#6b7280;
+  cursor:not-allowed;
+  box-shadow:none;
+}
 
 /* --- ESTILO ESPECIAL PARA PROYECTOS PUBLICADOS (Glow Verde) --- */
 .project-card.is-published {
@@ -1170,8 +1230,8 @@ input,textarea,select{font-family:'Plus Jakarta Sans',sans-serif;outline:none;}
   justify-content: center;
 }
 .planner-check.checked {
-  background: #10b981;
-  border-color: #10b981;
+  background: var(--green);
+  border-color: var(--green);
 }
 .planner-check.checked::after {
   content: '';
@@ -1230,7 +1290,7 @@ input,textarea,select{font-family:'Plus Jakarta Sans',sans-serif;outline:none;}
 .planner-pill.priority-medium { background: #fff7ed; color: #ea580c; }
 .planner-pill.priority-low { background: #f1f5f9; color: #64748b; }
 .planner-pill.status-active { background: #e0f2fe; color: #0284c7; }
-.planner-pill.status-done { background: #dcfce7; color: #16a34a; }
+.planner-pill.status-done { background: var(--green-bg); color: var(--green); }
 .planner-pill.status-on-hold { background: #f3e8ff; color: #9333ea; }
 .planner-pill.scope-month { background: #f5f3ff; color: #7c3aed; }
 .planner-pill.scope-week { background: #eff6ff; color: #2563eb; }
@@ -1520,13 +1580,13 @@ input,textarea,select{font-family:'Plus Jakarta Sans',sans-serif;outline:none;}
   --primary-hover: #d6ff57;
   --primary-light: #d6ff57;
   --primary-bg: #eef8c8;
-  --accent: #8b5cf6;
-  --accent-light: #8b5cf6;
-  --green: #22c55e;
-  --green-bg: #dcfce7;
-  --orange: #f97316;
+  --accent: #6d28d9;
+  --accent-light: #7c3aed;
+  --green: #147a34;
+  --green-bg: #e6f7ea;
+  --orange: #b54708;
   --orange-bg: #fff1e8;
-  --red: #ef4444;
+  --red: #b42318;
   --shadow-sm: 0 2px 8px rgba(0,0,0,0.04);
   --shadow-md: 0 6px 18px rgba(0,0,0,0.06);
   --shadow-lg: 0 12px 28px rgba(0,0,0,0.08);
@@ -1732,6 +1792,17 @@ button, .tb-btn, .sb-btn, .page-btn, .view-btn, .nav-item, .cat-item, .user-menu
   border-color: #cde76b;
   box-shadow: 0 0 0 3px rgba(191,255,0,0.22);
 }
+.idea-rich-editor .idea-doc-editor {
+  border: 0;
+  border-radius: 0;
+  box-shadow: none;
+  background: var(--bg);
+  padding: 22px;
+}
+.idea-rich-editor .idea-doc-editor:focus {
+  border: 0;
+  box-shadow: none;
+}
 .view-btn {
   width: 48px;
   height: 48px;
@@ -1745,6 +1816,21 @@ button, .tb-btn, .sb-btn, .page-btn, .view-btn, .nav-item, .cat-item, .user-menu
   background: var(--primary-bg);
   color: var(--text);
   border-color: rgba(191,255,0,.45);
+}
+.page-btn.active {
+  background: var(--primary);
+  color: #111;
+  border-color: #111;
+}
+.page-btn.active:hover {
+  background: var(--primary-hover);
+  color: #111;
+}
+.step-btn.start:hover,
+.v-switch-btn:hover {
+  background: var(--primary);
+  color: #111;
+  border-color: #111;
 }
 
 .proj-grid { gap: 20px; }
@@ -1782,16 +1868,16 @@ button, .tb-btn, .sb-btn, .page-btn, .view-btn, .nav-item, .cat-item, .user-menu
 .pc-schedule-date, .cc-text, .todo-text, .link-value { color: var(--text); }
 .pc-status { font-size: 13px; }
 .s-active { color: #3b82f6; }
-.s-done { color: #22c55e; }
-.s-waiting { color: #8b5cf6; }
-.s-publish { color: #8b5cf6; }
+.s-done { color: var(--green); }
+.s-waiting { color: var(--accent); }
+.s-publish { color: var(--accent); }
 .s-paused { color: var(--soft); }
-.badge-publish { background: #ede9fe; color: #8b5cf6; }
-.badge-priority { background: #fee2e2; color: #ef4444; }
+.badge-publish { background: #ede9fe; color: var(--accent); }
+.badge-priority { background: #fee2e2; color: var(--red); }
 .step-pip { background: #e9e9e9; }
 .step-pip.active { background: #3b82f6; }
-.step-pip.done { background: #22c55e; }
-.step-pip.waiting { background: #8b5cf6; }
+.step-pip.done { background: var(--green); }
+.step-pip.waiting { background: var(--accent); }
 
 .profile-header, .profile-col {
   border-radius: 20px;
@@ -1858,22 +1944,36 @@ button, .tb-btn, .sb-btn, .page-btn, .view-btn, .nav-item, .cat-item, .user-menu
   grid-template-columns: repeat(4, minmax(0, 1fr));
   gap: 20px;
   margin-bottom: 20px;
+  align-items:start;
 }
 .profile-kpi-card {
   background: #fff;
   border: 1px solid var(--line);
   border-radius: 20px;
-  padding: 24px;
   box-shadow: var(--shadow-sm);
+  overflow:hidden;
+}
+.profile-kpi-card.open {
+  border-color:#dfe5f0;
+  box-shadow:0 18px 44px rgba(28,39,70,.06);
+}
+.profile-kpi-trigger {
+  width:100%;
+  padding:24px;
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: 18px;
+  background:transparent;
+  color:var(--text);
+  text-align:left;
 }
+.profile-kpi-trigger:hover { background:#fafaf8; }
 .profile-kpi-main {
   display: flex;
   align-items: center;
   gap: 16px;
+  min-width:0;
 }
 .profile-kpi-icon {
   width: 52px;
@@ -1893,7 +1993,7 @@ button, .tb-btn, .sb-btn, .page-btn, .view-btn, .nav-item, .cat-item, .user-menu
 .profile-kpi-icon.projects { background: #eef8c8; }
 .profile-kpi-icon.completed { background: #dbeafe; color: #2563eb; }
 .profile-kpi-icon.tasks { background: #ede9fe; color: #7c3aed; }
-.profile-kpi-icon.deadlines { background: #ffedd5; color: #f97316; }
+.profile-kpi-icon.deadlines { background: #ffedd5; color: var(--orange); }
 .profile-kpi-value {
   font-size: 24px;
   line-height: 1;
@@ -1919,7 +2019,57 @@ button, .tb-btn, .sb-btn, .page-btn, .view-btn, .nav-item, .cat-item, .user-menu
 .profile-kpi-arrow svg {
   width: 16px;
   height: 16px;
+  transition:transform .18s ease;
 }
+.profile-kpi-card.open .profile-kpi-arrow svg { transform:rotate(90deg); }
+.profile-kpi-body {
+  display:none;
+  border-top:1px solid var(--line);
+  padding:14px 16px 16px;
+  background:#fbfcff;
+}
+.profile-kpi-card.open .profile-kpi-body { display:block; }
+.profile-kpi-list { display:flex; flex-direction:column; gap:10px; }
+.profile-kpi-body .profile-project-row {
+  grid-template-columns:42px minmax(0,1fr) 24px;
+  gap:10px;
+}
+.profile-kpi-body .profile-project-thumb {
+  width:42px;
+  height:42px;
+}
+.profile-kpi-body .content-type-tag,
+.profile-kpi-body .profile-published-pill {
+  display:none;
+}
+.profile-kpi-empty { color:var(--soft); font-size:13px; padding:10px 2px; }
+.profile-kpi-section-label {
+  font-size:11px;
+  font-weight:800;
+  color:#687194;
+  text-transform:uppercase;
+  letter-spacing:.04em;
+  margin:10px 0 8px;
+}
+.profile-kpi-section-label:first-child { margin-top:0; }
+.profile-task-row {
+  display:grid;
+  grid-template-columns:auto minmax(0,1fr) auto;
+  gap:10px;
+  align-items:center;
+  padding:10px 0;
+  border-bottom:1px solid var(--line);
+}
+.profile-task-row:last-child { border-bottom:none; }
+.profile-task-row.done .todo-text { text-decoration:line-through; color:var(--soft); }
+.profile-task-meta { display:block; color:var(--soft); font-size:11px; margin-top:3px; }
+.profile-inline-add {
+  display:grid;
+  grid-template-columns:minmax(0,1fr) auto;
+  gap:8px;
+  margin-bottom:10px;
+}
+.profile-inline-add .todo-input { min-height:40px; }
 .profile-dashboard-grid {
   display: grid;
   grid-template-columns: minmax(0, 1fr) minmax(0, 1.05fr) minmax(320px, .95fr);
@@ -2049,8 +2199,8 @@ button, .tb-btn, .sb-btn, .page-btn, .view-btn, .nav-item, .cat-item, .user-menu
 .deadline-card {
   background: #fff;
 }
-.deadline-kicker.queue { color: #8b5cf6; }
-.deadline-kicker.target { color: #f97316; }
+.deadline-kicker.queue { color: var(--accent); }
+.deadline-kicker.target { color: var(--orange); }
 .deadline-date { color: var(--text); }
 
 .ideas-grid { grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 20px; }
@@ -2171,9 +2321,9 @@ button, .tb-btn, .sb-btn, .page-btn, .view-btn, .nav-item, .cat-item, .user-menu
 /* Projects screen refinements */
 .projects-toolbar {
   display: grid !important;
-  grid-template-columns: minmax(320px, 1.5fr) repeat(3, minmax(160px, 0.7fr)) auto;
+  grid-template-columns: minmax(280px, 1.5fr) repeat(4, minmax(132px, 0.68fr)) auto;
   align-items: center;
-  gap: 16px;
+  gap: 12px;
 }
 .projects-search {
   padding-left: 40px !important;
@@ -2182,11 +2332,18 @@ button, .tb-btn, .sb-btn, .page-btn, .view-btn, .nav-item, .cat-item, .user-menu
   background-position: 14px center;
 }
 .projects-toolbar > span { display: none; }
+.projects-toolbar .filter-select {
+  width: 100%;
+  min-width: 0;
+}
 .projects-toolbar #btn-view-medium { display: none !important; }
 .projects-view-switch {
   display: flex;
   gap: 6px;
   justify-content: flex-end;
+  align-items: center;
+  min-width: 104px;
+  padding-left: 12px !important;
 }
 #screen-projects .project-card {
   min-height: 232px;
@@ -2314,7 +2471,7 @@ button, .tb-btn, .sb-btn, .page-btn, .view-btn, .nav-item, .cat-item, .user-menu
 }
 #screen-projects .s-active { background: #dbeafe; color: #2563eb; }
 #screen-projects .s-done { background: #dcfce7; color: #2f855a; }
-#screen-projects .s-waiting { background: #ffedd5; color: #f97316; }
+#screen-projects .s-waiting { background: #ffedd5; color: var(--orange); }
 #screen-projects .s-publish { background: #ede9fe; color: #7c3aed; }
 #screen-projects .s-paused { background: #f3f4f6; color: #64748b; }
 #screen-projects .pc-drag,
@@ -2495,6 +2652,13 @@ button, .tb-btn, .sb-btn, .page-btn, .view-btn, .nav-item, .cat-item, .user-menu
   font-weight: 700;
   color: #5c7f00;
 }
+.mw-project-thumb svg {
+  width:16px;
+  height:16px;
+  stroke:currentColor;
+  fill:none;
+  stroke-width:2;
+}
 .mw-project-name { font-size: 14px; font-weight: 600; color: var(--text); }
 .mw-project-meta { font-size: 13px; color: var(--soft); margin-top: 2px; }
 .mw-ellipsis-btn {
@@ -2608,12 +2772,745 @@ button, .tb-btn, .sb-btn, .page-btn, .view-btn, .nav-item, .cat-item, .user-menu
 }
 
 @media (max-width: 1180px) {
-  .projects-toolbar { grid-template-columns: 1fr 1fr; }
+  .projects-toolbar { grid-template-columns: minmax(240px, 1fr) 1fr 1fr; }
+  .projects-search { grid-column: span 3; }
+  .projects-view-switch { justify-content: flex-start; padding-left: 0 !important; border-left: 0 !important; }
   .mw-shell-grid { grid-template-columns: 1fr; }
   .mw-toolbar { grid-template-columns: 1fr 1fr; }
 }
 
+/* My Work project-style pass */
+#mywork-content {
+  max-width: 1240px !important;
+}
+#screen-mywork {
+  background:#f7f8fb;
+}
+#screen-mywork .screen-pad {
+  padding-bottom:42px;
+}
+#screen-mywork .planner-shell {
+  background:#f7f8fb;
+  border:0;
+  border-radius:0;
+  box-shadow:none;
+}
+#screen-mywork .planner-topbar {
+  background:#fbfcff;
+  border:1px solid #dfe5f0;
+  border-radius:18px;
+  padding:18px;
+  box-shadow:0 18px 44px rgba(28,39,70,.06);
+}
+#screen-mywork .planner-title-row {
+  align-items:flex-start;
+  margin-bottom:16px;
+}
+#screen-mywork .planner-title {
+  font-size:28px;
+  line-height:1.08;
+  letter-spacing:0;
+  font-weight:850;
+  color:#09103d;
+}
+#screen-mywork .planner-subtitle {
+  color:#687194;
+  margin-top:5px;
+}
+#screen-mywork .planner-stats {
+  display:grid;
+  grid-template-columns:repeat(3,minmax(86px,1fr));
+  gap:8px;
+  background:transparent;
+  border:0;
+  box-shadow:none;
+  padding:0;
+}
+#screen-mywork .planner-stat {
+  min-width:0;
+  min-height:58px;
+  border-radius:14px;
+  border-color:#e6eaf2;
+  background:#f7f9fd;
+  padding:10px 12px;
+  box-shadow:none;
+}
+#screen-mywork .planner-stat-label,
+#screen-mywork .planner-context-label {
+  color:#687194;
+  font-size:11px;
+  letter-spacing:0;
+}
+#screen-mywork .planner-stat-value {
+  color:#0d133d;
+  font-size:20px;
+}
+#screen-mywork .planner-toolbar {
+  display:grid;
+  grid-template-columns:auto minmax(0,1fr);
+  gap:14px;
+  align-items:center;
+  margin-top:0;
+}
+#screen-mywork .planner-view-switch {
+  display:flex;
+  gap:8px;
+}
+#screen-mywork .planner-view-btn {
+  min-width:82px;
+  min-height:38px;
+  height:38px;
+  border-radius:11px;
+  border-color:#dfe5f0;
+  background:#fbfcff;
+  color:#27305c;
+  font-size:13px;
+  font-weight:800;
+  box-shadow:none;
+}
+#screen-mywork .planner-view-btn.active {
+  background:#eeebff;
+  color:#281dff;
+  border-color:#d8d3ff;
+  box-shadow:none;
+}
+#screen-mywork .planner-toolbar-note {
+  color:#687194;
+  max-width:none;
+}
+#screen-mywork .planner-context-bar {
+  display:grid;
+  grid-template-columns:minmax(0,1fr) auto;
+  gap:14px;
+  align-items:center;
+  margin-top:14px;
+}
+#screen-mywork .planner-context-nav {
+  display:grid;
+  grid-template-columns:40px minmax(0,1fr) 40px;
+  gap:10px;
+  align-items:center;
+}
+#screen-mywork .planner-context-pills {
+  display:grid;
+  grid-template-columns:repeat(3,minmax(0,1fr));
+  gap:8px;
+}
+#screen-mywork .planner-context-pill,
+#screen-mywork .planner-nav-btn,
+#screen-mywork .planner-secondary-btn {
+  background:#fbfcff;
+  border-color:#dfe5f0;
+  color:#0d133d;
+  border-radius:12px;
+  box-shadow:none;
+}
+#screen-mywork .planner-context-pill {
+  min-width:0;
+  padding:10px 12px;
+}
+#screen-mywork .planner-context-value {
+  color:#0d133d;
+  font-size:13px;
+  overflow:hidden;
+  text-overflow:ellipsis;
+  white-space:nowrap;
+}
+#screen-mywork .planner-board {
+  padding:18px 0 0;
+}
+#screen-mywork .mw-shell-grid {
+  grid-template-columns:minmax(0,1fr) 318px;
+  gap:18px;
+  margin-top:0;
+  align-items:start;
+}
+#screen-mywork .mw-main-card,
+#screen-mywork .mw-side-card,
+#screen-mywork .planner-secondary .work-section {
+  background:#fbfcff;
+  border:1px solid #dfe5f0;
+  border-radius:18px;
+  box-shadow:0 18px 44px rgba(28,39,70,.06);
+}
+#screen-mywork .mw-main-card {
+  padding:18px;
+  min-width:0;
+}
+#screen-mywork .mw-side-card {
+  padding:18px;
+}
+#screen-mywork .mw-toolbar {
+  grid-template-columns:minmax(220px,1.35fr) repeat(4,minmax(132px,.75fr));
+  gap:10px;
+  margin-bottom:14px;
+}
+#screen-mywork .mw-toolbar .search-input,
+#screen-mywork .mw-toolbar .filter-select {
+  min-height:40px;
+  border-radius:10px;
+  border-color:#dfe5f0;
+  font-size:13px;
+}
+#screen-mywork .mw-table-wrap,
+#screen-mywork .planner-table-wrap {
+  border:1px solid #dfe5f0;
+  border-radius:12px;
+  overflow:auto;
+  background:#fbfcff;
+}
+#screen-mywork .mw-table,
+#screen-mywork .planner-table {
+  min-width:760px;
+}
+#screen-mywork .mw-table th,
+#screen-mywork .planner-table thead th {
+  background:#f7f9fd;
+  color:#687194;
+  border-color:#e6eaf2;
+  font-size:12px;
+}
+#screen-mywork .mw-table td,
+#screen-mywork .planner-table tbody td {
+  background:#fbfcff;
+  border-color:#e6eaf2;
+}
+#screen-mywork .mw-table tr:hover td,
+#screen-mywork .planner-table tbody tr:hover td {
+  background:#f7f9fd;
+}
+#screen-mywork .mw-task-title,
+#screen-mywork .planner-item-name,
+#screen-mywork .mw-project-name {
+  color:#0d133d;
+}
+#screen-mywork .mw-task-sub,
+#screen-mywork .planner-item-note,
+#screen-mywork .mw-project-meta {
+  color:#687194;
+}
+#screen-mywork .mw-footer {
+  padding-top:12px;
+}
+#screen-mywork .mw-footnote {
+  color:#687194;
+}
+#screen-mywork .mw-side-head {
+  margin-bottom:16px;
+}
+#screen-mywork .mw-side-title {
+  color:#0b123f;
+  font-weight:850;
+}
+#screen-mywork .mw-side-select {
+  background:#f7f9fd;
+  border-color:#dfe5f0;
+  color:#566077;
+}
+#screen-mywork .mw-donut-layout {
+  grid-template-columns:118px minmax(0,1fr);
+  gap:14px;
+}
+#screen-mywork .mw-donut {
+  width:118px;
+  height:118px;
+}
+#screen-mywork .mw-donut::after {
+  inset:20px;
+  background:#fbfcff;
+}
+#screen-mywork .mw-donut-value {
+  color:#0b123f;
+}
+#screen-mywork .mw-donut-label,
+#screen-mywork .mw-legend-row {
+  color:#687194;
+}
+#screen-mywork .mw-legend-row strong {
+  color:#0d133d;
+}
+#screen-mywork .planner-group {
+  margin:0 0 14px;
+  border-color:#dfe5f0;
+  border-radius:16px;
+  background:#fbfcff;
+  overflow:hidden;
+}
+#screen-mywork .planner-group:last-child {
+  margin-bottom:0;
+}
+#screen-mywork .planner-group-header {
+  background:#fbfcff;
+  border-color:#e6eaf2;
+  padding:14px 16px;
+}
+#screen-mywork .planner-group-title {
+  color:#0b123f;
+  font-size:16px;
+  font-weight:850;
+}
+#screen-mywork .planner-group-meta {
+  background:#eef1f5;
+  border:0;
+  color:#566077;
+}
+#screen-mywork .planner-addbar {
+  background:#f7f9fd;
+  border-color:#e6eaf2;
+  border-radius:0;
+}
+#screen-mywork .planner-add-input,
+#screen-mywork .planner-add-select {
+  border-color:#dfe5f0;
+  border-radius:10px;
+}
+#screen-mywork .planner-add-btn {
+  background:#281dff;
+  border:1px solid #281dff;
+  color:#fbfcff;
+  border-radius:10px;
+}
+#screen-mywork .planner-secondary {
+  margin-top:18px;
+}
+#screen-mywork .work-section-header {
+  background:#fbfcff;
+  border-color:#e6eaf2;
+}
+#screen-mywork .mywork-assigned-strip {
+  padding:14px 16px !important;
+}
+#screen-mywork .assigned-proj-card {
+  background:#fbfcff;
+  border:1px solid #dfe5f0;
+  border-left-width:3px;
+  border-radius:12px;
+}
+#screen-mywork .assigned-proj-card:hover {
+  background:#f7f9fd;
+  transform:translateY(-1px);
+}
 
+@media (max-width: 1180px) {
+  #screen-mywork .mw-shell-grid,
+  #screen-mywork .planner-context-bar {
+    grid-template-columns:1fr;
+  }
+  #screen-mywork .mw-toolbar {
+    grid-template-columns:1fr 1fr;
+  }
+}
+@media (max-width: 760px) {
+  #screen-mywork .planner-title-row,
+  #screen-mywork .planner-toolbar {
+    display:flex;
+    flex-direction:column;
+    align-items:stretch;
+  }
+  #screen-mywork .planner-stats,
+  #screen-mywork .planner-context-pills,
+  #screen-mywork .mw-toolbar {
+    grid-template-columns:1fr;
+  }
+  #screen-mywork .planner-context-nav {
+    grid-template-columns:40px minmax(0,1fr) 40px;
+  }
+  #screen-mywork .mw-donut-layout {
+    grid-template-columns:1fr;
+    justify-items:center;
+  }
+}
+
+
+/* PROJECT DETAIL WORKSPACE */
+.detail-layout { background:#f7f8fb; }
+.detail-left { padding:24px 20px 42px; background:#f7f8fb; }
+.detail-right {
+  width:348px;
+  min-width:348px;
+  border-left:1px solid #e4e8f0;
+  background:#f7f8fb;
+  padding:24px 16px;
+  gap:18px;
+}
+.project-workspace { display:flex; flex-direction:column; gap:18px; max-width:920px; margin:0 auto; }
+.project-hero {
+  display:grid;
+  grid-template-columns:118px minmax(0,1fr);
+  gap:18px;
+  background:#fbfcff;
+  border:1px solid #dfe5f0;
+  border-radius:18px;
+  padding:18px;
+  box-shadow:0 18px 44px rgba(28,39,70,.06);
+}
+.project-thumb-card {
+  width:118px;
+  height:104px;
+  border-radius:12px;
+  border:1px solid #dfe5f0;
+  background:#eef1f7;
+  overflow:hidden;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  cursor:pointer;
+}
+.project-thumb-card:hover { border-color:#5e47ff; }
+.project-thumb-card .detail-thumb { width:100%; height:100%; object-fit:cover; }
+.project-thumb-empty { display:flex; flex-direction:column; gap:7px; align-items:center; color:#717b96; font-size:12px; font-weight:700; text-align:center; }
+.project-hero-main { min-width:0; display:flex; flex-direction:column; gap:14px; }
+.project-title-row { display:flex; align-items:flex-start; justify-content:space-between; gap:16px; }
+.project-title-row h2 { font-size:28px; line-height:1.08; font-weight:850; color:#09103d; margin:0; letter-spacing:0; }
+.project-subtitle { font-size:14px; color:#687194; margin-top:5px; }
+.project-title-actions { display:flex; align-items:center; gap:8px; flex-shrink:0; }
+.project-status-pill {
+  display:inline-flex;
+  align-items:center;
+  gap:7px;
+  border-radius:999px;
+  padding:8px 12px;
+  font-size:12px;
+  font-weight:800;
+  background:#dff7df;
+  color:#11612a;
+  white-space:nowrap;
+}
+.project-status-pill svg { width:15px; height:15px; }
+.project-meta-grid {
+  display:grid;
+  grid-template-columns:repeat(4,minmax(0,1fr));
+  border:1px solid #e6eaf2;
+  border-radius:14px;
+  overflow:hidden;
+  background:#f7f9fd;
+}
+.project-meta-item { min-height:58px; padding:12px 14px; border-right:1px solid #e6eaf2; }
+.project-meta-item:last-child { border-right:none; }
+.project-meta-label { display:flex; align-items:center; gap:7px; font-size:12px; color:#687194; margin-bottom:4px; }
+.project-meta-label svg { width:15px; height:15px; color:#5260a8; }
+.project-meta-value { font-size:13px; font-weight:800; color:#0d133d; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+.project-meta-control {
+  width:100%;
+  min-height:28px;
+  border:0;
+  background:transparent;
+  color:#0d133d;
+  font-size:13px;
+  font-weight:800;
+  padding:0;
+}
+.project-meta-control:focus { outline:2px solid #d8d3ff; outline-offset:2px; border-radius:7px; }
+.project-meta-value.is-assignees { overflow:visible; display:flex; align-items:center; min-height:28px; }
+.project-meta-assignee-row { display:flex; align-items:center; justify-content:space-between; gap:8px; min-width:0; }
+.project-meta-value.is-assignees .avatar-group, .project-meta-value.is-assignees .avatar-empty { margin-top:0; }
+.project-meta-value.is-assignees .avatar-sm, .project-meta-value.is-assignees .avatar-extra, .project-meta-value.is-assignees .avatar-empty { width:26px; height:26px; border-color:#fbfcff; }
+.project-meta-manage {
+  min-height:26px;
+  border-radius:8px;
+  border:1px solid #dfe5f0;
+  background:#fbfcff;
+  color:#0d133d;
+  padding:0 9px;
+  font-size:11px;
+  font-weight:800;
+}
+.project-meta-manage:hover { background:#f1f4fb; border-color:#cfd6e4; }
+.detail-section-card {
+  background:#fbfcff;
+  border:1px solid #dfe5f0;
+  border-radius:18px;
+  padding:18px;
+  box-shadow:0 18px 44px rgba(28,39,70,.06);
+}
+.detail-section-head { display:flex; align-items:center; justify-content:space-between; gap:14px; margin-bottom:14px; }
+.detail-section-title { display:flex; align-items:center; gap:10px; font-size:16px; font-weight:850; color:#0b123f; }
+.detail-section-title svg { width:21px; height:21px; color:#281dff; }
+.detail-section-note { font-size:12px; color:#687194; margin-top:3px; }
+.detail-section-action {
+  min-height:34px;
+  border-radius:10px;
+  border:1px solid #e4e8f0;
+  background:#f3f2ff;
+  color:#2111c8;
+  padding:0 12px;
+  font-size:12px;
+  font-weight:800;
+  display:inline-flex;
+  align-items:center;
+  gap:7px;
+}
+.detail-section-action:hover { background:#ece9ff; border-color:#d3ceff; }
+.asset-list { border:1px solid #dfe5f0; border-radius:12px; overflow:hidden; background:#fbfcff; }
+.asset-row {
+  display:grid;
+  grid-template-columns:minmax(180px,.8fr) minmax(0,1fr) 32px;
+  gap:14px;
+  align-items:center;
+  min-height:48px;
+  padding:10px 12px;
+  border-bottom:1px solid #e6eaf2;
+}
+.asset-row:last-child { border-bottom:none; }
+.asset-kind { display:flex; align-items:center; gap:9px; font-size:13px; font-weight:800; color:#121944; min-width:0; }
+.asset-kind svg { width:18px; height:18px; color:#6049ff; flex-shrink:0; }
+.asset-value { min-width:0; font-size:13px; color:#3041a6; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+.asset-value a { color:#173ed6; text-decoration:none; }
+.asset-value a:hover { text-decoration:underline; }
+.asset-empty { color:#7c849b; font-style:normal; }
+.asset-action {
+  width:30px;
+  height:30px;
+  border-radius:8px;
+  border:1px solid transparent;
+  background:transparent;
+  color:#3041a6;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+}
+.asset-action:hover { border-color:#dfe5f0; background:#f1f4fb; }
+.asset-action svg { width:16px; height:16px; }
+.project-step-list { display:flex; flex-direction:column; gap:8px; }
+.project-step-card {
+  display:grid;
+  grid-template-columns:38px minmax(0,1fr) auto;
+  gap:12px;
+  align-items:center;
+  min-height:58px;
+  border:1px solid #dfe5f0;
+  border-radius:12px;
+  background:#fbfcff;
+  padding:9px 12px;
+}
+.project-step-card.step-active { border-color:#cbc5ff; background:#f6f5ff; }
+.project-step-card.step-done { background:#f7fff7; }
+.project-step-icon {
+  width:34px;
+  height:34px;
+  border-radius:10px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  background:#eeebff;
+  color:#4e36ff;
+}
+.project-step-card.step-done .project-step-icon { background:#dff7df; color:#199543; }
+.project-step-main { min-width:0; }
+.project-step-name { font-size:14px; font-weight:850; color:#111944; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+.project-step-note { margin-top:2px; font-size:12px; color:#687194; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+.project-step-actions { display:flex; align-items:center; gap:7px; flex-wrap:wrap; justify-content:flex-end; }
+.project-step-status {
+  min-width:84px;
+  text-align:center;
+  border-radius:999px;
+  padding:7px 11px;
+  font-size:11px;
+  font-weight:850;
+  background:#eef1f5;
+  color:#566077;
+}
+.project-step-card.step-active .project-step-status { background:#ebe8ff; color:#2615db; }
+.project-step-card.step-done .project-step-status { background:#dff7df; color:#147a34; min-width:34px; }
+.project-step-card.step-done .project-step-status svg { width:16px; height:16px; }
+.project-step-actions .step-btn { min-height:30px; border-radius:9px; padding:0 9px; }
+.link-inline-add { display:grid; grid-template-columns:170px minmax(0,1fr) auto; gap:8px; margin-top:12px; }
+.link-inline-add.final-render-add { grid-template-columns:minmax(0,1fr) max-content; }
+.link-inline-add select, .link-inline-add input {
+  min-height:38px;
+  border-radius:10px;
+  border:1px solid #dfe5f0;
+  background:#fbfcff;
+  padding:0 11px;
+  font-size:13px;
+  color:#121944;
+}
+.link-inline-add button { min-height:38px; border-radius:10px; border:1px solid #281dff; background:#281dff; color:#fbfcff; font-weight:800; padding:0 13px; }
+.link-inline-add.final-render-add button { white-space:nowrap; }
+.detail-right .detail-section-card { box-shadow:0 18px 44px rgba(28,39,70,.06); }
+.cp-header {
+  padding:0;
+  margin-bottom:16px;
+  border-bottom:none;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+}
+.cp-title { display:flex; align-items:center; gap:9px; font-size:16px; font-weight:850; color:#0b123f; }
+.cp-title svg { width:20px; height:20px; color:#281dff; }
+.cp-count { min-width:28px; height:24px; border-radius:999px; background:#eef1ff; color:#281dff; display:flex; align-items:center; justify-content:center; font-size:12px; font-weight:850; }
+.cp-list { flex:0 1 auto; max-height:316px; padding:0; gap:14px; margin-bottom:14px; }
+.cp-input { padding:14px 0 0; border-top:1px solid #e4e8f0; background:transparent; }
+.cp-ta-wrap { background:#fbfcff; border:1px solid #dfe5f0; border-radius:12px; align-items:center; }
+.cp-ta { min-height:42px; font-size:13px; }
+.cp-file-lbl { color:#5e47ff; }
+.comment-card { border:0; box-shadow:none; background:transparent; padding:0 0 2px 0; border-radius:0; }
+.cc-top { gap:7px; }
+.cc-author-img { width:30px; height:30px; }
+.cc-author-name { font-size:13px; color:#111944; }
+.cc-ver { background:transparent; color:#687194; padding:0; }
+.cc-text { font-size:13px; line-height:1.42; color:#2c335e; padding-left:37px; }
+.cc-date { padding-left:37px; font-size:11px; color:#8a91a6; }
+.project-social-card { display:flex; flex-direction:column; gap:13px; }
+.social-main-card { gap:16px; }
+.social-workspace-grid {
+  display:flex;
+  flex-direction:column;
+  gap:18px;
+}
+.social-thumbnail-panel {
+  width:100%;
+}
+.thumbnail-source-layout {
+  display:grid;
+  grid-template-columns:minmax(0,1fr) 168px;
+  gap:14px;
+  align-items:stretch;
+}
+.thumbnail-source-main { min-width:0; }
+.thumbnail-preview-card {
+  min-height:102px;
+  border:1px solid #dfe5f0;
+  background:#fbfcff;
+  border-radius:12px;
+  overflow:hidden;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  color:#697294;
+  text-decoration:none;
+}
+.thumbnail-preview-card img {
+  width:100%;
+  height:100%;
+  min-height:102px;
+  object-fit:cover;
+  display:block;
+}
+.thumbnail-preview-fallback {
+  display:none;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  gap:7px;
+  padding:12px;
+  text-align:center;
+  font-size:12px;
+  font-weight:750;
+}
+.thumbnail-preview-card.is-empty .thumbnail-preview-fallback,
+.thumbnail-preview-card.is-broken .thumbnail-preview-fallback {
+  display:flex;
+}
+.thumbnail-preview-fallback svg {
+  width:20px;
+  height:20px;
+  color:#281dff;
+}
+.social-link-row { display:grid; grid-template-columns:minmax(0,1fr) auto auto; gap:8px; margin-top:10px; }
+.social-link-row input, .social-caption-input {
+  width:100%;
+  border:1px solid #dfe5f0;
+  background:#fbfcff;
+  color:#111944;
+  border-radius:10px;
+  font-size:13px;
+}
+.social-link-row input { min-height:38px; padding:0 11px; }
+.social-link-row input:focus, .social-caption-input:focus { outline:2px solid #d8d3ff; outline-offset:1px; }
+.social-mini-btn {
+  min-height:38px;
+  border-radius:10px;
+  border:1px solid #dfe5f0;
+  background:#f3f2ff;
+  color:#2111c8;
+  padding:0 12px;
+  font-size:12px;
+  font-weight:850;
+}
+.social-mini-btn:hover { background:#ece9ff; border-color:#d3ceff; }
+.social-mini-btn.secondary { background:#fbfcff; color:#27305c; }
+.social-mini-btn.secondary:hover { background:#f1f4fb; }
+.caption-tabs { display:flex; gap:6px; }
+.caption-tab { flex:1; min-height:28px; border-radius:9px; background:#eef1f7; color:#586178; border:1px solid transparent; font-size:11px; font-weight:800; }
+.caption-tab.active { background:#eeebff; color:#281dff; border-color:#d8d3ff; }
+.caption-box {
+  border:1px solid #dfe5f0;
+  border-radius:12px;
+  padding:12px;
+  min-height:86px;
+  font-size:13px;
+  line-height:1.45;
+  color:#2c335e;
+  background:#fbfcff;
+}
+.caption-editor-list { display:flex; flex-direction:column; gap:12px; }
+.caption-editor {
+  border:1px solid #dfe5f0;
+  border-radius:13px;
+  background:#fbfcff;
+  padding:12px;
+}
+.caption-editor-head { display:flex; align-items:center; justify-content:space-between; gap:10px; margin-bottom:8px; }
+.caption-editor-title { font-size:13px; font-weight:850; color:#0b123f; }
+.caption-saved-list { display:flex; flex-direction:column; gap:8px; margin-bottom:10px; }
+.caption-card {
+  border:1px solid #e4e8f0;
+  border-radius:12px;
+  background:#f7f9fd;
+  padding:10px;
+}
+.caption-card-text {
+  color:#20284f;
+  font-size:13px;
+  line-height:1.45;
+  white-space:pre-wrap;
+  word-break:break-word;
+}
+.caption-card-actions { display:flex; justify-content:flex-end; gap:7px; margin-top:9px; }
+.caption-empty {
+  border:1px dashed #dfe5f0;
+  border-radius:12px;
+  color:#7c849b;
+  background:#f7f9fd;
+  padding:10px;
+  font-size:12px;
+  margin-bottom:10px;
+}
+.social-caption-input { min-height:86px; padding:10px 11px; resize:vertical; line-height:1.45; }
+.caption-editor-actions { display:flex; justify-content:flex-end; gap:8px; margin-top:8px; }
+.publish-ready-note { display:flex; gap:10px; padding:13px; border-radius:12px; background:#eef1ff; color:#18205a; font-size:12px; line-height:1.35; }
+.publish-ready-note svg { width:18px; height:18px; color:#281dff; flex-shrink:0; }
+.publish-ready-note strong { display:block; font-size:13px; margin-bottom:2px; color:#0b123f; }
+.detail-control-grid { display:grid; grid-template-columns:1fr; gap:12px; }
+.detail-control-grid .field-select { width:100%; }
+.project-workspace .versions-list { max-height:none; }
+.project-detail-grid { display:block; }
+.detail-stack { display:flex; flex-direction:column; gap:18px; }
+.detail-side-stack { display:none; }
+@media (max-width:1180px) {
+  .detail-layout { flex-direction:column; }
+  .detail-right { width:auto; min-width:0; border-left:none; border-top:1px solid #e4e8f0; display:grid; grid-template-columns:1fr 1fr; align-items:start; }
+}
+@media (max-width:860px) {
+  .project-hero { grid-template-columns:1fr; }
+  .project-thumb-card { width:100%; height:auto; aspect-ratio:16/9; }
+  .project-title-row { flex-direction:column; }
+  .project-meta-grid { grid-template-columns:repeat(2,minmax(0,1fr)); }
+  .project-meta-item:nth-child(2) { border-right:none; }
+  .project-meta-item:nth-child(1), .project-meta-item:nth-child(2) { border-bottom:1px solid #e6eaf2; }
+  .detail-right { grid-template-columns:1fr; }
+  .link-inline-add { grid-template-columns:1fr; }
+  .social-link-row { grid-template-columns:1fr; }
+  .thumbnail-source-layout { grid-template-columns:1fr; }
+}
+@media (max-width:620px) {
+  .detail-left { padding:16px; }
+  .project-meta-grid, .asset-row, .project-step-card { grid-template-columns:1fr; }
+  .project-meta-item { border-right:none; border-bottom:1px solid #e6eaf2; }
+  .project-meta-item:last-child { border-bottom:none; }
+  .project-step-actions { justify-content:flex-start; }
+}
 </style>
 </head>
 <body>
@@ -2679,8 +3576,8 @@ button, .tb-btn, .sb-btn, .page-btn, .view-btn, .nav-item, .cat-item, .user-menu
 
   <div class="screen active" id="screen-projects">
     <div class="screen-pad">
-     <div class="filter-bar projects-toolbar" style="display:flex; align-items:center; gap:12px; flex-wrap:wrap;">
-        <span style="font-size:18px; color:var(--muted)">ðŸ”</span>
+     <div class="filter-bar projects-toolbar">
+        <span class="ui-inline-icon lg" style="color:var(--muted)" aria-hidden="true"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg></span>
         <input type="text" id="search-proj" class="search-input projects-search" style="flex:1; min-width:260px;" placeholder="Search projects..." onkeyup="renderProjects()">
        <select id="filter-state" class="filter-select" onchange="renderProjects()">
           <option value="all">All Statuses</option>
@@ -2695,8 +3592,13 @@ button, .tb-btn, .sb-btn, .page-btn, .view-btn, .nav-item, .cat-item, .user-menu
         <select id="filter-client" class="filter-select" onchange="renderProjects()">
           <option value="all">All Clients</option>
         </select>
+        <select id="project-sort" class="filter-select" onchange="setProjectSort(this.value)" title="Project order">
+          <option value="manual">Manual order</option>
+          <option value="newest">Newest added</option>
+          <option value="oldest">Oldest added</option>
+        </select>
         
-        <div class="projects-view-switch" style="display:flex; gap:4px; padding-left:12px; border-left:1px solid var(--line2);">
+        <div class="projects-view-switch" style="border-left:1px solid var(--line2);">
           <button class="view-btn" id="btn-view-large" onclick="changeView('grid-large')" title="Large Grid View">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect></svg>
           </button>
@@ -2711,7 +3613,7 @@ button, .tb-btn, .sb-btn, .page-btn, .view-btn, .nav-item, .cat-item, .user-menu
 
       <div id="paused-wrapper" style="display:none; margin-top:24px;">
         <div class="paused-header" onclick="togglePausedGrid()">
-          <span class="paused-icon" id="paused-chev">â–¶</span>
+          <span class="paused-icon ui-inline-icon" id="paused-chev" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="m9 18 6-6-6-6"/></svg></span>
           <span>Paused Projects (<span id="paused-count">0</span>)</span>
         </div>
         <div class="paused-grid" id="paused-grid"></div>
@@ -2733,7 +3635,7 @@ button, .tb-btn, .sb-btn, .page-btn, .view-btn, .nav-item, .cat-item, .user-menu
           <img id="cp-img-preview" class="img-preview" />
           <div class="cp-ta-wrap">
             <textarea class="cp-ta" id="cp-ta" placeholder="Drop a note or feedback here..."></textarea>
-            <label for="cp-file" class="cp-file-lbl" title="Attach Image">ðŸ“Ž</label>
+            <label for="cp-file" class="cp-file-lbl" title="Attach Image"><span class="ui-inline-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="m21.44 11.05-8.49 8.49a6 6 0 0 1-8.49-8.49l8.49-8.48a4 4 0 0 1 5.66 5.65L9.4 17.43a2 2 0 1 1-2.83-2.83l8.48-8.48"/></svg></span></label>
             <input type="file" id="cp-file" accept="image/*" style="display:none" onchange="previewCommentImage(event)">
           </div>
           <div style="display:flex; gap:10px; align-items:center;">
@@ -2895,7 +3797,7 @@ button, .tb-btn, .sb-btn, .page-btn, .view-btn, .nav-item, .cat-item, .user-menu
     <select class="field-select" id="inp-pcat"></select>
   </div>
   <div class="field">
-    <label class="field-label" style="display:flex; justify-content:space-between; align-items:center;">Format Type <span style="color:var(--primary-light); cursor:pointer; text-transform:none; font-weight:600; font-size:12px;" onclick="openFormatsModal()">âš™ï¸ Manage</span></label>
+    <label class="field-label" style="display:flex; justify-content:space-between; align-items:center;">Format Type <span style="color:var(--primary-light); cursor:pointer; text-transform:none; font-weight:600; font-size:12px;" onclick="openFormatsModal()"><span class="ui-inline-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.7 1.7 0 0 0-1.82-.33 1.7 1.7 0 0 0-1.08 1.55V21a2 2 0 1 1-4 0v-.09a1.7 1.7 0 0 0-1.08-1.55 1.7 1.7 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06A1.7 1.7 0 0 0 4.6 15a1.7 1.7 0 0 0-1.55-1.08H3a2 2 0 1 1 0-4h.09A1.7 1.7 0 0 0 4.64 8.4a1.7 1.7 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06A1.7 1.7 0 0 0 8.96 4.6a1.7 1.7 0 0 0 1.08-1.55V3a2 2 0 1 1 4 0v.09a1.7 1.7 0 0 0 1.08 1.55 1.7 1.7 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.7 1.7 0 0 0-.33 1.82 1.7 1.7 0 0 0 1.55 1.08H21a2 2 0 1 1 0 4h-.09A1.7 1.7 0 0 0 19.4 15Z"/></svg></span> Manage</span></label>
     <div class="ct-radios" id="ct-radios"></div>
   </div>
   <div class="field">
@@ -2979,7 +3881,7 @@ button, .tb-btn, .sb-btn, .page-btn, .view-btn, .nav-item, .cat-item, .user-menu
 
 <div class="overlay" id="m-feedback" onclick="ovClose(event,'m-feedback')">
 <div class="modal">
-  <div class="modal-title">âš¡ Log Client Feedback</div>
+  <div class="modal-title"><span class="ui-inline-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="m12 3 1.9 5.1L19 10l-5.1 1.9L12 17l-1.9-5.1L5 10l5.1-1.9L12 3Z"/></svg></span> Log Client Feedback</div>
   <div style="font-size:13px;color:var(--soft);margin-bottom:20px">Describe the requested changes. A new version iteration will be created automatically.</div>
   <div class="field">
     <label class="field-label">Revision Details</label>
@@ -3518,14 +4420,39 @@ function renderPagination(containerId, page, totalPages, callbackName) {
     pages.push(`<button class="page-btn ${i===page?'active':''}" onclick="${callbackName}(${i})">${i}</button>`);
   }
   el.innerHTML = `<div class="pagination">
-    <button class="page-btn" ${page===1?'disabled':''} onclick="${callbackName}(${page-1})">â€¹</button>
+    <button class="page-btn" ${page===1?'disabled':''} onclick="${callbackName}(${page-1})" aria-label="Previous page">${uiIcon('chevronLeft')}</button>
     ${pages.join('')}
-    <button class="page-btn" ${page===totalPages?'disabled':''} onclick="${callbackName}(${page+1})">â€º</button>
+    <button class="page-btn" ${page===totalPages?'disabled':''} onclick="${callbackName}(${page+1})" aria-label="Next page">${uiIcon('chevronRight')}</button>
     <span class="page-info">Page ${page} of ${totalPages}</span>
   </div>`;
 }
 
 // Renderizador DinÃ¡mico de Etiquetas de Formato
+function getProjectAddedValue(p) {
+  const dateValue = Date.parse(p.createdAt || p.createdDate || p.date || p.versions?.[0]?.date || '');
+  const orderValue = Number.isFinite(Number(p.order)) ? Number(p.order) : 0;
+  return Number.isFinite(dateValue) ? (dateValue * 100000) + orderValue : orderValue;
+}
+
+function sortProjectsForCurrentView(projects) {
+  const arr = projects.slice();
+  if(projectSort === 'newest') return arr.sort((a,b) => getProjectAddedValue(b) - getProjectAddedValue(a));
+  if(projectSort === 'oldest') return arr.sort((a,b) => getProjectAddedValue(a) - getProjectAddedValue(b));
+  return arr.sort((a,b) => {
+    if(a.priority&&!b.priority) return -1;
+    if(!a.priority&&b.priority) return 1;
+    return (a.order||0)-(b.order||0);
+  });
+}
+
+function setProjectSort(value) {
+  projectSort = ['manual','newest','oldest'].includes(value) ? value : 'manual';
+  localStorage.setItem('jaba_project_sort', projectSort);
+  projectsPage = 1;
+  pausedProjectsPage = 1;
+  renderProjects();
+}
+
 function renderCTTag(ctId) {
   const ct = DB.contentTypes.find(c => c.id === ctId) || DB.contentTypes[0] || { label:'Unknown', color:'#ffffff' };
   // Usamos hexadecimal con '26' al final para darle transparencia al fondo (~15%)
@@ -3551,12 +4478,16 @@ let calOverdueOnly = false;
 let projectsPage = 1;
 let pausedProjectsPage = 1;
 let publishPage = 1;
+let projectSort = localStorage.getItem('jaba_project_sort') || 'manual';
+if(!['manual','newest','oldest'].includes(projectSort)) projectSort = 'manual';
 const PROJECTS_PER_PAGE = 12;
 const PUBLISH_PER_PAGE = 8;
 let currentIdeaImgB64 = null;
 let currentCommentImgB64 = null;
 let editingIdeaId = null;
 let viewingIdeaId = null;
+let ideaDocSelectionRange = null;
+let profileOpenPanel = 'assigned';
 let editingSeasonId = null;
 let editingCategoryId = null;
 let isPausedGridOpen = false;
@@ -3707,19 +4638,19 @@ function renderTopbarAuth() {
   const mainBadge = totalUnread > 0 ? `<span class="topbar-badge">${totalUnread}</span>` : '';
 
   return `
-    <button class="tb-btn primary" onclick="openModal('m-project')">âž• New Project</button>
+    <button class="tb-btn primary" onclick="openModal('m-project')">${uiIcon('plus')} New Project</button>
     <div class="user-menu-wrap" id="user-dropdown-wrap">
       <div class="user-menu-btn" onclick="toggleDropdown()">
         <img src="${u.avatar}" class="user-menu-avatar">
-        <span class="user-menu-name">${u.name}${mainBadge} â–¾</span>
+        <span class="user-menu-name">${u.name}${mainBadge} ${uiIcon('chevronDown')}</span>
       </div>
       <div class="dropdown-content" id="user-dropdown">
-        <div class="dropdown-item" onclick="goScreen('profile'); toggleDropdown();">ðŸ‘¤ My Profile</div>
-        <div class="dropdown-item" onclick="goScreen('notifications'); toggleDropdown();">ðŸ”” Notifications ${notifBadge}</div>
-        <div class="dropdown-item" onclick="goScreen('messages'); toggleDropdown();">ðŸ’¬ Messages ${msgBadge}</div>
+        <div class="dropdown-item" onclick="goScreen('profile'); toggleDropdown();">${uiIcon('user')} My Profile</div>
+        <div class="dropdown-item" onclick="goScreen('notifications'); toggleDropdown();">${uiIcon('bell')} Notifications ${notifBadge}</div>
+        <div class="dropdown-item" onclick="goScreen('messages'); toggleDropdown();">${uiIcon('message')} Messages ${msgBadge}</div>
         ${previewBackupItem}
         ${backupItem}
-        <div class="dropdown-item" style="color:var(--red)" onclick="signOut()">ðŸšª Logout</div>
+        <div class="dropdown-item" style="color:var(--red)" onclick="signOut()">${uiIcon('logout')} Logout</div>
       </div>
     </div>
   `;
@@ -3742,7 +4673,7 @@ function renderNotifications() {
   
   // Se agregÃ³ el botÃ³n de "Clear All" al tÃ­tulo
   let html = `<div class="sec-title" style="display:flex; justify-content:space-between; align-items:center;">
-                <span>ðŸ”” YOUR NOTIFICATIONS</span>
+                <span>${uiIcon('bell')} YOUR NOTIFICATIONS</span>
                 ${notifs.length > 0 ? `<button class="tb-btn" style="padding:4px 10px; font-size:11px;" onclick="clearAllNotifications()">Clear All</button>` : ''}
               </div>`;
               
@@ -3756,7 +4687,7 @@ function renderNotifications() {
           <div class="msg-meta"><span>System</span><span>${n.date}</span></div>
           <div style="font-size:14px; margin-top:4px;">${n.text}</div>
         </div>
-        <button class="link-del-btn" style="margin-left: 12px; flex-shrink: 0;" onclick="deleteNotification('${n.id}', event)" title="Delete">âœ•</button>
+        <button class="link-del-btn" style="margin-left: 12px; flex-shrink: 0;" onclick="deleteNotification('${n.id}', event)" title="Delete">${uiIcon('x')}</button>
       </div>
     `).join('');
     html += `</div>`;
@@ -3800,7 +4731,7 @@ function renderMessages() {
   // Obtener a todos los compaÃ±eros de equipo para poder chatear con ellos
   const contacts = DB.users.filter(x => x.id !== u.id);
 
-  let html = `<div class="sec-title" style="margin-bottom:16px;">ðŸ’¬ DIRECT MESSAGES</div>`;
+  let html = `<div class="sec-title" style="margin-bottom:16px;">${uiIcon('message')} DIRECT MESSAGES</div>`;
   html += `<div class="chat-layout">`;
 
   // PANEL IZQUIERDO: LISTA DE CONTACTOS
@@ -3845,7 +4776,7 @@ function renderMessages() {
                 <div class="chat-history" id="chat-history">`;
 
      if(thread.length === 0) {
-        html += `<div class="empty-state" style="border:none; background:transparent; padding-top:60px;"><div class="empty-text">Say hello to ${contact.name}! ðŸ‘‹</div><div class="empty-sub">Send a message to start the conversation.</div></div>`;
+        html += `<div class="empty-state" style="border:none; background:transparent; padding-top:60px;"><div class="empty-text">${uiIcon('hand')} Say hello to ${contact.name}!</div><div class="empty-sub">Send a message to start the conversation.</div></div>`;
      } else {
         html += thread.map(m => {
            const isMe = m.from === u.id;
@@ -3866,12 +4797,12 @@ function renderMessages() {
      html += `  </div>
                 <div class="chat-input-area">
                   <input type="text" id="chat-reply-input" class="chat-input" placeholder="Type a message to ${contact.name}..." onkeyup="if(event.key==='Enter') sendChatReply()">
-                  <button class="chat-send-btn" onclick="sendChatReply()">âž¤</button>
+                  <button class="chat-send-btn" onclick="sendChatReply()" aria-label="Send message" title="Send message">${uiIcon('send')}</button>
                 </div>
               </div>`;
   } else {
      html += `<div class="chat-main" style="align-items:center; justify-content:center; color:var(--muted); font-size:14px; background:var(--bg);">
-                <div style="font-size:48px; margin-bottom:16px; opacity:0.3;">ðŸ’¬</div>
+                <div style="width:48px; height:48px; margin-bottom:16px; opacity:0.35; color:var(--muted);">${uiIcon('message')}</div>
                 Select a team member to start chatting
               </div>`;
   }
@@ -3936,14 +4867,14 @@ function submitMessage() {
 
   save();
   closeModal('m-send-msg');
-  toast('Message sent', 'ðŸ’¬');
+  toast('Message sent', 'message');
   if(screen === 'messages') renderMessages();
 }
 
 // â”€â”€ PANTALLA DE DIRECTORIO DE EQUIPO â”€â”€
 function renderTeam() {
   const content = document.getElementById('team-content');
-  let html = `<div class="sec-title" style="margin-bottom:24px;">ðŸ‘¥ TEAM DIRECTORY</div>`;
+  let html = `<div class="sec-title" style="margin-bottom:24px;">${uiIcon('users')} TEAM DIRECTORY</div>`;
   html += `<div class="proj-grid">`;
   (DB.users || []).forEach(u => {
     html += `
@@ -3955,7 +4886,7 @@ function renderTeam() {
           <div style="font-size:11px; color:var(--muted); margin-top:4px;">${u.email}</div>
         </div>
         ${isMaster && u.id !== currentUser ? `
-          <button class="tb-btn danger" style="padding:6px 12px; font-size:11px;" onclick="event.stopPropagation(); askDelete('${u.id}', 'user')">ðŸ—‘</button>
+          <button class="tb-btn danger" style="padding:6px 12px; font-size:11px;" onclick="event.stopPropagation(); askDelete('${u.id}', 'user')">${uiIcon('trash')}</button>
         ` : ''}
       </div>
     `;
@@ -4059,7 +4990,7 @@ function sendInlineMessage(targetUid) {
 
     save();
     inputEl.value = '';
-    toast('Message sent', 'ðŸ’¬');
+    toast('Message sent', 'message');
     if(screen === 'messages') renderMessages();
   } catch (err) {
     console.error("Messaging error:", err);
@@ -4089,7 +5020,7 @@ function saveUserProfile() {
   } 
   save(); closeModal('m-new-user'); 
   renderTopbarAuth(); render();
-  toast('Profile updated', 'ðŸ‘¤');
+  toast('Profile updated', 'user');
 }
 
 /* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
@@ -4168,8 +5099,8 @@ function renderSidebar() {
           <span style="flex:1">${c.name}</span>
           <span class="cat-count">${cnts[c.id]||0}</span>
           ${isMaster ? `
-            <span class="sb-action" title="Edit Category" onclick="event.stopPropagation(); editCategory('${c.id}')">âœï¸</span>
-            <span class="sb-action" title="Delete Category" onclick="event.stopPropagation(); askDelete('${c.id}', 'category')">ðŸ—‘ï¸</span>
+            <span class="sb-action" title="Edit Category" onclick="event.stopPropagation(); editCategory('${c.id}')">${uiIcon('pencil')}</span>
+            <span class="sb-action" title="Delete Category" onclick="event.stopPropagation(); askDelete('${c.id}', 'category')">${uiIcon('trash')}</span>
           ` : ''}
         </div>
         ${subMenuHTML}
@@ -4178,12 +5109,12 @@ function renderSidebar() {
 
     blk.innerHTML = `
       <div class="yr-header" onclick="this.parentElement.classList.toggle('open')">
-        <span class="yr-label">ðŸ“ ${yr.label}</span>
+        <span class="yr-label">${uiIcon('folder')} ${yr.label}</span>
         ${isMaster ? `
-          <span class="sb-action" title="Edit Season" onclick="event.stopPropagation(); editSeason('${yr.id}')">âœï¸</span>
-          <span class="sb-action" title="Delete Season" onclick="event.stopPropagation(); askDelete('${yr.id}', 'season')">ðŸ—‘ï¸</span>
+          <span class="sb-action" title="Edit Season" onclick="event.stopPropagation(); editSeason('${yr.id}')">${uiIcon('pencil')}</span>
+          <span class="sb-action" title="Delete Season" onclick="event.stopPropagation(); askDelete('${yr.id}', 'season')">${uiIcon('trash')}</span>
         ` : ''}
-        <span class="yr-chev">â–¶</span>
+        <span class="yr-chev">${uiIcon('chevronRight')}</span>
       </div>
       <div class="yr-cats">
         ${catsHTML}
@@ -4265,13 +5196,13 @@ function renderTopbar() {
   }
   else if(screen==='profile') { leftTitle = 'My Profile'; leftSub = 'Your workspace, activity and everything in one place.'; }
   else if(screen==='team') { leftTitle = 'Team Directory'; leftSub = 'Find the right person, know their role, and see what they are working on.'; }
-  else if(screen==='notifications') { leftTitle = 'ðŸ”” Notifications'; }
-  else if(screen==='messages') { leftTitle = 'ðŸ’¬ Direct Messages'; }
+  else if(screen==='notifications') { leftTitle = 'Notifications'; }
+  else if(screen==='messages') { leftTitle = 'Direct Messages'; }
   else if(screen==='mywork') { leftTitle = 'My Work'; leftSub = 'All your tasks, projects, and deadlines in one place.'; }
   else if(screen==='public-profile') { 
     const u = DB.users.find(x => x.id === viewingProfileId);
     leftSub = `<span class="bc-link" onclick="goScreen('team')">Team</span> <span style="color:var(--muted)">/</span> <span style="color:var(--text)">Profile</span>`;
-    leftTitle = u ? `ðŸ‘¤ ${u.name}'s Profile` : 'User Profile'; 
+    leftTitle = u ? `${u.name}'s Profile` : 'User Profile';
   }
   else {
     if(filterCat) {
@@ -4342,6 +5273,7 @@ function uiIconSvg(name) {
     spark: `<svg viewBox="0 0 24 24"><path d="m12 3 1.9 5.1L19 10l-5.1 1.9L12 17l-1.9-5.1L5 10l5.1-1.9L12 3Z"/></svg>`,
     paperclip: `<svg viewBox="0 0 24 24"><path d="m21.44 11.05-8.49 8.49a6 6 0 0 1-8.49-8.49l8.49-8.48a4 4 0 0 1 5.66 5.65L9.4 17.43a2 2 0 1 1-2.83-2.83l8.48-8.48"/></svg>`,
     settings: `<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.7 1.7 0 0 0-1.82-.33 1.7 1.7 0 0 0-1.08 1.55V21a2 2 0 1 1-4 0v-.09a1.7 1.7 0 0 0-1.08-1.55 1.7 1.7 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06A1.7 1.7 0 0 0 4.6 15a1.7 1.7 0 0 0-1.55-1.08H3a2 2 0 1 1 0-4h.09A1.7 1.7 0 0 0 4.64 8.4a1.7 1.7 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06A1.7 1.7 0 0 0 8.96 4.6a1.7 1.7 0 0 0 1.08-1.55V3a2 2 0 1 1 4 0v.09a1.7 1.7 0 0 0 1.08 1.55 1.7 1.7 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.7 1.7 0 0 0-.33 1.82 1.7 1.7 0 0 0 1.55 1.08H21a2 2 0 1 1 0 4h-.09A1.7 1.7 0 0 0 19.4 15Z"/></svg>`,
+    send: `<svg viewBox="0 0 24 24"><path d="M22 2 11 13"/><path d="m22 2-7 20-4-9-9-4 20-7Z"/></svg>`,
     plus: `<svg viewBox="0 0 24 24"><path d="M12 5v14"/><path d="M5 12h14"/></svg>`,
     play: `<svg viewBox="0 0 24 24"><path d="m8 5 11 7-11 7V5z"/></svg>`,
     pause: `<svg viewBox="0 0 24 24"><path d="M8 5v14"/><path d="M16 5v14"/></svg>`,
@@ -4361,6 +5293,7 @@ function uiIconSvg(name) {
     chevronLeft: `<svg viewBox="0 0 24 24"><path d="m15 18-6-6 6-6"/></svg>`,
     chevronRight: `<svg viewBox="0 0 24 24"><path d="m9 18 6-6-6-6"/></svg>`,
     chevronDown: `<svg viewBox="0 0 24 24"><path d="m6 9 6 6 6-6"/></svg>`,
+    external: `<svg viewBox="0 0 24 24"><path d="M14 3h7v7"/><path d="M21 3 10 14"/><path d="M12 5H5a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-7"/></svg>`,
     x: `<svg viewBox="0 0 24 24"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>`,
     target: `<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5"/><circle cx="12" cy="12" r="1"/></svg>`,
     star: `<svg viewBox="0 0 24 24"><path d="m12 3 2.8 5.7 6.2.9-4.5 4.4 1.1 6.2L12 17.3 6.4 20.2l1.1-6.2L3 9.6l6.2-.9L12 3Z"/></svg>`,
@@ -4378,7 +5311,7 @@ const UI_EMOJI_ICON_MAP = [
   ['Ã°Å¸â€â€', 'bell'], ['Ã°Å¸â€™Â¬', 'message'], ['Ã°Å¸â€˜Â¤', 'user'], ['Ã°Å¸Å¡Âª', 'logout'],
   ['Ã°Å¸â€”â€˜Ã¯Â¸Â', 'trash'], ['Ã°Å¸â€”â€˜', 'trash'], ['Ã¢Å“ÂÃ¯Â¸Â', 'pencil'], ['Ã°Å¸â€œÂ', 'folder'],
   ['Ã°Å¸â€œâ€š', 'folderOpen'], ['Ã°Å¸â€˜Â¥', 'users'], ['Ã°Å¸â€œâ€¦', 'calendar'], ['Ã¢Å¡â„¢Ã¯Â¸Â', 'settings'],
-  ['Ã¢Å¾â€¢', 'plus'], ['Ã¢â€“Â¶', 'play'], ['Ã¢Å“â€¢', 'x'], ['Ã¢Å“â€¦', 'checkCircle'],
+  ['Ã¢Å¾â€¢', 'plus'], ['Ã¢Å¾Â¤', 'send'], ['Ã¢â€“Â¶', 'play'], ['Ã¢Å“â€¢', 'x'], ['Ã¢Å“â€¦', 'checkCircle'],
   ['Ã¢ÂÂ¸', 'pause'], ['Ã¢ÂÂ³', 'clock'], ['Ã°Å¸Å¡â‚¬', 'rocket'], ['Ã°Å¸Å½â€°', 'spark'],
   ['Ã°Å¸â€â„¢', 'chevronLeft'], ['Ã¢Â­Â', 'star'], ['Ã¢Ëœâ€ ', 'star'],
   ['Ã°Å¸â€â€”', 'link'], ['Ã°Å¸â€“Â¼Ã¯Â¸Â', 'image'], ['Ã°Å¸â€“Â¼', 'image'], ['Ã°Å¸â€œÂ', 'note'],
@@ -4388,15 +5321,30 @@ const UI_EMOJI_ICON_MAP = [
   ['ðŸ—‘ï¸', 'trash'], ['ðŸ—‘', 'trash'], ['ðŸ””', 'bell'], ['ðŸ’¬', 'message'], ['ðŸ‘¤', 'user'], ['ðŸšª', 'logout'],
   ['âœï¸', 'pencil'], ['âœ', 'pencil'], ['ðŸ“', 'folder'], ['ðŸ“‚', 'folderOpen'], ['ðŸ‘¥', 'users'],
   ['ðŸ“…', 'calendar'], ['âš¡', 'spark'], ['ðŸ“Ž', 'paperclip'], ['âš™ï¸', 'settings'], ['âš™', 'settings'],
-  ['âž•', 'plus'], ['â–¶', 'play'], ['â—€', 'chevronLeft'], ['â–¾', 'chevronDown'], ['▾', 'chevronDown'], ['▼', 'chevronDown'], ['âœ•', 'x'], ['âœ…', 'checkCircle'],
+  ['âž•', 'plus'], ['âž¤', 'send'], ['➤', 'send'], ['â–¶', 'play'], ['â—€', 'chevronLeft'], ['â–¾', 'chevronDown'], ['▾', 'chevronDown'], ['▼', 'chevronDown'], ['âœ•', 'x'], ['âœ…', 'checkCircle'],
   ['âœ”ï¸', 'checkCircle'], ['âœ“', 'check'], ['â¸', 'pause'], ['â³', 'clock'], ['ðŸš€', 'rocket'],
   ['ðŸŽ‰', 'spark'], ['ðŸ”™', 'chevronLeft'], ['â­', 'star'], ['â˜†', 'star'], ['ðŸ”—', 'link'], ['ðŸ–¼ï¸', 'image'], ['ðŸ–¼', 'image'], ['ðŸ“', 'note'],
   ['ðŸ”„', 'refresh'], ['ðŸ’¡', 'idea'], ['ðŸŽ¬', 'video'], ['ðŸ‘‹', 'hand'], ['ðŸ“„', 'file'],
   ['âš ï¸', 'warning'], ['âš ', 'warning'], ['â—Ž', 'target'], ['â†’', 'chevronRight'], ['→', 'chevronRight'], ['â ¿', 'drag']
 ];
 
+function repairTextEncoding(value) {
+  let out = String(value ?? '');
+  for(let i = 0; i < 2; i++) {
+    if(!/[ÃÂâð]/.test(out)) break;
+    try {
+      const decoded = decodeURIComponent(escape(out));
+      if(!decoded || decoded === out) break;
+      out = decoded;
+    } catch(e) {
+      break;
+    }
+  }
+  return out;
+}
+
 function iconifyUiHtml(html) {
-  let out = String(html)
+  let out = repairTextEncoding(html)
     .split('Â·').join('·')
     .split('â€”').join('—')
     .split('â€“').join('–')
@@ -4407,13 +5355,16 @@ function iconifyUiHtml(html) {
   UI_EMOJI_ICON_MAP.forEach(([token, iconName]) => {
     out = out.split(token).join(uiIcon(iconName));
   });
+  out = out
+    .replace(/ðŸ[^\s<]{0,8}\s*/g, '')
+    .replace(/Ã°Å¸[^\s<]{0,16}\s*/g, '');
   return out;
 }
 
 function applyUiIcons(root = document) {
   const selectors = [
     '.sec-title', '.modal-title', '.dropdown-item', '.empty-icon', '.idea-add-icon', '.idea-emoji',
-    '.pcol-title', '.ap-title', '.sb-action', '.yr-label', '.yr-chev', '.paused-icon', '.cp-file-lbl',
+    '.pcol-title', '.ap-title', '.sb-action', '.yr-label', '.yr-chev', '.paused-icon', '.cp-file-lbl', '.cc-text',
     '.link-del-btn', '.chat-send-btn', '.todo-del', '.idea-del', '.tb-btn', '.btn-ok', '.cal-nav',
     '.ap-btn', '.step-btn', '.detail-thumb-label', '.mw-focus-icon', '.planner-nav-btn', '.planner-row-btn',
     '.planner-add-btn', '.planner-secondary-btn', '.page-btn', '.field-label span[onclick]', '.cc-del',
@@ -4476,6 +5427,8 @@ function renderProjects() {
   const filterState = document.getElementById('filter-state').value;
   const filterFormat = document.getElementById('filter-format') ? document.getElementById('filter-format').value : 'all';
   const filterClient = document.getElementById('filter-client') ? document.getElementById('filter-client').value : 'all';
+  const sortSelect = document.getElementById('project-sort');
+  if(sortSelect && sortSelect.value !== projectSort) sortSelect.value = projectSort;
 
   let activeProjs = [];
   let pausedProjs = [];
@@ -4504,13 +5457,8 @@ function renderProjects() {
     else activeProjs.push(p);
   });
 
-  const sortFn = (a,b) => {
-    if(a.priority&&!b.priority) return -1;
-    if(!a.priority&&b.priority) return 1;
-    return (a.order||0)-(b.order||0);
-  };
-  activeProjs.sort(sortFn);
-  pausedProjs.sort(sortFn);
+  activeProjs = sortProjectsForCurrentView(activeProjs);
+  pausedProjs = sortProjectsForCurrentView(pausedProjs);
 
   const buildCard = (p) => {
     const cat = getCat(p.catId), ver = getCurVer(p);
@@ -4550,7 +5498,7 @@ function renderProjects() {
           <div>${doneN}/${steps.length} Steps</div>
         </div>
         <div class="pc-badges" style="margin-bottom:14px;">
-          <span class="priority-star" onclick="togglePriority(event,'${p.id}')" title="Priority">${p.priority?'â­':'â˜†'}</span>
+          <span class="priority-star" onclick="togglePriority(event,'${p.id}')" title="Priority">${uiIcon('star')}</span>
           ${renderCTTag(p.contentType)}
           <span class="pc-version">${p.currentVersion}</span>
         </div>
@@ -4562,8 +5510,8 @@ function renderProjects() {
             <input class="pc-date-input" type="date" value="${p.publishDate||''}" onchange="updateProjectPublishDate('${p.id}', this.value)" onclick="event.stopPropagation()">
           </div>
           <div class="pc-right-badges">
-            ${p.priority?`<span class="badge badge-priority">â­</span>`:''}
-            ${inPub?`<span class="badge badge-publish">ðŸš€</span>`:''}
+            ${p.priority?`<span class="badge badge-priority">${uiIcon('star')}</span>`:''}
+            ${inPub?`<span class="badge badge-publish">${uiIcon('rocket')}</span>`:''}
           </div>
         </div>
       </div>
@@ -4571,7 +5519,7 @@ function renderProjects() {
   };
 
   if(!activeProjs.length && !pausedProjs.length) {
-    grid.innerHTML=`<div class="empty-state"><div class="empty-icon">ðŸ“‚</div><div class="empty-text">No projects found</div><div class="empty-sub">Adjust your search or filters.</div></div>`;
+    grid.innerHTML=`<div class="empty-state"><div class="empty-icon">${uiIcon('folderOpen')}</div><div class="empty-text">No projects found</div><div class="empty-sub">Adjust your search or filters.</div></div>`;
     if(projPagination) projPagination.innerHTML = '';
     if(pausedPagination) pausedPagination.innerHTML = '';
     wrapper.style.display = 'none';
@@ -4614,7 +5562,7 @@ function dragLeave(e) { e.currentTarget.classList.remove('drag-over'); }
 function drop(e, targetId) { e.preventDefault(); e.currentTarget.classList.remove('drag-over'); if(!dragId||dragId===targetId) return;
   const drag=getP(dragId), target=getP(targetId), dOrder=drag.order??0, tOrder=target.order??0;
   drag.order=tOrder; target.order=dOrder; save(); renderProjects(); }
-function togglePriority(e, id) { e.stopPropagation(); const p=getP(id); p.priority=!p.priority; save(); renderProjects(); toast(p.priority?'Priority marked':'Priority removed','â­'); }
+function togglePriority(e, id) { e.stopPropagation(); const p=getP(id); p.priority=!p.priority; save(); renderProjects(); toast(p.priority?'Priority marked':'Priority removed','star'); }
 
 /* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
    PROJECT DETAIL
@@ -4655,7 +5603,14 @@ function renderDetail() {
     // Bloqueamos poder borrar etapas si estÃ¡ publicado
     if(!ver.waitingFeedback && !inPub && !p.isPaused && !isPub) btns+=`<button class="step-btn danger" onclick="delStep('${p.id}',${i})">${uiIcon('x')}</button>`;
     
-    return `<div class="step-row ${rowCls}" draggable="true" ondragstart="stepDragStart(event, ${i})" ondragover="stepDragOver(event)" ondragleave="stepDragLeave(event)" ondrop="stepDrop(event, ${i})" ondragend="stepDragEnd(event)"><div class="step-main"><div style="cursor:grab; color:var(--muted); font-size:18px; padding-right:12px; user-select:none; transition:color 0.2s;" onmouseover="this.style.color='var(--text)'" onmouseout="this.style.color='var(--muted)'" title="Drag to reorder">${uiIcon('drag')}</div><div class="step-circle">${icon}</div><div class="step-info"><div class="step-name">${s.name}</div>${s.note?`<div class="step-note">${s.note}</div>`:''}</div><div class="step-tag">${tag}</div></div><div class="step-actions">${btns}</div></div>`;
+    return `<div class="project-step-card ${rowCls}" draggable="true" ondragstart="stepDragStart(event, ${i})" ondragover="stepDragOver(event)" ondragleave="stepDragLeave(event)" ondrop="stepDrop(event, ${i})" ondragend="stepDragEnd(event)">
+      <div class="project-step-icon" title="Drag to reorder">${icon || uiIcon('target')}</div>
+      <div class="project-step-main">
+        <div class="project-step-name">${i + 1}. ${escapeHtml(s.name)}</div>
+        ${s.note ? `<div class="project-step-note">${escapeHtml(s.note)}</div>` : ''}
+      </div>
+      <div class="project-step-actions"><span class="project-step-status">${tag}</span>${btns}</div>
+    </div>`;
   }).join('');
 
   const linkOpts = LINK_TYPES.map(t=>`<option value="${t.id}">${t.label}</option>`).join('');
@@ -4669,64 +5624,205 @@ function renderDetail() {
   }).join('');
 
   const versHTML = (p.versions||[]).slice().reverse().map(v=>`<div class="version-row ${v.v===p.currentVersion?'vcurrent':''}"><div class="v-tag">${v.v}</div><div class="v-body"><div class="v-desc">${v.feedbackDesc}</div><div class="v-date">${uiIcon('calendar')} ${v.date}</div>${v.v===p.currentVersion?`<div class="v-cur">ACTIVE WORKSPACE</div>`:`<button class="v-switch-btn" onclick="switchVer('${p.id}','${v.v}')">Revert to this</button>`}</div></div>`).join('');
-  const thumbHtml = p.thumbnail ? `<img src="${p.thumbnail}" class="detail-thumb">` : `<div class="detail-thumb-label"><span>Set Project Thumbnail</span></div>`;
+  const thumbHtml = p.thumbnail ? `<img src="${p.thumbnail}" class="detail-thumb">` : `<div class="project-thumb-empty">${uiIcon('image','xl')}<span>Add thumbnail</span></div>`;
   
   const cat = getCat(p.catId);
   const formatColor = DB.contentTypes.find(c => c.id === p.contentType)?.color || 'var(--line2)';
+  const format = DB.contentTypes.find(c => c.id === p.contentType) || DB.contentTypes[0] || { label:'Format', color:formatColor };
+  const doneN = steps.filter(s=>s.status==='done').length;
+  const actStep = steps.find(s=>s.status==='active');
+  const progress = steps.length ? Math.round((doneN / steps.length) * 100) : 0;
+  let statusLabel = 'Pending';
+  let statusIcon = 'pending';
+  if (isPub) { statusLabel = 'Published'; statusIcon = 'published'; }
+  else if (p.isPaused) { statusLabel = 'Paused'; statusIcon = 'paused'; }
+  else if (inPub) { statusLabel = 'Queued for publish'; statusIcon = 'queued'; }
+  else if (ver.waitingFeedback) { statusLabel = 'Awaiting feedback'; statusIcon = 'waiting'; }
+  else if (allDone) { statusLabel = 'Ready to publish'; statusIcon = 'done'; }
+  else if (actStep) { statusLabel = `Working: ${actStep.name}`; statusIcon = 'play'; }
+
+  const links = Array.isArray(p.links) ? p.links : [];
+  const finalRenderLink = links.find(lnk => lnk.url && lnk.type === 'final');
+  const finalRenderRow = finalRenderLink
+    ? `<div class="asset-row">
+      <div class="asset-kind">${uiIcon('video')} Final render</div>
+      <div class="asset-value"><a href="${escapeHtml(finalRenderLink.url)}" target="_blank" rel="noopener">${escapeHtml(finalRenderLink.url)}</a></div>
+      <a class="asset-action" href="${escapeHtml(finalRenderLink.url)}" target="_blank" rel="noopener" aria-label="Open final render">${uiIcon('external')}</a>
+    </div>`
+    : `<div class="asset-row"><div class="asset-kind">${uiIcon('video')} Final render</div><div class="asset-value asset-empty">Add the final render link below.</div><span></span></div>`;
+  const assetLinks = links
+    .map((lnk, idx) => ({...lnk, idx}))
+    .filter(lnk => lnk.url && (lnk.type === 'asset' || lnk.assetRoute || lnk.label));
+  const linkRows = assetLinks.map((lnk) => {
+    const lbl = lnk.label || 'Asset folder';
+    const safeUrl = escapeHtml(lnk.url || '');
+    return `<div class="asset-row">
+      <div class="asset-kind">${uiIcon('folderOpen')} ${escapeHtml(lbl)}</div>
+      <div class="asset-value"><a href="${safeUrl}" target="_blank" rel="noopener">${safeUrl}</a></div>
+      <a class="asset-action" href="${safeUrl}" target="_blank" rel="noopener" aria-label="Open link">${uiIcon('external')}</a>
+    </div>`;
+  }).join('');
+  const assetRows = linkRows || `<div class="asset-row"><div class="asset-kind">${uiIcon('folderOpen')} No asset routes yet</div><div class="asset-value asset-empty">Add a Dropbox, Drive or folder link below.</div><span></span></div>`;
+  const assignedUsers = (p.assignees || []).map(id => DB.users.find(u => u.id === id)).filter(Boolean);
+  const thumbnailSourceUrl = p.thumbnailSourceUrl || p.thumbnailDropboxUrl || p.thumbnailOriginalUrl || '';
+  const thumbnailPreviewUrl = getThumbnailPreviewUrl(thumbnailSourceUrl);
+  const thumbnailPreviewHtml = thumbnailPreviewUrl
+    ? `<a class="thumbnail-preview-card" href="${escapeHtml(thumbnailSourceUrl)}" target="_blank" rel="noopener" aria-label="Open thumbnail preview">
+        <img src="${escapeHtml(thumbnailPreviewUrl)}" alt="Thumbnail preview" loading="lazy" onerror="this.closest('.thumbnail-preview-card').classList.add('is-broken'); this.remove();">
+        <span class="thumbnail-preview-fallback">${uiIcon('image')} Preview unavailable</span>
+      </a>`
+    : `<div class="thumbnail-preview-card is-empty"><span class="thumbnail-preview-fallback">${uiIcon('image')} No preview yet</span></div>`;
+  const thumbnailLinkRow = thumbnailSourceUrl
+    ? `<div class="asset-row">
+        <div class="asset-kind">${uiIcon('image')} Thumbnail</div>
+        <div class="asset-value"><a href="${escapeHtml(thumbnailSourceUrl)}" target="_blank" rel="noopener">${escapeHtml(thumbnailSourceUrl)}</a></div>
+        <a class="asset-action" href="${escapeHtml(thumbnailSourceUrl)}" target="_blank" rel="noopener" aria-label="Open thumbnail link">${uiIcon('external')}</a>
+      </div>`
+    : `<div class="asset-row"><div class="asset-kind">${uiIcon('image')} Thumbnail</div><div class="asset-value asset-empty">Add the Dropbox link below.</div><span></span></div>`;
+  const socialPlatforms = [
+    {id:'instagram', label:'Instagram'},
+    {id:'linkedin', label:'LinkedIn'},
+    {id:'x', label:'X'}
+  ];
+  const captionEditors = socialPlatforms.map(platform => {
+    const items = getProjectCaptionListFromProject(p, platform.id);
+    const captionCards = items.length
+      ? `<div class="caption-saved-list">${items.map((text, idx) => `<div class="caption-card">
+          <div class="caption-card-text">${escapeHtml(text)}</div>
+          <div class="caption-card-actions">
+            <button class="social-mini-btn secondary" onclick="copyProjectCaption('${p.id}','${platform.id}',${idx})">Copy</button>
+            <button class="social-mini-btn secondary" onclick="removeProjectCaption('${p.id}','${platform.id}',${idx})">Remove</button>
+          </div>
+        </div>`).join('')}</div>`
+      : `<div class="caption-empty">No captions added yet.</div>`;
+    return `<div class="caption-editor">
+      <div class="caption-editor-head">
+        <div class="caption-editor-title">${platform.label}</div>
+      </div>
+      ${captionCards}
+      <textarea class="social-caption-input" id="caption-draft-${platform.id}" placeholder="Write a new ${platform.label} caption..."></textarea>
+      <div class="caption-editor-actions">
+        <button class="social-mini-btn" onclick="addProjectCaption('${p.id}','${platform.id}')">Add</button>
+      </div>
+    </div>`;
+  }).join('');
+  const socialInfoSection = `<section class="detail-section-card project-social-card social-main-card">
+    <div class="detail-section-head">
+      <div><div class="detail-section-title">${uiIcon('rocket')} Social info</div><div class="detail-section-note">Thumbnail source and captions ready to copy for publishing.</div></div>
+    </div>
+    <div class="social-workspace-grid">
+      <div class="social-thumbnail-panel">
+        <div class="project-meta-label">Thumbnail original link</div>
+        <div class="thumbnail-source-layout">
+          <div class="thumbnail-source-main">
+            <div class="asset-list">${thumbnailLinkRow}</div>
+            <div class="social-link-row">
+              <input type="text" id="thumbnail-source-url" placeholder="Paste Dropbox link for original thumbnail">
+              <button class="social-mini-btn" onclick="saveThumbnailSourceLink('${p.id}')">Add Link</button>
+            </div>
+          </div>
+          ${thumbnailPreviewHtml}
+        </div>
+      </div>
+      <div>
+        <div class="project-meta-label">Captions</div>
+        <div class="caption-editor-list">${captionEditors}</div>
+      </div>
+    </div>
+  </section>`;
 
   document.getElementById('detail-left').innerHTML=iconifyUiHtml(`
-    <div class="detail-thumb-wrap" onclick="document.getElementById('upload-thumb-input').click()">
-      ${thumbHtml}
-    </div>
-    
-    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:16px;">
-      <h2 style="font-size:24px; font-weight:800;">${p.name}</h2>
-    </div>
+    <div class="project-workspace">
+      <section class="project-hero">
+        <div class="project-thumb-card" onclick="document.getElementById('upload-thumb-input').click()">${thumbHtml}</div>
+        <div class="project-hero-main">
+          <div class="project-title-row">
+            <div>
+              <h2>${escapeHtml(p.name)}</h2>
+              <div class="project-subtitle">${escapeHtml(cat?.name || 'Uncategorized')} · ${escapeHtml(format.label)} · ${escapeHtml(p.currentVersion)}</div>
+            </div>
+            <div class="project-title-actions">
+              <div class="project-status-pill">${projectCardIcon(statusIcon)} ${escapeHtml(statusLabel)}</div>
+            </div>
+          </div>
+          <div class="project-meta-grid">
+            <div class="project-meta-item"><div class="project-meta-label">${uiIcon('folder')} Client</div><select class="project-meta-control" onchange="changeProjectCategory('${p.id}', this.value)">${DB.categories.map(c => `<option value="${c.id}" ${c.id === p.catId ? 'selected' : ''}>${c.name}</option>`).join('')}</select></div>
+            <div class="project-meta-item"><div class="project-meta-label">${uiIcon('settings')} Format</div><select class="project-meta-control" onchange="changeProjectFormat('${p.id}', this.value)">${DB.contentTypes.map(ct => `<option value="${ct.id}" ${ct.id === p.contentType ? 'selected' : ''}>${ct.label}</option>`).join('')}</select></div>
+            <div class="project-meta-item"><div class="project-meta-label">${uiIcon('calendar')} Publish date</div><input class="project-meta-control" type="date" value="${p.publishDate||''}" onchange="updateProjectPublishDate('${p.id}', this.value)"></div>
+            <div class="project-meta-item"><div class="project-meta-label">${uiIcon('users')} Assigned to</div><div class="project-meta-value is-assignees project-meta-assignee-row">${renderAvatars(p.assignees)}<button class="project-meta-manage" onclick="openAssignModal('${p.id}')">Manage</button></div></div>
+          </div>
+        </div>
+      </section>
 
-    <div style="display:flex; gap:16px; margin-bottom: 24px; background: var(--bg); padding: 16px; border-radius: 12px; border-left: 4px solid ${formatColor}; border-top: 1px solid var(--line2); border-right: 1px solid var(--line2); border-bottom: 1px solid var(--line2);">
-       <div style="flex:1;">
-         <div style="font-size:11px; font-weight:700; color:var(--muted); margin-bottom:6px; text-transform:uppercase; letter-spacing:0.5px;">${uiIcon('folder')} Group / Category</div>
-         <select class="field-select" style="padding:8px 12px; font-size:13px;" onchange="changeProjectCategory('${p.id}', this.value)">
-           ${DB.categories.map(c => `<option value="${c.id}" ${c.id === p.catId ? 'selected' : ''}>${c.name}</option>`).join('')}
-         </select>
-       </div>
-       <div style="flex:1;">
-          <div style="font-size:11px; font-weight:700; color:var(--muted); margin-bottom:6px; text-transform:uppercase; letter-spacing:0.5px;">${uiIcon('settings')} Format Type</div>
-         <select class="field-select" style="padding:8px 12px; font-size:13px;" onchange="changeProjectFormat('${p.id}', this.value)">
-           ${DB.contentTypes.map(ct => `<option value="${ct.id}" ${ct.id === p.contentType ? 'selected' : ''}>${ct.label}</option>`).join('')}
-         </select>
-       </div>
-       <div style="flex:1;">
-         <div style="font-size:11px; font-weight:700; color:var(--muted); margin-bottom:6px; text-transform:uppercase; letter-spacing:0.5px;">Target Publish Date</div>
-         <div style="display:flex; gap:8px; align-items:center;">
-           <input class="field-select" type="date" style="padding:8px 12px; font-size:13px; width:100%;" value="${p.publishDate||''}" onchange="updateProjectPublishDate('${p.id}', this.value)">
-           ${p.publishDate ? `<button class="tb-btn" style="padding:8px 12px;" onclick="updateProjectPublishDate('${p.id}', '')">Clear</button>` : ''}
-         </div>
-       </div>
-    </div>
+      <div class="project-detail-grid">
+        <div class="detail-stack">
+          <section class="detail-section-card">
+            <div class="detail-section-head">
+              <div><div class="detail-section-title">${uiIcon('folderOpen')} Asset routes</div><div class="detail-section-note">Links and publish materials attached to this project.</div></div>
+              <button class="detail-section-action" onclick="copyProjectAssetLinks('${p.id}')">${uiIcon('link')} Copy links</button>
+            </div>
+            <div class="project-meta-label">Asset folders</div>
+            <div class="asset-list">${assetRows}</div>
+            <div class="link-inline-add" style="margin-top:14px; margin-bottom:18px;">
+              <input type="text" id="new-link-label" placeholder="Route name, e.g. Raw footage">
+              <input type="text" id="new-link-url" placeholder="Paste Dropbox, Drive or folder URL">
+              <button onclick="addInlineLink('${p.id}')">Add Route</button>
+            </div>
+            <div class="project-meta-label">Final render</div>
+            <div class="asset-list">${finalRenderRow}</div>
+            <div class="link-inline-add final-render-add" style="margin-top:14px;">
+              <input type="text" id="final-render-url" placeholder="Paste final render URL">
+              <button onclick="addFinalRenderLink('${p.id}')">Add Final Render</button>
+            </div>
+          </section>
 
-    <div class="assignees-block">
-      <div>
-        <div class="assignees-label">ASSIGNED TO</div>
-        ${renderAvatars(p.assignees)}
+          ${socialInfoSection}
+
+          <section class="detail-section-card">
+            <div class="detail-section-head">
+              <div><div class="detail-section-title">${uiIcon('settings')} Editing steps</div><div class="detail-section-note">Move through the work, add notes, or reorder steps.</div></div>
+              ${!isPub ? `<button class="detail-section-action" onclick="openModal('m-step')">${uiIcon('plus')} Add stage</button>` : ''}
+            </div>
+            <div class="project-step-list">${stepsHTML || '<div class="asset-empty">No steps configured.</div>'}</div>
+          </section>
+
+          <section class="detail-section-card">
+            <div class="detail-section-head"><div class="detail-section-title">${uiIcon('clock')} Iteration history</div></div>
+            <div class="versions-list">${versHTML}</div>
+          </section>
+        </div>
       </div>
-      <button class="assignees-manage-btn" onclick="openAssignModal('${p.id}')">Manage Team</button>
-    </div>
-    ${panel}
-    <div class="sec-title"><span>${uiIcon('folderOpen')} PROJECT ASSETS & LINKS</span></div>
-    <div class="links-section">
-      <div id="links-list-container">${linksHTML}</div>
-      <div class="link-inline-add">
-        <select id="new-link-type">${linkOpts}</select>
-        <input type="text" id="new-link-url" placeholder="Paste URL here...">
-        <button onclick="addInlineLink('${p.id}')">Add Link</button>
-      </div>
-    </div>
-    <div class="sec-title"><span>${uiIcon('settings')} EDITING WORKFLOW</span></div>
-    <div class="steps-list">${stepsHTML}</div>
-    ${!isPub ? `<button class="tb-btn" style="margin-bottom:32px" onclick="openModal('m-step')">${uiIcon('plus')} Add Custom Stage</button>` : ''}
-    <div class="sec-title"><span>${uiIcon('clock')} ITERATION HISTORY</span></div>
-    <div class="versions-list">${versHTML}</div>`);
+    </div>`);
+
+  const detailRight = document.querySelector('.detail-right');
+  if(detailRight) {
+    detailRight.innerHTML = iconifyUiHtml(`
+      <section class="detail-section-card">
+        <div class="cp-header">
+          <div class="cp-title">${uiIcon('message')} Comments</div>
+          <div style="display:flex;align-items:center;gap:8px;">
+            <div class="cp-count" id="cp-count">0</div>
+            <button class="detail-section-action" onclick="document.getElementById('cp-ta').focus()">${uiIcon('plus')} Add</button>
+          </div>
+        </div>
+        <div class="cp-list" id="cp-list"></div>
+        <div class="cp-input">
+          <img id="cp-img-preview" class="img-preview" />
+          <div class="cp-ta-wrap">
+            <textarea class="cp-ta" id="cp-ta" placeholder="Write a comment..."></textarea>
+            <label for="cp-file" class="cp-file-lbl" title="Attach image">${uiIcon('paperclip')}</label>
+            <input type="file" id="cp-file" accept="image/*" style="display:none" onchange="previewCommentImage(event)">
+          </div>
+          <div style="display:flex;gap:8px;margin-top:10px;">
+            <select class="cp-tag" id="cp-tag" style="flex:1"><option value="">No tag...</option></select>
+            <button class="cp-send" style="margin-top:0;flex:1;" onclick="submitComment()">Add Note</button>
+          </div>
+        </div>
+      </section>
+
+      ${panel}
+      `);
+  }
     
   const cpTag = document.getElementById('cp-tag');
   if(cpTag) {
@@ -4737,16 +5833,155 @@ function renderDetail() {
   renderComments();
 }
 
+function copyProjectAssetLinks(pid) {
+  const p = getP(pid);
+  const lines = (p?.links || []).filter(l => l.url && (l.type === 'asset' || l.assetRoute || l.label)).map(l => {
+    const label = l.label || 'Asset folder';
+    return `${label}: ${l.url}`;
+  });
+  copyTextToClipboard(lines.join('\n'), 'Asset links copied', 'No asset links to copy yet');
+}
+
+function copyProjectPublishCopy(pid) {
+  const p = getP(pid);
+  const captions = getProjectCaptions(pid, false);
+  const labels = {instagram:'Instagram', linkedin:'LinkedIn', x:'X'};
+  const lines = Object.keys(labels)
+    .flatMap(key => getProjectCaptionList(pid, key).map(text => `${labels[key]}:\n${text}`));
+  copyTextToClipboard(lines.join('\n\n'), 'Captions copied', 'Captions are not configured yet');
+}
+
+function getProjectCaptionListFromProject(p, platform) {
+  if(!p) return [];
+  const captions = p.captions || {};
+  let value = captions[platform];
+  if((value == null || value === '') && platform === 'instagram' && p.caption) value = p.caption;
+  if(Array.isArray(value)) return value.filter(Boolean);
+  if(typeof value === 'string' && value.trim()) return [value.trim()];
+  return [];
+}
+
+function getProjectCaptionList(pid, platform) {
+  return getProjectCaptionListFromProject(getP(pid), platform);
+}
+
+function ensureProjectCaptionList(pid, platform) {
+  const p = getP(pid);
+  if(!p) return [];
+  if(!p.captions) p.captions = {};
+  const list = getProjectCaptionListFromProject(p, platform);
+  p.captions[platform] = list;
+  return p.captions[platform];
+}
+
+function getProjectCaptions(pid, create = true) {
+  const p = getP(pid);
+  if(!p) return {};
+  if(!p.captions && create) p.captions = {};
+  const captions = p.captions || {};
+  if(!captions.instagram && p.caption) captions.instagram = p.caption;
+  return captions;
+}
+
+function getThumbnailPreviewUrl(url) {
+  const value = (url || '').trim();
+  if(!value) return '';
+  try {
+    const parsed = new URL(value);
+    const host = parsed.hostname.toLowerCase();
+    const looksLikeImage = /\.(png|jpe?g|webp|gif|avif)$/i.test(parsed.pathname);
+    if(host.includes('dropbox.com')) {
+      parsed.hostname = 'dl.dropboxusercontent.com';
+      parsed.searchParams.delete('dl');
+      parsed.searchParams.set('raw', '1');
+      return parsed.toString();
+    }
+    if(host === 'drive.google.com') {
+      const fileMatch = value.match(/\/file\/d\/([^/]+)/) || value.match(/[?&]id=([^&]+)/);
+      if(fileMatch) return `https://drive.google.com/uc?export=view&id=${encodeURIComponent(fileMatch[1])}`;
+    }
+    return looksLikeImage ? value : '';
+  } catch(e) {
+    return '';
+  }
+}
+
+function addProjectCaption(pid, platform) {
+  const p = getP(pid);
+  if(!p) return;
+  const input = document.getElementById(`caption-draft-${platform}`);
+  if(!input) return;
+  const value = input.value.trim();
+  if(!value) return;
+  const list = ensureProjectCaptionList(pid, platform);
+  list.push(value);
+  if(platform === 'instagram') p.caption = list[0] || '';
+  save();
+  renderDetail();
+  toast('Caption added', 'check');
+}
+
+function copyProjectCaption(pid, platform, idx) {
+  const list = getProjectCaptionList(pid, platform);
+  copyTextToClipboard(list[idx] || '', 'Caption copied', 'That caption is empty');
+}
+
+function removeProjectCaption(pid, platform, idx) {
+  const p = getP(pid);
+  if(!p) return;
+  const list = ensureProjectCaptionList(pid, platform);
+  list.splice(idx, 1);
+  if(platform === 'instagram') p.caption = list[0] || '';
+  save();
+  renderDetail();
+  toast('Caption removed', 'check');
+}
+
+function saveThumbnailSourceLink(pid) {
+  const p = getP(pid);
+  if(!p) return;
+  const input = document.getElementById('thumbnail-source-url');
+  if(!input) return;
+  const value = input.value.trim();
+  if(!value) return;
+  p.thumbnailSourceUrl = value;
+  save();
+  renderDetail();
+  toast('Thumbnail link added', 'link');
+}
+
+function copyTextToClipboard(text, successMsg, emptyMsg) {
+  const value = repairTextEncoding(text || '').trim();
+  if(!value) { toast(emptyMsg, 'note'); return; }
+  if(navigator.clipboard && navigator.clipboard.writeText) {
+    navigator.clipboard.writeText(value).then(() => toast(successMsg, 'check')).catch(() => fallbackCopyText(value, successMsg));
+  } else {
+    fallbackCopyText(value, successMsg);
+  }
+}
+
+function fallbackCopyText(value, successMsg) {
+  const ta = document.createElement('textarea');
+  ta.value = value;
+  ta.style.position = 'fixed';
+  ta.style.left = '-9999px';
+  document.body.appendChild(ta);
+  ta.select();
+  document.execCommand('copy');
+  ta.remove();
+  toast(successMsg, 'check');
+}
+
 function togglePause(pid) { const p=getP(pid); p.isPaused = !p.isPaused; save(); renderDetail(); }
   
   function changeProjectCategory(pid, newCatId) {
   const p = getP(pid);
-  if(p) { p.catId = newCatId; save(); renderDetail(); renderSidebar(); renderTopbar(); toast('Category updated', 'ðŸ“'); }
+  if(p) { p.catId = newCatId; save(); renderDetail(); renderSidebar(); renderTopbar(); toast('Category updated', 'folder'); }
 }
 
 function changeProjectFormat(pid, newFormatId) {
   const p = getP(pid);
-  if(p) { p.contentType = newFormatId; save(); renderDetail(); renderProjects(); toast('Format updated', 'âš™ï¸'); }
+  if(p) { p.contentType = newFormatId; save(); renderDetail(); renderProjects(); toast('Format updated', 'settings'); }
 }
 
 /* â”€â”€ Inline Links Add / Remove â”€â”€ */
@@ -4757,26 +5992,42 @@ function updateProjectPublishDate(pid, newDate) {
   save();
   if(screen === 'detail' && curPid === pid) renderDetail();
   renderProjects();
-  toast(newDate ? 'Target publish date saved' : 'Target publish date cleared','ðŸ“…');
+  toast(newDate ? 'Target publish date saved' : 'Target publish date cleared','calendar');
 }
 
 function addInlineLink(pid) { 
-  const t = document.getElementById('new-link-type').value;
+  const labelEl = document.getElementById('new-link-label');
+  const typeEl = document.getElementById('new-link-type');
+  const label = labelEl ? labelEl.value.trim() : '';
+  const t = typeEl ? typeEl.value : 'asset';
   const u = document.getElementById('new-link-url').value.trim(); 
   if(!u) return; 
   const proj = getP(pid);
   if(!Array.isArray(proj.links)) proj.links = []; // Seguridad extra
-  proj.links.push({type:t, url:u}); 
+  proj.links.push({type:t || 'asset', label: label || 'Asset folder', url:u, assetRoute:true});
   save(); 
   renderDetail(); 
-  toast('Link attached','ðŸ”—'); 
+  toast('Asset route added','link');
+}
+function addFinalRenderLink(pid) {
+  const u = document.getElementById('final-render-url')?.value.trim();
+  if(!u) return;
+  const proj = getP(pid);
+  if(!proj) return;
+  if(!Array.isArray(proj.links)) proj.links = [];
+  const existing = proj.links.find(lnk => lnk.type === 'final');
+  if(existing) existing.url = u;
+  else proj.links.push({type:'final', url:u});
+  save();
+  renderDetail();
+  toast('Final render linked','video');
 }
 function removeLink(pid, idx) { getP(pid).links.splice(idx,1); save(); renderDetail(); }
 
-function handleThumbnailUpload(e) { if(!e.target.files[0] || !curPid) return; resizeImage(e.target.files[0], (base64) => { getP(curPid).thumbnail = base64; save(); renderDetail(); toast('Thumbnail updated','ðŸ–¼ï¸'); }); e.target.value = ''; }
+function handleThumbnailUpload(e) { if(!e.target.files[0] || !curPid) return; resizeImage(e.target.files[0], (base64) => { getP(curPid).thumbnail = base64; save(); renderDetail(); toast('Thumbnail updated','image'); }); e.target.value = ''; }
 function stepAct(pid,i,action) { const p=getP(pid), ver=getCurVer(p), s=ver.steps[i]; if(action==='start') s.status='active'; else if(action==='complete'){ s.status='done'; if(ver.steps.every(x=>x.status==='done')) ver.waitingFeedback=true; } else if(action==='reopen'){ s.status='active'; ver.waitingFeedback=false; } save(); renderDetail(); renderSidebar(); }
 function openNoteModal(pid,i) { editStepCtx={pid,i}; document.getElementById('inp-note').value=getP(pid)?getCurVer(getP(pid)).steps[i].note||'':''; openModal('m-note'); }
-function saveStepNote() { if(!editStepCtx) return; getCurVer(getP(editStepCtx.pid)).steps[editStepCtx.i].note=document.getElementById('inp-note').value.trim(); save(); closeModal('m-note'); renderDetail(); toast('Status note saved','ðŸ“'); }
+function saveStepNote() { if(!editStepCtx) return; getCurVer(getP(editStepCtx.pid)).steps[editStepCtx.i].note=document.getElementById('inp-note').value.trim(); save(); closeModal('m-note'); renderDetail(); toast('Status note saved','note'); }
 function delStep(pid,i) {
   deleteCtx = JSON.stringify({pid, i});
   deleteType = 'step';
@@ -4824,9 +6075,9 @@ function stepDrop(e, targetIdx) {
   
   save(); 
   renderDetail(); 
-  toast('Pipeline reordered', 'ðŸ”„');
+  toast('Pipeline reordered', 'refresh');
 }  
-function switchVer(pid,v) { getP(pid).currentVersion=v; save(); renderDetail(); toast(`Workspace reverted to: ${v}`,'ðŸ”„'); }
+function switchVer(pid,v) { getP(pid).currentVersion=v; save(); renderDetail(); toast(`Workspace reverted to: ${v}`,'refresh'); }
 
 /* â”€â”€ Assignees Modal â”€â”€ */
 let tempAssignees = [];
@@ -4855,7 +6106,7 @@ function toggleUserSelection(uid, containerId) {
 function saveAssignees() {
   if(curPid && screen === 'detail') {
     getP(curPid).assignees = [...tempAssignees];
-    save(); closeModal('m-assign'); renderDetail(); toast('Team updated', 'ðŸ‘¥');
+    save(); closeModal('m-assign'); renderDetail(); toast('Team updated', 'users');
   }
 }
 
@@ -4882,7 +6133,7 @@ function submitComment() {
   }
 
   document.getElementById('cp-ta').value=''; currentCommentImgB64=null; document.getElementById('cp-img-preview').style.display = 'none'; document.getElementById('cp-file').value=''; document.getElementById('cp-tag').value='';
-  save(); renderComments(); toast('Note logged','âœ”ï¸');
+  save(); renderComments(); toast('Note logged','checkCircle');
 }
 function deleteComment(pid,cid) { const p=getP(pid); p.comments=p.comments.filter(c=>c.id!==cid); save(); renderComments(); }
 function renderComments() {
@@ -4890,7 +6141,7 @@ function renderComments() {
   document.getElementById('cp-count').textContent=p.comments.length;
   const list=document.getElementById('cp-list');
   if(!p.comments.length){ list.innerHTML=`<div class="no-comments">No notes yet.</div>`; return; }
-  list.innerHTML=p.comments.slice().reverse().map(c=>{
+  list.innerHTML=iconifyUiHtml(p.comments.slice().reverse().map(c=>{
     const author = DB.users.find(u=>u.id===c.authorId) || {name:'Unknown', avatar:'https://ui-avatars.com/api/?name=Unknown'};
     return `<div class="comment-card">
       <div class="cc-top">
@@ -4901,9 +6152,9 @@ function renderComments() {
       ${c.text?`<div class="cc-text">${c.text}</div>`:''}
       ${c.img?`<img src="${c.img}" class="cc-img">`:''}
       <div class="cc-date">${c.date}</div>
-      ${c.authorId===currentUser || isMaster ? `<button class="cc-del" onclick="deleteComment('${p.id}','${c.id}')">âœ•</button>`:''}
+      ${c.authorId===currentUser || isMaster ? `<button class="cc-del" onclick="deleteComment('${p.id}','${c.id}')">${uiIcon('x')}</button>`:''}
     </div>`;
-  }).join('');
+  }).join(''));
 }
 
 /* â”€â”€ Feedback & Delete â”€â”€ */
@@ -4919,7 +6170,7 @@ function applyFeedback() {
     p.versions.push({v:newV,date:today(),feedbackDesc:desc||'Visual feedback revision',waitingFeedback:false,steps:selSteps.map((n,i)=>({name:n,status:'pending',note:''}))});
     p.currentVersion=newV; DB.publish=DB.publish.filter(x=>x.projectId!==p.id);
     p.comments.push({id:uid(),text:`ðŸ” Auto-log: Version bumped to ${newV} | ${desc}`,img:imgData,date:today(),version:newV, authorId:currentUser});
-    save(); closeModal('m-feedback'); renderDetail(); renderSidebar(); toast('Revision tracked successfully','ðŸ”');
+    save(); closeModal('m-feedback'); renderDetail(); renderSidebar(); toast('Revision tracked successfully','refresh');
   };
   if(file) resizeImage(file, finishFb); else finishFb(null);
 }
@@ -4946,7 +6197,7 @@ function confirmDelete() {
     save(); 
     if(curPid === deleteCtx) { curPid = null; goScreen('projects'); }
     else { renderProjects(); }
-    toast('Project wiped','ðŸ—‘');
+    toast('Project wiped','trash');
   } else if (deleteType === 'user') {
     DB.users = DB.users.filter(u=>u.id!==deleteCtx);
     DB.projects.forEach(p => { 
@@ -4955,14 +6206,14 @@ function confirmDelete() {
     save();
     if (screen === 'team') renderTeam(); 
     if (screen === 'projects') renderProjects();
-    toast('Profile deleted','ðŸ—‘');
+    toast('Profile deleted','trash');
   } else if (deleteType === 'season') {
     DB.years = DB.years.filter(y => y.id !== deleteCtx);
     DB.categories = DB.categories.filter(c => c.yearId !== deleteCtx); // Borrado en cascada
-    save(); renderSidebar(); toast('Season deleted','ðŸ—‘');
+    save(); renderSidebar(); toast('Season deleted','trash');
   } else if (deleteType === 'category') {
     DB.categories = DB.categories.filter(c => c.id !== deleteCtx);
-    save(); renderSidebar(); toast('Category deleted','ðŸ—‘');
+    save(); renderSidebar(); toast('Category deleted','trash');
   } else if (deleteType === 'format') {
     if(DB.contentTypes.length <= 1) {
       alert("You must have at least one format type.");
@@ -4974,14 +6225,14 @@ function confirmDelete() {
     const fallbackId = DB.contentTypes[0].id;
     DB.projects.forEach(p => { if(p.contentType === deleteCtx) p.contentType = fallbackId; });
     save(); renderFormatsList(); buildCTRadios(selContentType); renderProjects();
-    toast('Format deleted','ðŸ—‘');
+    toast('Format deleted','trash');
   }
   else if (deleteType === 'step') {
     try {
       const ctx = JSON.parse(deleteCtx);
       getCurVer(getP(ctx.pid)).steps.splice(ctx.i, 1);
       save(); renderDetail();
-      toast('Stage removed','ðŸ—‘');
+      toast('Stage removed','trash');
     } catch(e) { console.error(e); }
   } else if (deleteType === 'idea') {
     DB.ideas = DB.ideas.filter(i=>i.id!==deleteCtx);
@@ -4990,7 +6241,7 @@ function confirmDelete() {
     viewingIdeaId = null;
     currentIdeaImgB64 = null;
     goScreen('ideas');
-    toast('Idea deleted','ðŸ—‘');
+    toast('Idea deleted','trash');
   } else if (deleteType === 'notifications') {
     const u = getAuthUser();
     if(u) {
@@ -5013,7 +6264,7 @@ function renderProfile() {
     if(!u) {
       document.getElementById('profile-content').innerHTML = `
         <div class="empty-state" style="margin-top:40px;">
-          <div class="empty-icon">ðŸ‘¤</div>
+          <div class="empty-icon">${uiIcon('user')}</div>
           <div class="empty-text">Loading profile data...</div>
         </div>`;
       return;
@@ -5040,7 +6291,7 @@ function renderProfile() {
         : `<div class="profile-project-thumb">${escapeHtml(p.name.charAt(0).toUpperCase())}</div>`;
       const format = DB.contentTypes.find(ct => ct.id === p.contentType)?.label || '';
       return `<div class="profile-project-row" onclick="openProj('${p.id}')">
-        ${opts.thumb ? thumb : ''}
+        ${thumb}
         <div>
           <div class="profile-project-name">${escapeHtml(p.name)}</div>
           <div class="profile-project-meta">${escapeHtml(cat?.name||'')} · ${escapeHtml(p.currentVersion)}</div>
@@ -5065,18 +6316,38 @@ function renderProfile() {
     );
 
     const todoHTML = dailyTodos.map(t => `
-      <div class="todo-item ${t.status==='done'?'done':''}">
+      <div class="profile-task-row ${t.status==='done'?'done':''}">
         <input type="checkbox" ${t.status==='done'?'checked':''} onchange="toggleTodo('${t.id}')">
-        <span class="todo-text">${t.text}</span>
+        <span class="todo-text">${escapeHtml(t.text)}<span class="profile-task-meta">${t.bucket === 'week' ? `Scheduled ${escapeHtml(t.weekDay || t.day || 'this week')}` : 'Today'}</span></span>
         <button class="todo-del" onclick="delTodo('${t.id}')">${uiIcon('x')}</button>
       </div>
     `).join('');
 
     const tasksCompleted = todos.filter(t => t.status === 'done').length;
+    const completedTaskHTML = todos.filter(t => t.status === 'done').slice(0, 8).map(t => `
+      <div class="profile-task-row done">
+        <input type="checkbox" checked onchange="toggleTodo('${t.id}')">
+        <span class="todo-text">${escapeHtml(t.text)}<span class="profile-task-meta">${t.bucket === 'month' ? 'Month' : t.bucket === 'week' ? escapeHtml(t.weekDay || t.day || 'Week') : 'Today'}</span></span>
+        <button class="todo-del" onclick="delTodo('${t.id}')">${uiIcon('x')}</button>
+      </div>
+    `).join('');
     const upcomingDeadlines = activeP.filter(p => {
       const deadline = getProjectDeadlineMeta(p);
       return deadline && !isPastDeadline(deadline.date);
     }).length;
+    const upcomingDeadlineProjects = activeP
+      .map(p => ({ p, deadline: getProjectDeadlineMeta(p) }))
+      .filter(item => item.deadline && !isPastDeadline(item.deadline.date))
+      .sort((a,b) => String(a.deadline.date).localeCompare(String(b.deadline.date)));
+    const deadlineHTML = upcomingDeadlineProjects.length
+      ? upcomingDeadlineProjects.map(item => renderMini(item.p, { thumb:false })).join('')
+      : '<div class="profile-kpi-empty">No upcoming deadlines.</div>';
+    const assignedHTML = activeP.length
+      ? activeP.map(p => renderMini(p, { thumb:false })).join('')
+      : '<div class="profile-kpi-empty">No active projects assigned.</div>';
+    const completedHTML = doneP.length
+      ? doneP.map(p => renderMini(p, { thumb:true, published:true })).join('')
+      : '<div class="profile-kpi-empty">No completed projects yet.</div>';
     const initial = (u.name || u.email || 'U').charAt(0).toUpperCase();
 
     document.getElementById('profile-content').innerHTML = `
@@ -5096,51 +6367,42 @@ function renderProfile() {
       </div>
 
       <div class="profile-kpi-row">
-        <div class="profile-kpi-card">
-          <div class="profile-kpi-main"><div class="profile-kpi-icon projects">${uiIcon('folder')}</div><div><div class="profile-kpi-value">${activeP.length}</div><div class="profile-kpi-label">Assigned Projects</div></div></div>
-          <span class="profile-kpi-arrow">${uiIcon('chevronRight')}</span>
+        <div class="profile-kpi-card ${profileOpenPanel === 'assigned' ? 'open' : ''}">
+          <button class="profile-kpi-trigger" onclick="toggleProfilePanel('assigned')">
+            <div class="profile-kpi-main"><div class="profile-kpi-icon projects">${uiIcon('folder')}</div><div><div class="profile-kpi-value">${activeP.length}</div><div class="profile-kpi-label">Assigned Projects</div></div></div>
+            <span class="profile-kpi-arrow">${uiIcon('chevronRight')}</span>
+          </button>
+          <div class="profile-kpi-body"><div class="profile-kpi-list">${assignedHTML}</div></div>
         </div>
-        <div class="profile-kpi-card">
-          <div class="profile-kpi-main"><div class="profile-kpi-icon completed">${uiIcon('checkCircle')}</div><div><div class="profile-kpi-value">${doneP.length}</div><div class="profile-kpi-label">Completed Projects</div></div></div>
-          <span class="profile-kpi-arrow">${uiIcon('chevronRight')}</span>
+        <div class="profile-kpi-card ${profileOpenPanel === 'completed' ? 'open' : ''}">
+          <button class="profile-kpi-trigger" onclick="toggleProfilePanel('completed')">
+            <div class="profile-kpi-main"><div class="profile-kpi-icon completed">${uiIcon('checkCircle')}</div><div><div class="profile-kpi-value">${doneP.length}</div><div class="profile-kpi-label">Completed Projects</div></div></div>
+            <span class="profile-kpi-arrow">${uiIcon('chevronRight')}</span>
+          </button>
+          <div class="profile-kpi-body"><div class="profile-kpi-list">${completedHTML}</div></div>
         </div>
-        <div class="profile-kpi-card">
-          <div class="profile-kpi-main"><div class="profile-kpi-icon tasks">${uiIcon('clock')}</div><div><div class="profile-kpi-value">${tasksCompleted}</div><div class="profile-kpi-label">Tasks Completed</div></div></div>
-          <span class="profile-kpi-arrow">${uiIcon('chevronRight')}</span>
-        </div>
-        <div class="profile-kpi-card">
-          <div class="profile-kpi-main"><div class="profile-kpi-icon deadlines">${uiIcon('calendar')}</div><div><div class="profile-kpi-value">${upcomingDeadlines}</div><div class="profile-kpi-label">Upcoming Deadlines</div></div></div>
-          <span class="profile-kpi-arrow">${uiIcon('chevronRight')}</span>
-        </div>
-      </div>
-
-      <div class="profile-dashboard-grid">
-        <div class="profile-col">
-          <div class="profile-col-header">
-            <div class="pcol-title">Assigned Active Projects (${activeP.length})</div>
-            <button class="profile-view-btn" onclick="goScreen('projects')">View all</button>
+        <div class="profile-kpi-card ${profileOpenPanel === 'tasks' ? 'open' : ''}">
+          <button class="profile-kpi-trigger" onclick="toggleProfilePanel('tasks')">
+            <div class="profile-kpi-main"><div class="profile-kpi-icon tasks">${uiIcon('clock')}</div><div><div class="profile-kpi-value">${tasksCompleted}</div><div class="profile-kpi-label">Tasks Completed</div></div></div>
+            <span class="profile-kpi-arrow">${uiIcon('chevronRight')}</span>
+          </button>
+          <div class="profile-kpi-body">
+            <div class="profile-kpi-section-label">Daily To-Do</div>
+            <div class="profile-inline-add">
+              <input type="text" id="new-todo" class="todo-input" placeholder="Add a new task..." onkeyup="if(event.key==='Enter') addTodo()">
+              <button class="todo-add-btn" onclick="addTodo()">Add</button>
+            </div>
+            <div class="profile-kpi-list">${todoHTML || '<div class="profile-kpi-empty">All caught up for today.</div>'}</div>
+            <div class="profile-kpi-section-label">Completed</div>
+            <div class="profile-kpi-list">${completedTaskHTML || '<div class="profile-kpi-empty">No completed tasks yet.</div>'}</div>
           </div>
-          <div class="mini-proj-list">${activeP.length?activeP.slice(0,5).map(p => renderMini(p, { thumb:false })).join(''):'<div style="color:var(--muted);font-size:13px;">No active projects.</div>'}</div>
         </div>
-        <div class="profile-col">
-          <div class="profile-col-header">
-            <div class="pcol-title">Completed Projects (${doneP.length})</div>
-            <button class="profile-view-btn" onclick="goScreen('publish')">View all</button>
-          </div>
-          <div class="mini-proj-list">${doneP.length?doneP.slice(0,5).map(p => renderMini(p, { thumb:true, published:true })).join(''):'<div style="color:var(--muted);font-size:13px;">No completed projects.</div>'}</div>
-          ${doneP.length > 5 ? `<button class="profile-view-btn" style="width:100%;margin-top:16px;" onclick="goScreen('publish')">View all projects</button>` : ''}
-        </div>
-        <div class="profile-col">
-          <div class="profile-todo-head">
-            <div class="pcol-title">Daily To-Do</div>
-            <button class="profile-todo-add-icon" onclick="document.getElementById('new-todo')?.focus()">${uiIcon('plus')}</button>
-          </div>
-          <div class="todo-input-wrap">
-            <input type="text" id="new-todo" class="todo-input" placeholder="Add a new task..." onkeyup="if(event.key==='Enter') addTodo()">
-            <button class="todo-add-btn" onclick="addTodo()">Add</button>
-          </div>
-          <div class="todo-list">${todoHTML || '<div style="color:var(--muted);font-size:13px;">All caught up!</div>'}</div>
-          <div class="profile-tip">${uiIcon('spark')} <span>Tip: Prioritize your tasks and focus on what matters most.</span></div>
+        <div class="profile-kpi-card ${profileOpenPanel === 'deadlines' ? 'open' : ''}">
+          <button class="profile-kpi-trigger" onclick="toggleProfilePanel('deadlines')">
+            <div class="profile-kpi-main"><div class="profile-kpi-icon deadlines">${uiIcon('calendar')}</div><div><div class="profile-kpi-value">${upcomingDeadlines}</div><div class="profile-kpi-label">Upcoming Deadlines</div></div></div>
+            <span class="profile-kpi-arrow">${uiIcon('chevronRight')}</span>
+          </button>
+          <div class="profile-kpi-body"><div class="profile-kpi-list">${deadlineHTML}</div></div>
         </div>
       </div>
     `;
@@ -5150,6 +6412,11 @@ function renderProfile() {
     document.getElementById('profile-content').innerHTML = `<div class="empty-state">Error loading profile data. Check console.</div>`;
     queueUiIcons();
   }
+}
+
+function toggleProfilePanel(panel) {
+  profileOpenPanel = profileOpenPanel === panel ? null : panel;
+  renderProfile();
 }
 
 function addTodo() {
@@ -5200,9 +6467,9 @@ function delTodo(id) {
 /* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
    PUBLISH SCREEN
 â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
-function sendToPublish(pid) { if(!DB.publish.find(x=>x.projectId===pid)) DB.publish.push({projectId:pid,date:null}); save(); goScreen('publish'); toast('Added to Queue','ðŸš€'); }
-function removeFromPublish(pid, e) { if(e) e.stopPropagation(); DB.publish=DB.publish.filter(x=>x.projectId!==pid); save(); renderPublish(); toast('Removed from Queue','âœ•'); }
-function setPublishDate(pid,date) { const e=DB.publish.find(x=>x.projectId===pid); if(e){ e.date=date; save(); renderPublish(); toast('Date scheduled','ðŸ“…'); } }
+function sendToPublish(pid) { if(!DB.publish.find(x=>x.projectId===pid)) DB.publish.push({projectId:pid,date:null}); save(); goScreen('publish'); toast('Added to Queue','rocket'); }
+function removeFromPublish(pid, e) { if(e) e.stopPropagation(); DB.publish=DB.publish.filter(x=>x.projectId!==pid); save(); renderPublish(); toast('Removed from Queue','x'); }
+function setPublishDate(pid,date) { const e=DB.publish.find(x=>x.projectId===pid); if(e){ e.date=date; save(); renderPublish(); toast('Date scheduled','calendar'); } }
 
 function renderPublish() {
   const el = document.getElementById('pub-content');
@@ -5272,12 +6539,17 @@ function renderPublish() {
     // Construimos la imagen clicable
     const thumbHTML = p.thumbnail 
       ? `<img src="${p.thumbnail}" style="width:180px; height:100px; object-fit:cover; border-radius:8px; cursor:pointer;" onclick="openProj('${p.id}')">` 
-      : `<div style="width:180px; height:100px; background:var(--card2); border-radius:8px; display:flex; align-items:center; justify-content:center; cursor:pointer; font-size:32px;" onclick="openProj('${p.id}')">ðŸŽ¬</div>`;
+      : `<div style="width:180px; height:100px; background:var(--card2); border-radius:8px; display:flex; align-items:center; justify-content:center; cursor:pointer; color:var(--muted);" onclick="openProj('${p.id}')">${uiIcon('video','xl')}</div>`;
 
     // Si tiene un link cargado en los assets, el botÃ³n lo abre. Si no, no hace nada.
-    const renderBtn = (p.links && p.links.length > 0) 
-      ? `<button onclick="window.open('${p.links[0].url}', '_blank')" style="background:var(--primary); border:none; color:white; padding:8px 16px; border-radius:6px; cursor:pointer; font-weight:600; transition:0.2s;" onmouseover="this.style.opacity='0.8'" onmouseout="this.style.opacity='1'">â–¶ View Final Render</button>` 
-      : `<button style="background:var(--card2); border:none; color:var(--muted); padding:8px 16px; border-radius:6px; font-weight:600; cursor:not-allowed;">â–¶ No Link Available</button>`;
+    const finalRender = (p.links || []).find(l => l.type === 'final' && l.url);
+    let renderBtn = finalRender
+      ? `<button onclick="window.open('${finalRender.url}', '_blank')" style="background:var(--primary); border:none; color:white; padding:8px 16px; border-radius:6px; cursor:pointer; font-weight:600; transition:0.2s;" onmouseover="this.style.opacity='0.8'" onmouseout="this.style.opacity='1'">${uiIcon('play')} View Final Render</button>`
+      : `<button style="background:var(--card2); border:none; color:var(--muted); padding:8px 16px; border-radius:6px; font-weight:600; cursor:not-allowed;">${uiIcon('play')} No Link Available</button>`;
+
+    renderBtn = finalRender
+      ? `<button class="publish-action-btn primary" onclick="window.open('${finalRender.url}', '_blank')">View Final Render</button>`
+      : `<button class="publish-action-btn disabled">No Link Available</button>`;
 
     html += `
     <div class="pub-card" style="display:flex; justify-content:space-between; align-items:center; background:var(--bg); padding:16px; border-radius:12px; --hover-color:${formatColor};">
@@ -5290,7 +6562,7 @@ function renderPublish() {
             ${renderCTTag(p.contentType)}
           </div>
           <div style="display:flex; align-items:center; gap:8px; margin-top:4px;">
-            <span style="font-size:14px; color:var(--text);">ðŸ“… Release:</span>
+            <span style="font-size:14px; color:var(--text);">${uiIcon('calendar')} Release:</span>
             <input type="date" value="${pub.date||''}" onchange="updatePubDate('${p.id}', this.value)" style="background:transparent; border:1px solid var(--line2); color:var(--text); padding:4px 8px; border-radius:6px; font-family:inherit; font-size:14px; cursor:pointer;">
           </div>
         </div>
@@ -5298,12 +6570,12 @@ function renderPublish() {
       
       <div style="display:flex; flex-direction:column; gap:12px; align-items:flex-end;">
         <div style="display:flex; gap:8px;">
-          <button onclick="openProj('${p.id}')" style="background:transparent; border:1px solid var(--line2); color:var(--text); padding:6px 12px; border-radius:6px; cursor:pointer; font-weight:600; transition:0.2s;" onmouseover="this.style.background='var(--card2)'" onmouseout="this.style.background='transparent'">ðŸ“‚ Open</button>
-          <button onclick="removeFromPublish('${p.id}')" style="background:transparent; border:1px solid var(--line2); color:var(--text); padding:6px 12px; border-radius:6px; cursor:pointer; font-weight:600; transition:0.2s;" onmouseover="this.style.background='var(--card2)'" onmouseout="this.style.background='transparent'">âœ• Remove</button>
+          <button onclick="openProj('${p.id}')" style="background:transparent; border:1px solid var(--line2); color:var(--text); padding:6px 12px; border-radius:6px; cursor:pointer; font-weight:600; transition:0.2s;" onmouseover="this.style.background='var(--card2)'" onmouseout="this.style.background='transparent'">${uiIcon('folderOpen')} Open</button>
+          <button onclick="removeFromPublish('${p.id}')" style="background:transparent; border:1px solid var(--line2); color:var(--text); padding:6px 12px; border-radius:6px; cursor:pointer; font-weight:600; transition:0.2s;" onmouseover="this.style.background='var(--card2)'" onmouseout="this.style.background='transparent'">${uiIcon('x')} Remove</button>
         </div>
         <div style="display:flex; gap:8px;">
           ${renderBtn}
-          <button onclick="markAsPublished('${p.id}')" style="background:var(--green); border:none; color:white; padding:8px 16px; border-radius:6px; cursor:pointer; font-weight:600; transition:0.2s;" onmouseover="this.style.opacity='0.8'" onmouseout="this.style.opacity='1'">âœ… Published</button>
+          <button class="publish-action-btn success" onclick="markAsPublished('${p.id}')">Published</button>
         </div>
       </div>
     </div>
@@ -5350,7 +6622,7 @@ function buildCalendarHTML(entries = getFilteredCalendarEntries()) {
       }).join('');
       
       if(dayEntries.length > 3) {
-        projsHTML += `<div class="cal-proj-label" style="background:var(--card2); color:var(--text); text-align:center;">+${dayEntries.length - 3} mÃ¡s</div>`;
+        projsHTML += `<div class="cal-proj-label" style="background:var(--card2); color:var(--text); text-align:center;">+${dayEntries.length - 3} more</div>`;
       }
     }
 
@@ -5372,8 +6644,8 @@ function buildCalendarHTML(entries = getFilteredCalendarEntries()) {
     <div class="cal-modal-overlay" onclick="calSelectedDay=null; renderCalendarScreen();" style="position:fixed; top:0; left:0; width:100vw; height:100vh; background:rgba(0,0,0,0.6); z-index:9999; display:flex; align-items:center; justify-content:center; backdrop-filter:blur(4px);">
       <div class="cal-modal-content" onclick="event.stopPropagation()" style="background:var(--bg); border:1px solid var(--line2); border-radius:16px; padding:24px; width:450px; max-width:90%; box-shadow: 0 20px 40px rgba(0,0,0,0.4);">
         <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px;">
-          <div style="font-size:20px; font-weight:800; color:var(--text);">ðŸ“… Schedule for ${formatPlannedDate(calSelectedDay)}</div>
-          <button onclick="calSelectedDay=null; renderCalendarScreen();" style="background:var(--card2); border:none; color:var(--text); width:32px; height:32px; border-radius:50%; cursor:pointer; font-weight:bold; transition:0.2s;" onmouseover="this.style.background='var(--red)'; this.style.color='#fff';" onmouseout="this.style.background='var(--card2)'; this.style.color='var(--text)';">âœ•</button>
+          <div style="font-size:20px; font-weight:800; color:var(--text);">${uiIcon('calendar')} Schedule for ${formatPlannedDate(calSelectedDay)}</div>
+          <button onclick="calSelectedDay=null; renderCalendarScreen();" style="background:var(--card2); border:none; color:var(--text); width:32px; height:32px; border-radius:50%; cursor:pointer; font-weight:bold; transition:0.2s;" onmouseover="this.style.background='var(--red)'; this.style.color='#fff';" onmouseout="this.style.background='var(--card2)'; this.style.color='var(--text)';">${uiIcon('x')}</button>
         </div>
         
         <div style="display:flex; flex-direction:column; gap:12px; max-height: 60vh; overflow-y:auto; padding-right:8px;">
@@ -5404,7 +6676,7 @@ function buildCalendarHTML(entries = getFilteredCalendarEntries()) {
                 <div style="font-size:11px; color:${entry.type === 'queue' ? 'var(--accent-light)' : 'var(--orange)'}; font-weight:800; text-transform:uppercase; letter-spacing:0.5px; margin-bottom:4px;">${eventTag}</div>
                 <div style="font-size:12px; color:var(--muted); font-weight:600;">${actionText}</div>
               </div>
-              ${p.thumbnail ? `<img src="${p.thumbnail}" style="width:60px; height:40px; border-radius:6px; object-fit:cover;">` : `<div style="font-size:24px;">ðŸŽ¬</div>`}
+              ${p.thumbnail ? `<img src="${p.thumbnail}" style="width:60px; height:40px; border-radius:6px; object-fit:cover;">` : `<div style="color:var(--muted);">${uiIcon('video')}</div>`}
             </div>
             `;
           }).join('')}
@@ -5416,9 +6688,9 @@ function buildCalendarHTML(entries = getFilteredCalendarEntries()) {
 
   return `<div class="cal-wrap">
             <div class="cal-hd">
-              <button class="cal-nav" onclick="calDate.setMonth(calDate.getMonth()-1); calSelectedDay=null; renderCalendarScreen()">â—€</button>
+              <button class="cal-nav" onclick="calDate.setMonth(calDate.getMonth()-1); calSelectedDay=null; renderCalendarScreen()" aria-label="Previous month">${uiIcon('chevronLeft')}</button>
               <div class="cal-month">${['January','February','March','April','May','June','July','August','September','October','November','December'][m]} ${y}</div>
-              <button class="cal-nav" onclick="calDate.setMonth(calDate.getMonth()+1); calSelectedDay=null; renderCalendarScreen()">â–¶</button>
+              <button class="cal-nav" onclick="calDate.setMonth(calDate.getMonth()+1); calSelectedDay=null; renderCalendarScreen()" aria-label="Next month">${uiIcon('chevronRight')}</button>
             </div>
             <div class="cal-body">
               <div class="cal-dnames">${['Su','Mo','Tu','We','Th','Fr','Sa'].map(d=>`<div class="cal-dname">${d}</div>`).join('')}</div>
@@ -5433,9 +6705,9 @@ function buildCalendarHTML(entries = getFilteredCalendarEntries()) {
 â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
 function renderIdeas() {
   const grid=document.getElementById('ideas-grid');
-  let html=`<div class="idea-add-card" onclick="openIdeaModal()"><div class="idea-add-icon">ðŸ’¡</div><div class="idea-add-text">Add New Concept</div></div>`;
+  let html=`<div class="idea-add-card" onclick="openIdeaModal()"><div class="idea-add-icon">${uiIcon('idea')}</div><div class="idea-add-text">Add New Concept</div></div>`;
   if(DB.ideas.length) {
-    html+=DB.ideas.slice().reverse().map(idea=>`<div class="idea-card" onclick="openIdeaModal('${idea.id}')"><div class="idea-top"><div class="idea-emoji">ðŸ“</div><div class="idea-title">${idea.title}</div></div>${idea.img?`<img src="${idea.img}" class="idea-img">`:''}<div class="idea-body">${idea.body}</div>${idea.link?`<a class="idea-link" href="${idea.link}" target="_blank" rel="noopener" onclick="event.stopPropagation()">ðŸ”— Reference Link</a>`:''}<div class="idea-date">${idea.date}</div><button class="idea-del" onclick="event.stopPropagation(); deleteIdea('${idea.id}')">âœ•</button></div>`).join('');
+    html+=DB.ideas.slice().reverse().map(idea=>`<div class="idea-card" onclick="openIdeaModal('${idea.id}')"><div class="idea-top"><div class="idea-emoji">${uiIcon('note')}</div><div class="idea-title">${idea.title}</div></div>${idea.img?`<img src="${idea.img}" class="idea-img">`:''}<div class="idea-body">${idea.body}</div>${idea.link?`<a class="idea-link" href="${idea.link}" target="_blank" rel="noopener" onclick="event.stopPropagation()">${uiIcon('link')} Reference Link</a>`:''}<div class="idea-date">${idea.date}</div><button class="idea-del" onclick="event.stopPropagation(); deleteIdea('${idea.id}')">${uiIcon('x')}</button></div>`).join('');
   }
   grid.innerHTML=html;
 }
@@ -5456,9 +6728,10 @@ function openIdeaModal(id=null) {
 function saveIdea() {
   const title=document.getElementById('inp-ititle').value.trim(), body=document.getElementById('inp-ibody').value.trim(), link=document.getElementById('inp-ilink').value.trim();
   if(!title){ alert('Title required.'); return; }
-  if(editingIdeaId) { const idea = DB.ideas.find(i=>i.id===editingIdeaId); idea.title = title; idea.body = body; idea.link = link; idea.img = currentIdeaImgB64; }
-  else { DB.ideas.push({id:uid(),title,body,link,img:currentIdeaImgB64,date:today()}); }
-  save(); closeModal('m-idea'); renderIdeas(); toast('Concept saved','ðŸ’¡');
+  const bodyHtml = plainTextToIdeaHtml(body);
+  if(editingIdeaId) { const idea = DB.ideas.find(i=>i.id===editingIdeaId); idea.title = title; idea.body = body; idea.bodyHtml = bodyHtml; idea.link = link; idea.img = currentIdeaImgB64; }
+  else { DB.ideas.push({id:uid(),title,body,bodyHtml,link,img:currentIdeaImgB64,date:today()}); }
+  save(); closeModal('m-idea'); renderIdeas(); toast('Concept saved','idea');
 }
 function deleteIdea(id) { if(confirm('Wipe this idea?')) { DB.ideas=DB.ideas.filter(i=>i.id!==id); save(); renderIdeas(); } }
 
@@ -5471,11 +6744,11 @@ function createProject() {
   const selSteps=[...document.querySelectorAll('#step-toggles .stoggle.on')].map(t=>t.dataset.s);
   if(!selSteps.length){ alert('Please select at least one pipeline step.'); return; }
   DB.projects.push({
-    id:uid(), catId, name, contentType:selContentType, priority:false, currentVersion:'v1.0', order:DB.projects.length, thumbnail: null, links:[], assignees:[...tempAssignees], isPaused:false,
+    id:uid(), catId, name, contentType:selContentType, priority:false, currentVersion:'v1.0', order:DB.projects.length, createdAt:new Date().toISOString(), thumbnail: null, links:[], assignees:[...tempAssignees], isPaused:false,
     versions:[{v:'v1.0',date:today(),feedbackDesc:'Initial workspace created',waitingFeedback:false,steps:selSteps.map((s,i)=>({name:s,status:'pending',note:''}))}],
     comments:[], publishDate:null
   });
-  save(); closeModal('m-project'); render(); toast('Project deployed','ðŸŽ¬');
+  save(); closeModal('m-project'); render(); toast('Project deployed','video');
 }
 
 function createSeason() {
@@ -5485,10 +6758,10 @@ function createSeason() {
   if (editingSeasonId) {
     const yr = DB.years.find(y => y.id === editingSeasonId);
     if(yr) yr.label = name;
-    toast('Season updated','ðŸ“');
+    toast('Season updated','folder');
   } else {
     DB.years.push({id:'y'+Date.now(), label:name});
-    toast('Season created','ðŸ“');
+    toast('Season created','folder');
   }
   
   save(); closeModal('m-season'); render();
@@ -5508,16 +6781,16 @@ function createCategory() {
       cat.yearId = yearId;
       cat.color = selCatColor;
     }
-    toast('Category updated','ðŸ“');
+    toast('Category updated','folder');
   } else {
     DB.categories.push({id:uid(), yearId, name, color:selCatColor}); 
-    toast('Category created','ðŸ“');
+    toast('Category created','folder');
   }
   
   save(); closeModal('m-category'); render(); 
 }
 
-function createStep() { const name=document.getElementById('inp-sname').value.trim(); if(!name) return; getCurVer(getP(curPid)).steps.push({name,status:'pending',note:''}); save(); closeModal('m-step'); renderDetail(); toast('Step added','âž•'); }
+function createStep() { const name=document.getElementById('inp-sname').value.trim(); if(!name) return; getCurVer(getP(curPid)).steps.push({name,status:'pending',note:''}); save(); closeModal('m-step'); renderDetail(); toast('Step added','plus'); }
 
 /* Funciones dinÃ¡micas para Format Types */
 let editingFormatId = null;
@@ -5556,8 +6829,8 @@ function renderFormatsList() {
       </div>
       ${isMaster ? `
       <div style="display:flex; gap:6px;">
-        <button class="tb-btn" style="padding:4px 8px; font-size:11px;" onclick="editFormat('${ct.id}')">âœï¸</button>
-        <button class="tb-btn danger" style="padding:4px 8px; font-size:11px;" onclick="askDelete('${ct.id}', 'format')">ðŸ—‘</button>
+        <button class="tb-btn" style="padding:4px 8px; font-size:11px;" onclick="editFormat('${ct.id}')">${uiIcon('pencil')}</button>
+        <button class="tb-btn danger" style="padding:4px 8px; font-size:11px;" onclick="askDelete('${ct.id}', 'format')">${uiIcon('trash')}</button>
       </div>` : ''}
     </div>
   `).join('');
@@ -5587,11 +6860,11 @@ function addFormat() {
       ct.label = label;
       ct.color = color;
     }
-    toast('Format updated', 'âœ…');
+    toast('Format updated', 'checkCircle');
   } else {
     // Si es nuevo, lo creamos
     DB.contentTypes.push({ id: 'ct_'+Date.now(), label, color });
-    toast('Format added', 'âœ…');
+    toast('Format added', 'checkCircle');
   }
   
   save();
@@ -5679,12 +6952,12 @@ if (IS_VISUAL_PREVIEW) setTimeout(startVisualPreview, 0);
 
 function changeProjectCategory(pid, newCatId) {
   const p = getP(pid);
-  if(p) { p.catId = newCatId; save(); renderDetail(); renderSidebar(); renderTopbar(); toast('Category updated', 'ðŸ“'); }
+  if(p) { p.catId = newCatId; save(); renderDetail(); renderSidebar(); renderTopbar(); toast('Category updated', 'folder'); }
 }
 
 function changeProjectFormat(pid, newFormatId) {
   const p = getP(pid);
-  if(p) { p.contentType = newFormatId; save(); renderDetail(); renderProjects(); toast('Format updated', 'âš™ï¸'); }
+  if(p) { p.contentType = newFormatId; save(); renderDetail(); renderProjects(); toast('Format updated', 'settings'); }
 }
 
 function unqueueProject(pid) {
@@ -5695,7 +6968,7 @@ function unqueueProject(pid) {
   // Refresca la pantalla para mostrar el panel verde de completado
   renderDetail();
   renderSidebar(); // Para actualizar la burbujita roja de notificaciones de la izquierda
-  toast('Removed from Queue', 'ðŸ”™');
+  toast('Removed from Queue', 'chevronLeft');
 }
 
 let currentView = localStorage.getItem('jaba_view') || 'grid-large';
@@ -5744,7 +7017,7 @@ function markAsPublished(pid) {
   renderPublish(); 
   
   // Aviso de Ã©xito
-  toast('Project marked as Published!', 'ðŸŽ‰');
+  toast('Project marked as Published!', 'spark');
 }
 
 function updatePubDate(pid, newDate) {
@@ -5762,7 +7035,7 @@ function updatePubDate(pid, newDate) {
     renderPublish(); 
     
     // Opcional: mostramos un mensajito de Ã©xito (si tienes la funciÃ³n toast)
-    if(typeof toast === 'function') toast('Release date updated!', 'ðŸ“…');
+    if(typeof toast === 'function') toast('Release date updated!', 'calendar');
   }
 }  
   
@@ -5776,7 +7049,7 @@ function renderPublish() {
   if(!el) return;
   const queue = (DB.publish || []).filter(pub => getP(pub.projectId));
   if(!queue.length) {
-    el.innerHTML = `<div class="empty-state"><div class="empty-icon">ðŸš€</div><div class="empty-text">No completed projects queued</div><div class="empty-sub">Projects approved for release will appear here.</div></div>`;
+    el.innerHTML = `<div class="empty-state"><div class="empty-icon">${uiIcon('rocket')}</div><div class="empty-text">No completed projects queued</div><div class="empty-sub">Projects approved for release will appear here.</div></div>`;
     queueUiIcons();
     return;
   }
@@ -5793,10 +7066,15 @@ function renderPublish() {
     const formatColor = DB.contentTypes.find(c => c.id === p.contentType)?.color || 'var(--primary)';
     const thumbHTML = p.thumbnail
       ? `<img src="${p.thumbnail}" style="width:180px; height:100px; object-fit:cover; border-radius:8px; cursor:pointer;" onclick="openProj('${p.id}')">`
-      : `<div style="width:180px; height:100px; background:var(--card2); border-radius:8px; display:flex; align-items:center; justify-content:center; cursor:pointer; font-size:32px;" onclick="openProj('${p.id}')">ðŸŽ¬</div>`;
-    const renderBtn = (p.links && p.links.length > 0)
-      ? `<button onclick="window.open('${p.links[0].url}', '_blank')" style="background:var(--primary); border:none; color:white; padding:8px 16px; border-radius:6px; cursor:pointer; font-weight:600; transition:0.2s;" onmouseover="this.style.opacity='0.8'" onmouseout="this.style.opacity='1'">â–¶ View Final Render</button>`
-      : `<button style="background:var(--card2); border:none; color:var(--muted); padding:8px 16px; border-radius:6px; font-weight:600; cursor:not-allowed;">â–¶ No Link Available</button>`;
+      : `<div style="width:180px; height:100px; background:var(--card2); border-radius:8px; display:flex; align-items:center; justify-content:center; cursor:pointer; color:var(--muted);" onclick="openProj('${p.id}')">${uiIcon('video','xl')}</div>`;
+    const finalRender = (p.links || []).find(l => l.type === 'final' && l.url);
+    let renderBtn = finalRender
+      ? `<button onclick="window.open('${finalRender.url}', '_blank')" style="background:var(--primary); border:none; color:white; padding:8px 16px; border-radius:6px; cursor:pointer; font-weight:600; transition:0.2s;" onmouseover="this.style.opacity='0.8'" onmouseout="this.style.opacity='1'">${uiIcon('play')} View Final Render</button>`
+      : `<button style="background:var(--card2); border:none; color:var(--muted); padding:8px 16px; border-radius:6px; font-weight:600; cursor:not-allowed;">${uiIcon('play')} No Link Available</button>`;
+
+    renderBtn = finalRender
+      ? `<button class="publish-action-btn primary" onclick="window.open('${finalRender.url}', '_blank')">View Final Render</button>`
+      : `<button class="publish-action-btn disabled">No Link Available</button>`;
 
     html += `
     <div class="pub-card" style="display:flex; justify-content:space-between; align-items:center; background:var(--bg); padding:16px; border-radius:12px; --hover-color:${formatColor};">
@@ -5809,19 +7087,19 @@ function renderPublish() {
             ${renderCTTag(p.contentType)}
           </div>
           <div style="display:flex; align-items:center; gap:8px; margin-top:4px;">
-            <span style="font-size:14px; color:var(--text);">ðŸ“… Release:</span>
+            <span style="font-size:14px; color:var(--text);">${uiIcon('calendar')} Release:</span>
             <input type="date" value="${pub.date||''}" onchange="updatePubDate('${p.id}', this.value)" style="background:transparent; border:1px solid var(--line2); color:var(--text); padding:4px 8px; border-radius:6px; font-family:inherit; font-size:14px; cursor:pointer;">
           </div>
         </div>
       </div>
       <div style="display:flex; flex-direction:column; gap:12px; align-items:flex-end;">
         <div style="display:flex; gap:8px;">
-          <button onclick="openProj('${p.id}')" style="background:transparent; border:1px solid var(--line2); color:var(--text); padding:6px 12px; border-radius:6px; cursor:pointer; font-weight:600; transition:0.2s;" onmouseover="this.style.background='var(--card2)'" onmouseout="this.style.background='transparent'">ðŸ“‚ Open</button>
-          <button onclick="removeFromPublish('${p.id}')" style="background:transparent; border:1px solid var(--line2); color:var(--text); padding:6px 12px; border-radius:6px; cursor:pointer; font-weight:600; transition:0.2s;" onmouseover="this.style.background='var(--card2)'" onmouseout="this.style.background='transparent'">âœ• Remove</button>
+          <button onclick="openProj('${p.id}')" style="background:transparent; border:1px solid var(--line2); color:var(--text); padding:6px 12px; border-radius:6px; cursor:pointer; font-weight:600; transition:0.2s;" onmouseover="this.style.background='var(--card2)'" onmouseout="this.style.background='transparent'">${uiIcon('folderOpen')} Open</button>
+          <button onclick="removeFromPublish('${p.id}')" style="background:transparent; border:1px solid var(--line2); color:var(--text); padding:6px 12px; border-radius:6px; cursor:pointer; font-weight:600; transition:0.2s;" onmouseover="this.style.background='var(--card2)'" onmouseout="this.style.background='transparent'">${uiIcon('x')} Remove</button>
         </div>
         <div style="display:flex; gap:8px;">
           ${renderBtn}
-          <button onclick="markAsPublished('${p.id}')" style="background:var(--green); border:none; color:white; padding:8px 16px; border-radius:6px; cursor:pointer; font-weight:600; transition:0.2s;" onmouseover="this.style.opacity='0.8'" onmouseout="this.style.opacity='1'">âœ… Published</button>
+          <button class="publish-action-btn success" onclick="markAsPublished('${p.id}')">Published</button>
         </div>
       </div>
     </div>`;
@@ -5886,6 +7164,7 @@ function renderCalendarScreen() {
 function openIdeaDoc(id=null) {
   editingIdeaId = id;
   viewingIdeaId = id;
+  ideaDocSelectionRange = null;
   const idea = id ? DB.ideas.find(i=>i.id===id) : null;
   currentIdeaImgB64 = idea?.img || null;
   goScreen('idea-doc');
@@ -5899,23 +7178,88 @@ function escapeIdeaDocValue(value='') {
     .replace(/"/g, '&quot;');
 }
 
+function plainTextToIdeaHtml(text='') {
+  const safe = escapeIdeaDocValue(repairTextEncoding(text || ''));
+  if(!safe.trim()) return '';
+  return safe
+    .split(/\n{2,}/)
+    .map(block => `<p>${block.replace(/\n/g, '<br>')}</p>`)
+    .join('');
+}
+
+function sanitizeIdeaDocHtml(html='') {
+  const template = document.createElement('template');
+  template.innerHTML = String(html || '');
+  template.content.querySelectorAll('script,style,iframe,object,embed,meta,link').forEach(el => el.remove());
+  const allowedTags = new Set(['A','B','BLOCKQUOTE','BR','DIV','EM','H2','H3','I','LI','OL','P','S','SPAN','STRONG','U','UL']);
+  Array.from(template.content.querySelectorAll('*')).forEach(el => {
+    const tag = el.tagName;
+    if(!allowedTags.has(tag)) {
+      el.replaceWith(...Array.from(el.childNodes));
+      return;
+    }
+    const textAlign = el.style?.textAlign || '';
+    const lineHeight = el.style?.lineHeight || '';
+    const href = el.getAttribute('href') || '';
+    Array.from(el.attributes).forEach(attr => el.removeAttribute(attr.name));
+    if(['left','center','right','justify'].includes(textAlign)) el.style.textAlign = textAlign;
+    if(/^(1|1\.[0-9]|2|2\.0|normal)$/.test(lineHeight)) el.style.lineHeight = lineHeight;
+    if(tag === 'A' && /^(https?:|mailto:)/i.test(href)) {
+      el.setAttribute('href', href);
+      el.setAttribute('target', '_blank');
+      el.setAttribute('rel', 'noopener');
+    }
+  });
+  return template.innerHTML;
+}
+
+function getIdeaDocHtml(idea) {
+  if(!idea) return '';
+  return sanitizeIdeaDocHtml(idea.bodyHtml || plainTextToIdeaHtml(idea.body || ''));
+}
+
+function getIdeaDocPlainText(idea) {
+  if(!idea) return '';
+  const div = document.createElement('div');
+  div.innerHTML = getIdeaDocHtml(idea);
+  return repairTextEncoding(div.textContent || idea.body || '').trim();
+}
+
+function ideaEditorIcon(name) {
+  const icons = {
+    list: `<svg viewBox="0 0 24 24"><path d="M8 6h13"/><path d="M8 12h13"/><path d="M8 18h13"/><path d="M3 6h.01"/><path d="M3 12h.01"/><path d="M3 18h.01"/></svg>`,
+    ordered: `<svg viewBox="0 0 24 24"><path d="M10 6h11"/><path d="M10 12h11"/><path d="M10 18h11"/><path d="M4 6h1v4"/><path d="M4 10h2"/><path d="M3 14h3l-3 4h3"/></svg>`,
+    alignLeft: `<svg viewBox="0 0 24 24"><path d="M3 6h18"/><path d="M3 12h12"/><path d="M3 18h18"/></svg>`,
+    alignCenter: `<svg viewBox="0 0 24 24"><path d="M4 6h16"/><path d="M7 12h10"/><path d="M4 18h16"/></svg>`,
+    alignRight: `<svg viewBox="0 0 24 24"><path d="M3 6h18"/><path d="M9 12h12"/><path d="M3 18h18"/></svg>`,
+    link: `<svg viewBox="0 0 24 24"><path d="M10 13a5 5 0 0 0 7.07 0l2.12-2.12a5 5 0 0 0-7.07-7.07L10.9 5"/><path d="M14 11a5 5 0 0 0-7.07 0L4.81 13.12a5 5 0 0 0 7.07 7.07L13.1 19"/></svg>`,
+    clear: `<svg viewBox="0 0 24 24"><path d="m3 21 6-6"/><path d="m14 4 6 6"/><path d="M19 5 8 16l-4-4L15 1l4 4Z"/><path d="M12 21h9"/></svg>`
+  };
+  return icons[name] || '';
+}
+
 function renderIdeas() {
   const grid=document.getElementById('ideas-grid');
   if(!grid) return;
-  let html=`<div class="idea-add-card" onclick="openIdeaDoc()"><div class="idea-add-icon">ðŸ’¡</div><div class="idea-add-text">Create New Idea Document</div></div>`;
+  let html=`<div class="idea-add-card" onclick="openIdeaDoc()"><div class="idea-add-icon">${uiIcon('idea')}</div><div class="idea-add-text">Create New Idea Document</div></div>`;
   if(DB.ideas.length) {
-    html+=DB.ideas.slice().reverse().map(idea=>`
+    html+=DB.ideas.slice().reverse().map(idea=>{
+      const preview = getIdeaDocPlainText(idea);
+      const excerpt = preview.length > 160 ? `${preview.slice(0, 160)}...` : preview;
+      return `
       <div class="idea-card compact" onclick="openIdeaDoc('${idea.id}')">
         <div class="idea-top">
-          <div class="idea-emoji">ðŸ“</div>
-          <div class="idea-title">${idea.title}</div>
+          <div class="idea-emoji">${uiIcon('note')}</div>
+          <div class="idea-title">${escapeHtml(idea.title)}</div>
         </div>
+        ${excerpt ? `<div class="idea-body">${escapeHtml(excerpt)}</div>` : `<div class="idea-body">Empty document.</div>`}
         <div class="idea-open-hint">Open full document â†’</div>
         <div class="idea-meta-row">
-          <span>${idea.updatedAt || idea.date || ''}</span>
-          <span>${idea.link ? 'ðŸ”— Ref' : 'Draft'}</span>
+          <span>${escapeHtml(idea.updatedAt || idea.date || '')}</span>
+          <span>${idea.link ? `${uiIcon('link')} Ref` : 'Draft'}</span>
         </div>
-      </div>`).join('');
+      </div>`;
+    }).join('');
   }
   grid.innerHTML=iconifyUiHtml(html);
   queueUiIcons();
@@ -5931,7 +7275,7 @@ function renderIdeaDoc() {
     return;
   }
   const title = idea?.title || '';
-  const body = idea?.body || '';
+  const bodyHtml = getIdeaDocHtml(idea);
   const link = idea?.link || '';
   const meta = idea ? `Created ${idea.date || today()}${idea.updatedAt ? ` Â· Updated ${idea.updatedAt}` : ''}` : 'New document';
   const preview = currentIdeaImgB64 || idea?.img || null;
@@ -5940,7 +7284,35 @@ function renderIdeaDoc() {
       <div class="idea-doc-main">
         <div class="idea-doc-meta">${meta}</div>
         <input id="idea-doc-title" class="idea-doc-title-input" placeholder="Untitled idea..." value="${escapeIdeaDocValue(title)}">
-        <textarea id="idea-doc-body" class="idea-doc-editor" placeholder="Write freely here, as if this were your working document...">${escapeIdeaDocValue(body)}</textarea>
+        <div class="idea-rich-editor">
+          <div id="idea-doc-body" class="idea-doc-editor" contenteditable="true" data-placeholder="Write freely here, as if this were your working document..." onkeyup="saveIdeaDocSelection()" onmouseup="saveIdeaDocSelection()" oninput="saveIdeaDocSelection()" onpaste="handleIdeaDocPaste(event)">${bodyHtml}</div>
+          <div class="idea-editor-toolbar">
+            <select title="Text style" onchange="formatIdeaDocBlock(this.value)">
+              <option value="p">Paragraph</option>
+              <option value="h2">Heading</option>
+              <option value="h3">Subheading</option>
+              <option value="blockquote">Quote</option>
+            </select>
+            <button type="button" class="idea-editor-tool" title="Bold" onclick="formatIdeaDoc('bold')"><strong>B</strong></button>
+            <button type="button" class="idea-editor-tool" title="Italic" onclick="formatIdeaDoc('italic')"><em>I</em></button>
+            <button type="button" class="idea-editor-tool" title="Underline" onclick="formatIdeaDoc('underline')"><u>U</u></button>
+            <div class="idea-editor-sep"></div>
+            <button type="button" class="idea-editor-tool" title="Bulleted list" aria-label="Bulleted list" onclick="formatIdeaDoc('insertUnorderedList')">${ideaEditorIcon('list')}</button>
+            <button type="button" class="idea-editor-tool" title="Numbered list" aria-label="Numbered list" onclick="formatIdeaDoc('insertOrderedList')">${ideaEditorIcon('ordered')}</button>
+            <div class="idea-editor-sep"></div>
+            <button type="button" class="idea-editor-tool" title="Align left" aria-label="Align left" onclick="formatIdeaDoc('justifyLeft')">${ideaEditorIcon('alignLeft')}</button>
+            <button type="button" class="idea-editor-tool" title="Align center" aria-label="Align center" onclick="formatIdeaDoc('justifyCenter')">${ideaEditorIcon('alignCenter')}</button>
+            <button type="button" class="idea-editor-tool" title="Align right" aria-label="Align right" onclick="formatIdeaDoc('justifyRight')">${ideaEditorIcon('alignRight')}</button>
+            <select title="Line spacing" onchange="setIdeaDocLineHeight(this.value)">
+              <option value="1.4">Line 1.4</option>
+              <option value="1.7" selected>Line 1.7</option>
+              <option value="2">Line 2.0</option>
+            </select>
+            <div class="idea-editor-sep"></div>
+            <button type="button" class="idea-editor-tool" title="Add link" aria-label="Add link" onclick="addIdeaDocLink()">${ideaEditorIcon('link')}</button>
+            <button type="button" class="idea-editor-tool" title="Clear format" aria-label="Clear format" onclick="formatIdeaDoc('removeFormat')">${ideaEditorIcon('clear')}</button>
+          </div>
+        </div>
         <div class="idea-doc-actions">
           <button class="tb-btn primary" onclick="saveIdeaDoc()">Save Document</button>
           <button class="tb-btn" onclick="goScreen('ideas')">Back to Ideas</button>
@@ -5971,9 +7343,97 @@ function previewIdeaDocImage(e) {
   });
 }
 
+function saveIdeaDocSelection() {
+  const editor = document.getElementById('idea-doc-body');
+  const selection = window.getSelection();
+  if(!editor || !selection || !selection.rangeCount) return;
+  const range = selection.getRangeAt(0);
+  const node = range.commonAncestorContainer;
+  if(node === editor || editor.contains(node)) ideaDocSelectionRange = range.cloneRange();
+}
+
+function restoreIdeaDocSelection() {
+  const editor = document.getElementById('idea-doc-body');
+  if(!editor) return null;
+  editor.focus();
+  if(ideaDocSelectionRange) {
+    const selection = window.getSelection();
+    selection.removeAllRanges();
+    selection.addRange(ideaDocSelectionRange);
+  }
+  return editor;
+}
+
+function focusIdeaDocEditor() {
+  const editor = restoreIdeaDocSelection();
+  if(editor) editor.focus();
+  return editor;
+}
+
+function formatIdeaDoc(command, value = null) {
+  const editor = focusIdeaDocEditor();
+  if(!editor) return;
+  document.execCommand(command, false, value);
+  saveIdeaDocSelection();
+}
+
+function formatIdeaDocBlock(tag) {
+  const editor = focusIdeaDocEditor();
+  if(!editor) return;
+  document.execCommand('formatBlock', false, tag);
+  saveIdeaDocSelection();
+}
+
+function getCurrentIdeaDocBlock() {
+  const editor = document.getElementById('idea-doc-body');
+  const selection = window.getSelection();
+  if(!editor || !selection || !selection.rangeCount) return null;
+  let node = selection.anchorNode;
+  if(node && node.nodeType === Node.TEXT_NODE) node = node.parentNode;
+  while(node && node !== editor) {
+    if(['P','DIV','LI','H2','H3','BLOCKQUOTE'].includes(node.tagName)) return node;
+    node = node.parentNode;
+  }
+  return null;
+}
+
+function setIdeaDocLineHeight(value) {
+  const editor = focusIdeaDocEditor();
+  if(!editor) return;
+  let block = getCurrentIdeaDocBlock();
+  if(!block) {
+    document.execCommand('formatBlock', false, 'p');
+    block = getCurrentIdeaDocBlock();
+  }
+  if(block) block.style.lineHeight = value;
+  saveIdeaDocSelection();
+}
+
+function addIdeaDocLink() {
+  const editor = focusIdeaDocEditor();
+  if(!editor) return;
+  const url = prompt('Paste link URL');
+  if(!url) return;
+  const cleanUrl = url.trim();
+  if(!/^https?:\/\//i.test(cleanUrl) && !/^mailto:/i.test(cleanUrl)) {
+    toast('Use a valid link', 'link');
+    return;
+  }
+  document.execCommand('createLink', false, cleanUrl);
+  saveIdeaDocSelection();
+}
+
+function handleIdeaDocPaste(event) {
+  event.preventDefault();
+  const text = event.clipboardData?.getData('text/plain') || '';
+  document.execCommand('insertText', false, repairTextEncoding(text));
+}
+
 function saveIdeaDoc() {
   const title = (document.getElementById('idea-doc-title')?.value || '').trim();
-  const body = (document.getElementById('idea-doc-body')?.value || '').trim();
+  const editor = document.getElementById('idea-doc-body');
+  const body = repairTextEncoding(editor?.textContent || '').trim();
+  const bodyHtml = body ? sanitizeIdeaDocHtml(editor?.innerHTML || '').trim() : '';
   const link = (document.getElementById('idea-doc-link')?.value || '').trim();
   if(!title){ alert('Title required.'); return; }
   if(editingIdeaId) {
@@ -5981,19 +7441,20 @@ function saveIdeaDoc() {
     if(!idea) return;
     idea.title = title;
     idea.body = body;
+    idea.bodyHtml = bodyHtml;
     idea.link = link;
     idea.img = currentIdeaImgB64;
     idea.updatedAt = today();
     viewingIdeaId = idea.id;
   } else {
-    const newIdea = { id:uid(), title, body, link, img:currentIdeaImgB64, date:today(), updatedAt:today() };
+    const newIdea = { id:uid(), title, body, bodyHtml, link, img:currentIdeaImgB64, date:today(), updatedAt:today() };
     DB.ideas.push(newIdea);
     editingIdeaId = newIdea.id;
     viewingIdeaId = newIdea.id;
   }
   save();
   renderIdeaDoc();
-  toast('Idea document saved','ðŸ’¡');
+  toast('Idea document saved','idea');
 }
 
 function deleteIdeaDoc(id) {
@@ -6311,8 +7772,8 @@ function renderMyWork() {
   const donutStyle = `background: conic-gradient(
     #d9d9d9 0 ${(workload.todo / totalForDonut) * 360}deg,
     #3b82f6 ${(workload.todo / totalForDonut) * 360}deg ${((workload.todo + workload.inProgress) / totalForDonut) * 360}deg,
-    #6dbf57 ${((workload.todo + workload.inProgress) / totalForDonut) * 360}deg ${((workload.todo + workload.inProgress + workload.done) / totalForDonut) * 360}deg,
-    #ef476f ${((workload.todo + workload.inProgress + workload.done) / totalForDonut) * 360}deg 360deg
+    var(--green) ${((workload.todo + workload.inProgress) / totalForDonut) * 360}deg ${((workload.todo + workload.inProgress + workload.done) / totalForDonut) * 360}deg,
+    var(--red) ${((workload.todo + workload.inProgress + workload.done) / totalForDonut) * 360}deg 360deg
   )`;
   const projectOptions = [...new Map(currentTasks.flatMap(task => (task.linkedProjectIds || []).map(id => {
     const project = DB.projects.find(p => p.id === id);
@@ -6359,7 +7820,7 @@ function renderMyWork() {
         </div>
         <div class="planner-context-bar">
           <div class="planner-context-nav">
-            <button class="planner-nav-btn" onclick="shiftMyWorkPeriod(-1)">â€¹</button>
+            <button class="planner-nav-btn" onclick="shiftMyWorkPeriod(-1)" aria-label="Previous period">${uiIcon('chevronLeft')}</button>
             <div class="planner-context-pills">
               <div class="planner-context-pill">
                 <div class="planner-context-label">Month</div>
@@ -6374,11 +7835,10 @@ function renderMyWork() {
                 <div class="planner-context-value">${formatDayLabel(selectedDateKey)}</div>
               </div>
             </div>
-            <button class="planner-nav-btn" onclick="shiftMyWorkPeriod(1)">â€º</button>
+            <button class="planner-nav-btn" onclick="shiftMyWorkPeriod(1)" aria-label="Next period">${uiIcon('chevronRight')}</button>
           </div>
           <div class="planner-context-actions">
             <button class="planner-secondary-btn" onclick="jumpMyWorkToToday()">Today</button>
-            <button class="planner-secondary-btn" onclick="generateWeeklyReport()">Generate Weekly Report</button>
           </div>
         </div>
       </div>
@@ -6387,11 +7847,6 @@ function renderMyWork() {
         <div class="mw-shell-grid">
           <div class="mw-main">
             <div class="mw-main-card">
-              <div class="mw-tabs">
-                <button class="mw-tab ${myWorkView === 'month' ? 'active' : ''}" onclick="setMyWorkView('month')">Month</button>
-                <button class="mw-tab ${myWorkView === 'week' ? 'active' : ''}" onclick="setMyWorkView('week')">Week</button>
-                <button class="mw-tab ${myWorkView === 'today' ? 'active' : ''}" onclick="setMyWorkView('today')">Day</button>
-              </div>
               ${myWorkView === 'week' ? renderWeekPlanner(weekTasks) : `
               <div class="mw-toolbar">
                 <input class="search-input" placeholder="Search tasks..." value="${escapeHtml(myWorkSearch)}" oninput="setMyWorkFilter('search', this.value)">
@@ -6421,13 +7876,6 @@ function renderMyWork() {
               ${renderMyWorkTable(filteredTasks, selectedWeekKey)}
               <div class="mw-footer">
                 <div class="mw-footnote">Showing ${filteredTasks.length ? 1 : 0} to ${filteredTasks.length} of ${currentTasks.length} tasks</div>
-                <div class="mw-pager">
-                  <button class="page-btn">â€¹</button>
-                  <button class="page-btn active">1</button>
-                  <button class="page-btn">2</button>
-                  <button class="page-btn">3</button>
-                  <button class="page-btn">â€º</button>
-                </div>
               </div>`}
             </div>
           </div>
@@ -6450,8 +7898,8 @@ function renderMyWork() {
                   <div class="mw-legend">
                     <div class="mw-legend-row"><span class="mw-legend-dot" style="background:#d9d9d9;"></span><span>To Do</span><strong>${workload.todo}</strong></div>
                     <div class="mw-legend-row"><span class="mw-legend-dot" style="background:#3b82f6;"></span><span>In Progress</span><strong>${workload.inProgress}</strong></div>
-                    <div class="mw-legend-row"><span class="mw-legend-dot" style="background:#6dbf57;"></span><span>Completed</span><strong>${workload.done}</strong></div>
-                    <div class="mw-legend-row"><span class="mw-legend-dot" style="background:#ef476f;"></span><span>Overdue</span><strong>${workload.overdue}</strong></div>
+                    <div class="mw-legend-row"><span class="mw-legend-dot" style="background:var(--green);"></span><span>Completed</span><strong>${workload.done}</strong></div>
+                    <div class="mw-legend-row"><span class="mw-legend-dot" style="background:var(--red);"></span><span>Overdue</span><strong>${workload.overdue}</strong></div>
                   </div>
                 </div>
               </div>
@@ -6461,10 +7909,7 @@ function renderMyWork() {
       </div>
     </div>
 
-    <div class="planner-secondary">
-      ${assignedHTML}
-      ${renderMeetingBriefPanel()}
-    </div>
+    ${assignedHTML ? `<div class="planner-secondary">${assignedHTML}</div>` : ''}
   `;
   queueUiIcons();
 }
@@ -6591,7 +8036,7 @@ function renderMyWorkTable(tasks, selectedWeekKey) {
             const format = project ? DB.contentTypes.find(c => c.id === project.contentType)?.label || WORK_BUCKET_LABELS[task.bucket] : WORK_BUCKET_LABELS[task.bucket];
             const thumb = project?.thumbnail
               ? `<img class="mw-project-thumb" src="${project.thumbnail}">`
-              : '';
+              : `<div class="mw-project-thumb">${uiIcon(project ? 'folder' : 'check')}</div>`;
             return `
               <tr>
                 <td class="mw-check-cell"><button class="planner-check ${task.status === 'done' ? 'checked' : ''}" onclick="toggleWorkTask('${task.id}')"></button></td>
@@ -6640,16 +8085,16 @@ async function generateWeeklyReport() {
   );
 
   if (!weeklyTasks.length) {
-    toast('No tasks found for the selected week.', 'âš ');
+    toast('No tasks found for the selected week.', 'warning');
     return;
   }
 
   try {
     await buildWeeklyReportDocx(u, weeklyTasks, selectedWeekKey);
-    toast('Weekly Report downloaded!', 'ðŸ“„');
+    toast('Weekly Report downloaded!', 'file');
   } catch (err) {
     console.error(err);
-    toast('Error generating weekly report: ' + err.message, 'âš ');
+    toast('Error generating weekly report: ' + err.message, 'warning');
   }
 }
 
@@ -7383,6 +8828,7 @@ function buildMeetingBriefData() {
 }
 
 function renderMeetingBriefPanel() {
+  return '';
   ensureMeetingBriefDefaults();
   const data = buildMeetingBriefData();
   const canGenerate = data.selectedUsers.length || data.selectedIdeas.length;
@@ -7498,16 +8944,16 @@ async function generateMeetingBrief() {
   if (!u) return;
   const data = buildMeetingBriefData();
   if (!data.selectedUsers.length && !data.selectedIdeas.length) {
-    toast('Select at least one participant or idea first.', 'âš ');
+    toast('Select at least one participant or idea first.', 'warning');
     return;
   }
 
   try {
     await buildMeetingBriefDocx(data);
-    toast('Meeting Brief downloaded!', 'ðŸ“„');
+    toast('Meeting Brief downloaded!', 'file');
   } catch (err) {
     console.error(err);
-    toast('Error generating document: ' + err.message, 'âš ');
+    toast('Error generating document: ' + err.message, 'warning');
   }
 }
 
@@ -7693,8 +9139,8 @@ function renderWeekDays(weekTasks) {
             ${day} ${isToday ? '<span style="font-size:10px; color:var(--primary-light); font-weight:600; margin-left:4px;">TODAY</span>' : ''}
           </div>
           <div style="display:flex; align-items:center; gap:8px;">
-            ${pending > 0 ? `<span class="work-count">${pending}</span>` : '<span style="font-size:11px; color:var(--muted);">â€”</span>'}
-            <span class="week-day-chev" style="transform:${isOpen?'rotate(90deg)':'none'}">â–¶</span>
+            ${pending > 0 ? `<span class="work-count">${pending}</span>` : '<span style="font-size:11px; color:var(--muted);">&mdash;</span>'}
+            <span class="week-day-chev" style="transform:${isOpen?'rotate(90deg)':'none'}">${uiIcon('chevronRight')}</span>
           </div>
         </div>
         <div class="week-day-tasks">
@@ -7705,7 +9151,7 @@ function renderWeekDays(weekTasks) {
 }
 
 function escapeHtml(str) {
-  return String(str).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+  return repairTextEncoding(str).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
 }
 
 // â”€â”€ Task CRUD â”€â”€
@@ -7821,7 +9267,7 @@ function renderActionNotesBody() {
           const sel = anSelectedProjects.has(p.id);
           const thumb = p.thumbnail
             ? `<div class="an-proj-thumb"><img src="${p.thumbnail}"></div>`
-            : `<div class="an-proj-thumb" style="background:${cat?.color||'var(--primary)'}26;color:${cat?.color||'var(--primary)'}">ðŸŽ¬</div>`;
+            : `<div class="an-proj-thumb" style="background:${cat?.color||'var(--primary)'}26;color:${cat?.color||'var(--primary)'}">${uiIcon('video')}</div>`;
           return `
             <div class="an-proj-card ${sel?'selected':''}" onclick="toggleANProject('${p.id}')">
               ${thumb}
@@ -7901,7 +9347,7 @@ async function generateActionNotes() {
   const selectedIdeas = [...anSelectedIdeas].map(iid => (DB.ideas||[]).find(i => i.id === iid)).filter(Boolean);
 
   if (!selectedProjs.length && !selectedIdeas.length) {
-    toast('Select at least one project or idea first', 'âš ');
+    toast('Select at least one project or idea first', 'warning');
     return;
   }
 
@@ -7920,11 +9366,11 @@ async function generateActionNotes() {
     await buildAndDownloadDocx(targetUser, todayTasks, weekTasks, selectedProjs, selectedIdeas);
 
     document.getElementById('action-notes-body').innerHTML = renderActionNotesBody();
-    toast('Action Notes downloaded!', 'ðŸ“„');
+    toast('Action Notes downloaded!', 'file');
   } catch(err) {
     console.error(err);
     host.innerHTML = renderActionNotesBody();
-    toast('Error generating document: ' + err.message, 'âš ');
+    toast('Error generating document: ' + err.message, 'warning');
   }
 }
 
