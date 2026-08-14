@@ -1598,7 +1598,7 @@ input,textarea,select{font-family:'Plus Jakarta Sans',sans-serif;outline:none;}
 }
 
 html, body { background: var(--bg); color: var(--text); font-family: Inter, "SF Pro Display", system-ui, sans-serif; color-scheme: light; }
-body, button, input, textarea, select { font-family: Inter, "SF Pro Display", system-ui, sans-serif; }
+body, button, input, textarea, select { font-family: Inter, "SF Pro Display", system-ui, "Apple Color Emoji", "Segoe UI Emoji", "Noto Color Emoji", sans-serif; }
 button, .tb-btn, .sb-btn, .page-btn, .view-btn, .nav-item, .cat-item, .user-menu-btn, .planner-nav-btn, .planner-secondary-btn, .an-generate-btn {
   transition: all 180ms cubic-bezier(0.2, 0.8, 0.2, 1);
 }
@@ -4685,7 +4685,7 @@ function renderNotifications() {
       <div class="msg-bubble ${n.read ? '' : 'unread'}" onclick="if('${n.pid}'){ goScreen('projects'); openProj('${n.pid}'); }" style="${n.pid?'cursor:pointer;':''} display: flex; align-items: flex-start; justify-content: space-between;">
         <div style="flex:1;">
           <div class="msg-meta"><span>System</span><span>${n.date}</span></div>
-          <div style="font-size:14px; margin-top:4px;">${n.text}</div>
+          <div style="font-size:14px; margin-top:4px;">${escapeHtml(n.text)}</div>
         </div>
         <button class="link-del-btn" style="margin-left: 12px; flex-shrink: 0;" onclick="deleteNotification('${n.id}', event)" title="Delete">${uiIcon('x')}</button>
       </div>
@@ -4788,7 +4788,7 @@ function renderMessages() {
 
            return `
            <div class="chat-bubble-wrap ${isMe ? 'me' : 'them'}">
-             <div class="chat-bubble ${isMe ? 'me' : 'them'}">${m.text}</div>
+             <div class="chat-bubble ${isMe ? 'me' : 'them'}">${escapeHtml(m.text)}</div>
              <div class="chat-time">${timeStr}</div>
            </div>`;
         }).join('');
@@ -4827,7 +4827,7 @@ function openChat(uid) {
 function sendChatReply() {
   const input = document.getElementById('chat-reply-input');
   if(!input) return;
-  const text = input.value.trim();
+  const text = normalizeUserEmojiText(input.value).trim();
   if(!text || !activeChatUser) return;
 
   const msgObj = { id: uid(), from: currentUser, to: activeChatUser, text, date: new Date().toISOString(), read: false };
@@ -4851,7 +4851,7 @@ function openMsgModal(targetUid) {
 }
 
 function submitMessage() {
-  const text = document.getElementById('inp-msg-text').value.trim();
+  const text = normalizeUserEmojiText(document.getElementById('inp-msg-text').value).trim();
   if(!text) { alert("Please write a message."); return; }
   if(!msgTargetUid) return;
   
@@ -4975,7 +4975,7 @@ function sendInlineMessage(targetUid) {
   try {
     const inputEl = document.getElementById('inline-msg-text');
     if (!inputEl) return;
-    const text = inputEl.value.trim();
+    const text = normalizeUserEmojiText(inputEl.value).trim();
     if(!text) { alert("Please write a message first."); return; }
     
     const msgObj = { id: uid(), from: currentUser, to: targetUid, text, date: new Date().toISOString(), read: false };
@@ -5341,6 +5341,75 @@ function repairTextEncoding(value) {
     }
   }
   return out;
+}
+
+const USER_EMOJI_ALIASES = {
+  'relieved': '\u{1F60C}',
+  'relieved face': '\u{1F60C}',
+  'smile': '\u{1F604}',
+  'smiling': '\u{1F604}',
+  'smiling face': '\u{1F604}',
+  'grinning': '\u{1F600}',
+  'grinning face': '\u{1F600}',
+  'laugh': '\u{1F606}',
+  'laughing': '\u{1F606}',
+  'joy': '\u{1F602}',
+  'tears of joy': '\u{1F602}',
+  'wink': '\u{1F609}',
+  'winking face': '\u{1F609}',
+  'heart eyes': '\u{1F60D}',
+  'star struck': '\u{1F929}',
+  'thinking': '\u{1F914}',
+  'thinking face': '\u{1F914}',
+  'mind blown': '\u{1F92F}',
+  'cry': '\u{1F622}',
+  'crying': '\u{1F622}',
+  'sob': '\u{1F62D}',
+  'fire': '\u{1F525}',
+  'rocket': '\u{1F680}',
+  'sparkles': '\u{2728}',
+  'star': '\u{2B50}',
+  'eyes': '\u{1F440}',
+  'clap': '\u{1F44F}',
+  'clapping': '\u{1F44F}',
+  'raised hands': '\u{1F64C}',
+  'pray': '\u{1F64F}',
+  'folded hands': '\u{1F64F}',
+  'thumbs up': '\u{1F44D}',
+  'thumbsup': '\u{1F44D}',
+  'ok hand': '\u{1F44C}',
+  'muscle': '\u{1F4AA}',
+  'red heart': '\u{2764}\u{FE0F}',
+  'heart': '\u{2764}\u{FE0F}',
+  'blue heart': '\u{1F499}',
+  'green heart': '\u{1F49A}',
+  'purple heart': '\u{1F49C}',
+  'yellow heart': '\u{1F49B}',
+  'check': '\u{2705}',
+  'check mark': '\u{2705}',
+  'white check mark': '\u{2705}',
+  'warning': '\u{26A0}\u{FE0F}',
+  'party': '\u{1F389}',
+  'tada': '\u{1F389}',
+  'camera': '\u{1F4F7}',
+  'video': '\u{1F3AC}',
+  'notes': '\u{1F4DD}',
+  'memo': '\u{1F4DD}',
+  'link': '\u{1F517}',
+  'calendar': '\u{1F4C5}'
+};
+
+function normalizeUserEmojiText(value) {
+  let out = repairTextEncoding(value ?? '');
+  return out.replace(/:([a-z0-9][a-z0-9 _+\-']{1,48})(?:\s+emoji)?:/gi, (match, name) => {
+    const key = String(name || '')
+      .toLowerCase()
+      .replace(/[_+-]+/g, ' ')
+      .replace(/\bemoji\b/g, '')
+      .replace(/\s+/g, ' ')
+      .trim();
+    return USER_EMOJI_ALIASES[key] || match;
+  });
 }
 
 function iconifyUiHtml(html) {
@@ -5856,8 +5925,8 @@ function getProjectCaptionListFromProject(p, platform) {
   const captions = p.captions || {};
   let value = captions[platform];
   if((value == null || value === '') && platform === 'instagram' && p.caption) value = p.caption;
-  if(Array.isArray(value)) return value.filter(Boolean);
-  if(typeof value === 'string' && value.trim()) return [value.trim()];
+  if(Array.isArray(value)) return value.map(normalizeUserEmojiText).filter(Boolean);
+  if(typeof value === 'string' && value.trim()) return [normalizeUserEmojiText(value).trim()];
   return [];
 }
 
@@ -5911,7 +5980,7 @@ function addProjectCaption(pid, platform) {
   if(!p) return;
   const input = document.getElementById(`caption-draft-${platform}`);
   if(!input) return;
-  const value = input.value.trim();
+  const value = normalizeUserEmojiText(input.value).trim();
   if(!value) return;
   const list = ensureProjectCaptionList(pid, platform);
   list.push(value);
@@ -5951,7 +6020,7 @@ function saveThumbnailSourceLink(pid) {
 }
 
 function copyTextToClipboard(text, successMsg, emptyMsg) {
-  const value = repairTextEncoding(text || '').trim();
+  const value = normalizeUserEmojiText(text || '').trim();
   if(!value) { toast(emptyMsg, 'note'); return; }
   if(navigator.clipboard && navigator.clipboard.writeText) {
     navigator.clipboard.writeText(value).then(() => toast(successMsg, 'check')).catch(() => fallbackCopyText(value, successMsg));
@@ -6027,7 +6096,7 @@ function removeLink(pid, idx) { getP(pid).links.splice(idx,1); save(); renderDet
 function handleThumbnailUpload(e) { if(!e.target.files[0] || !curPid) return; resizeImage(e.target.files[0], (base64) => { getP(curPid).thumbnail = base64; save(); renderDetail(); toast('Thumbnail updated','image'); }); e.target.value = ''; }
 function stepAct(pid,i,action) { const p=getP(pid), ver=getCurVer(p), s=ver.steps[i]; if(action==='start') s.status='active'; else if(action==='complete'){ s.status='done'; if(ver.steps.every(x=>x.status==='done')) ver.waitingFeedback=true; } else if(action==='reopen'){ s.status='active'; ver.waitingFeedback=false; } save(); renderDetail(); renderSidebar(); }
 function openNoteModal(pid,i) { editStepCtx={pid,i}; document.getElementById('inp-note').value=getP(pid)?getCurVer(getP(pid)).steps[i].note||'':''; openModal('m-note'); }
-function saveStepNote() { if(!editStepCtx) return; getCurVer(getP(editStepCtx.pid)).steps[editStepCtx.i].note=document.getElementById('inp-note').value.trim(); save(); closeModal('m-note'); renderDetail(); toast('Status note saved','note'); }
+function saveStepNote() { if(!editStepCtx) return; getCurVer(getP(editStepCtx.pid)).steps[editStepCtx.i].note=normalizeUserEmojiText(document.getElementById('inp-note').value).trim(); save(); closeModal('m-note'); renderDetail(); toast('Status note saved','note'); }
 function delStep(pid,i) {
   deleteCtx = JSON.stringify({pid, i});
   deleteType = 'step';
@@ -6113,7 +6182,7 @@ function saveAssignees() {
 /* â”€â”€ Comments â”€â”€ */
 function previewCommentImage(e) { if(!e.target.files[0]) return; resizeImage(e.target.files[0], (b) => { currentCommentImgB64 = b; const img = document.getElementById('cp-img-preview'); img.src = b; img.style.display = 'block'; }); }
 function submitComment() {
-  let text=document.getElementById('cp-ta').value.trim(); 
+  let text=normalizeUserEmojiText(document.getElementById('cp-ta').value).trim();
   if(!text && !currentCommentImgB64) return;
   
   const tagUid = document.getElementById('cp-tag').value;
@@ -6149,7 +6218,7 @@ function renderComments() {
         <span class="cc-author-name">${author.name}</span>
         <span class="cc-ver">${c.version}</span>
       </div>
-      ${c.text?`<div class="cc-text">${c.text}</div>`:''}
+      ${c.text?`<div class="cc-text">${normalizeUserEmojiText(c.text)}</div>`:''}
       ${c.img?`<img src="${c.img}" class="cc-img">`:''}
       <div class="cc-date">${c.date}</div>
       ${c.authorId===currentUser || isMaster ? `<button class="cc-del" onclick="deleteComment('${p.id}','${c.id}')">${uiIcon('x')}</button>`:''}
@@ -6160,7 +6229,7 @@ function renderComments() {
 /* â”€â”€ Feedback & Delete â”€â”€ */
 function openFbModal() { document.getElementById('fb-step-toggles').innerHTML=DEFAULT_STEPS.map(s=>`<div class="stoggle on" data-s="${s}" onclick="this.classList.toggle('on')">${s}</div>`).join(''); document.getElementById('inp-fb').value=''; document.getElementById('inp-fb-file').value=''; openModal('m-feedback'); }
 function applyFeedback() {
-  const desc=document.getElementById('inp-fb').value.trim(), file=document.getElementById('inp-fb-file').files[0];
+  const desc=normalizeUserEmojiText(document.getElementById('inp-fb').value).trim(), file=document.getElementById('inp-fb-file').files[0];
   if(!desc && !file){ alert('Describe the feedback or attach an image.'); return; }
   const selSteps=[...document.querySelectorAll('#fb-step-toggles .stoggle.on')].map(t=>t.dataset.s);
   if(!selSteps.length){ alert('Select at least one step.'); return; }
@@ -6422,7 +6491,7 @@ function toggleProfilePanel(panel) {
 function addTodo() {
   const u = getAuthUser();
   const input = document.getElementById('new-todo');
-  const text = input.value.trim();
+  const text = normalizeUserEmojiText(input.value).trim();
   if(!u || !text) return;
   ensureTodosReady();
   const dateKey = today();
@@ -6726,7 +6795,7 @@ function openIdeaModal(id=null) {
   openModal('m-idea');
 }
 function saveIdea() {
-  const title=document.getElementById('inp-ititle').value.trim(), body=document.getElementById('inp-ibody').value.trim(), link=document.getElementById('inp-ilink').value.trim();
+  const title=normalizeUserEmojiText(document.getElementById('inp-ititle').value).trim(), body=normalizeUserEmojiText(document.getElementById('inp-ibody').value).trim(), link=document.getElementById('inp-ilink').value.trim();
   if(!title){ alert('Title required.'); return; }
   const bodyHtml = plainTextToIdeaHtml(body);
   if(editingIdeaId) { const idea = DB.ideas.find(i=>i.id===editingIdeaId); idea.title = title; idea.body = body; idea.bodyHtml = bodyHtml; idea.link = link; idea.img = currentIdeaImgB64; }
@@ -6739,7 +6808,7 @@ function deleteIdea(id) { if(confirm('Wipe this idea?')) { DB.ideas=DB.ideas.fil
    CREATE PROJECT / CATEGORY / SEASON
 â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
 function createProject() {
-  const name=document.getElementById('inp-pname').value.trim(), catId=document.getElementById('inp-pcat').value;
+  const name=normalizeUserEmojiText(document.getElementById('inp-pname').value).trim(), catId=document.getElementById('inp-pcat').value;
   if(!name){ alert('Video name is required.'); return; } if(!catId){ alert('Please select a category.'); return; }
   const selSteps=[...document.querySelectorAll('#step-toggles .stoggle.on')].map(t=>t.dataset.s);
   if(!selSteps.length){ alert('Please select at least one pipeline step.'); return; }
@@ -6790,7 +6859,7 @@ function createCategory() {
   save(); closeModal('m-category'); render(); 
 }
 
-function createStep() { const name=document.getElementById('inp-sname').value.trim(); if(!name) return; getCurVer(getP(curPid)).steps.push({name,status:'pending',note:''}); save(); closeModal('m-step'); renderDetail(); toast('Step added','plus'); }
+function createStep() { const name=normalizeUserEmojiText(document.getElementById('inp-sname').value).trim(); if(!name) return; getCurVer(getP(curPid)).steps.push({name,status:'pending',note:''}); save(); closeModal('m-step'); renderDetail(); toast('Step added','plus'); }
 
 /* Funciones dinÃ¡micas para Format Types */
 let editingFormatId = null;
@@ -7179,7 +7248,7 @@ function escapeIdeaDocValue(value='') {
 }
 
 function plainTextToIdeaHtml(text='') {
-  const safe = escapeIdeaDocValue(repairTextEncoding(text || ''));
+  const safe = escapeIdeaDocValue(normalizeUserEmojiText(text || ''));
   if(!safe.trim()) return '';
   return safe
     .split(/\n{2,}/)
@@ -7222,7 +7291,7 @@ function getIdeaDocPlainText(idea) {
   if(!idea) return '';
   const div = document.createElement('div');
   div.innerHTML = getIdeaDocHtml(idea);
-  return repairTextEncoding(div.textContent || idea.body || '').trim();
+  return normalizeUserEmojiText(div.textContent || idea.body || '').trim();
 }
 
 function ideaEditorIcon(name) {
@@ -7426,13 +7495,13 @@ function addIdeaDocLink() {
 function handleIdeaDocPaste(event) {
   event.preventDefault();
   const text = event.clipboardData?.getData('text/plain') || '';
-  document.execCommand('insertText', false, repairTextEncoding(text));
+  document.execCommand('insertText', false, normalizeUserEmojiText(text));
 }
 
 function saveIdeaDoc() {
   const title = (document.getElementById('idea-doc-title')?.value || '').trim();
   const editor = document.getElementById('idea-doc-body');
-  const body = repairTextEncoding(editor?.textContent || '').trim();
+  const body = normalizeUserEmojiText(editor?.textContent || '').trim();
   const bodyHtml = body ? sanitizeIdeaDocHtml(editor?.innerHTML || '').trim() : '';
   const link = (document.getElementById('idea-doc-link')?.value || '').trim();
   if(!title){ alert('Title required.'); return; }
@@ -9151,7 +9220,7 @@ function renderWeekDays(weekTasks) {
 }
 
 function escapeHtml(str) {
-  return repairTextEncoding(str).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+  return normalizeUserEmojiText(str).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
 }
 
 // â”€â”€ Task CRUD â”€â”€
@@ -9169,7 +9238,7 @@ function addWorkTask(mode) {
   }
 
   const inputEl = document.getElementById(inputId);
-  const text = inputEl?.value.trim();
+  const text = normalizeUserEmojiText(inputEl?.value).trim();
   if (!text) return;
   const priority = document.getElementById(priId)?.value || 'medium';
   const weekDay = bucket === 'week' ? (document.getElementById(dayId)?.value || 'Monday') : DAYS_OF_WEEK[parseDateKey(myWorkRefDate).getDay() === 0 ? 6 : parseDateKey(myWorkRefDate).getDay() - 1];
